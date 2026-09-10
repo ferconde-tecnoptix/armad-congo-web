@@ -3,27 +3,720 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Armad Congo - Desarrollo Web y Software para PyMEs</title>
+    <title>ARMAD — Colectivo Conde González | Arte, Robótica, Música, Asesoría y Desarrollo</title>
+    
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
+        :root {
+            --armad-bg-dark: #11181e;
+            --armad-card-bg: #1a232a;
+            --armad-card-hover: #222d36;
+            --armad-teal: #58a69e;
+            --armad-teal-light: #76c7bc;
+            --armad-teal-dark: #3a756f;
+            --armad-text: #e2e8f0;
+            --armad-muted: #94a3b8;
+        }
+
+        body, html {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--armad-bg-dark);
+            color: var(--armad-text);
+            scroll-behavior: smooth;
+        }
+
+        /* Estilos personalizados W3.CSS Overrides */
+        .armad-teal-text { color: var(--armad-teal) !important; }
+        .armad-bg-teal { background-color: var(--armad-teal) !important; color: #fff !important; }
+        .armad-bg-card { background-color: var(--armad-card-bg) !important; }
+        
+        .armad-border-teal { border-color: var(--armad-teal) !important; }
+        
+        .armad-card {
+            background-color: var(--armad-card-bg);
+            border: 1px solid rgba(88, 166, 158, 0.15);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .armad-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(88, 166, 158, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .armad-btn-primary {
+            background-color: var(--armad-teal);
+            color: #0d1317;
+            font-weight: 700;
+            border-radius: 8px;
+            padding: 12px 24px;
+            border: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .armad-btn-primary:hover {
+            background-color: var(--armad-teal-light);
+            color: #0d1317;
+            box-shadow: 0 0 15px rgba(88, 166, 158, 0.4);
+        }
+
+        .armad-btn-secondary {
+            background-color: transparent;
+            color: var(--armad-teal);
+            border: 2px solid var(--armad-teal);
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 10px 22px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .armad-btn-secondary:hover {
+            background-color: rgba(88, 166, 158, 0.1);
+            color: var(--armad-teal-light);
+        }
+
+        /* Acróstico Interactivo */
+        .acrostic-box {
             display: flex;
-            flex-direction: column;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+        .acrostic-letter {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background-color: var(--armad-card-bg);
+            border: 2px solid var(--armad-teal);
+            color: var(--armad-teal);
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #38bdf8; }
-        p { font-size: 1.2rem; color: #94a3b8; max-width: 600px; }
+        .acrostic-letter.active, .acrostic-letter:hover {
+            background-color: var(--armad-teal);
+            color: #0d1317;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(88, 166, 158, 0.5);
+        }
+
+        .acrostic-content-box {
+            background-color: var(--armad-card-bg);
+            border-left: 4px solid var(--armad-teal);
+            border-radius: 0 12px 12px 0;
+            padding: 20px;
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+
+        /* Formulario Guiado por Pasos */
+        .step-progress-bar {
+            height: 6px;
+            background-color: #2a363f;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        .step-progress-fill {
+            height: 100%;
+            background-color: var(--armad-teal);
+            width: 25%;
+            transition: width 0.4s ease;
+        }
+
+        .form-step {
+            display: none;
+        }
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            background-color: #12181e;
+            border: 1px solid #2d3a45;
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            outline: none;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--armad-teal);
+            box-shadow: 0 0 8px rgba(88, 166, 158, 0.3);
+        }
     </style>
 </head>
 <body>
-    <h1>Armad Congo</h1>
-    <p>Estamos construyendo nuestra plataforma de desarrollo de software y aplicaciones para PyMEs y empresas unipersonales.</p>
-    <p style="color: #38bdf8;">¡Despliegue automático configurado con éxito!</p>
+
+    <header class="w3-top" style="z-index: 100;">
+        <div class="w3-bar w3-padding-large" style="background-color: rgba(17, 24, 30, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(88, 166, 158, 0.15);">
+            <a href="#inicio" class="w3-bar-item w3-button w3-hover-none w3-hover-text-teal" style="font-weight: 800; font-size: 20px; color: var(--armad-teal);">
+                <i class="fa-solid fa-lightbulb w3-margin-right"></i>ARMAD
+            </a>
+            
+            <!-- Links de Escritorio -->
+            <div class="w3-right w3-hide-small w3-hide-medium">
+                <a href="#inicio" class="w3-bar-item w3-button w3-hover-none w3-hover-text-teal" style="color: var(--armad-text);">Inicio</a>
+                <a href="#acrostico" class="w3-bar-item w3-button w3-hover-none w3-hover-text-teal" style="color: var(--armad-text);">A.R.M.A.D.</a>
+                <a href="#servicios" class="w3-bar-item w3-button w3-hover-none w3-hover-text-teal" style="color: var(--armad-text);">Servicios</a>
+                <a href="#nosotros" class="w3-bar-item w3-button w3-hover-none w3-hover-text-teal" style="color: var(--armad-text);">Quiénes Somos</a>
+                <a href="#cotizador" class="armad-btn-primary w3-margin-left" style="padding: 8px 18px; font-size: 14px;">Iniciar Proyecto</a>
+            </div>
+
+            <!-- Botón Menú Móvil -->
+            <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large" onclick="toggleMobileMenu()">
+                <i class="fa-solid fa-bars" style="color: var(--armad-teal); font-size: 22px;"></i>
+            </a>
+        </div>
+
+        <!-- Menú desplegable Móvil -->
+        <div id="mobileMenu" class="w3-bar-block w3-hide w3-hide-large armad-bg-card" style="border-bottom: 2px solid var(--armad-teal);">
+            <a href="#inicio" onclick="toggleMobileMenu()" class="w3-bar-item w3-button" style="color: var(--armad-text);">Inicio</a>
+            <a href="#acrostico" onclick="toggleMobileMenu()" class="w3-bar-item w3-button" style="color: var(--armad-text);">A.R.M.A.D.</a>
+            <a href="#servicios" onclick="toggleMobileMenu()" class="w3-bar-item w3-button" style="color: var(--armad-text);">Servicios</a>
+            <a href="#nosotros" onclick="toggleMobileMenu()" class="w3-bar-item w3-button" style="color: var(--armad-text);">Quiénes Somos</a>
+            <a href="#cotizador" onclick="toggleMobileMenu()" class="w3-bar-item w3-button armad-teal-text" style="font-weight: 700;">Iniciar Proyecto</a>
+        </div>
+    </header>
+
+    <section id="inicio" class="w3-container w3-padding-64" style="padding-top: 120px !important; min-height: 90vh; display: flex; align-items: center;">
+        <div class="w3-content" style="max-width: 1100px;">
+            <div class="w3-row-padding w3-vertical-align">
+                <div class="w3-col l7 m12 w3-margin-bottom">
+                    <span class="w3-tag w3-round armad-bg-teal" style="font-size: 12px; letter-spacing: 1.5px; padding: 6px 12px; text-transform: uppercase;">Estudio Multidisciplinario</span>
+                    <h1 style="font-size: 42px; font-weight: 800; line-height: 1.2; margin-top: 15px;" class="w3-margin-bottom">
+                        Donde la <span class="armad-teal-text">Tecnología</span>, la <span class="armad-teal-text">Música</span> y el <span class="armad-teal-text">Arte</span> convergen.
+                    </h1>
+                    <p style="font-size: 18px; color: var(--armad-muted);" class="w3-margin-bottom">
+                        Somos la <strong>Familia Conde González</strong> (Colectivo CONGO). Combinamos ingeniería de precisión, creación artística y pedagogía superior para dar vida a soluciones integrales y proyectos extraordinarios.
+                    </p>
+                    <div class="w3-padding-16">
+                        <a href="#cotizador" class="armad-btn-primary w3-margin-right w3-margin-bottom">
+                            <i class="fa-solid fa-paper-plane w3-margin-right"></i>Estructurar mi Proyecto
+                        </a>
+                        <a href="#nosotros" class="armad-btn-secondary w3-margin-bottom">Conocer al Colectivo</a>
+                    </div>
+                </div>
+
+                <div class="w3-col l5 m12 w3-center">
+                    <div class="armad-card w3-padding-24 w3-center" style="position: relative; overflow: hidden;">
+                        <!-- Placeholder de Logo con Fallback -->
+                        <img src="./assets/images/Logo Armad-rec.png" onerror="this.onerror=null; this.src='https://placehold.co/400x180/1a232a/58a69e?text=ARMAD+Emprendimiento'" alt="ARMAD Logo" style="max-width: 90%; height: auto; border-radius: 8px;">
+                        <p style="font-size: 14px; color: var(--armad-muted); margin-top: 15px; font-style: italic;">
+                            "Sueños Hechos Realidad"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="acrostico" class="w3-container w3-padding-64" style="background-color: rgba(26, 35, 42, 0.4);">
+        <div class="w3-content" style="max-width: 900px;">
+            <div class="w3-center w3-margin-bottom">
+                <h2 style="font-weight: 800;" class="armad-teal-text">El Concepto A.R.M.A.D.</h2>
+                <p style="color: var(--armad-muted);">Haz clic en cada letra para descubrir el pilar de nuestra propuesta de valor:</p>
+            </div>
+
+            <!-- Botones del acróstico -->
+            <div class="acrostic-box">
+                <div class="acrostic-letter active" onclick="showAcrostic('A1', this)">A</div>
+                <div class="acrostic-letter" onclick="showAcrostic('R', this)">R</div>
+                <div class="acrostic-letter" onclick="showAcrostic('M', this)">M</div>
+                <div class="acrostic-letter" onclick="showAcrostic('A2', this)">A</div>
+                <div class="acrostic-letter" onclick="showAcrostic('D', this)">D</div>
+            </div>
+
+            <!-- Contenido dinámico del acróstico -->
+            <div id="acrostic-display" class="acrostic-content-box w3-margin-top">
+                <!-- Se llena mediante JS -->
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios" class="w3-container w3-padding-64">
+        <div class="w3-content" style="max-width: 1100px;">
+            <div class="w3-center w3-margin-bottom">
+                <h2 style="font-weight: 800;">Nuestros 3 Ejes de Servicios</h2>
+                <p style="color: var(--armad-muted); max-width: 700px; margin: 0 auto;">
+                    Estructuramos nuestras capacidades técnicas y artísticas en tres áreas especializadas para responder con exactitud a tu requerimiento.
+                </p>
+            </div>
+
+            <div class="w3-row-padding w3-margin-top">
+                <!-- EJE 1: Tecnología, Software e IoT -->
+                <div class="w3-col l4 m6 s12 w3-margin-bottom">
+                    <div class="armad-card w3-padding-24" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div class="w3-margin-bottom" style="font-size: 36px; color: var(--armad-teal);">
+                                <i class="fa-solid fa-microchip"></i>
+                            </div>
+                            <span class="w3-tag armad-bg-teal w3-round" style="font-size: 11px;">Robótica + Desarrollo</span>
+                            <h3 style="font-size: 20px; font-weight: 700;" class="w3-margin-top">Tecnología, Software e IoT</h3>
+                            <p style="color: var(--armad-muted); font-size: 14px;">
+                                Desarrollo de software moderno a medida e integración de hardware con Internet de las Cosas (IoT).
+                            </p>
+                            <ul style="color: var(--armad-text); font-size: 13px; padding-left: 20px; line-height: 1.8;">
+                                <li>Páginas Web y Software para PyMEs <span class="w3-text-grey">(Global)</span></li>
+                                <li>Internet de las Cosas y Telemetría <span class="w3-text-grey">(Nacional)</span></li>
+                                <li>Desarrollos Gráficos Interactivos <span class="w3-text-grey">(Global)</span></li>
+                            </ul>
+                        </div>
+                        <div class="w3-margin-top">
+                            <button onclick="startWizard('tecnologia')" class="armad-btn-secondary w3-block w3-center" style="font-size: 13px;">
+                                <i class="fa-solid fa-list-check w3-margin-right"></i>Cotizar Tecnología / IoT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJE 2: Música y Pedagogía -->
+                <div class="w3-col l4 m6 s12 w3-margin-bottom">
+                    <div class="armad-card w3-padding-24" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div class="w3-margin-bottom" style="font-size: 36px; color: var(--armad-teal);">
+                                <i class="fa-solid fa-music"></i>
+                            </div>
+                            <span class="w3-tag armad-bg-teal w3-round" style="font-size: 11px;">Música + Arte</span>
+                            <h3 style="font-size: 20px; font-weight: 700;" class="w3-margin-top">Creación Musical y Pedagogía</h3>
+                            <p style="color: var(--armad-muted); font-size: 14px;">
+                                Producción artística de alcance internacional, dirección coral estructurada y formación instrumental.
+                            </p>
+                            <ul style="color: var(--armad-text); font-size: 13px; padding-left: 20px; line-height: 1.8;">
+                                <li>Composición y Arreglos Musicales <span class="w3-text-grey">(Global)</span></li>
+                                <li>Dirección Coral y Montaje <span class="w3-text-grey">(Regional/Virtual)</span></li>
+                                <li>Enseñanza Instrumental y Vocal <span class="w3-text-grey">(Local/Virtual)</span></li>
+                            </ul>
+                        </div>
+                        <div class="w3-margin-top">
+                            <button onclick="startWizard('musica')" class="armad-btn-secondary w3-block w3-center" style="font-size: 13px;">
+                                <i class="fa-solid fa-list-check w3-margin-right"></i>Cotizar Proyecto Musical
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJE 3: Diseño Visual y Asesoría -->
+                <div class="w3-col l4 m12 s12 w3-margin-bottom">
+                    <div class="armad-card w3-padding-24" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div class="w3-margin-bottom" style="font-size: 36px; color: var(--armad-teal);">
+                                <i class="fa-solid fa-palette"></i>
+                            </div>
+                            <span class="w3-tag armad-bg-teal w3-round" style="font-size: 11px;">Arte + Asesoría</span>
+                            <h3 style="font-size: 20px; font-weight: 700;" class="w3-margin-top">Diseño Visual y Asesoría</h3>
+                            <p style="color: var(--armad-muted); font-size: 14px;">
+                                Diseño digital conceptual, arte plástico por computador y consultoría técnica multidisciplinaria.
+                            </p>
+                            <ul style="color: var(--armad-text); font-size: 13px; padding-left: 20px; line-height: 1.8;">
+                                <li>Diseño Gráfico Digital e Identidad <span class="w3-text-grey">(Global)</span></li>
+                                <li>Material Interactivo Promocional <span class="w3-text-grey">(Global)</span></li>
+                                <li>Consultoría y Asesoría Integrada <span class="w3-text-grey">(Global)</span></li>
+                            </ul>
+                        </div>
+                        <div class="w3-margin-top">
+                            <button onclick="startWizard('diseno')" class="armad-btn-secondary w3-block w3-center" style="font-size: 13px;">
+                                <i class="fa-solid fa-list-check w3-margin-right"></i>Cotizar Diseño / Consultoría
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cotizador" class="w3-container w3-padding-64" style="background-color: rgba(26, 35, 42, 0.6);">
+        <div class="w3-content" style="max-width: 800px;">
+            <div class="armad-card w3-padding-32">
+                <div class="w3-center w3-margin-bottom">
+                    <span class="armad-teal-text" style="font-weight: 700; font-size: 13px; text-transform: uppercase;">Asistente Guiado de Proyectos</span>
+                    <h2 style="font-weight: 800; margin-top: 5px;" id="wizard-title">Estructura tu Requerimiento</h2>
+                    <p style="color: var(--armad-muted); font-size: 14px;">
+                        Avanza y retrocede libremente para complementar las ideas de tu proyecto antes de enviarlo.
+                    </p>
+                </div>
+
+                <!-- Barra de Progreso -->
+                <div class="step-progress-bar">
+                    <div id="progress-fill" class="step-progress-fill"></div>
+                </div>
+
+                <!-- Formulario -->
+                <form id="project-form" onsubmit="handleFormSubmit(event)">
+                    
+                    <!-- PASO 1: Selección de Eje de Servicio -->
+                    <div id="step-1" class="form-step active">
+                        <h4 class="armad-teal-text" style="font-weight: 700;">Paso 1: ¿Qué tipo de proyecto deseas desarrollar?</h4>
+                        <label style="font-size: 13px; color: var(--armad-muted);">Selecciona la categoría principal:</label>
+                        <select id="field-eje" class="form-select" onchange="updateFormCategory()" required>
+                            <option value="">-- Selecciona una categoría --</option>
+                            <option value="tecnologia">1. Tecnología, Software e IoT (Desarrollo Web, Robótica)</option>
+                            <option value="musica">2. Creación Musical y Pedagogía (Composición, Coros, Clases)</option>
+                            <option value="diseno">3. Diseño Visual y Asesoría (Arte Digital, Consultoría)</option>
+                            <option value="multidisciplinar">4. Proyecto Multidisciplinario (Combina varias áreas)</option>
+                        </select>
+
+                        <label style="font-size: 13px; color: var(--armad-muted);">Nombre o Título tentativo del Proyecto:</label>
+                        <input type="text" id="field-titulo" class="form-input" placeholder="Ej: Plataforma Web para Automatización de Inventarios" required>
+                    </div>
+
+                    <!-- PASO 2: Detalles del Requerimiento -->
+                    <div id="step-2" class="form-step">
+                        <h4 class="armad-teal-text" style="font-weight: 700;">Paso 2: Descripción Objetiva del Proyecto</h4>
+                        <label style="font-size: 13px; color: var(--armad-muted);">Describe el objetivo principal y qué esperas lograr:</label>
+                        <textarea id="field-descripcion" class="form-textarea" rows="4" placeholder="Detalla las características, necesidades principales o especificaciones técnicas de tu idea..." required></textarea>
+
+                        <div class="w3-row-padding" style="margin: 0 -8px;">
+                            <div class="w3-half">
+                                <label style="font-size: 13px; color: var(--armad-muted);">Alcance geográfico esperado:</label>
+                                <select id="field-alcance" class="form-select">
+                                    <option value="Local (Armenia / Quindío)">Local (Armenia / Quindío)</option>
+                                    <option value="Nacional (Colombia)">Nacional (Colombia)</option>
+                                    <option value="Global / Internacional">Global / Internacional</option>
+                                </select>
+                            </div>
+                            <div class="w3-half">
+                                <label style="font-size: 13px; color: var(--armad-muted);">Tiempo estimado de entrega deseado:</label>
+                                <select id="field-tiempo" class="form-select">
+                                    <option value="Urgente (menos de 1 mes)">Urgente (menos de 1 mes)</option>
+                                    <option value="Medio (1 a 3 meses)">Medio (1 a 3 meses)</option>
+                                    <option value="Flexible (más de 3 meses)">Flexible (más de 3 meses)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PASO 3: Datos de Contacto y Confirmación -->
+                    <div id="step-3" class="form-step">
+                        <h4 class="armad-teal-text" style="font-weight: 700;">Paso 3: Información de Contacto</h4>
+                        <p style="font-size: 13px; color: var(--armad-muted);">¿A dónde podemos enviarte la propuesta conceptual o agendar una sesión de análisis?</p>
+
+                        <div class="w3-row-padding" style="margin: 0 -8px;">
+                            <div class="w3-half">
+                                <label style="font-size: 13px; color: var(--armad-muted);">Nombre completo:</label>
+                                <input type="text" id="field-nombre" class="form-input" placeholder="Tu nombre" required>
+                            </div>
+                            <div class="w3-half">
+                                <label style="font-size: 13px; color: var(--armad-muted);">Correo Electrónico:</label>
+                                <input type="email" id="field-email" class="form-input" placeholder="correo@ejemplo.com" required>
+                            </div>
+                        </div>
+
+                        <div class="w3-row-padding" style="margin: 0 -8px;">
+                            <div class="w3-half">
+                                <label style="font-size: 13px; color: var(--armad-muted);">Teléfono / WhatsApp (Opcional):</label>
+                                <input type="tel" id="field-telefono" class="form-input" placeholder="+57 300 000 0000">
+                            </div>
+                            <div class="w3-half">
+                                <label style="font-size: 13px; color: var(--armad-muted);">Empresa / Institución (Opcional):</label>
+                                <input type="text" id="field-empresa" class="form-input" placeholder="Nombre de tu entidad">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de Navegación del Wizard -->
+                    <div class="w3-margin-top" style="display: flex; justify-content: space-between; align-items: center;">
+                        <button type="button" id="btn-prev" onclick="changeStep(-1)" class="armad-btn-secondary" style="display: none;">
+                            <i class="fa-solid fa-arrow-left w3-margin-right"></i>Anterior
+                        </button>
+
+                        <div style="margin-left: auto;">
+                            <button type="button" id="btn-next" onclick="changeStep(1)" class="armad-btn-primary">
+                                Siguiente<i class="fa-solid fa-arrow-right w3-margin-left"></i>
+                            </button>
+                            <button type="submit" id="btn-submit" class="armad-btn-primary" style="display: none;">
+                                <i class="fa-solid fa-paper-plane w3-margin-right"></i>Enviar Requerimiento
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Mensaje de confirmación -->
+                <div id="form-response" class="w3-padding-16 w3-center" style="display: none;">
+                    <div class="w3-panel w3-round armad-bg-card armad-border-teal" style="border: 1px solid;">
+                        <i class="fa-solid fa-circle-check armad-teal-text" style="font-size: 40px; margin-top: 15px;"></i>
+                        <h3 class="armad-teal-text" style="font-weight: 700;">¡Requerimiento Recibido!</h3>
+                        <p style="color: var(--armad-text); font-size: 14px;">
+                            Gracias por detallar tu propuesta. La <strong>Familia Conde González</strong> analizará la información y te responderá al correo indicado a la brevedad.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="nosotros" class="w3-container w3-padding-64">
+        <div class="w3-content" style="max-width: 1100px;">
+            <div class="w3-center w3-margin-bottom">
+                <span class="armad-teal-text" style="font-weight: 700; font-size: 13px; text-transform: uppercase;">Nuestra Historia</span>
+                <h2 style="font-weight: 800;">El Colectivo CONGO</h2>
+                <p style="color: var(--armad-muted); max-width: 750px; margin: 0 auto; font-size: 15px;">
+                    En <strong>ARMAD</strong> creemos que la ciencia y el arte no son mundos separados. Somos la <strong>Familia Conde González</strong>, combinando habilidades en ingeniería, desarrollo, música, pedagogía y artes visuales.
+                </p>
+            </div>
+
+            <!-- Integrantes -->
+            <div class="w3-row-padding w3-margin-top">
+                <!-- Fernando -->
+                <div class="w3-col l4 m6 s12 w3-margin-bottom">
+                    <div class="armad-card w3-padding-24">
+                        <h3 style="font-size: 18px; font-weight: 700; margin: 0;" class="armad-teal-text">Fernando Conde</h3>
+                        <span style="font-size: 12px; color: var(--armad-muted);">Ingeniería & Desarrollo</span>
+                        <p style="font-size: 13px; color: var(--armad-text); margin-top: 10px;">
+                            Ingeniero Electrónico con Maestría en Ingeniería Biomédica. Especialista en arquitectura web, desarrollo local/en línea, sistemas de automatización e IoT.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Marcela -->
+                <div class="w3-col l4 m6 s12 w3-margin-bottom">
+                    <div class="armad-card w3-padding-24">
+                        <h3 style="font-size: 18px; font-weight: 700; margin: 0;" class="armad-teal-text">Marcela González</h3>
+                        <span style="font-size: 12px; color: var(--armad-muted);">Dirección Musical & Pedagogía</span>
+                        <p style="font-size: 13px; color: var(--armad-text); margin-top: 10px;">
+                            Músico y Directora Coral con Maestría en Música Elemental y Pedagogía del Movimiento. Líder en técnica vocal, montaje coral y expresión corporal.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Arturo -->
+                <div class="w3-col l4 m6 s12 w3-margin-bottom">
+                    <div class="armad-card w3-padding-24">
+                        <h3 style="font-size: 18px; font-weight: 700; margin: 0;" class="armad-teal-text">Arturo Conde</h3>
+                        <span style="font-size: 12px; color: var(--armad-muted);">Composición & Educación</span>
+                        <p style="font-size: 13px; color: var(--armad-text); margin-top: 10px;">
+                            Compositor con destacada habilidad pedagógica. Creador de obras originales, arreglos para diversos formatos y metodologías de aprendizaje dinámico.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Lucía -->
+                <div class="w3-col l6 m6 s12 w3-margin-bottom">
+                    <div class="armad-card w3-padding-24">
+                        <h3 style="font-size: 18px; font-weight: 700; margin: 0;" class="armad-teal-text">Lucía Conde</h3>
+                        <span style="font-size: 12px; color: var(--armad-muted);">Arte Plástico & Diseño Digital</span>
+                        <p style="font-size: 13px; color: var(--armad-text); margin-top: 10px;">
+                            Artista Plástica orientada al diseño por computador. Especialista en desarrollo gráfico interactivo, ilustración y estructuración de identidad visual.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Verónica -->
+                <div class="w3-col l6 m12 s12 w3-margin-bottom">
+                    <div class="armad-card w3-padding-24">
+                        <h3 style="font-size: 18px; font-weight: 700; margin: 0;" class="armad-teal-text">Verónica Conde</h3>
+                        <span style="font-size: 12px; color: var(--armad-muted);">Expresión Musical & Artística</span>
+                        <p style="font-size: 13px; color: var(--armad-text); margin-top: 10px;">
+                            Músico y creadora artística multidisciplinaria. Destaca por su versatilidad, perseverancia e interpretación en proyectos integrados.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="w3-container w3-padding-48" style="background-color: #0c1115; border-top: 1px solid rgba(88, 166, 158, 0.2);">
+        <div class="w3-content" style="max-width: 1100px;">
+            <div class="w3-row-padding">
+                <!-- Columna 1: Identidad -->
+                <div class="w3-col l3 m6 s12 w3-margin-bottom">
+                    <h3 style="font-weight: 800; font-size: 18px; color: var(--armad-teal);" class="w3-margin-bottom">
+                        <i class="fa-solid fa-lightbulb w3-margin-right"></i>ARMAD
+                    </h3>
+                    <p style="font-size: 13px; color: var(--armad-muted); line-height: 1.6;">
+                        Estudio multidisciplinario de la Familia Conde González. Unimos Arte, Robótica, Música, Asesoría y Desarrollo.
+                    </p>
+                    <span style="font-size: 12px; font-style: italic; color: var(--armad-teal);">"Sueños Hechos Realidad"</span>
+                </div>
+
+                <!-- Columna 2: Navegación -->
+                <div class="w3-col l3 m6 s12 w3-margin-bottom">
+                    <h4 style="font-weight: 700; font-size: 14px; color: #fff;" class="w3-margin-bottom">Navegación</h4>
+                    <ul class="w3-ul" style="border: none; padding: 0;">
+                        <li style="border: none; padding: 4px 0;"><a href="#inicio" style="color: var(--armad-muted); text-decoration: none; font-size: 13px;">Inicio</a></li>
+                        <li style="border: none; padding: 4px 0;"><a href="#acrostico" style="color: var(--armad-muted); text-decoration: none; font-size: 13px;">Acróstico A.R.M.A.D.</a></li>
+                        <li style="border: none; padding: 4px 0;"><a href="#servicios" style="color: var(--armad-muted); text-decoration: none; font-size: 13px;">Ejes de Servicios</a></li>
+                        <li style="border: none; padding: 4px 0;"><a href="#nosotros" style="color: var(--armad-muted); text-decoration: none; font-size: 13px;">El Colectivo CONGO</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3: Servicios -->
+                <div class="w3-col l3 m6 s12 w3-margin-bottom">
+                    <h4 style="font-weight: 700; font-size: 14px; color: #fff;" class="w3-margin-bottom">Ejes Especializados</h4>
+                    <ul class="w3-ul" style="border: none; padding: 0; font-size: 13px; color: var(--armad-muted);">
+                        <li style="border: none; padding: 4px 0;">Tecnología, Software e IoT</li>
+                        <li style="border: none; padding: 4px 0;">Creación Musical y Pedagogía</li>
+                        <li style="border: none; padding: 4px 0;">Diseño Visual y Consultoría</li>
+                        <li style="border: none; padding: 4px 0;">Asistente Guiado de Cotización</li>
+                    </ul>
+                </div>
+
+                <!-- Columna 4: Contacto -->
+                <div class="w3-col l3 m6 s12 w3-margin-bottom">
+                    <h4 style="font-weight: 700; font-size: 14px; color: #fff;" class="w3-margin-bottom">Contacto Directo</h4>
+                    <p style="font-size: 13px; color: var(--armad-muted); margin: 4px 0;">
+                        <i class="fa-solid fa-envelope armad-teal-text w3-margin-right"></i>contacto@armad-congo.com
+                    </p>
+                    <p style="font-size: 13px; color: var(--armad-muted); margin: 4px 0;">
+                        <i class="fa-solid fa-location-dot armad-teal-text w3-margin-right"></i>Armenia, Quindío — Colombia
+                    </p>
+                </div>
+            </div>
+
+            <div class="w3-center w3-padding-16 w3-margin-top" style="border-top: 1px solid rgba(255, 255, 255, 0.05); font-size: 12px; color: var(--armad-muted);">
+                © 2026 ARMAD — Colectivo Conde González. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle Menú Móvil
+        function toggleMobileMenu() {
+            var x = document.getElementById("mobileMenu");
+            if (x.className.indexOf("w3-show") === -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+
+        // Datos del Acróstico
+        const acrosticData = {
+            'A1': { title: 'A — Arte', desc: 'Diseño plástico, ilustración digital por computador y expresión visual conceptual para entornos interactivos.' },
+            'R':  { title: 'R — Robótica', desc: 'Integración de dispositivos electrónicos, automatización de procesos, consolas de control e Internet de las Cosas (IoT).' },
+            'M':  { title: 'M — Música', desc: 'Composición original, arreglos musicales a medida, pedagogía del movimiento y dirección coral de alto nivel.' },
+            'A2': { title: 'A — Asesoría', desc: 'Consultoría integral para acompañar y estructurar proyectos complejos que combinan ciencia, tecnología y arte.' },
+            'D':  { title: 'D — Desarrollo', desc: 'Creación de software a medida, aplicaciones web interactivas y portales digitales escalables para empresas.' }
+        };
+
+        function showAcrostic(key, element) {
+            document.querySelectorAll('.acrostic-letter').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            
+            const data = acrosticData[key];
+            const display = document.getElementById('acrostic-display');
+            display.innerHTML = `
+                <h3 style="margin:0; font-weight:700;" class="armad-teal-text">${data.title}</h3>
+                <p style="margin-top:10px; color:var(--armad-text); font-size:15px;">${data.desc}</p>
+            `;
+        }
+
+        // Inicializar Acróstico
+        showAcrostic('A1', document.querySelector('.acrostic-letter'));
+
+        // Lógica de Wizard Multi-paso
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        function updateWizardUI() {
+            // Actualizar visibilidad de pasos
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepEl = document.getElementById(`step-${i}`);
+                if (i === currentStep) {
+                    stepEl.classList.add('active');
+                } else {
+                    stepEl.classList.remove('active');
+                }
+            }
+
+            // Actualizar barra de progreso
+            const fillPercent = (currentStep / totalSteps) * 100;
+            document.getElementById('progress-fill').style.width = `${fillPercent}%`;
+
+            // Actualizar Botones
+            document.getElementById('btn-prev').style.display = (currentStep === 1) ? 'none' : 'inline-block';
+            
+            if (currentStep === totalSteps) {
+                document.getElementById('btn-next').style.display = 'none';
+                document.getElementById('btn-submit').style.display = 'inline-block';
+            } else {
+                document.getElementById('btn-next').style.display = 'inline-block';
+                document.getElementById('btn-submit').style.display = 'none';
+            }
+        }
+
+        function changeStep(delta) {
+            // Validar campos del paso actual antes de avanzar
+            if (delta > 0) {
+                if (currentStep === 1) {
+                    const eje = document.getElementById('field-eje').value;
+                    const titulo = document.getElementById('field-titulo').value;
+                    if (!eje || !titulo) {
+                        alert('Por favor selecciona una categoría y asigna un título a tu proyecto.');
+                        return;
+                    }
+                } else if (currentStep === 2) {
+                    const desc = document.getElementById('field-descripcion').value;
+                    if (!desc) {
+                        alert('Por favor agrega una breve descripción de tu requerimiento.');
+                        return;
+                    }
+                }
+            }
+
+            currentStep += delta;
+            if (currentStep < 1) currentStep = 1;
+            if (currentStep > totalSteps) currentStep = totalSteps;
+            updateWizardUI();
+        }
+
+        function startWizard(ejeCategory) {
+            document.getElementById('field-eje').value = ejeCategory;
+            currentStep = 1;
+            updateWizardUI();
+            
+            // Desplazar suavemente al cotizador
+            document.getElementById('cotizador').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateFormCategory() {
+            // Callback opcional si se quiere modificar los campos dinámicamente según la categoría
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const formData = {
+                categoria: document.getElementById('field-eje').value,
+                titulo: document.getElementById('field-titulo').value,
+                descripcion: document.getElementById('field-descripcion').value,
+                alcance: document.getElementById('field-alcance').value,
+                tiempo: document.getElementById('field-tiempo').value,
+                nombre: document.getElementById('field-nombre').value,
+                email: document.getElementById('field-email').value,
+                telefono: document.getElementById('field-telefono').value,
+                empresa: document.getElementById('field-empresa').value,
+                fechaEnvio: new Date().toISOString()
+            };
+
+            // Ocultar formulario y mostrar confirmación
+            document.getElementById('project-form').style.display = 'none';
+            document.getElementById('form-response').style.display = 'block';
+
+            console.log('Datos listos para enviar a Google Apps Script:', formData);
+            // Próximo paso: AQUÍ realizaremos el fetch() hacia la Webhook de Google Sheets
+        }
+    </script>
 </body>
 </html>
