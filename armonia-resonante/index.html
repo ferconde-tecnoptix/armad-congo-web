@@ -1,235 +1,567 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Armonía Resonante - Academia Musical y Coro</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #1e3c72;
-      --secondary: #2a5298;
-      --accent: #f39c12;
-      --bg: #f8f9fa;
-      --text: #333333;
+  <title>Armonía Resonante - Academia Musical y Coro | Armenia, Quindío</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              navy: '#1A2B4C',
+              blue: '#2B50AA',
+              cyan: '#00A8E8',
+              yellow: '#FFB800',
+              orange: '#FF6B35',
+              green: '#2EC4B6',
+              bgLight: '#F8FAFC'
+            }
+          }
+        }
+      }
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; }
-    header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; text-align: center; padding: 2.5rem 1rem; }
-    header img { max-width: 220px; height: auto; margin-bottom: 1rem; }
-    header h1 { font-size: 2.2rem; }
-    header p { font-size: 1.1rem; font-weight: 300; opacity: 0.9; }
-    
-    .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
-    section { margin-bottom: 3rem; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-    h2 { color: var(--primary); margin-bottom: 1rem; border-bottom: 3px solid var(--accent); display: inline-block; padding-bottom: 0.3rem; }
-    
-    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
-    .card { background: #fdfdfd; border: 1px solid #eee; border-left: 4px solid var(--accent); padding: 1.5rem; border-radius: 8px; }
-    .card h3 { color: var(--primary); margin-bottom: 0.5rem; }
-
-    /* Galería y Medios */
-    .media-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
-    .placeholder-img { width: 100%; height: 220px; background-color: #e9ecef; border: 2px dashed #b0b0b0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6c757d; font-weight: 600; text-align: center; padding: 1rem; }
-    .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000; margin-top: 1.5rem; }
-    .video-container iframe, .video-container .placeholder-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; }
-
-    /* Formulario */
-    form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
-    .full-width { grid-column: span 2; }
-    label { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem; display: block; }
-    input, select, textarea { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }
-    button { background: var(--accent); color: white; font-weight: bold; padding: 1rem; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem; transition: background 0.3s ease; }
-    button:hover { background: #d3830e; }
-
-    footer { text-align: center; padding: 1.5rem; background: var(--primary); color: white; margin-top: 2rem; }
-
-    @media (max-width: 768px) {
-      form { grid-template-columns: 1fr; }
-      .full-width { grid-column: span 1; }
+  </script>
+  <style>
+    .rainbow-border {
+      background: linear-gradient(90deg, #FF6B35, #FFB800, #2EC4B6, #00A8E8, #2B50AA);
+      height: 4px;
+    }
+    .gradient-header {
+      background: linear-gradient(135deg, #0F172A 0%, #1A2B4C 50%, #2B50AA 100%);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
     }
   </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-yellow selection:text-slate-900">
 
-  <header>
-    <!-- Coloca la imagen de tu logo aquí -->
-    <img src="Logo Coro Armonía Resonante 2019.jpeg" alt="Logo Armonía Resonante">
-    <h1>Academia Musical Armonía Resonante</h1>
-    <p>¡Resuena y canta en armonía! | Armenia, Quindío</p>
+  <!-- Top Rainbow Decorative Bar -->
+  <div class="rainbow-border"></div>
+
+  <!-- Header / Navigation -->
+  <header class="gradient-header text-white sticky top-0 z-50 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <img src="Logo Coro Armonía Resonante 2019.jpeg" alt="Logo Armonía Resonante" class="h-14 w-auto bg-white rounded-full p-1 shadow-md object-contain" onerror="this.onerror=null; this.src='https://placehold.co/120x120/1A2B4C/FFFFFF?text=Armon%C3%ADa+Resonante';">
+        <div>
+          <h1 class="text-xl font-bold tracking-tight text-white leading-tight">Armonía Resonante</h1>
+          <p class="text-xs text-brand-yellow font-medium">¡Resuena y canta en armonía!</p>
+        </div>
+      </div>
+      <nav class="hidden md:flex space-x-6 text-sm font-medium">
+        <a href="#inicio" class="hover:text-brand-yellow transition">Inicio</a>
+        <a href="#maestros" class="hover:text-brand-yellow transition">Maestros</a>
+        <a href="#coro" class="hover:text-brand-yellow transition">Coro & Galería</a>
+        <a href="#videos" class="hover:text-brand-yellow transition">Videos</a>
+        <a href="#inscripcion" class="bg-brand-yellow text-slate-900 px-4 py-2 rounded-full font-semibold hover:bg-yellow-400 transition shadow-md">Inscripciones</a>
+      </nav>
+      <!-- Mobile button menu -->
+      <a href="#inscripcion" class="md:hidden bg-brand-yellow text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold">Inscribirse</a>
+    </div>
   </header>
 
-  <div class="container">
-    
-    <!-- Quienes Somos -->
-    <section>
-      <h2>Nuestra Academia</h2>
-      <p>En <strong>Armonía Resonante</strong> formamos talentos de todas las edades a través del canto y la vivencia musical. Nuestra metodología integral combina la excelencia técnica con la expresión artística en la ciudad de Armenia, Quindío.</p>
-      
-      <div class="team-grid">
-        <div class="card">
-          <h3>Maestra Marcela González Forero</h3>
-          <p>Directora y Fundadora. Maestra en música con énfasis en Canto y Pedagogía musical y Especialista en Direccón de Coros Infantiles y Juveniles de la Pontificia Universidad Javeriana de Bogotá, 
-            con estudios en el Conservatorio de la Universidad Nacional de Colombia y Maestría en Música Elemental y Pedagogía 
-            del Movimiento en el renombrado Mozarteum de Salzburgo, Austria. Especializada en los métodos Orff y Kodály, integrando movimiento, 
-            técnica vocal y práctica coral.</p>
+  <!-- Hero Section -->
+  <section id="inicio" class="relative gradient-header text-white py-16 lg:py-24 overflow-hidden border-b border-slate-800">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid md:grid-cols-12 gap-8 items-center">
+      <div class="md:col-span-7 space-y-6">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30">
+          <i class="fa-solid fa-location-dot text-brand-yellow"></i> Armenia, Quindío - Colombia
+        </span>
+        <h2 class="text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight">
+          Academia Musical y Coro Infantil - Juvenil
+        </h2>
+        <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+          Formación musical integral en canto para niños, jóvenes y adultos. Descubre el arte vocal a través de pedagogía vivencial, movimiento y la práctica coral polifónica.
+        </p>
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a href="#inscripcion" class="inline-flex items-center gap-2 bg-brand-yellow text-slate-900 font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition hover:-translate-y-0.5">
+            <i class="fa-solid fa-pen-to-square"></i> Formulario de Inscripción
+          </a>
+          <a href="#videos" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur-sm border border-white/20 transition">
+            <i class="fa-solid fa-play text-brand-cyan"></i> Ver Presentaciones
+          </a>
         </div>
-        <div class="card">
-          <h3>Arturo Conde González</h3>
-          <p>Docente y Arreglista. Joven talento de extraordinaria habilidad musical y oído absoluto. Destaca por su profunda sensibilidad artística, capacidad de composición y arreglos musicales que enriquecen nuestro repertorio.</p>
+      </div>
+      <div class="md:col-span-5 flex justify-center">
+        <div class="relative group max-w-sm w-full">
+          <div class="absolute -inset-1 bg-gradient-to-r from-brand-orange via-brand-yellow to-brand-cyan rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+          <div class="relative bg-slate-900 rounded-3xl p-6 text-center border border-slate-700">
+            <img src="Logo Coro Armonía Resonante 2019.jpeg" alt="Logo Coro Armonía Resonante" class="mx-auto h-48 w-48 object-contain mb-4 rounded-2xl bg-white p-3 shadow-inner" onerror="this.onerror=null; this.src='https://placehold.co/300x300/1A2B4C/FFFFFF?text=Armonia+Resonante';">
+            <h3 class="text-lg font-bold text-white">¡Únete a nuestra agrupación!</h3>
+            <p class="text-xs text-slate-400 mt-1">Clases particulares e integración al coro polifónico.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- Section: Maestros / Equipo Docente -->
+    <section id="maestros" class="space-y-8">
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl font-bold text-brand-navy">Nuestra Dirección y Docencia</h2>
+        <div class="w-20 h-1 bg-brand-yellow mx-auto mt-2 rounded-full"></div>
+        <p class="text-slate-600 mt-3">Formación de alta excelencia académica y sensibilidad humana al servicio de la música.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Maestra Marcela Card -->
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-md border border-slate-100 hover:shadow-xl transition relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-brand-cyan/10 rounded-bl-full -z-0"></div>
+          <div class="relative z-10 space-y-4">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-2xl bg-brand-navy text-brand-yellow flex items-center justify-center text-2xl font-bold shadow-md">
+                <i class="fa-solid fa-music"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-brand-navy">Maestra Marcela González Forero</h3>
+                <p class="text-sm font-semibold text-brand-blue">Directora y Fundadora</p>
+              </div>
+            </div>
+            <p class="text-slate-700 text-sm leading-relaxed text-justify">
+              Directora y Fundadora. Maestra en música con énfasis en Canto y Pedagogía musical y Especialista en Dirección de Coros Infantiles y Juveniles de la Pontificia Universidad Javeriana de Bogotá, con estudios en el Conservatorio de la Universidad Nacional de Colombia y Maestría en Música Elemental y Pedagogía del Movimiento en el renombrado Mozarteum de Salzburgo, Austria. Especializada en los métodos Orff y Kodály, integrando movimiento, técnica vocal y práctica coral.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-2 text-xs font-medium text-slate-500">
+            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Pontificia Univ. Javeriana</span>
+            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Mozarteum Salzburgo</span>
+            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Métodos Kodály & Orff</span>
+          </div>
+        </div>
+
+        <!-- Arturo Conde Card -->
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-md border border-slate-100 hover:shadow-xl transition relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-brand-orange/10 rounded-bl-full -z-0"></div>
+          <div class="relative z-10 space-y-4">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-2xl bg-brand-orange text-white flex items-center justify-center text-2xl font-bold shadow-md">
+                <i class="fa-solid fa-compact-disc"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-brand-navy">Arturo Conde González</h3>
+                <p class="text-sm font-semibold text-brand-orange">Compositor y Arreglista</p>
+              </div>
+            </div>
+            <p class="text-slate-700 text-sm leading-relaxed text-justify">
+              Acompaña la labor de la academia demostrando una extraordinaria habilidad musical respaldada por su oído absoluto y una especial sensibilidad artística. Expresa su talento a través de una profunda capacidad para la composición musical, la creación de arreglos y el acompañamiento dinámico en el desarrollo del proceso coral e instrumental.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-2 text-xs font-medium text-slate-500">
+            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Oído Absoluto</span>
+            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Composición Musical</span>
+            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Arreglos Corales</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Coro e Imágenes -->
-    <section>
-      <h2>Coro Infantil y Juvenil Polifónico</h2>
-      <p>Contamos con una agrupación coral representativa que aborda obras nacionales, internacionales, clásicas, contemporáneas, sacras y profanas.</p>
-      
-      <div class="media-grid">
-        <div class="placeholder-img">📷 [Espacio para Imagen del Coro 1]</div>
-        <div class="placeholder-img">📷 [Espacio para Imagen del Coro 2]</div>
-        <div class="placeholder-img">📷 [Espacio para Imagen del Coro 3]</div>
+    <!-- Section: Coro Infantil y Juvenil + Espacios para Fotos -->
+    <section id="coro" class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200/80 space-y-8">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-slate-100 pb-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-brand-orange">Agrupación Representativa</span>
+          <h2 class="text-3xl font-bold text-brand-navy">Coro Infantil y Juvenil Polifónico</h2>
+          <p class="text-slate-600 mt-1 max-w-2xl">
+            Interpretamos un variado repertorio de obras nacionales e internacionales, abarcando géneros clásicos, contemporáneos, sacros y profanos.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-500 bg-slate-100 px-4 py-2 rounded-xl">
+          <i class="fa-solid fa-users text-brand-blue"></i>
+          <span>Coro Vocacional y de Formación</span>
+        </div>
       </div>
 
-      <h3 style="margin-top: 2rem; color: var(--primary);">Nuestra Música en Video</h3>
-      <div class="video-container">
-        <div class="placeholder-video">🎥 [Espacio para Video de Presentación / YouTube Embed]</div>
+      <!-- 3 Espacios para Imágenes del Coro -->
+      <div class="space-y-3">
+        <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Galería Fotográfica</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Foto 1 -->
+          <div class="group relative bg-slate-100 border-2 border-dashed border-slate-300 rounded-2xl h-64 flex flex-col items-center justify-center p-6 text-center hover:border-brand-blue transition overflow-hidden">
+            <div class="w-12 h-12 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-brand-blue group-hover:text-white transition duration-300">
+              <i class="fa-solid fa-camera text-xl"></i>
+            </div>
+            <p class="font-semibold text-slate-700 text-sm">Espacio para Imagen 1</p>
+            <p class="text-xs text-slate-400 mt-1">Presentaciones en vivo / Coro Infantil</p>
+            <img src="https://placehold.co/600x400/e2e8f0/475569?text=Fotografia+del+Coro+1" alt="Espacio para foto 1" class="absolute inset-0 w-full h-full object-cover opacity-30 hover:opacity-100 transition duration-300 pointer-events-none">
+          </div>
+
+          <!-- Foto 2 -->
+          <div class="group relative bg-slate-100 border-2 border-dashed border-slate-300 rounded-2xl h-64 flex flex-col items-center justify-center p-6 text-center hover:border-brand-blue transition overflow-hidden">
+            <div class="w-12 h-12 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-brand-blue group-hover:text-white transition duration-300">
+              <i class="fa-solid fa-image text-xl"></i>
+            </div>
+            <p class="font-semibold text-slate-700 text-sm">Espacio para Imagen 2</p>
+            <p class="text-xs text-slate-400 mt-1">Ensayos y Talla Pedagógica</p>
+            <img src="https://placehold.co/600x400/e2e8f0/475569?text=Fotografia+del+Coro+2" alt="Espacio para foto 2" class="absolute inset-0 w-full h-full object-cover opacity-30 hover:opacity-100 transition duration-300 pointer-events-none">
+          </div>
+
+          <!-- Foto 3 -->
+          <div class="group relative bg-slate-100 border-2 border-dashed border-slate-300 rounded-2xl h-64 flex flex-col items-center justify-center p-6 text-center hover:border-brand-blue transition overflow-hidden">
+            <div class="w-12 h-12 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-brand-blue group-hover:text-white transition duration-300">
+              <i class="fa-solid fa-icons text-xl"></i>
+            </div>
+            <p class="font-semibold text-slate-700 text-sm">Espacio para Imagen 3</p>
+            <p class="text-xs text-slate-400 mt-1">Conciertos y Eventos Especiales</p>
+            <img src="https://placehold.co/600x400/e2e8f0/475569?text=Fotografia+del+Coro+3" alt="Espacio para foto 3" class="absolute inset-0 w-full h-full object-cover opacity-30 hover:opacity-100 transition duration-300 pointer-events-none">
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Formulario de Inscripción -->
-    <section id="inscripcion">
-      <h2>Formulario de Inscripción</h2>
-      <p>Inscribe a tu hijo(a) en el Coro Infantil y Juvenil o en nuestras Clases Particulares de Canto.</p>
-      
-      <form id="registrationForm">
-        <div>
-          <label>Nombre del Estudiante *</label>
-          <input type="text" id="nombre" name="nombre" required>
+    <!-- Section: Videos con Pestañas y Selector Dinámico -->
+    <section id="videos" class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl font-bold text-brand-navy">Galería de Muestras y Conciertos</h2>
+        <div class="w-20 h-1 bg-brand-cyan mx-auto mt-2 rounded-full"></div>
+        <p class="text-slate-600 mt-3">Disfruta de nuestras interpretaciones vocales e instrumentales. Selecciona cualquier video de la lista para reproducirlo.</p>
+      </div>
+
+      <div class="bg-slate-900 rounded-3xl p-4 sm:p-8 shadow-2xl text-white">
+        <!-- Pestañas / Selector de Videos -->
+        <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-4 mb-6" id="videoTabs">
+          <!-- Generado o administrado dinámicamente -->
         </div>
-        <div>
-          <label>Apellido del Estudiante *</label>
-          <input type="text" id="apellido" name="apellido" required>
+
+        <!-- Reproductor Principal -->
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+          <div class="lg:col-span-8">
+            <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-lg border border-slate-800">
+              <iframe id="mainVideoPlayer" class="w-full h-full" src="https://www.youtube-nocookie.com/embed/CRwrRhnl6lM?rel=0" title="Reproductor de Video Armonía Resonante" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="mt-4">
+              <h3 id="currentVideoTitle" class="text-lg font-bold text-brand-yellow">Presentación Musical 1</h3>
+              <p id="currentVideoDesc" class="text-xs text-slate-400 mt-1">Interpretación del Coro Infantil y Juvenil Armonía Resonante.</p>
+            </div>
+          </div>
+
+          <!-- Lista lateral de Selección -->
+          <div class="lg:col-span-4 space-y-3">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Lista de Reproducción</h4>
+            <div class="space-y-3 max-h-[420px] overflow-y-auto pr-1" id="videoPlaylist">
+              <!-- Items de videos insertados por JS -->
+            </div>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Section: Formulario de Inscripción -->
+    <section id="inscripcion" class="bg-white rounded-3xl p-6 sm:p-10 shadow-lg border border-slate-200">
+      <div class="max-w-3xl mx-auto text-center space-y-2 mb-8">
+        <span class="px-3 py-1 bg-brand-yellow/20 text-slate-900 text-xs font-bold rounded-full uppercase">Admisiones Abiertas</span>
+        <h2 class="text-3xl font-extrabold text-brand-navy">Formulario de Inscripción</h2>
+        <p class="text-slate-600 text-sm">
+          Completa los datos para inscribir al estudiante en el **Coro Infantil y Juvenil** o en nuestras **Clases Particulares de Canto**. Los registros se ordenan automáticamente del más reciente al más antiguo.
+        </p>
+      </div>
+
+      <form id="registrationForm" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        
+        <!-- Datos del Estudiante -->
+        <div class="md:col-span-2 border-b border-slate-200 pb-2">
+          <h3 class="text-base font-bold text-brand-blue flex items-center gap-2">
+            <i class="fa-solid fa-child-reaching"></i> Información del Estudiante
+          </h3>
+        </div>
+
         <div>
-          <label>Sexo *</label>
-          <select id="sexo" name="sexo" required>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombre">Nombre *</label>
+          <input type="text" id="nombre" name="nombre" required placeholder="Ej. Sofia" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="apellido">Apellido *</label>
+          <input type="text" id="apellido" name="apellido" required placeholder="Ej. Rodríguez" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="sexo">Sexo *</label>
+          <select id="sexo" name="sexo" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm bg-white">
             <option value="">Seleccione...</option>
             <option value="Femenino">Femenino</option>
             <option value="Masculino">Masculino</option>
-          </select>
-        </div>
-        <div>
-          <label>Fecha de Nacimiento *</label>
-          <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
-        </div>
-        <div class="full-width">
-          <label>Programa de Interés *</label>
-          <select id="programa" name="programa" required>
-            <option value="Coro Infantil y Juvenil">Coro Infantil y Juvenil</option>
-            <option value="Clases Particulares de Canto">Clases Particulares de Canto</option>
+            <option value="Otro">Otro</option>
           </select>
         </div>
 
         <div>
-          <label>Nombre del Papá</label>
-          <input type="text" id="nombrePapa" name="nombrePapa">
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="fechaNacimiento">Fecha de Nacimiento *</label>
+          <input type="date" id="fechaNacimiento" name="fechaNacimiento" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
         </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="programa">Programa de Interés *</label>
+          <select id="programa" name="programa" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm bg-white">
+            <option value="Coro Infantil y Juvenil">Coro Infantil y Juvenil Polifónico</option>
+            <option value="Clases Particulares de Canto">Clases Particulares de Canto (Niños y Adultos)</option>
+          </select>
+        </div>
+
+        <!-- Datos de los Padres -->
+        <div class="md:col-span-2 border-b border-slate-200 pb-2 mt-4">
+          <h3 class="text-base font-bold text-brand-blue flex items-center gap-2">
+            <i class="fa-solid fa-users"></i> Información de los Padres / Acudientes
+          </h3>
+        </div>
+
+        <!-- Datos Papá -->
         <div>
-          <label>Celular del Papá</label>
-          <input type="tel" id="celularPapa" name="celularPapa">
-        </div>
-        <div class="full-width">
-          <label>Email del Papá</label>
-          <input type="email" id="emailPapa" name="emailPapa">
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombrePapa">Nombre del Papá</label>
+          <input type="text" id="nombrePapa" name="nombrePapa" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
         </div>
 
         <div>
-          <label>Nombre de la Mamá</label>
-          <input type="text" id="nombreMama" name="nombreMama">
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="celularPapa">Celular del Papá</label>
+          <input type="tel" id="celularPapa" name="celularPapa" placeholder="Ej. 300 123 4567" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
         </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="emailPapa">Email del Papá</label>
+          <input type="email" id="emailPapa" name="emailPapa" placeholder="correo@ejemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+        </div>
+
+        <!-- Datos Mamá -->
         <div>
-          <label>Celular de la Mamá</label>
-          <input type="tel" id="celularMama" name="celularMama">
-        </div>
-        <div class="full-width">
-          <label>Email de la Mamá</label>
-          <input type="email" id="emailMama" name="emailMama">
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombreMama">Nombre de la Mamá</label>
+          <input type="text" id="nombreMama" name="nombreMama" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
         </div>
 
         <div>
-          <label>EPS *</label>
-          <input type="text" id="eps" name="eps" required>
-        </div>
-        <div>
-          <label>Alergias o Condición Médica</label>
-          <input type="text" id="alergias" name="alergias" placeholder="Escriba 'Ninguna' si no aplica">
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="celularMama">Celular de la Mamá</label>
+          <input type="tel" id="celularMama" name="celularMama" placeholder="Ej. 310 987 6543" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
         </div>
 
-        <div class="full-width">
-          <button type="submit" id="submitBtn">Enviar Inscripción</button>
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="emailMama">Email de la Mamá</label>
+          <input type="email" id="emailMama" name="emailMama" placeholder="correo@ejemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+        </div>
+
+        <!-- Salud y Seguridad -->
+        <div class="md:col-span-2 border-b border-slate-200 pb-2 mt-4">
+          <h3 class="text-base font-bold text-brand-blue flex items-center gap-2">
+            <i class="fa-solid fa-notes-medical"></i> Salud y Observaciones
+          </h3>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="eps">EPS *</label>
+          <input type="text" id="eps" name="eps" required placeholder="Nombre de la entidad EPS" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="alergias">Alergias o Cuidados Especiales</label>
+          <input type="text" id="alergias" name="alergias" placeholder="Indicar si aplica o escribir 'Ninguna'" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+        </div>
+
+        <!-- Submit Button -->
+        <div class="md:col-span-2 pt-4">
+          <button type="submit" id="submitBtn" class="w-full bg-brand-yellow hover:bg-yellow-400 text-slate-900 font-bold text-base py-4 px-6 rounded-2xl shadow-lg transition duration-200 flex items-center justify-center gap-2 hover:shadow-xl">
+            <i class="fa-solid fa-paper-plane"></i> Enviar Inscripción
+          </button>
         </div>
       </form>
-      <div id="statusMessage" style="margin-top: 1rem; font-weight: bold; text-align: center;"></div>
+
+      <!-- Feedback Modal / Notification -->
+      <div id="statusModal" class="hidden mt-6 p-4 rounded-2xl text-center text-sm font-semibold transition"></div>
     </section>
 
-  </div>
+  </main>
 
-  <footer>
-    <p>&copy; Armonía Resonante - Armenia, Quindío, Colombia.</p>
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-white mt-16 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="space-y-3">
+        <div class="flex items-center space-x-3">
+          <img src="Logo Coro Armonía Resonante 2019.jpeg" alt="Logo Footer" class="h-10 w-auto bg-white rounded-full p-1" onerror="this.onerror=null; this.src='https://placehold.co/100x100/1A2B4C/FFFFFF?text=AR';">
+          <span class="font-bold text-lg">Armonía Resonante</span>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Academia musical especializada en la formación vocal de niños, jóvenes y adultos. Directora Maestra Marcela González Forero.
+        </p>
+      </div>
+
+      <div class="space-y-2 text-xs text-slate-300">
+        <h4 class="font-bold text-white uppercase text-sm mb-3">Ubicación y Contacto</h4>
+        <p class="flex items-center gap-2">
+          <i class="fa-solid fa-location-dot text-brand-yellow"></i> Armenia, Quindío - Colombia
+        </p>
+        <p class="flex items-center gap-2">
+          <i class="fa-solid fa-envelope text-brand-yellow"></i> Notificaciones administrativas: margonfo@gmail.com
+        </p>
+      </div>
+
+      <div class="space-y-2 text-xs text-slate-300">
+        <h4 class="font-bold text-white uppercase text-sm mb-3">Programas</h4>
+        <ul class="space-y-1">
+          <li>• Coro Infantil y Juvenil Polifónico</li>
+          <li>• Clases Particulares de Canto</li>
+          <li>• Pedagogía Vocal Kodály y Orff</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+      &copy; <span id="yearSpan"></span> Armonía Resonante. Todos los derechos reservados.
+    </div>
   </footer>
 
   <script>
-    // REEMPLAZA ESTA URL CON LA URL QUE OBTENGAS DE GOOGLE APPS SCRIPT
+    // Año dinámico footer
+    document.getElementById('yearSpan').textContent = new Date().getFullYear();
+
+    // -------------------------------------------------------------
+    // URL DEL GOOGLE APPS SCRIPT
+    // -------------------------------------------------------------
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUdi8Ms2DyHXurwFj17F_z_VEZ0iKiAVXoXHWJQW_nXM-bNJp5SwGK8tB5ESpgcmmF/exec";
 
+    // -------------------------------------------------------------
+    // GESTOR DE VIDEOS DE YOUTUBE
+    // -------------------------------------------------------------
+    const videosList = [
+      {
+        id: "CRwrRhnl6lM",
+        title: "Presentación Coral 1",
+        desc: "Muestra musical del Coro Infantil y Juvenil Armonía Resonante."
+      },
+      {
+        id: "HU7RDucguGs",
+        title: "Presentación Coral 2",
+        desc: "Interpretación polifónica y ensamble vocal."
+      },
+      {
+        id: "bsUJlicsiZU",
+        title: "Presentación Coral 3",
+        desc: "Repertorio sacro, profano y pedagógico."
+      }
+    ];
+
+    let currentVideoIndex = 0;
+
+    function renderVideos() {
+      const tabsContainer = document.getElementById('videoTabs');
+      const playlistContainer = document.getElementById('videoPlaylist');
+
+      tabsContainer.innerHTML = '';
+      playlistContainer.innerHTML = '';
+
+      videosList.forEach((video, index) => {
+        const isActive = index === currentVideoIndex;
+
+        // Render Tabs
+        const tabBtn = document.createElement('button');
+        tabBtn.className = `px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 ${
+          isActive 
+            ? 'bg-brand-yellow text-slate-900 shadow-md' 
+            : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+        }`;
+        tabBtn.innerHTML = `<i class="fa-solid ${isActive ? 'fa-circle-play' : 'fa-play'}"></i> Video ${index + 1}`;
+        tabBtn.onclick = () => selectVideo(index);
+        tabsContainer.appendChild(tabBtn);
+
+        // Render Playlist Card
+        const playlistItem = document.createElement('div');
+        playlistItem.className = `p-3 rounded-2xl cursor-pointer transition border flex gap-3 items-center ${
+          isActive 
+            ? 'bg-slate-800 border-brand-yellow/50 shadow-md' 
+            : 'bg-slate-900/60 border-slate-800 hover:bg-slate-800/80'
+        }`;
+        playlistItem.onclick = () => selectVideo(index);
+
+        playlistItem.innerHTML = `
+          <div class="relative w-24 aspect-video rounded-lg overflow-hidden bg-slate-950 flex-shrink-0 border border-slate-700">
+            <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="${video.title}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+              <i class="fa-solid fa-play text-white text-xs"></i>
+            </div>
+          </div>
+          <div class="overflow-hidden">
+            <h5 class="text-xs font-bold text-white truncate">${video.title}</h5>
+            <p class="text-[10px] text-slate-400 line-clamp-2 mt-0.5">${video.desc}</p>
+          </div>
+        `;
+        playlistContainer.appendChild(playlistItem);
+      });
+
+      // Actualizar reproductor principal
+      const current = videosList[currentVideoIndex];
+      document.getElementById('mainVideoPlayer').src = `https://www.youtube-nocookie.com/embed/${current.id}?autoplay=1&rel=0`;
+      document.getElementById('currentVideoTitle').textContent = current.title;
+      document.getElementById('currentVideoDesc').textContent = current.desc;
+    }
+
+    function selectVideo(index) {
+      currentVideoIndex = index;
+      renderVideos();
+    }
+
+    // Inicializar reproductor
+    renderVideos();
+
+    // -------------------------------------------------------------
+    // ENVÍO DE FORMULARIO DE INSCRIPCIÓN
+    // -------------------------------------------------------------
     document.getElementById('registrationForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      
-      const btn = document.getElementById('submitBtn');
-      const status = document.getElementById('statusMessage');
-      
-      btn.disabled = true;
-      btn.innerText = "Enviando registro...";
-      status.style.color = "#333";
-      status.innerText = "Procesando inscripción...";
 
-      const formData = {
-        nombre: document.getElementById('nombre').value,
-        apellido: document.getElementById('apellido').value,
+      const btn = document.getElementById('submitBtn');
+      const modal = document.getElementById('statusModal');
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Registrando inscripción...`;
+
+      modal.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-blue-50 text-blue-800 border border-blue-200 block";
+      modal.innerHTML = "Enviando información y notificando a los administradores...";
+
+      const payload = {
+        nombre: document.getElementById('nombre').value.trim(),
+        apellido: document.getElementById('apellido').value.trim(),
         sexo: document.getElementById('sexo').value,
         fechaNacimiento: document.getElementById('fechaNacimiento').value,
         programa: document.getElementById('programa').value,
-        nombrePapa: document.getElementById('nombrePapa').value,
-        celularPapa: document.getElementById('celularPapa').value,
-        emailPapa: document.getElementById('emailPapa').value,
-        nombreMama: document.getElementById('nombreMama').value,
-        celularMama: document.getElementById('celularMama').value,
-        emailMama: document.getElementById('emailMama').value,
-        eps: document.getElementById('eps').value,
-        alergias: document.getElementById('alergias').value
+        nombrePapa: document.getElementById('nombrePapa').value.trim(),
+        celularPapa: document.getElementById('celularPapa').value.trim(),
+        emailPapa: document.getElementById('emailPapa').value.trim(),
+        nombreMama: document.getElementById('nombreMama').value.trim(),
+        celularMama: document.getElementById('celularMama').value.trim(),
+        emailMama: document.getElementById('emailMama').value.trim(),
+        eps: document.getElementById('eps').value.trim(),
+        alergias: document.getElementById('alergias').value.trim()
       };
 
       fetch(SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors', // Permite enviar a Apps Script sin bloqueos CORS
+        mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       })
       .then(() => {
-        status.style.color = "green";
-        status.innerText = "¡Inscripción realizada con éxito! Nos pondremos en contacto muy pronto.";
+        modal.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 block";
+        modal.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 text-lg mr-1"></i> ¡Inscripción realizada con éxito! La información ha sido registrada y notificada por correo a la dirección general de la academia.`;
         document.getElementById('registrationForm').reset();
       })
       .catch(error => {
-        status.style.color = "red";
-        status.innerText = "Ocurrió un error al enviar el registro. Por favor intente nuevamente.";
-        console.error('Error:', error);
+        modal.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-rose-50 text-rose-800 border border-rose-200 block";
+        modal.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 text-lg mr-1"></i> Ocurrió un error de conexión al enviar el registro. Por favor, intenta de nuevo.`;
+        console.error('Error enviando formulario:', error);
       })
       .finally(() => {
         btn.disabled = false;
-        btn.innerText = "Enviar Inscripción";
+        btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Enviar Inscripción`;
       });
     });
   </script>
