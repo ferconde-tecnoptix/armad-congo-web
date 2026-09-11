@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARMAD — Conde González | Arte, Robótica, Música, Asesoría & Desarrollo</title>
+    <title>ARMAD — Colectivo Conde González | Arte, Robótica, Música, Asesoría & Desarrollo</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="./assets/images/icono.jpg">
@@ -44,6 +44,27 @@
 
         /* Smooth Scrolling */
         html { scroll-behavior: smooth; }
+
+        /* Logo Backdrop & Filter Styles for Dark Backgrounds */
+        .logo-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 16px;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(88, 166, 158, 0.45);
+            border: 2px solid var(--brand-mint);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .logo-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(88, 166, 158, 0.7);
+        }
+
+        /* Halo Filter Option (Alternative without solid background) */
+        .logo-halo-filter {
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 18px rgba(88, 166, 158, 0.6));
+        }
 
         /* Acrostic Card Interactivity */
         .acrostic-btn {
@@ -154,9 +175,14 @@
     <!-- Hero Section -->
     <section id="inicio" class="w3-container w3-padding-64" style="padding-top: 120px !important;">
         <div class="w3-content w3-center" style="max-width: 900px;">
-            <div class="w3-padding">
-                <img src="./assets/images/Logo Armad-circ.png" alt="Logo ARMAD Circular" style="max-width: 180px;" class="w3-animate-top" onerror="this.style.display='none'">
+            
+            <!-- Contenedor del Logo con fondo claro e iluminación Menta -->
+            <div class="w3-padding w3-margin-bottom">
+                <div class="logo-badge w3-animate-top">
+                    <img src="./assets/images/Logo Armad-circ.png" alt="Logo ARMAD Circular" style="max-width: 170px; display: block;" onerror="this.style.display='none'">
+                </div>
             </div>
+
             <h1 class="w3-xxlarge w3-bold w3-margin-top">
                 Donde la <span class="text-mint">Tecnología</span>, la <span class="text-mint">Música</span> y el <span class="text-mint">Arte</span> convergen.
             </h1>
@@ -518,7 +544,7 @@
     <!-- JavaScript Section -->
     <script>
         // Reemplaza esta constante con la URL obtenida al implementar tu Aplicación Web en Apps Script
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxG7XV_X3Ns9x8zFDXczLEkZ4X-AgrlteBqqcdd9wioV-0T3wsCscg0NdFq0WmwD3_6pQ/exec';
+        const GOOGLE_APPS_SCRIPT_URL = 'REEMPLAZAR_CON_TU_URL_DE_WEB_APP';
 
         const acrosticData = {
             'A1': { title: '<i class="fa fa-palette"></i> A — Arte & Diseño Digital', desc: 'Creación visual plástica, ilustración por computador, maquetación de catálogos interactivos e identidad de marca con sello conceptual único.' },
