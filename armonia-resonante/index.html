@@ -283,16 +283,27 @@
         <span class="px-3 py-1 bg-brand-yellow/20 text-slate-900 text-xs font-bold rounded-full uppercase">Admisiones Abiertas</span>
         <h2 class="text-3xl font-extrabold text-brand-navy">Formulario de Inscripción</h2>
         <p class="text-slate-600 text-sm">
-          Completa los datos para inscribir al estudiante en el **Coro Infantil y Juvenil** o en nuestras **Clases Particulares de Canto**. Los registros se ordenan automáticamente del más reciente al más antiguo.
+          Completa los datos para realizar el registro en nuestros programas. Los datos se sincronizan automáticamente con la hoja electrónica de inscripciones.
         </p>
       </div>
 
       <form id="registrationForm" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
         
+        <!-- Casilla Mayor de Edad -->
+        <div class="md:col-span-2 bg-brand-cyan/10 border border-brand-cyan/30 rounded-2xl p-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <input type="checkbox" id="esMayorDeEdad" name="esMayorDeEdad" class="w-5 h-5 text-brand-blue rounded focus:ring-brand-blue border-slate-300 cursor-pointer">
+            <div>
+              <label for="esMayorDeEdad" class="text-sm font-bold text-slate-800 cursor-pointer">El / La estudiante es mayor de edad (18 años o más)</label>
+              <p class="text-xs text-slate-500">Al marcar esta casilla, los datos de acudientes o padres no serán requeridos.</p>
+            </div>
+          </div>
+        </div>
+
         <!-- Datos del Estudiante -->
         <div class="md:col-span-2 border-b border-slate-200 pb-2">
           <h3 class="text-base font-bold text-brand-blue flex items-center gap-2">
-            <i class="fa-solid fa-child-reaching"></i> Información del Estudiante
+            <i class="fa-solid fa-user-graduate"></i> Información del Estudiante
           </h3>
         </div>
 
@@ -311,8 +322,7 @@
           <select id="sexo" name="sexo" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm bg-white">
             <option value="">Seleccione...</option>
             <option value="Femenino">Femenino</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Otro">Otro</option>
+            <option value="Masculino">Masculino</option>            
           </select>
         </div>
 
@@ -321,51 +331,117 @@
           <input type="date" id="fechaNacimiento" name="fechaNacimiento" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
         </div>
 
+        <!-- Selección múltiple de programas offered -->
         <div class="md:col-span-2">
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="programa">Programa de Interés *</label>
-          <select id="programa" name="programa" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm bg-white">
-            <option value="Coro Infantil y Juvenil">Coro Infantil y Juvenil Polifónico</option>
-            <option value="Clases Particulares de Canto">Clases Particulares de Canto (Niños y Adultos)</option>
-          </select>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Programas de Interés (Selecciona una o más opciones) *</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="programasContainer">
+            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
+              <input type="checkbox" name="programa" value="Coro Infantil y Juvenil Polifónico" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
+              <span class="text-xs font-medium text-slate-700"><strong>Coro Infantil y Juvenil Polifónico</strong><br><span class="text-slate-500">Práctica coral y ensamble vocal polifónico</span></span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
+              <input type="checkbox" name="programa" value="Clases Particulares de Canto (Niños y Adultos)" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
+              <span class="text-xs font-medium text-slate-700"><strong>Clases Particulares de Canto</strong><br><span class="text-slate-500">Formación y técnica vocal personalizada</span></span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
+              <input type="checkbox" name="programa" value="Iniciación Vocal y Movimiento (Métodos Kodály / Orff)" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
+              <span class="text-xs font-medium text-slate-700"><strong>Iniciación Vocal y Movimiento</strong><br><span class="text-slate-500">Pedagogía vivencial y desarrollo rítmico</span></span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
+              <input type="checkbox" name="programa" value="Práctica Vocal y Ensamble para Adultos" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
+              <span class="text-xs font-medium text-slate-700"><strong>Taller Vocal para Adultos</strong><br><span class="text-slate-500">Técnica y experiencia coral para adultos</span></span>
+            </label>
+          </div>
+          <p id="programaError" class="text-xs text-rose-500 mt-1 hidden font-semibold">Por favor selecciona al menos un programa de interés.</p>
         </div>
 
-        <!-- Datos de los Padres -->
-        <div class="md:col-span-2 border-b border-slate-200 pb-2 mt-4">
-          <h3 class="text-base font-bold text-brand-blue flex items-center gap-2">
-            <i class="fa-solid fa-users"></i> Información de los Padres / Acudientes
-          </h3>
-        </div>
+        <!-- Contenedor Padres y Acudiente (Ocultable si es mayor de edad) -->
+        <div id="seccionPadresAcudiente" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          
+          <div class="md:col-span-2 border-b border-slate-200 pb-2 flex items-center justify-between">
+            <h3 class="text-base font-bold text-brand-blue flex items-center gap-2">
+              <i class="fa-solid fa-users"></i> Información de Padres / Acudiente
+            </h3>
+            <span id="badgeMayorEdad" class="hidden text-xs bg-brand-yellow/30 text-slate-800 font-bold px-2.5 py-1 rounded-md">
+              Opcional (Estudiante mayor de edad)
+            </span>
+          </div>
 
-        <!-- Datos Papá -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombrePapa">Nombre del Papá</label>
-          <input type="text" id="nombrePapa" name="nombrePapa" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-        </div>
+          <!-- Datos Papá -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombrePapa">Nombre del Papá</label>
+            <input type="text" id="nombrePapa" name="nombrePapa" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="celularPapa">Celular del Papá</label>
-          <input type="tel" id="celularPapa" name="celularPapa" placeholder="Ej. 300 123 4567" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-        </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="celularPapa">Celular del Papá</label>
+            <input type="tel" id="celularPapa" name="celularPapa" placeholder="Ej. 300 123 4567" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
 
-        <div class="md:col-span-2">
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="emailPapa">Email del Papá</label>
-          <input type="email" id="emailPapa" name="emailPapa" placeholder="correo@ejemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-        </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="emailPapa">Email del Papá</label>
+            <input type="email" id="emailPapa" name="emailPapa" placeholder="correo@ejemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
 
-        <!-- Datos Mamá -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombreMama">Nombre de la Mamá</label>
-          <input type="text" id="nombreMama" name="nombreMama" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-        </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="ocupacionPapa">Ocupación del Papá</label>
+            <input type="text" id="ocupacionPapa" name="ocupacionPapa" placeholder="Ej. Ingeniero, Docente..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="celularMama">Celular de la Mamá</label>
-          <input type="tel" id="celularMama" name="celularMama" placeholder="Ej. 310 987 6543" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-        </div>
+          <!-- Datos Mamá -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombreMama">Nombre de la Mamá</label>
+            <input type="text" id="nombreMama" name="nombreMama" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
 
-        <div class="md:col-span-2">
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="emailMama">Email de la Mamá</label>
-          <input type="email" id="emailMama" name="emailMama" placeholder="correo@ejemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="celularMama">Celular de la Mamá</label>
+            <input type="tel" id="celularMama" name="celularMama" placeholder="Ej. 310 987 6543" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="emailMama">Email de la Mamá</label>
+            <input type="email" id="emailMama" name="emailMama" placeholder="correo@ejemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="ocupacionMama">Ocupación de la Mamá</label>
+            <input type="text" id="ocupacionMama" name="ocupacionMama" placeholder="Ej. Arquitecta, Médica..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
+
+          <!-- Datos Acudiente (Opcional) -->
+          <div class="md:col-span-2 pt-2 border-t border-slate-100">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Información del Acudiente (Opcional)</h4>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombreAcudiente">Nombre del Acudiente</label>
+            <input type="text" id="nombreAcudiente" name="nombreAcudiente" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="parentescoAcudiente">Parentesco</label>
+            <input type="text" id="parentescoAcudiente" name="parentescoAcudiente" placeholder="Ej. Tío, Abuelo, Tutor..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="celularAcudiente">Celular del Acudiente</label>
+            <input type="tel" id="celularAcudiente" name="celularAcudiente" placeholder="Ej. 315 000 0000" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="emailAcudiente">Email del Acudiente</label>
+            <input type="email" id="emailAcudiente" name="emailAcudiente" placeholder="acudiente@ejemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="ocupacionAcudiente">Ocupación del Acudiente</label>
+            <input type="text" id="ocupacionAcudiente" name="ocupacionAcudiente" placeholder="Ej. Comercio, Contador..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
+          </div>
+
         </div>
 
         <!-- Salud y Seguridad -->
@@ -444,6 +520,21 @@
     // URL DEL GOOGLE APPS SCRIPT
     // -------------------------------------------------------------
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUdi8Ms2DyHXurwFj17F_z_VEZ0iKiAVXoXHWJQW_nXM-bNJp5SwGK8tB5ESpgcmmF/exec";
+
+    // Manejo visual de mayor de edad
+    const esMayorCheck = document.getElementById('esMayorDeEdad');
+    const badgeMayor = document.getElementById('badgeMayorEdad');
+    const seccionPadres = document.getElementById('seccionPadresAcudiente');
+
+    esMayorCheck.addEventListener('change', function() {
+      if (this.checked) {
+        badgeMayor.classList.remove('hidden');
+        seccionPadres.classList.add('opacity-60');
+      } else {
+        badgeMayor.classList.add('hidden');
+        seccionPadres.classList.remove('opacity-60');
+      }
+    });
 
     // -------------------------------------------------------------
     // GESTOR DE VIDEOS DE YOUTUBE
@@ -534,6 +625,18 @@
     document.getElementById('registrationForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
+      // Validar selección de programas
+      const checkedProgramas = Array.from(document.querySelectorAll('input[name="programa"]:checked')).map(cb => cb.value);
+      const programaError = document.getElementById('programaError');
+
+      if (checkedProgramas.length === 0) {
+        programaError.classList.remove('hidden');
+        document.getElementById('programasContainer').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      } else {
+        programaError.classList.add('hidden');
+      }
+
       const btn = document.getElementById('submitBtn');
       const modal = document.getElementById('statusModal');
 
@@ -544,17 +647,33 @@
       modal.innerHTML = "Enviando información y notificando a los administradores...";
 
       const payload = {
+        esMayorDeEdad: esMayorCheck.checked ? "Sí" : "No",
         nombre: document.getElementById('nombre').value.trim(),
         apellido: document.getElementById('apellido').value.trim(),
         sexo: document.getElementById('sexo').value,
         fechaNacimiento: document.getElementById('fechaNacimiento').value,
-        programa: document.getElementById('programa').value,
+        programas: checkedProgramas.join(", "),
+        
+        // Papá
         nombrePapa: document.getElementById('nombrePapa').value.trim(),
         celularPapa: document.getElementById('celularPapa').value.trim(),
         emailPapa: document.getElementById('emailPapa').value.trim(),
+        ocupacionPapa: document.getElementById('ocupacionPapa').value.trim(),
+
+        // Mamá
         nombreMama: document.getElementById('nombreMama').value.trim(),
         celularMama: document.getElementById('celularMama').value.trim(),
         emailMama: document.getElementById('emailMama').value.trim(),
+        ocupacionMama: document.getElementById('ocupacionMama').value.trim(),
+
+        // Acudiente (Opcional)
+        nombreAcudiente: document.getElementById('nombreAcudiente').value.trim(),
+        parentescoAcudiente: document.getElementById('parentescoAcudiente').value.trim(),
+        celularAcudiente: document.getElementById('celularAcudiente').value.trim(),
+        emailAcudiente: document.getElementById('emailAcudiente').value.trim(),
+        ocupacionAcudiente: document.getElementById('ocupacionAcudiente').value.trim(),
+
+        // Salud
         eps: document.getElementById('eps').value.trim(),
         alergias: document.getElementById('alergias').value.trim()
       };
@@ -569,6 +688,8 @@
         modal.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 block";
         modal.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 text-lg mr-1"></i> ¡Inscripción realizada con éxito! La información ha sido registrada y notificada por correo a la dirección general de la academia.`;
         document.getElementById('registrationForm').reset();
+        badgeMayor.classList.add('hidden');
+        seccionPadres.classList.remove('opacity-60');
       })
       .catch(error => {
         modal.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-rose-50 text-rose-800 border border-rose-200 block";
