@@ -89,28 +89,28 @@
           Formación musical integral en canto para niños, jóvenes y adultos. Descubre el arte vocal a través de pedagogía vivencial, movimiento y la práctica coral polifónica.
         </p>
         <div class="flex flex-wrap gap-4 pt-2">
-        <a href="#inscripcion" class="inline-flex items-center gap-2 bg-brand-yellow text-slate-900 font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition hover:-translate-y-0.5">
-          <i class="fa-solid fa-pen-to-square"></i> Formulario de Inscripción
-        </a>
-        <a href="#videos" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur-sm border border-white/20 transition">
-          <i class="fa-solid fa-play text-brand-cyan"></i> Ver Presentaciones
+          <a href="#inscripcion" class="inline-flex items-center gap-2 bg-brand-yellow text-slate-900 font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition hover:-translate-y-0.5">
+            <i class="fa-solid fa-pen-to-square"></i> Formulario de Inscripción
+          </a>
+          <a href="#videos" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur-sm border border-white/20 transition">
+            <i class="fa-solid fa-play text-brand-cyan"></i> Ver Presentaciones
+          </a>
+        </div>
+      </div>
+      <div class="md:col-span-5 flex justify-center">
+        <a href="#inscripcion" class="relative group max-w-sm w-full block transform transition hover:-translate-y-1">
+          <div class="absolute -inset-1 bg-gradient-to-r from-brand-orange via-brand-yellow to-brand-cyan rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+          <div class="relative bg-slate-900 rounded-3xl p-6 text-center border border-slate-700 hover:border-brand-yellow/50 transition">
+            <img src="logo.jpeg" alt="Logo Coro Armonía Resonante" class="mx-auto h-48 w-48 object-contain mb-4 rounded-2xl bg-white p-3 shadow-inner" onerror="this.onerror=null; this.src='https://placehold.co/300x300/1A2B4C/FFFFFF?text=Armonia+Resonante';">
+            <h3 class="text-lg font-bold text-white flex items-center justify-center gap-2">
+              ¡Únete a nuestra agrupación! <i class="fa-solid fa-arrow-right text-brand-yellow text-sm group-hover:translate-x-1 transition"></i>
+            </h3>
+            <p class="text-xs text-brand-yellow mt-1 font-medium">Haz clic aquí para ir al formulario de inscripción</p>
+          </div>
         </a>
       </div>
     </div>
-    <div class="md:col-span-5 flex justify-center">
-      <a href="#inscripcion" class="relative group max-w-sm w-full block transform transition hover:-translate-y-1">
-        <div class="absolute -inset-1 bg-gradient-to-r from-brand-orange via-brand-yellow to-brand-cyan rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-        <div class="relative bg-slate-900 rounded-3xl p-6 text-center border border-slate-700 hover:border-brand-yellow/50 transition">
-          <img src="logo.jpeg" alt="Logo Coro Armonía Resonante" class="mx-auto h-48 w-48 object-contain mb-4 rounded-2xl bg-white p-3 shadow-inner" onerror="this.onerror=null; this.src='https://placehold.co/300x300/1A2B4C/FFFFFF?text=Armonia+Resonante';">
-          <h3 class="text-lg font-bold text-white flex items-center justify-center gap-2">
-            ¡Únete a nuestra agrupación! <i class="fa-solid fa-arrow-right text-brand-yellow text-sm group-hover:translate-x-1 transition"></i>
-          </h3>
-          <p class="text-xs text-brand-yellow mt-1 font-medium">Haz clic aquí para ir al formulario de inscripción</p>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
+  </section>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
 
@@ -189,10 +189,23 @@
         </div>
       </div>
 
-      <!-- 3 Espacios para Imágenes del Coro con Texto Descriptivo -->
+      <!-- Espacios para Imágenes del Coro con Texto Descriptivo -->
       <div class="space-y-3">
         <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Galería Fotográfica</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Foto 0 -->
+          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+            <div class="relative h-64 overflow-hidden bg-slate-100">
+              <img src="foto00.jpg" alt="Presentaciones y Conciertos" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1A2B4C/FFFFFF?text=Fotografia+0';">
+              <div class="absolute top-3 left-3 bg-brand-navy/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
+                Directora en concierto
+              </div>
+            </div>
+            <div class="p-4 bg-white border-t border-slate-100">
+              <h4 class="font-bold text-slate-800 text-sm">Conciertos</h4>
+              <p class="text-xs text-slate-500 mt-1">Conciertos y participaciones en vivo en escenarios locales y virtuales.</p>
+            </div>
+          </div>
           
           <!-- Foto 1 -->
           <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
@@ -203,8 +216,8 @@
               </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Presentaciones Coralísticas</h4>
-              <p class="text-xs text-slate-500 mt-1">Conciertos y participaciones en vivo en escenarios locales e internacionales.</p>
+              <h4 class="font-bold text-slate-800 text-sm">Conciertos</h4>
+              <p class="text-xs text-slate-500 mt-1">Conciertos y participaciones en vivo en escenarios locales y virtuales.</p>
             </div>
           </div>
 
@@ -236,10 +249,10 @@
             </div>
           </div>
 
-          <!-- Foto 4 -->
+          <!-- Foto 4 (Centrada) -->
           <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
             <div class="relative h-64 overflow-hidden bg-slate-100 flex items-center justify-center">
-              <img src="foto04.jpg" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+3';">
+              <img src="foto04.jpg" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+4';">
               <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
                 Movimiento
               </div>
@@ -252,12 +265,85 @@
 
           <!-- Foto 5 -->
           <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-                Eventos Especiales
+            <div class="relative h-64 overflow-hidden bg-slate-100">
+              <img src="foto05.jpeg" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+5';">
+              <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
+                Belleza y Armonía
               </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Repertorio Polifónico</h4>
-              <p class="text-xs text-slate-500 mt-1">Obras sacras, profanas, folclóricas y repertorio coral infantil - juvenil.</p>
+              <h4 class="font-bold text-slate-800 text-sm">Música, Arte y Belleza</h4>
+              <p class="text-xs text-slate-500 mt-1">Sensibilidad en los detalles.</p>
+            </div>
+          </div>
+
+          <!-- Foto 6 -->
+          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+            <div class="relative h-64 overflow-hidden bg-slate-100">
+              <img src="foto06.JPG" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+6';">
+              <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
+                Cultura y Tradición
+              </div>
+            </div>
+            <div class="p-4 bg-white border-t border-slate-100">
+              <h4 class="font-bold text-slate-800 text-sm">Obras populares, orgullo de nuestra tierra</h4>
+              <p class="text-xs text-slate-500 mt-1">Lugares icónicos para nuestras presentaciones</p>
+            </div>
+          </div>
+
+          <!-- Foto 7 -->
+          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+            <div class="relative h-64 overflow-hidden bg-slate-100">
+              <img src="foto07.jpeg" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+7';">
+              <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
+                 Acompañamiento y Juego
+              </div>
+            </div>
+            <div class="p-4 bg-white border-t border-slate-100">
+              <h4 class="font-bold text-slate-800 text-sm">Acompañamiento instrumental y grupo coral </h4>
+              <p class="text-xs text-slate-500 mt-1">Práctica coral con acompañamiento musical, la mejor forma de ocupar el tiempo</p>
+            </div>
+          </div>
+
+          <!-- Foto 8 -->
+          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+            <div class="relative h-64 overflow-hidden bg-slate-100">
+              <img src="foto08.jpeg" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+8';">
+              <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
+                Vestuario y preparación
+              </div>
+            </div>
+            <div class="p-4 bg-white border-t border-slate-100">
+              <h4 class="font-bold text-slate-800 text-sm">Previos de conciertos para promosiones y posters</h4>
+              <p class="text-xs text-slate-500 mt-1">Túnicas y preparación para presentaciones.</p>
+            </div>
+          </div>
+
+          <!-- Foto 9 -->
+          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+            <div class="relative h-64 overflow-hidden bg-slate-100">
+              <img src="foto09.jpg" alt="Ensayos y Talla Pedagógica" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2B50AA/FFFFFF?text=Fotografia+9';">
+              <div class="absolute top-3 left-3 bg-brand-blue/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
+                Conciertos
+              </div>
+            </div>
+            <div class="p-4 bg-white border-t border-slate-100">
+              <h4 class="font-bold text-slate-800 text-sm">Música, Canto y Movimiento</h4>
+              <p class="text-xs text-slate-500 mt-1">Práctica vocal integral mediante los métodos Kodály y Orff con niños y jóvenes.</p>
+            </div>
+          </div>
+
+          <!-- Foto 10 -->
+          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+            <div class="relative h-64 overflow-hidden bg-slate-100">
+              <img src="foto10.jpg" alt="Ensayos y Talla Pedagógica" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2B50AA/FFFFFF?text=Fotografia+10';">
+              <div class="absolute top-3 left-3 bg-brand-blue/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
+                Pedagogía Vivencial
+              </div>
+            </div>
+            <div class="p-4 bg-white border-t border-slate-100">
+              <h4 class="font-bold text-slate-800 text-sm">Ensayos y Movimiento</h4>
+              <p class="text-xs text-slate-500 mt-1">Práctica integral instrumental y vocal.</p>
             </div>
           </div>
 
@@ -357,7 +443,7 @@
           <input type="date" id="fechaNacimiento" name="fechaNacimiento" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
         </div>
 
-        <!-- Selección múltiple de programas offered -->
+        <!-- Selección múltiple de programas ofrecidos -->
         <div class="md:col-span-2">
           <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Programas de Interés (Selecciona una o más opciones) *</label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="programasContainer">
@@ -602,6 +688,31 @@
         id: "bsUJlicsiZU",
         title: "Presentación Coral 3",
         desc: "Repertorio sacro, profano y pedagógico."
+      },
+      {
+        id: "LeHpgSDGVEY",
+        title: "Canción de cuna para arrullar un arroyo",
+        desc: "Repertorio popular, Armonía Resonante Campesino."
+      },
+      {
+        id: "FIM4WMBrZB0",
+        title: "Colombia es amor",
+        desc: "Repertorio popular, Armonía Resonante Campesino."
+      },
+      {
+        id: "Z8CPIQxziZI",
+        title: "Dona Nobis Pacem",
+        desc: "Repertorio sacro, Armonía Resonante Campesino."
+      },
+      {
+        id: "GFJfakbLxJU",
+        title: "Ay si si",
+        desc: "Repertorio popular, Armonía Resonante Campesino."
+      },
+      {
+        id: "jcwtVUpgAEg",
+        title: "Niña Guabina",
+        desc: "Repertorio popular, Armonía Resonante Campesino."
       }
     ];
 
