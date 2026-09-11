@@ -322,7 +322,8 @@
           <select id="sexo" name="sexo" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm bg-white">
             <option value="">Seleccione...</option>
             <option value="Femenino">Femenino</option>
-            <option value="Masculino">Masculino</option>            
+            <option value="Masculino">Masculino</option>
+            <option value="Otro">Otro</option>
           </select>
         </div>
 
@@ -341,13 +342,23 @@
             </label>
 
             <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
+              <input type="checkbox" name="programa" value="Coro Infantil Semillero" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
+              <span class="text-xs font-medium text-slate-700"><strong>Coro Infantil Semillero</strong><br><span class="text-slate-500">Iniciación coral y desarrollo auditivo infantil</span></span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
               <input type="checkbox" name="programa" value="Clases Particulares de Canto (Niños y Adultos)" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
               <span class="text-xs font-medium text-slate-700"><strong>Clases Particulares de Canto</strong><br><span class="text-slate-500">Formación y técnica vocal personalizada</span></span>
             </label>
 
             <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
-              <input type="checkbox" name="programa" value="Iniciación Vocal y Movimiento (Métodos Kodály / Orff)" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
-              <span class="text-xs font-medium text-slate-700"><strong>Iniciación Vocal y Movimiento</strong><br><span class="text-slate-500">Pedagogía vivencial y desarrollo rítmico</span></span>
+              <input type="checkbox" name="programa" value="Clases Particulares de Piano" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
+              <span class="text-xs font-medium text-slate-700"><strong>Clases Particulares de Piano</strong><br><span class="text-slate-500">Iniciación al piano, técnica y lenguaje musical</span></span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
+              <input type="checkbox" name="programa" value="Solfeo (lectura musical)" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
+              <span class="text-xs font-medium text-slate-700"><strong>Solfeo (Lectura Musical)</strong><br><span class="text-slate-500">Entrenamiento auditivo, gramática y lectura musical</span></span>
             </label>
 
             <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
@@ -502,8 +513,9 @@
         <h4 class="font-bold text-white uppercase text-sm mb-3">Programas</h4>
         <ul class="space-y-1">
           <li>• Coro Infantil y Juvenil Polifónico</li>
-          <li>• Clases Particulares de Canto</li>
-          <li>• Pedagogía Vocal Kodály y Orff</li>
+          <li>• Coro Infantil Semillero</li>
+          <li>• Clases Particulares de Canto y Piano</li>
+          <li>• Solfeo y Lectura Musical</li>
         </ul>
       </div>
     </div>
