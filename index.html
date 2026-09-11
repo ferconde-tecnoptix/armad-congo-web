@@ -152,6 +152,7 @@
                 <div class="w3-right w3-hide-small">
                     <a href="#acrostico" class="w3-bar-item w3-button w3-hover-text-teal">Acróstico</a>
                     <a href="#servicios" class="w3-bar-item w3-button w3-hover-text-teal">Servicios</a>
+                    <a href="#proyectos" class="w3-bar-item w3-button w3-hover-text-teal">Proyectos por Eje</a>
                     <a href="#quienes-somos" class="w3-bar-item w3-button w3-hover-text-teal">Quiénes Somos</a>
                     <a href="#contacto" class="w3-bar-item w3-button btn-armad w3-margin-left">Solicitar Cotización</a>
                 </div>
@@ -167,6 +168,7 @@
         <div id="mobileNav" class="w3-bar-block w3-hide w3-hide-large w3-hide-medium bg-card w3-padding-large">
             <a href="#acrostico" class="w3-bar-item w3-button" onclick="toggleMobileNav()">Acróstico</a>
             <a href="#servicios" class="w3-bar-item w3-button" onclick="toggleMobileNav()">Servicios</a>
+            <a href="#proyectos" class="w3-bar-item w3-button" onclick="toggleMobileNav()">Proyectos por Eje</a>
             <a href="#quienes-somos" class="w3-bar-item w3-button" onclick="toggleMobileNav()">Quiénes Somos</a>
             <a href="#contacto" class="w3-bar-item w3-button btn-armad w3-margin-top" onclick="toggleMobileNav()">Solicitar Cotización</a>
         </div>
@@ -244,7 +246,203 @@
                 <p id="acrosticDesc" class="w3-large w3-padding" style="max-width: 800px; margin: 0 auto;">
                     Creación visual plástica, ilustración por computador, maquetación de catálogos interactivos e identidad de marca con sello conceptual único.
                 </p>
+                <div class="w3-margin-top">
+                    <a id="acrosticLink" href="#sec-arte" class="w3-button btn-outline-armad w3-small">
+                        <i class="fa fa-images"></i> Ver Proyectos de Arte & Diseño <i class="fa fa-arrow-down"></i>
+                    </a>
+                </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Showcase / Projects Sections by Pillar -->
+    <section id="proyectos" class="w3-container w3-padding-64" style="background-color: var(--brand-dark-bg);">
+        <div class="w3-content" style="max-width: 1200px;">
+            <div class="w3-center w3-margin-bottom">
+                <h2 class="w3-xxlarge w3-bold">Portafolio de Proyectos por Eje</h2>
+                <p style="color: var(--brand-text-muted);">Explora nuestros trabajos realizados en cada una de las dimensiones ARMAD:</p>
+            </div>
+
+            <!-- Pillar A1: ARTE & DISEÑO -->
+            <div id="sec-arte" class="w3-margin-bottom w3-padding-24 bg-card w3-round-large" style="scroll-margin-top: 90px; border-left: 5px solid var(--brand-mint);">
+                <div class="w3-container">
+                    <h3 class="w3-xlarge w3-bold text-mint"><i class="fa fa-palette"></i> A — Arte & Diseño Digital</h3>
+                    <p class="w3-small text-muted" style="color: var(--brand-text-muted);">Identidad gráfica, ilustración conceptual, piezas interactivas y diagramación editorial.</p>
+                </div>
+                <div class="w3-row-padding w3-margin-top">
+                    <div class="w3-col l4 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80" alt="Identidad Visual Marca" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Arte+y+Diseno'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Identidad Visual & Branding</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Manuales de marca, logotipos vectoriales y paletas de color con narrativa conceptual personalizada.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Diseño Gráfico</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-col l4 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="Ilustración Digital" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Ilustracion+Digital'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Ilustración Digital & Plástica</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Composiciones artísticas por computador para portadas, afiches culturales y material divulgativo.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Ilustración</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-col l4 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80" alt="Catálogos Interactivos" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Catalogos+Digitales'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Catálogos & Piezas Interactivas</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Maquetación de portafolios digitales navegables y piezas gráficas promocionales multi-formato.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Editorial Digital</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar R: ROBÓTICA E IOT -->
+            <div id="sec-robotica" class="w3-margin-bottom w3-padding-24 bg-card w3-round-large" style="scroll-margin-top: 90px; border-left: 5px solid var(--brand-mint);">
+                <div class="w3-container">
+                    <h3 class="w3-xlarge w3-bold text-mint"><i class="fa fa-robot"></i> R — Robótica e IoT</h3>
+                    <p class="w3-small text-muted" style="color: var(--brand-text-muted);">Sistemas electrónicos embebidos, telemetría de sensores, automatización y hardware conectado.</p>
+                </div>
+                <div class="w3-row-padding w3-margin-top">
+                    <div class="w3-col l6 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80" alt="Consolas Telemetría IoT" style="width:100%; height:220px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Telemetria+IoT'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Consolas de Telemetría e Internet de las Cosas</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Diseño de nodos sensores con transmisión inalambrica a paneles de monitoreo en la nube en tiempo real.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">IoT & Embebidos</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-col l6 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="Automatización Electrónica" style="width:100%; height:220px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Automatizacion+Industrial'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Automatización de Procesos Electrónicos</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Controladores dedicados a medida para accionamiento de actuadores, motores y prototipos interactivos.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Control & Electrónica</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar M: MÚSICA & PEDAGOGÍA -->
+            <div id="sec-musica" class="w3-margin-bottom w3-padding-24 bg-card w3-round-large" style="scroll-margin-top: 90px; border-left: 5px solid var(--brand-mint);">
+                <div class="w3-container">
+                    <h3 class="w3-xlarge w3-bold text-mint"><i class="fa fa-music"></i> M — Música & Pedagogía</h3>
+                    <p class="w3-small text-muted" style="color: var(--brand-text-muted);">Composición académica, partituras para coros/orquestas, técnica vocal y metodologías formativas.</p>
+                </div>
+                <div class="w3-row-padding w3-margin-top">
+                    <div class="w3-col l4 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80" alt="Composición y Partituras" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Composicion+Musical'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Composición & Arreglos Originales</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Creación de obras inéditas y arreglos polifónicos adaptados a diferentes niveles instrumentales o vocales.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Partituras & Composición</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-col l4 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=600&q=80" alt="Dirección Coral" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Direccion+Coral'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Dirección Coral & Montaje Vocal</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Conformación de agrupaciones corales, dirección de ensayos y talleres intensivos de colocación vocal.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Dirección Coral</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-col l4 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&w=600&q=80" alt="Formación Instrumental" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Pedagogia+Musical'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Pedagogía & Clases de Música</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Metodología activa del movimiento para la iniciación musical infantil y perfeccionamiento técnico instrumental.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Pedagogía del Movimiento</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar A2: ASESORÍA INTEGRAL -->
+            <div id="sec-asesoria" class="w3-margin-bottom w3-padding-24 bg-card w3-round-large" style="scroll-margin-top: 90px; border-left: 5px solid var(--brand-mint);">
+                <div class="w3-container">
+                    <h3 class="w3-xlarge w3-bold text-mint"><i class="fa fa-comments"></i> A — Asesoría Integral</h3>
+                    <p class="w3-small text-muted" style="color: var(--brand-text-muted);">Consultoría multidisciplinaria para proyectos complejos que cruzan tecnología, cultura y educación.</p>
+                </div>
+                <div class="w3-row-padding w3-margin-top">
+                    <div class="w3-col l6 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80" alt="Estructuración Proyectos" style="width:100%; height:220px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Estructuracion+Proyectos'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Estructuración de Proyectos Multidisciplinarios</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Asesoramiento integral desde la formulación conceptual hasta los planes de ejecución técnica y artística.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Consultoría Estratégica</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-col l6 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="Integración Ciencia Arte" style="width:100%; height:220px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Arte+y+Tecnologia'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Mentoría en Tecnología + Arte (STEAM)</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Acompañamiento pedagógico e institucional para integrar herramientas científicas en procesos creativos.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Asesoría STEAM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar D: DESARROLLO DE SOFTWARE -->
+            <div id="sec-desarrollo" class="w3-margin-bottom w3-padding-24 bg-card w3-round-large" style="scroll-margin-top: 90px; border-left: 5px solid var(--brand-mint);">
+                <div class="w3-container">
+                    <h3 class="w3-xlarge w3-bold text-mint"><i class="fa fa-code"></i> D — Desarrollo de Software</h3>
+                    <p class="w3-small text-muted" style="color: var(--brand-text-muted);">Aplicaciones web, portales corporativos, software PyME e integración de APIs.</p>
+                </div>
+                <div class="w3-row-padding w3-margin-top">
+                    <div class="w3-col l4 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80" alt="Portales Web Responsivos" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Portales+Web'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Portales Web & Landing Pages</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Sitios institucionales ultrarrápidos, optimizados para dispositivos móviles e integrados con repositorios Git.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Desarrollo Web</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-col l4 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80" alt="Software para PyMEs" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=Software+PyME'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Software de Gestión PyME</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Herramientas administrativas personalizadas, sistemas de requerimientos y almacenamiento de datos.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Software a Medida</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-col l4 m6 w3-margin-bottom">
+                        <div class="w3-card w3-round-large" style="background: #0b1120; overflow: hidden; border: 1px solid var(--brand-card-border);">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80" alt="Integración de APIs y Serverless" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='https://placehold.co/600x400/151f32/58a69e?text=APIs+y+Cloud'">
+                            <div class="w3-container w3-padding">
+                                <h4 class="w3-medium w3-bold">Integraciones Serverless & APIs</h4>
+                                <p class="w3-small" style="color: var(--brand-text-muted);">Conexión de formularios inteligentes con Google Sheets, automatización de correos y microservicios en la nube.</p>
+                                <span class="w3-tag w3-round bg-mint w3-tiny">Cloud & Serverless</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -507,18 +705,20 @@
                         <li><a href="#inicio" class="w3-hover-text-teal">Inicio</a></li>
                         <li><a href="#acrostico" class="w3-hover-text-teal">Acróstico ARMAD</a></li>
                         <li><a href="#servicios" class="w3-hover-text-teal">Ejes de Servicios</a></li>
+                        <li><a href="#proyectos" class="w3-hover-text-teal">Proyectos por Eje</a></li>
                         <li><a href="#quienes-somos" class="w3-hover-text-teal">El Colectivo CONGO</a></li>
                     </ul>
                 </div>
 
-                <!-- Col 3 -->
+                <!-- Col 3: Ejes de Servicios actualizados con los 5 del acróstico ARMAD -->
                 <div class="w3-col l3 m6 w3-margin-bottom">
-                    <h4 class="w3-medium w3-bold text-mint">Ejes de Servicios</h4>
+                    <h4 class="w3-medium w3-bold text-mint">Ejes ARMAD</h4>
                     <ul class="w3-ul w3-border-0 w3-small" style="padding: 0;">
-                        <li>Tecnología, Software e IoT</li>
-                        <li>Composición & Dirección Coral</li>
-                        <li>Diseño Gráfico & Arte Visual</li>
-                        <li>Consultoría & Asesoría Integral</li>
+                        <li><a href="#sec-arte" class="w3-hover-text-teal"><i class="fa fa-palette text-mint"></i> <strong>A</strong> — Arte & Diseño Digital</a></li>
+                        <li><a href="#sec-robotica" class="w3-hover-text-teal"><i class="fa fa-robot text-mint"></i> <strong>R</strong> — Robótica e IoT</a></li>
+                        <li><a href="#sec-musica" class="w3-hover-text-teal"><i class="fa fa-music text-mint"></i> <strong>M</strong> — Música & Pedagogía</a></li>
+                        <li><a href="#sec-asesoria" class="w3-hover-text-teal"><i class="fa fa-comments text-mint"></i> <strong>A</strong> — Asesoría Integral</a></li>
+                        <li><a href="#sec-desarrollo" class="w3-hover-text-teal"><i class="fa fa-code text-mint"></i> <strong>D</strong> — Desarrollo de Software</a></li>
                     </ul>
                 </div>
 
@@ -547,11 +747,36 @@
         const GOOGLE_APPS_SCRIPT_URL = 'REEMPLAZAR_CON_TU_URL_DE_WEB_APP';
 
         const acrosticData = {
-            'A1': { title: '<i class="fa fa-palette"></i> A — Arte & Diseño Digital', desc: 'Creación visual plástica, ilustración por computador, maquetación de catálogos interactivos e identidad de marca con sello conceptual único.' },
-            'R': { title: '<i class="fa fa-robot"></i> R — Robótica e IoT', desc: 'Sistemas electrónicos integrados, automatización de procesos, telemetría y comunicación de dispositivos con plataformas en la nube.' },
-            'M': { title: '<i class="fa fa-music"></i> M — Música & Pedagogía', desc: 'Composición musical original, arreglos para diversos formatos, dirección coral, técnica vocal e instrucción instrumental estructurada.' },
-            'A2': { title: '<i class="fa fa-comments"></i> A — Asesoría Integral', desc: 'Acompañamiento y consultoría para estructurar proyectos complejos que combinan ciencia, tecnología, arte y pedagogía.' },
-            'D': { title: '<i class="fa fa-code"></i> D — Desarrollo de Software', desc: 'Desarrollo de páginas web, aplicaciones locales y en línea, herramientas interactivas y software corporativo para PyMEs.' }
+            'A1': { 
+                title: '<i class="fa fa-palette"></i> A — Arte & Diseño Digital', 
+                desc: 'Creación visual plástica, ilustración por computador, maquetación de catálogos interactivos e identidad de marca con sello conceptual único.',
+                targetId: 'sec-arte',
+                buttonText: '<i class="fa fa-images"></i> Ver Proyectos de Arte & Diseño <i class="fa fa-arrow-down"></i>'
+            },
+            'R': { 
+                title: '<i class="fa fa-robot"></i> R — Robótica e IoT', 
+                desc: 'Sistemas electrónicos integrados, automatización de procesos, telemetría y comunicación de dispositivos con plataformas en la nube.',
+                targetId: 'sec-robotica',
+                buttonText: '<i class="fa fa-microchip"></i> Ver Proyectos de Robótica e IoT <i class="fa fa-arrow-down"></i>'
+            },
+            'M': { 
+                title: '<i class="fa fa-music"></i> M — Música & Pedagogía', 
+                desc: 'Composición musical original, arreglos para diversos formatos, dirección coral, técnica vocal e instrucción instrumental estructurada.',
+                targetId: 'sec-musica',
+                buttonText: '<i class="fa fa-music"></i> Ver Proyectos de Música & Pedagogía <i class="fa fa-arrow-down"></i>'
+            },
+            'A2': { 
+                title: '<i class="fa fa-comments"></i> A — Asesoría Integral', 
+                desc: 'Acompañamiento y consultoría para estructurar proyectos complejos que combinan ciencia, tecnología, arte y pedagogía.',
+                targetId: 'sec-asesoria',
+                buttonText: '<i class="fa fa-lightbulb"></i> Ver Proyectos de Asesoría Integral <i class="fa fa-arrow-down"></i>'
+            },
+            'D': { 
+                title: '<i class="fa fa-code"></i> D — Desarrollo de Software', 
+                desc: 'Desarrollo de páginas web, aplicaciones locales y en línea, herramientas interactivas y software corporativo para PyMEs.',
+                targetId: 'sec-desarrollo',
+                buttonText: '<i class="fa fa-laptop-code"></i> Ver Proyectos de Desarrollo de Software <i class="fa fa-arrow-down"></i>'
+            }
         };
 
         function showAcrostic(key, element) {
@@ -562,6 +787,12 @@
             if (item) {
                 document.getElementById('acrosticTitle').innerHTML = item.title;
                 document.getElementById('acrosticDesc').innerText = item.desc;
+                
+                const linkBtn = document.getElementById('acrosticLink');
+                if (linkBtn) {
+                    linkBtn.href = '#' + item.targetId;
+                    linkBtn.innerHTML = item.buttonText;
+                }
             }
         }
 
