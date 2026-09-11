@@ -1,1 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mercApp - Control de Inventario y Compras</title>
+    <!-- Estilos W3-CSS -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS para Mapas -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; }
+        .app-header { background-color: #2e7d32; color: white; }
+        .card-product { border-left: 5px solid #2e7d32; }
+        .card-alert { border-left: 5px solid #d32f2f; }
+        #map { height: 350px; width: 100%; border-radius: 8px; }
+        .badge-qty { font-size: 1.1em; font-weight: bold; }
+    </style>
+</head>
+<body>
 
+    <!-- Header / Barra de Navegación -->
+    <header class="w3-bar app-header w3-card w3-padding">
+        <span class="w3-bar-item w3-large w3-bold"><i class="fa-solid => fa-basket-shopping"></i> mercApp</span>
+        <div id="navButtons" class="w3-right w3-hide">
+            <button onclick="showSection('inventario')" class="w3-bar-item w3-button"><i class="fa-solid fa-boxes-stacked"></i> Inventario</button>
+            <button onclick="showSection('listaMercado')" class="w3-bar-item w3-button"><i class="fa-solid fa-list-check"></i> Lista de Compras</button>
+            <button onclick="showSection('proveedores')" class="w3-bar-item w3-button"><i class="fa-solid fa-store"></i> Proveedores</button>
+            <button onclick="logout()" class="w3-bar-item w3-button w3-red"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+        </div>
+    </header>
+
+    <main class="w3-container w3-margin-top" style="max-width:1200px; margin:auto;">
+
+        <!-- Vista de Login / Registro -->
+        <section id="secLogin" class="w3-card-4 w3-white w3-padding-24 w3-round" style="max-width:450px; margin:40px auto;">
+            <h2 class="w3-center w3-text-green w3-bold">Iniciar Sesión</h2>
+            <form id="formLogin" onsubmit="handleLogin(event)">
+                <label>Usuario</label>
+                <input class="w3-input w3-border w3-margin-bottom" type="text" id="loginUser" required>
+                <label>Contraseña</label>
+                <input class="w3-input w3-border w3-margin-bottom" type="password" id="loginPass" required>
+                <button type="submit" class="w3-button w3-green w3-block w3-round w3-large">Ingresar</button>
+            </form>
+            <p class="w3-center w3-small w3-margin-top">¿No tienes cuenta? Registra tu cuenta cliente o proveedora en la Hoja de Control.</p>
+        </section>
+
+        <!-- Vista de Inventario del Cliente -->
+        <section id="secInventario" class="w3-hide">
+            <div class="w3-row w3-margin-bottom">
+                <div class="w3-col m8">
+                    <h3><i class="fa-solid fa-house-laptop"></i> Mi Inventario Diario</h3>
+                </div>
+                <div class="w3-col m4 w3-right-align">
+                    <button onclick="openModalProducto()" class="w3-button w3-green w3-round"><i class="fa-solid fa-plus"></i> Nuevo Producto</button>
+                </div>
+            </div>
+
+            <!-- Filtro por Categorías -->
+            <div class="w3-bar w3-white w3-card w3-round w3-margin-bottom w3-padding-small" id="catFilters">
+                <button onclick="filterCat('all')" class="w3-bar-item w3-button w3-green w3-round w3-small">Todas</button>
+            </div>
+
+            <!-- Grilla de Productos -->
+            <div class="w3-row-padding" id="gridProductos">
+                <!-- Se puebla dinámicamente -->
+            </div>
+        </section>
+
+        <!-- Vista de Generación de Lista de Mercado -->
+        <section id="secListaMercado" class="w3-hide">
+            <h3><i class="fa-solid fa-cart-shopping"></i> Lista de Chequeo de Mercado</h3>
+            <p class="w3-text-gray">Productos que presentan un faltante mayor a cero:</p>
+            <ul class="w3-ul w3-card w3-white w3-round" id="ulListaFaltantes">
+                <!-- Se puebla dinámicamente -->
+            </ul>
+        </section>
+
+        <!-- Vista de Proveedores Cercanos y Pedidos -->
+        <section id="secProveedores" class="w3-hide">
+            <h3><i class="fa-solid fa-map-location-dot"></i> Proveedores con Cobertura en Tu Zona</h3>
+            <div class="w3-row-padding w3-margin-top">
+                <div class="w3-col l7 m12">
+                    <div id="map"></div>
+                </div>
+                <div class="w3-col l5 m12">
+                    <div class="w3-card w3-white w3-padding w3-round" id="infoProveedor">
+                        <h4>Selecciona un proveedor en el mapa</h4>
+                        <p class="w3-text-gray">Podrás ver sus listas de precios, montos de domicilio y realizar pedidos directa o independientemente.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // CONFIGURACIÓN DE TU BACKEND API (Reemplaza con tu URL de Apps Script desplegada)
+        const API_URL = "https://script.google.com/macros/s/AKfycbwBJO_HqurAcn6SOdtNl_r0AH0jdnXSS6HSgaSI135eWfWzEdLaHmhYhnpDfgWghEkWeg/exec";
+
+        let currentUser = null;
+        let map = null;
+        let productosList = [];
+
+        // Inicialización de la App
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedUser = localStorage.getItem("mercapp_user");
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                onLoginSuccess();
+            }
+        });
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const userVal = document.getElementById("loginUser").value;
+            const passVal = document.getElementById("loginPass").value;
+
+            // Petición a la API para verificar usuario
+            fetch(`${API_URL}?action=read&sheet=Usuarios`)
+                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 'success') {
+                        const user = res.data.find(u => u.usuario === userVal && u.contrasena === passVal);
+                        if (user) {
+                            currentUser = user;
+                            localStorage.setItem("mercapp_user", JSON.stringify(user));
+                            onLoginSuccess();
+                        } else {
+                            alert("Usuario o contraseña incorrectos");
+                        }
+                    }
+                });
+        }
+
+        function onLoginSuccess() {
+            document.getElementById("secLogin").classList.add("w3-hide");
+            document.getElementById("navButtons").classList.remove("w3-hide");
+            showSection("inventario");
+            loadInventario();
+        }
+
+        function logout() {
+            localStorage.removeItem("mercapp_user");
+            location.reload();
+        }
+
+        function showSection(secId) {
+            document.getElementById("secInventario").classList.add("w3-hide");
+            document.getElementById("secListaMercado").classList.add("w3-hide");
+            document.getElementById("secProveedores").classList.add("w3-hide");
+
+            if (secId === 'inventario') {
+                document.getElementById("secInventario").classList.remove("w3-hide");
+            } else if (secId === 'listaMercado') {
+                document.getElementById("secListaMercado").classList.remove("w3-hide");
+                renderListaMercado();
+            } else if (secId === 'proveedores') {
+                document.getElementById("secProveedores").classList.remove("w3-hide");
+                initMap();
+            }
+        }
+
+        // Cargar inventario del cliente
+        function loadInventario() {
+            fetch(`${API_URL}?action=read&sheet=ProductosCliente`)
+                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 'success') {
+                        // Filtrar por la cuenta del usuario actual
+                        productosList = res.data.filter(p => p.idCuenta == currentUser.idCuenta);
+                        renderProductos(productosList);
+                    }
+                });
+        }
+
+        function renderProductos(items) {
+            const container = document.getElementById("gridProductos");
+            container.innerHTML = "";
+
+            items.forEach(p => {
+                const disponible = parseFloat(p.Disponible) || 0;
+                const minimo = parseFloat(p.Minimo) || 0;
+                const faltante = Math.max(0, minimo - disponible);
+                const isAlert = faltante > 0;
+
+                const cardHtml = `
+                    <div class="w3-col l4 m6 s12 w3-margin-bottom">
+                        <div class="w3-card w3-white w3-padding w3-round ${isAlert ? 'card-alert' : 'card-product'}">
+                            <h4 class="w3-bold">${p.Nombre}</h4>
+                            <p class="w3-small w3-text-gray">Unidad: ${p.Unidad}</p>
+                            <div class="w3-row w3-center w3-margin-top">
+                                <div class="w3-col s4">
+                                    <span class="w3-small">Mínimo</span><br>
+                                    <b class="badge-qty">${minimo}</b>
+                                </div>
+                                <div class="w3-col s4">
+                                    <span class="w3-small">Disponible</span><br>
+                                    <b class="badge-qty w3-text-blue">${disponible}</b>
+                                </div>
+                                <div class="w3-col s4">
+                                    <span class="w3-small">Faltante</span><br>
+                                    <b class="badge-qty ${faltante > 0 ? 'w3-text-red' : 'w3-text-green'}">${faltante}</b>
+                                </div>
+                            </div>
+                            <div class="w3-margin-top w3-center">
+                                <button onclick="updateQty('${p.id}', ${disponible - 1})" class="w3-button w3-light-gray w3-round w3-bold">-</button>
+                                <span class="w3-margin-left w3-margin-right">Consumo Diario</span>
+                                <button onclick="updateQty('${p.id}', ${disponible + 1})" class="w3-button w3-light-gray w3-round w3-bold">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        function updateQty(prodId, newQty) {
+            if (newQty < 0) return;
+            const prod = productosList.find(p => p.id == prodId);
+            if (!prod) return;
+
+            prod.Disponible = newQty;
+            renderProductos(productosList);
+
+            // Actualización asíncrona en base de datos
+            fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "update",
+                    sheet: "ProductosCliente",
+                    data: { id: prodId, Disponible: newQty, Faltante: Math.max(0, prod.Minimo - newQty) }
+                })
+            });
+        }
+
+        // Generación de Lista de Mercado en Base a Faltantes
+        function renderListaMercado() {
+            const ul = document.getElementById("ulListaFaltantes");
+            ul.innerHTML = "";
+
+            const faltantes = productosList.filter(p => (parseFloat(p.Minimo) - parseFloat(p.Disponible)) > 0);
+
+            if (faltantes.length === 0) {
+                ul.innerHTML = `<li class="w3-padding w3-text-gray">¡Todo al día! No tienes productos faltantes en tu inventario.</li>`;
+                return;
+            }
+
+            faltantes.forEach(p => {
+                const cantComprar = parseFloat(p.Minimo) - parseFloat(p.Disponible);
+                ul.innerHTML += `
+                    <li class="w3-padding w3-display-container">
+                        <input class="w3-check w3-margin-right" type="checkbox">
+                        <span class="w3-large"><b>${p.Nombre}</b></span> 
+                        <span class="w3-tag w3-green w3-round w3-margin-left">Comprar: ${cantComprar} ${p.Unidad}</span>
+                    </li>
+                `;
+            });
+        }
+
+        // Mapas y Geolocalización con Leaflet.js
+        function initMap() {
+            if (map) return; // Evitar reinicializar si ya está creado
+
+            // Coordenadas por defecto (Ejemplo: Armenia, Quindío: 4.53389, -75.68111)
+            const userLat = 4.53389;
+            const userLng = -75.68111;
+
+            map = L.map('map').setView([userLat, userLng], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+
+            // Marcador del Cliente
+            L.marker([userLat, userLng]).addTo(map)
+                .bindPopup('<b>Tu Ubicación</b>').openPopup();
+
+            // Cargar Proveedores y evaluar Cobertura
+            fetch(`${API_URL}?action=read&sheet=Cuentas`)
+                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 'success') {
+                        const proveedores = res.data.filter(c => c.tipo === 'Proveedor');
+                        proveedores.forEach(prov => {
+                            if (prov.Ubicacion) {
+                                const [pLat, pLng] = prov.Ubicacion.split(',').map(Number);
+                                const radiusKm = parseFloat(prov.Cobertura) || 5;
+
+                                // Marcador del Proveedor
+                                const marker = L.marker([pLat, pLng]).addTo(map);
+                                
+                                // Círculo de Cobertura
+                                L.circle([pLat, pLng], {
+                                    color: 'green',
+                                    fillColor: '#2e7d32',
+                                    fillOpacity: 0.15,
+                                    radius: radiusKm * 1000
+                                }).addTo(map);
+
+                                marker.on('click', () => {
+                                    document.getElementById("infoProveedor").innerHTML = `
+                                        <h4><b>${prov.Nombre}</b></h4>
+                                        <p>${prov.Descripcion || 'Sin descripción disponible.'}</p>
+                                        <p><b>Cobertura:</b> ${radiusKm} km a la redonda</p>
+                                        <button class="w3-button w3-block w3-green w3-round w3-margin-top">
+                                            Ver Catálogo y Hacer Pedido
+                                        </button>
+                                    `;
+                                });
+                            }
+                        });
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
