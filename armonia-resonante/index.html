@@ -56,7 +56,7 @@
   <header class="gradient-header text-white sticky top-0 z-50 shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between">
       <div class="flex items-center space-x-3">
-        <img src="Logo Coro Armonía Resonante 2019.jpeg" alt="Logo Armonía Resonante" class="h-14 w-auto bg-white rounded-full p-1 shadow-md object-contain" onerror="this.onerror=null; this.src='https://placehold.co/120x120/1A2B4C/FFFFFF?text=Armon%C3%ADa+Resonante';">
+        <img src="logo.jpeg" alt="Logo Armonía Resonante" class="h-14 w-auto bg-white rounded-full p-1 shadow-md object-contain" onerror="this.onerror=null; this.src='https://placehold.co/120x120/1A2B4C/FFFFFF?text=Armon%C3%ADa+Resonante';">
         <div>
           <h1 class="text-xl font-bold tracking-tight text-white leading-tight">Armonía Resonante</h1>
           <p class="text-xs text-brand-yellow font-medium">¡Resuena y canta en armonía!</p>
@@ -89,26 +89,28 @@
           Formación musical integral en canto para niños, jóvenes y adultos. Descubre el arte vocal a través de pedagogía vivencial, movimiento y la práctica coral polifónica.
         </p>
         <div class="flex flex-wrap gap-4 pt-2">
-          <a href="#inscripcion" class="inline-flex items-center gap-2 bg-brand-yellow text-slate-900 font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition hover:-translate-y-0.5">
-            <i class="fa-solid fa-pen-to-square"></i> Formulario de Inscripción
-          </a>
-          <a href="#videos" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur-sm border border-white/20 transition">
-            <i class="fa-solid fa-play text-brand-cyan"></i> Ver Presentaciones
-          </a>
-        </div>
-      </div>
-      <div class="md:col-span-5 flex justify-center">
-        <div class="relative group max-w-sm w-full">
-          <div class="absolute -inset-1 bg-gradient-to-r from-brand-orange via-brand-yellow to-brand-cyan rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-          <div class="relative bg-slate-900 rounded-3xl p-6 text-center border border-slate-700">
-            <img src="logo.jpeg" alt="Logo Coro Armonía Resonante" class="mx-auto h-48 w-48 object-contain mb-4 rounded-2xl bg-white p-3 shadow-inner" onerror="this.onerror=null; this.src='https://placehold.co/300x300/1A2B4C/FFFFFF?text=Armonia+Resonante';">
-            <h3 class="text-lg font-bold text-white">¡Únete a nuestra agrupación!</h3>
-            <p class="text-xs text-slate-400 mt-1">Clases particulares e integración al coro polifónico.</p>
-          </div>
-        </div>
+        <a href="#inscripcion" class="inline-flex items-center gap-2 bg-brand-yellow text-slate-900 font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition hover:-translate-y-0.5">
+          <i class="fa-solid fa-pen-to-square"></i> Formulario de Inscripción
+        </a>
+        <a href="#videos" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur-sm border border-white/20 transition">
+          <i class="fa-solid fa-play text-brand-cyan"></i> Ver Presentaciones
+        </a>
       </div>
     </div>
-  </section>
+    <div class="md:col-span-5 flex justify-center">
+      <a href="#inscripcion" class="relative group max-w-sm w-full block transform transition hover:-translate-y-1">
+        <div class="absolute -inset-1 bg-gradient-to-r from-brand-orange via-brand-yellow to-brand-cyan rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+        <div class="relative bg-slate-900 rounded-3xl p-6 text-center border border-slate-700 hover:border-brand-yellow/50 transition">
+          <img src="logo.jpeg" alt="Logo Coro Armonía Resonante" class="mx-auto h-48 w-48 object-contain mb-4 rounded-2xl bg-white p-3 shadow-inner" onerror="this.onerror=null; this.src='https://placehold.co/300x300/1A2B4C/FFFFFF?text=Armonia+Resonante';">
+          <h3 class="text-lg font-bold text-white flex items-center justify-center gap-2">
+            ¡Únete a nuestra agrupación! <i class="fa-solid fa-arrow-right text-brand-yellow text-sm group-hover:translate-x-1 transition"></i>
+          </h3>
+          <p class="text-xs text-brand-yellow mt-1 font-medium">Haz clic aquí para ir al formulario de inscripción</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
 
@@ -187,39 +189,53 @@
         </div>
       </div>
 
-      <!-- 3 Espacios para Imágenes del Coro -->
+      <!-- 3 Espacios para Imágenes del Coro con Texto Descriptivo -->
       <div class="space-y-3">
         <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Galería Fotográfica</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
           <!-- Foto 1 -->
-          <div class="group relative bg-slate-100 border-2 border-dashed border-slate-300 rounded-2xl h-64 flex flex-col items-center justify-center p-6 text-center hover:border-brand-blue transition overflow-hidden">
-            <!--<div class="w-12 h-12 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-brand-blue group-hover:text-white transition duration-300">
-              <i class="fa-solid fa-camera text-xl"></i>
+          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+            <div class="relative h-64 overflow-hidden bg-slate-100">
+              <img src="foto01.jpg" alt="Presentaciones y Conciertos" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1A2B4C/FFFFFF?text=Fotografia+1';">
+              <div class="absolute top-3 left-3 bg-brand-navy/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
+                Conciertos
+              </div>
             </div>
-            <p class="font-semibold text-slate-700 text-sm">Espacio para Imagen 1</p>
-            <p class="text-xs text-slate-400 mt-1">Presentaciones en vivo / Coro Infantil</p>-->
-            <img src="foto01.jpg" alt="Espacio para foto 1" class="absolute inset-0 w-full h-full object-cover opacity-30 hover:opacity-100 transition duration-300 pointer-events-none">
+            <div class="p-4 bg-white border-t border-slate-100">
+              <h4 class="font-bold text-slate-800 text-sm">Presentaciones Coralísticas</h4>
+              <p class="text-xs text-slate-500 mt-1">Conciertos y participaciones en vivo en escenarios locales e internacionales.</p>
+            </div>
           </div>
 
           <!-- Foto 2 -->
-          <div class="group relative bg-slate-100 border-2 border-dashed border-slate-300 rounded-2xl h-64 flex flex-col items-center justify-center p-6 text-center hover:border-brand-blue transition overflow-hidden">
-            <!--<div class="w-12 h-12 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-brand-blue group-hover:text-white transition duration-300">
-              <i class="fa-solid fa-image text-xl"></i>
+          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+            <div class="relative h-64 overflow-hidden bg-slate-100">
+              <img src="foto02.jpg" alt="Ensayos y Talla Pedagógica" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2B50AA/FFFFFF?text=Fotografia+2';">
+              <div class="absolute top-3 left-3 bg-brand-blue/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
+                Pedagogía Vivencial
+              </div>
             </div>
-            <p class="font-semibold text-slate-700 text-sm">Espacio para Imagen 2</p>
-            <p class="text-xs text-slate-400 mt-1">Ensayos y Talla Pedagógica</p>-->
-            <img src="foto02.jpg" alt="Espacio para foto 2" class="absolute inset-0 w-full h-full object-cover opacity-30 hover:opacity-100 transition duration-300 pointer-events-none">
+            <div class="p-4 bg-white border-t border-slate-100">
+              <h4 class="font-bold text-slate-800 text-sm">Ensayos y Movimiento</h4>
+              <p class="text-xs text-slate-500 mt-1">Práctica vocal integral mediante los métodos Kodály y Orff con niños y jóvenes.</p>
+            </div>
           </div>
 
           <!-- Foto 3 -->
-          <div class="group relative bg-slate-100 border-2 border-dashed border-slate-300 rounded-2xl h-64 flex flex-col items-center justify-center p-6 text-center hover:border-brand-blue transition overflow-hidden">
-            <!--<div class="w-12 h-12 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-brand-blue group-hover:text-white transition duration-300">
-              <i class="fa-solid fa-icons text-xl"></i>
+          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+            <div class="relative h-64 overflow-hidden bg-slate-100">
+              <img src="foto03.jpg" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+3';">
+              <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
+                Eventos Especiales
+              </div>
             </div>
-            <p class="font-semibold text-slate-700 text-sm">Espacio para Imagen 3</p>
-            <p class="text-xs text-slate-400 mt-1">Conciertos y Eventos Especiales</p>-->
-            <img src="foto03.jpg" alt="Espacio para foto 3" class="absolute inset-0 w-full h-full object-cover opacity-30 hover:opacity-100 transition duration-300 pointer-events-none">
+            <div class="p-4 bg-white border-t border-slate-100">
+              <h4 class="font-bold text-slate-800 text-sm">Repertorio Polifónico</h4>
+              <p class="text-xs text-slate-500 mt-1">Obras sacras, profanas, folclóricas y repertorio coral infantil - juvenil.</p>
+            </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -388,7 +404,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
       <div class="space-y-3">
         <div class="flex items-center space-x-3">
-          <img src="Logo Coro Armonía Resonante 2019.jpeg" alt="Logo Footer" class="h-10 w-auto bg-white rounded-full p-1" onerror="this.onerror=null; this.src='https://placehold.co/100x100/1A2B4C/FFFFFF?text=AR';">
+          <img src="logo.jpeg" alt="Logo Footer" class="h-10 w-auto bg-white rounded-full p-1" onerror="this.onerror=null; this.src='https://placehold.co/100x100/1A2B4C/FFFFFF?text=AR';">
           <span class="font-bold text-lg">Armonía Resonante</span>
         </div>
         <p class="text-xs text-slate-400 leading-relaxed">
