@@ -1,1 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Armonía Resonante - Academia Musical y Coro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e3c72;
+      --secondary: #2a5298;
+      --accent: #f39c12;
+      --bg: #f8f9fa;
+      --text: #333333;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; }
+    header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; text-align: center; padding: 2.5rem 1rem; }
+    header img { max-width: 220px; height: auto; margin-bottom: 1rem; }
+    header h1 { font-size: 2.2rem; }
+    header p { font-size: 1.1rem; font-weight: 300; opacity: 0.9; }
+    
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
+    section { margin-bottom: 3rem; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    h2 { color: var(--primary); margin-bottom: 1rem; border-bottom: 3px solid var(--accent); display: inline-block; padding-bottom: 0.3rem; }
+    
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+    .card { background: #fdfdfd; border: 1px solid #eee; border-left: 4px solid var(--accent); padding: 1.5rem; border-radius: 8px; }
+    .card h3 { color: var(--primary); margin-bottom: 0.5rem; }
 
+    /* Galería y Medios */
+    .media-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+    .placeholder-img { width: 100%; height: 220px; background-color: #e9ecef; border: 2px dashed #b0b0b0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6c757d; font-weight: 600; text-align: center; padding: 1rem; }
+    .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000; margin-top: 1.5rem; }
+    .video-container iframe, .video-container .placeholder-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; }
+
+    /* Formulario */
+    form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    .full-width { grid-column: span 2; }
+    label { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem; display: block; }
+    input, select, textarea { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }
+    button { background: var(--accent); color: white; font-weight: bold; padding: 1rem; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem; transition: background 0.3s ease; }
+    button:hover { background: #d3830e; }
+
+    footer { text-align: center; padding: 1.5rem; background: var(--primary); color: white; margin-top: 2rem; }
+
+    @media (max-width: 768px) {
+      form { grid-template-columns: 1fr; }
+      .full-width { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <!-- Coloca la imagen de tu logo aquí -->
+    <img src="Logo Coro Armonía Resonante 2019.jpeg" alt="Logo Armonía Resonante">
+    <h1>Academia Musical Armonía Resonante</h1>
+    <p>¡Resuena y canta en armonía! | Armenia, Quindío</p>
+  </header>
+
+  <div class="container">
+    
+    <!-- Quienes Somos -->
+    <section>
+      <h2>Nuestra Academia</h2>
+      <p>En <strong>Armonía Resonante</strong> formamos talentos de todas las edades a través del canto y la vivencia musical. Nuestra metodología integral combina la excelencia técnica con la expresión artística en la ciudad de Armenia, Quindío.</p>
+      
+      <div class="team-grid">
+        <div class="card">
+          <h3>Maestra Marcela González Forero</h3>
+          <p>Directora y Fundadora. Maestra en música con énfasis en canto de la Pontificia Universidad Javeriana de Bogotá, con estudios en el Conservatorio de la Universidad Nacional de Colombia y Maestría en Música Elemental y Pedagogía del Movimiento en el renombrado Mozarteum de Salzburgo, Austria. Especializada en el método Kodály, integrando movimiento, técnica vocal y práctica coral.</p>
+        </div>
+        <div class="card">
+          <h3>Arturo Conde González</h3>
+          <p>Docente y Arreglista. Joven talento de extraordinaria habilidad musical y oído absoluto. Destaca por su profunda sensibilidad artística, capacidad de composición y arreglos musicales que enriquecen nuestro repertorio.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coro e Imágenes -->
+    <section>
+      <h2>Coro Infantil y Juvenil Polifónico</h2>
+      <p>Contamos con una agrupación coral representativa que aborda obras nacionales, internacionales, clásicas, contemporáneas, sacras y profanas.</p>
+      
+      <div class="media-grid">
+        <div class="placeholder-img">📷 [Espacio para Imagen del Coro 1]</div>
+        <div class="placeholder-img">📷 [Espacio para Imagen del Coro 2]</div>
+        <div class="placeholder-img">📷 [Espacio para Imagen del Coro 3]</div>
+      </div>
+
+      <h3 style="margin-top: 2rem; color: var(--primary);">Nuestra Música en Video</h3>
+      <div class="video-container">
+        <div class="placeholder-video">🎥 [Espacio para Video de Presentación / YouTube Embed]</div>
+      </div>
+    </section>
+
+    <!-- Formulario de Inscripción -->
+    <section id="inscripcion">
+      <h2>Formulario de Inscripción</h2>
+      <p>Inscribe a tu hijo(a) en el Coro Infantil y Juvenil o en nuestras Clases Particulares de Canto.</p>
+      
+      <form id="registrationForm">
+        <div>
+          <label>Nombre del Estudiante *</label>
+          <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div>
+          <label>Apellido del Estudiante *</label>
+          <input type="text" id="apellido" name="apellido" required>
+        </div>
+        <div>
+          <label>Sexo *</label>
+          <select id="sexo" name="sexo" required>
+            <option value="">Seleccione...</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Masculino">Masculino</option>
+          </select>
+        </div>
+        <div>
+          <label>Fecha de Nacimiento *</label>
+          <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+        </div>
+        <div class="full-width">
+          <label>Programa de Interés *</label>
+          <select id="programa" name="programa" required>
+            <option value="Coro Infantil y Juvenil">Coro Infantil y Juvenil</option>
+            <option value="Clases Particulares de Canto">Clases Particulares de Canto</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Nombre del Papá</label>
+          <input type="text" id="nombrePapa" name="nombrePapa">
+        </div>
+        <div>
+          <label>Celular del Papá</label>
+          <input type="tel" id="celularPapa" name="celularPapa">
+        </div>
+        <div class="full-width">
+          <label>Email del Papá</label>
+          <input type="email" id="emailPapa" name="emailPapa">
+        </div>
+
+        <div>
+          <label>Nombre de la Mamá</label>
+          <input type="text" id="nombreMama" name="nombreMama">
+        </div>
+        <div>
+          <label>Celular de la Mamá</label>
+          <input type="tel" id="celularMama" name="celularMama">
+        </div>
+        <div class="full-width">
+          <label>Email de la Mamá</label>
+          <input type="email" id="emailMama" name="emailMama">
+        </div>
+
+        <div>
+          <label>EPS *</label>
+          <input type="text" id="eps" name="eps" required>
+        </div>
+        <div>
+          <label>Alergias o Condición Médica</label>
+          <input type="text" id="alergias" name="alergias" placeholder="Escriba 'Ninguna' si no aplica">
+        </div>
+
+        <div class="full-width">
+          <button type="submit" id="submitBtn">Enviar Inscripción</button>
+        </div>
+      </form>
+      <div id="statusMessage" style="margin-top: 1rem; font-weight: bold; text-align: center;"></div>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>&copy; Armonía Resonante - Armenia, Quindío, Colombia.</p>
+  </footer>
+
+  <script>
+    // REEMPLAZA ESTA URL CON LA URL QUE OBTENGAS DE GOOGLE APPS SCRIPT
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUdi8Ms2DyHXurwFj17F_z_VEZ0iKiAVXoXHWJQW_nXM-bNJp5SwGK8tB5ESpgcmmF/exec";
+
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const btn = document.getElementById('submitBtn');
+      const status = document.getElementById('statusMessage');
+      
+      btn.disabled = true;
+      btn.innerText = "Enviando registro...";
+      status.style.color = "#333";
+      status.innerText = "Procesando inscripción...";
+
+      const formData = {
+        nombre: document.getElementById('nombre').value,
+        apellido: document.getElementById('apellido').value,
+        sexo: document.getElementById('sexo').value,
+        fechaNacimiento: document.getElementById('fechaNacimiento').value,
+        programa: document.getElementById('programa').value,
+        nombrePapa: document.getElementById('nombrePapa').value,
+        celularPapa: document.getElementById('celularPapa').value,
+        emailPapa: document.getElementById('emailPapa').value,
+        nombreMama: document.getElementById('nombreMama').value,
+        celularMama: document.getElementById('celularMama').value,
+        emailMama: document.getElementById('emailMama').value,
+        eps: document.getElementById('eps').value,
+        alergias: document.getElementById('alergias').value
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Permite enviar a Apps Script sin bloqueos CORS
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      .then(() => {
+        status.style.color = "green";
+        status.innerText = "¡Inscripción realizada con éxito! Nos pondremos en contacto muy pronto.";
+        document.getElementById('registrationForm').reset();
+      })
+      .catch(error => {
+        status.style.color = "red";
+        status.innerText = "Ocurrió un error al enviar el registro. Por favor intente nuevamente.";
+        console.error('Error:', error);
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.innerText = "Enviar Inscripción";
+      });
+    });
+  </script>
+</body>
+</html>
