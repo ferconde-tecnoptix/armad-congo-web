@@ -1,873 +1,1232 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es" class="h-full bg-slate-50">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Armonía Resonante - Academia Musical y Coro | Armenia, Quindío</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts: Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Poppins', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              navy: '#1A2B4C',
-              blue: '#2B50AA',
-              cyan: '#00A8E8',
-              yellow: '#FFB800',
-              orange: '#FF6B35',
-              green: '#2EC4B6',
-              bgLight: '#F8FAFC'
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mercApp - Tu Mercado Inteligente y Gestión de Despensa</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  </script>
-  <style>
-    .rainbow-border {
-      background: linear-gradient(90deg, #FF6B35, #FFB800, #2EC4B6, #00A8E8, #2B50AA);
-      height: 4px;
-    }
-    .gradient-header {
-      background: linear-gradient(135deg, #0F172A 0%, #1A2B4C 50%, #2B50AA 100%);
-    }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-    }
-  </style>
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #16a34a 0%, #0d9488 100%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        #leafletMap {
+            min-height: 420px;
+            z-index: 10;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-yellow selection:text-slate-900">
+<body class="h-full text-slate-800 flex flex-col font-sans antialiased">
 
-  <!-- Top Rainbow Decorative Bar -->
-  <div class="rainbow-border"></div>
+    <!-- Navbar Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="showPublicLanding()">
+                    <div class="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center text-white shadow-md">
+                        <i class="fa-solid fa-basket-shopping text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold text-slate-900 tracking-tight">merc<span class="text-brand-600">App</span></span>
+                        <span class="block text-[10px] text-slate-400 -mt-1 font-medium tracking-wide">SMART MARKET & DESPENSA</span>
+                    </div>
+                </div>
 
-  <!-- Header / Navigation -->
-  <header class="gradient-header text-white sticky top-0 z-50 shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <img src="logo.jpeg" alt="Logo Armonía Resonante" class="h-14 w-auto bg-white rounded-full p-1 shadow-md object-contain" onerror="this.onerror=null; this.src='https://placehold.co/120x120/1A2B4C/FFFFFF?text=Armon%C3%ADa+Resonante';">
-        <div>
-          <h1 class="text-xl font-bold tracking-tight text-white leading-tight">Armonía Resonante</h1>
-          <p class="text-xs text-brand-yellow font-medium">¡Resuena y canta en armonía!</p>
+                <!-- Navigation Controls for Public vs Private Session -->
+                <div id="navPublic" class="flex items-center space-x-2 sm:space-x-3">
+                    <button onclick="openApiConfigModal()" class="text-slate-400 hover:text-slate-700 p-2 rounded-lg text-sm" title="Configurar URL Backend Google Apps Script">
+                        <i class="fa-solid fa-gear text-lg"></i>
+                    </button>
+                    <button onclick="openAuthModal('login')" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-brand-700 hover:text-brand-800 transition-colors">
+                        Iniciar Sesión
+                    </button>
+                    <button onclick="openAuthModal('register')" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-white gradient-bg rounded-xl shadow hover:opacity-95 transition-all">
+                        Crear Cuenta
+                    </button>
+                </div>
+
+                <div id="navPrivate" class="hidden flex items-center space-x-1 sm:space-x-3">
+                    <button onclick="switchAppTab('inventory')" id="tabBtnInventory" class="px-2.5 py-2 text-xs sm:text-sm font-bold text-brand-700 border-b-2 border-brand-600">
+                        <i class="fa-solid fa-boxes-stacked mr-1"></i> <span class="hidden sm:inline">Despensa</span>
+                    </button>
+                    <button onclick="switchAppTab('checklist')" id="tabBtnChecklist" class="px-2.5 py-2 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-800">
+                        <i class="fa-solid fa-clipboard-list mr-1"></i> <span class="hidden sm:inline">Lista Mercado</span>
+                    </button>
+                    <button onclick="switchAppTab('suppliers')" id="tabBtnSuppliers" class="px-2.5 py-2 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-800">
+                        <i class="fa-solid fa-store mr-1"></i> <span class="hidden sm:inline">Proveedores</span>
+                    </button>
+                    <button onclick="switchAppTab('users')" id="tabBtnUsers" class="px-2.5 py-2 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-800">
+                        <i class="fa-solid fa-users-gear mr-1"></i> <span class="hidden sm:inline">Usuarios</span>
+                    </button>
+                    <div class="h-6 w-px bg-slate-200 my-auto mx-1"></div>
+                    <div class="flex items-center space-x-2">
+                        <div class="text-right hidden md:block">
+                            <span id="lblAccountName" class="block text-xs font-bold text-slate-700"></span>
+                            <span id="lblUserRole" class="block text-[10px] text-slate-400 capitalize"></span>
+                        </div>
+                        <button onclick="logout()" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Cerrar Sesión">
+                            <i class="fa-solid fa-right-from-bracket text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <nav class="hidden md:flex space-x-6 text-sm font-medium">
-        <a href="#inicio" class="hover:text-brand-yellow transition">Inicio</a>
-        <a href="#maestros" class="hover:text-brand-yellow transition">Maestros</a>
-        <a href="#coro" class="hover:text-brand-yellow transition">Coro & Galería</a>
-        <a href="#videos" class="hover:text-brand-yellow transition">Videos</a>
-        <a href="#inscripcion" class="bg-brand-yellow text-slate-900 px-4 py-2 rounded-full font-semibold hover:bg-yellow-400 transition shadow-md">Inscripciones</a>
-      </nav>
-      <!-- Mobile button menu -->
-      <a href="#inscripcion" class="md:hidden bg-brand-yellow text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold">Inscribirse</a>
+    </header>
+
+    <!-- PUBLIC LANDING PRESENTATION & INSTRUCTIONS -->
+    <div id="viewLanding" class="flex-grow">
+        <!-- Hero Banner -->
+        <section class="gradient-bg text-white py-14 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
+            <div class="max-w-4xl mx-auto relative z-10">
+                <span class="inline-block bg-white/20 backdrop-blur-md text-white text-xs font-bold px-3.5 py-1.5 rounded-full mb-4 shadow-sm">
+                    <i class="fa-solid fa-sparkles mr-1"></i> Sistema de Abastecimiento Diario Inteligente
+                </span>
+                <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight mb-4">
+                    Controla tu despensa y conecta directamente con proveedores cercanos
+                </h1>
+                <p class="text-base sm:text-lg text-emerald-100 max-w-2xl mx-auto mb-8 font-light">
+                    Sincroniza el consumo diario de tu hogar, genera listas automáticas de faltantes y realiza pedidos a comercios con cobertura GPS en tiempo real.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <button onclick="openAuthModal('register', 'cliente')" class="w-full sm:w-auto px-7 py-3.5 bg-white text-brand-800 font-bold rounded-xl shadow-lg hover:bg-emerald-50 transition-all text-sm sm:text-base">
+                        <i class="fa-solid fa-house-user mr-2 text-brand-600"></i> Registro Cuenta de Cliente
+                    </button>
+                    <button onclick="openAuthModal('register', 'proveedor')" class="w-full sm:w-auto px-7 py-3.5 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-all text-sm sm:text-base">
+                        <i class="fa-solid fa-store mr-2 text-emerald-400"></i> Registro Cuenta de Proveedor
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Role-based Interactive Presentation Tabs (Clientes vs Proveedores) -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            
+            <!-- Presentation Tabs Selector Header -->
+            <div class="flex justify-center mb-10">
+                <div class="inline-flex p-1.5 bg-slate-200/80 rounded-2xl shadow-inner border border-slate-300">
+                    <button id="presTabClientBtn" onclick="switchPresentationTab('cliente')" class="px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all bg-white text-brand-700 shadow-sm">
+                        <i class="fa-solid fa-user-gear mr-2"></i> Para Clientes / Hogares
+                    </button>
+                    <button id="presTabSupplierBtn" onclick="switchPresentationTab('proveedor')" class="px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all text-slate-600 hover:text-slate-900">
+                        <i class="fa-solid fa-shop mr-2"></i> Para Proveedores / Comercios
+                    </button>
+                </div>
+            </div>
+
+            <!-- CLIENT / HOUSEHOLD PRESENTATION TAB CONTENT -->
+            <div id="presTabClient" class="space-y-12">
+                <!-- Core Concept Explanation Box -->
+                <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-sm">
+                    <div class="w-16 h-16 bg-brand-600 text-white rounded-2xl flex items-center justify-center text-3xl shrink-0 shadow-md">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-brand-200 text-brand-900 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full">Regla de Cuenta Única</span>
+                            <h3 class="text-xl font-bold text-slate-900">1 Solo Registro por Hogar = Usuarios Ilimitados</h3>
+                        </div>
+                        <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                            No es necesario que cada miembro de la familia cree una cuenta separada. <strong>Quien registra la cuenta obtiene automáticamente el rol de Administrador</strong>. Desde su panel, el Administrador puede registrar e invitar un número <strong>ilimitado de usuarios</strong> (pareja, hijos, colaboradores) asignándoles sus credenciales. Todos actualizarán la misma despensa sincronizada en tiempo real desde sus teléfonos celulares.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 3-Step Guided Process for Clients -->
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-900 text-center mb-8">¿Cómo funciona mercApp para Hogares?</h3>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                            <div class="w-10 h-10 bg-brand-100 text-brand-700 rounded-xl font-black flex items-center justify-center text-lg mb-4">1</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">1. Control Diario de Despensa</h4>
+                            <p class="text-slate-600 text-xs sm:text-sm">Registra tus productos especificando su unidad de medida y cantidad mínima deseada. Cada vez que consumas un alimento, suma o resta existencias rápidamente desde tu celular.</p>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                            <div class="w-10 h-10 bg-brand-100 text-brand-700 rounded-xl font-black flex items-center justify-center text-lg mb-4">2</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">2. Lista Inteligente de Chequeo</h4>
+                            <p class="text-slate-600 text-xs sm:text-sm">El sistema calcula de forma instantánea el faltante exacto (<code class="bg-slate-100 px-1 py-0.5 rounded text-xs font-mono">Mínimo - Disponible</code>). Al ir de compras, la aplicación te brinda una lista interactiva para marcar tus productos en el supermercado.</p>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                            <div class="w-10 h-10 bg-brand-100 text-brand-700 rounded-xl font-black flex items-center justify-center text-lg mb-4">3</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">3. Pedidos Directos en Mapa</h4>
+                            <p class="text-slate-600 text-xs sm:text-sm">En el mapa interactivo con tecnología Leaflet, descubre comercios locales cuyo radio de cobertura abarca tu ubicación. Revisa sus listas de precios, políticas de domicilio y realiza tu orden en línea.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video & Graphic Placeholder Sections for Clients -->
+                <div class="space-y-6 pt-4">
+                    <h3 class="text-xl font-bold text-slate-900 text-center">Video Tutoriales y Demostración Visual (Clientes)</h3>
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <!-- Video Tutorial Container Placeholder -->
+                        <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-xl aspect-video relative flex flex-col justify-center items-center text-white p-6 text-center group border border-slate-800">
+                            <div class="w-16 h-16 bg-brand-600 rounded-full flex items-center justify-center text-2xl shadow-lg mb-3 group-hover:scale-110 transition-transform cursor-pointer">
+                                <i class="fa-solid fa-play ml-1"></i>
+                            </div>
+                            <h5 class="font-bold text-lg">Guía en Video: Gestión de Despensa y Lista Automática</h5>
+                            <p class="text-xs text-slate-400 mt-1 max-w-md">Aprende a registrar mínimos, actualizar consumos diarios y crear usuarios secundarios para tu hogar.</p>
+                            <span class="absolute bottom-3 right-3 text-[10px] bg-slate-800/90 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700">
+                                <i class="fa-solid fa-film mr-1"></i> Contenedor de Video (MP4 / YouTube)
+                            </span>
+                        </div>
+
+                        <!-- Explanatory Infographic / Screenshot Placeholder -->
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <i class="fa-solid fa-mobile-screen text-brand-600 text-2xl"></i>
+                                <div>
+                                    <h5 class="font-bold text-slate-800 text-base">Vista Previa de Interfaz Móvil</h5>
+                                    <p class="text-xs text-slate-500">Optimizado para actualización rápida en teléfonos celulares</p>
+                                </div>
+                            </div>
+                            <div class="bg-slate-100 rounded-xl h-52 border-2 border-dashed border-slate-300 flex flex-col items-center justify-center p-6 text-center">
+                                <i class="fa-solid fa-layer-group text-4xl text-slate-400 mb-2"></i>
+                                <span class="text-xs font-bold text-slate-700">Espacio Reservado para Captura de Pantalla / Infografía</span>
+                                <span class="text-[11px] text-slate-400 mt-1">Muestra la lista de chequeo y categorización (Frutas, Carnes, Aseo)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to Action Banner -->
+                <div class="bg-slate-900 text-white rounded-2xl p-8 text-center flex flex-col items-center shadow-md">
+                    <h4 class="text-2xl font-bold mb-2">Comienza a organizar la despensa de tu hogar hoy</h4>
+                    <p class="text-slate-400 max-w-xl text-xs sm:text-sm mb-6">Suscripción única por cuenta familiar de solo COP $5.000 al mes.</p>
+                    <button onclick="openAuthModal('register', 'cliente')" class="px-8 py-3.5 gradient-bg text-white font-bold rounded-xl shadow-lg hover:opacity-95 text-sm transition-all">
+                        <i class="fa-solid fa-user-plus mr-2"></i> Registrar Cuenta de Cliente Ahora
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUPPLIER / COMMERCIAL PRESENTATION TAB CONTENT -->
+            <div id="presTabSupplier" class="hidden space-y-12">
+                <!-- Core Concept Explanation Box -->
+                <div class="bg-slate-900 text-white border border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-md">
+                    <div class="w-16 h-16 bg-teal-500 text-slate-950 rounded-2xl flex items-center justify-center text-3xl shrink-0 shadow-md">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full">Perfil Comercial</span>
+                            <h3 class="text-xl font-bold text-white">Publicación de Catálogos y Cobertura GPS</h3>
+                        </div>
+                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                            Registra tu negocio, supermercado, fruver o distribuidora. Delimita la <strong>ubicación exacta de tu local en el mapa</strong> y define tu <strong>radio de cobertura de entregas en kilómetros</strong>. La cuenta de proveedor otorga perfil Administrador a quien la crea para añadir empleados o vendedores.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 3-Step Guided Process for Suppliers -->
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-900 text-center mb-8">¿Cómo funciona mercApp para Proveedores?</h3>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                            <div class="w-10 h-10 bg-teal-100 text-teal-800 rounded-xl font-black flex items-center justify-center text-lg mb-4">1</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">1. Carga de Productos y Precios</h4>
+                            <p class="text-slate-600 text-xs sm:text-sm">Registra tu catálogo de productos (<code class="bg-slate-100 px-1 py-0.5 rounded text-xs font-mono">ProductosProveedor</code>) y activa tus Listas de Precios vigentes con fotos, unidades y montos.</p>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                            <div class="w-10 h-10 bg-teal-100 text-teal-800 rounded-xl font-black flex items-center justify-center text-lg mb-4">2</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">2. Configuración de Radio Domiciliario</h4>
+                            <p class="text-slate-600 text-xs sm:text-sm">Establece tu cobertura GPS en kilómetros. Tu comercio aparecerá automáticamente en el mapa de los clientes situados dentro de tu perímetro.</p>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                            <div class="w-10 h-10 bg-teal-100 text-teal-800 rounded-xl font-black flex items-center justify-center text-lg mb-4">3</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">3. Recepción Directa de Pedidos</h4>
+                            <p class="text-slate-600 text-xs sm:text-sm">Recibe pedidos generados directamente desde las listas de faltantes de los clientes de tu zona. Solo pagas una tarifa del 1% sobre ventas efectivas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video & Graphic Placeholder Sections for Suppliers -->
+                <div class="space-y-6 pt-4">
+                    <h3 class="text-xl font-bold text-slate-900 text-center">Video Tutoriales y Configuración (Proveedores)</h3>
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <!-- Video Container Placeholder -->
+                        <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-xl aspect-video relative flex flex-col justify-center items-center text-white p-6 text-center group border border-slate-800">
+                            <div class="w-16 h-16 bg-teal-500 text-slate-950 rounded-full flex items-center justify-center text-2xl shadow-lg mb-3 group-hover:scale-110 transition-transform cursor-pointer">
+                                <i class="fa-solid fa-play ml-1"></i>
+                            </div>
+                            <h5 class="font-bold text-lg">Guía para Comercios: Carga de Catálogo y Mapa</h5>
+                            <p class="text-xs text-slate-400 mt-1 max-w-md">Paso a paso para subir listas de precios, establecer montos de domicilio gratis y recibir pedidos.</p>
+                            <span class="absolute bottom-3 right-3 text-[10px] bg-slate-800/90 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700">
+                                <i class="fa-solid fa-film mr-1"></i> Contenedor de Video (MP4 / YouTube)
+                            </span>
+                        </div>
+
+                        <!-- Geographic Coverage Infographic Placeholder -->
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <i class="fa-solid fa-map-location-dot text-teal-600 text-2xl"></i>
+                                <div>
+                                    <h5 class="font-bold text-slate-800 text-base">Esquema de Radio de Cobertura GPS</h5>
+                                    <p class="text-xs text-slate-500">Visualización de clientes alcanzados según coordenadas</p>
+                                </div>
+                            </div>
+                            <div class="bg-slate-100 rounded-xl h-52 border-2 border-dashed border-slate-300 flex flex-col items-center justify-center p-6 text-center">
+                                <i class="fa-solid fa-circle-dot text-4xl text-teal-600/60 mb-2"></i>
+                                <span class="text-xs font-bold text-slate-700">Espacio Reservado para Diagrama de Cobertura Leaflet</span>
+                                <span class="text-[11px] text-slate-400 mt-1">Demostración gráfica del perímetro de entregas en la ciudad</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to Action Banner -->
+                <div class="gradient-bg text-white rounded-2xl p-8 text-center flex flex-col items-center shadow-md">
+                    <h4 class="text-2xl font-bold mb-2">Conecta con los clientes de tu zona geográfica</h4>
+                    <p class="text-emerald-100 max-w-xl text-xs sm:text-sm mb-6">Incrementa las ventas de tu negocio capturando pedidos directo de la despensa del consumidor.</p>
+                    <button onclick="openAuthModal('register', 'proveedor')" class="px-8 py-3.5 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 text-sm transition-all">
+                        <i class="fa-solid fa-store mr-2"></i> Registrar Cuenta de Proveedor
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="bg-slate-100 border-t border-slate-200 py-16 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-5xl mx-auto text-center">
+                <h2 class="text-3xl font-black text-slate-900 mb-2">Modelo de Tarifas Transparente</h2>
+                <p class="text-slate-600 max-w-xl mx-auto mb-10 text-xs sm:text-sm">Precios claros y accesibles sin cláusulas de permanencia</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Client Plan -->
+                    <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-extrabold text-brand-700 bg-brand-50 px-3 py-1 rounded-full uppercase tracking-wider">Plan Hogar / Cliente</span>
+                            <h3 class="text-3xl sm:text-4xl font-black text-slate-900 my-4">COP $5.000 <span class="text-xs font-normal text-slate-500">/ mes por cuenta</span></h3>
+                            <ul class="text-left text-xs sm:text-sm text-slate-600 space-y-3 my-6">
+                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Usuarios ilimitados sincronizados en la misma cuenta</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Control completo de existencias e inventario</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Cálculo automático de faltantes y lista de mercado</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Localización de comercios y ofertas en mapa</li>
+                            </ul>
+                        </div>
+                        <button onclick="openAuthModal('register', 'cliente')" class="w-full py-3 bg-slate-100 text-slate-800 font-bold text-xs sm:text-sm rounded-xl hover:bg-brand-600 hover:text-white transition-all">
+                            Crear Cuenta Cliente
+                        </button>
+                    </div>
+
+                    <!-- Supplier Plan -->
+                    <div class="bg-white rounded-2xl p-8 border-2 border-brand-500 shadow-md flex flex-col justify-between relative">
+                        <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-600 text-white text-[10px] font-extrabold px-3.5 py-1 rounded-full uppercase tracking-wider">Comercial</span>
+                        <div>
+                            <span class="text-[10px] font-extrabold text-slate-600 bg-slate-100 px-3 py-1 rounded-full uppercase tracking-wider">Plan Proveedor</span>
+                            <h3 class="text-3xl sm:text-4xl font-black text-slate-900 my-4">1% <span class="text-xs font-normal text-slate-500">por venta efectuada</span></h3>
+                            <ul class="text-left text-xs sm:text-sm text-slate-600 space-y-3 my-6">
+                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Registro de catálogo de productos e imágenes</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Configuración de radio de cobertura de domicilios</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Definición de políticas de envío y monto mínimo</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Recepción directa de órdenes de compra</li>
+                            </ul>
+                        </div>
+                        <button onclick="openAuthModal('register', 'proveedor')" class="w-full py-3 gradient-bg text-white font-bold text-xs sm:text-sm rounded-xl shadow hover:opacity-95 transition-all">
+                            Crear Cuenta Proveedor
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-  </header>
 
-  <!-- Hero Section -->
-  <section id="inicio" class="relative gradient-header text-white py-16 lg:py-24 overflow-hidden border-b border-slate-800">
-    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid md:grid-cols-12 gap-8 items-center">
-      <div class="md:col-span-7 space-y-6">
-        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30">
-          <i class="fa-solid fa-location-dot text-brand-yellow"></i> Armenia, Quindío - Colombia
-        </span>
-        <h2 class="text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight">
-          Academia Musical y Coro Infantil - Juvenil
-        </h2>
-        <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
-          Formación musical integral en canto para niños, jóvenes y adultos. Descubre el arte vocal a través de pedagogía vivencial, movimiento y la práctica coral polifónica.
-        </p>
-        <div class="flex flex-wrap gap-4 pt-2">
-          <a href="#inscripcion" class="inline-flex items-center gap-2 bg-brand-yellow text-slate-900 font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-400 transition hover:-translate-y-0.5">
-            <i class="fa-solid fa-pen-to-square"></i> Formulario de Inscripción
-          </a>
-          <a href="#videos" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur-sm border border-white/20 transition">
-            <i class="fa-solid fa-play text-brand-cyan"></i> Ver Presentaciones
-          </a>
+    <!-- AUTH MODAL (LOGIN & REGISTRATION) -->
+    <div id="modalAuth" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 relative my-8">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- LOGIN FORM -->
+            <div id="formLoginContainer">
+                <h3 class="text-2xl font-black text-slate-900 mb-1">Iniciar Sesión</h3>
+                <p class="text-xs text-slate-500 mb-6">Accede a la despensa o panel de tu cuenta mercApp</p>
+                <form onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Usuario</label>
+                        <input type="text" id="loginUser" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Contraseña</label>
+                        <input type="password" id="loginPass" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm">
+                    </div>
+                    <button type="submit" class="w-full py-3 gradient-bg text-white font-bold rounded-xl shadow hover:opacity-95 transition-all text-sm">
+                        Ingresar a la Plataforma
+                    </button>
+                </form>
+                <p class="text-xs text-center text-slate-500 mt-6">
+                    ¿Aún no tienes cuenta? <button onclick="toggleAuthMode('register')" class="text-brand-700 font-bold underline">Regístrate aquí</button>
+                </p>
+            </div>
+
+            <!-- REGISTRATION FORM -->
+            <div id="formRegisterContainer" class="hidden">
+                <h3 class="text-2xl font-black text-slate-900 mb-1">Registrar Cuenta</h3>
+                <p class="text-xs text-slate-500 mb-4">Quien registra la cuenta se asigna como <strong>Administrador</strong> principal.</p>
+
+                <!-- Role Switcher -->
+                <div class="flex bg-slate-100 p-1 rounded-xl mb-4 border border-slate-200">
+                    <button type="button" id="regTypeClientBtn" onclick="setRegAccountType('Cliente')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-white shadow-sm text-brand-700">
+                        <i class="fa-solid fa-house-user mr-1"></i> Cliente / Hogar
+                    </button>
+                    <button type="button" id="regTypeSupplierBtn" onclick="setRegAccountType('Proveedor')" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900">
+                        <i class="fa-solid fa-store mr-1"></i> Proveedor
+                    </button>
+                </div>
+
+                <form onsubmit="handleRegistration(event)" class="space-y-3 text-left">
+                    <input type="hidden" id="regAccountType" value="Cliente">
+                    
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase text-slate-600">Nombre de la Cuenta (Familia o Empresa)</label>
+                        <input type="text" id="regAccountName" placeholder="Ej: Familia Gómez / Fruver San José" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-slate-600">Nombre Admin</label>
+                            <input type="text" id="regAdminName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-slate-600">Apellido Admin</label>
+                            <input type="text" id="regAdminLastName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-slate-600">Usuario Login</label>
+                            <input type="text" id="regUser" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-slate-600">Contraseña</label>
+                            <input type="password" id="regPass" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase text-slate-600">Ubicación (Latitud, Longitud)</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="regLocation" placeholder="Ej: 4.53389,-75.68111" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
+                            <button type="button" onclick="getCurrentGpsLocation()" class="px-3 py-2 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-300 shrink-0" title="Obtener GPS actual">
+                                <i class="fa-solid fa-location-crosshairs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Supplier specific fields -->
+                    <div id="supplierOnlyFields" class="hidden space-y-3 border-t border-slate-200 pt-3">
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-slate-600">Cobertura de Domicilios (en Km)</label>
+                            <input type="number" step="0.5" id="regCoverage" placeholder="Ej: 5" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-slate-600">Descripción (Costo domicilio, monto mínimo)</label>
+                            <textarea id="regDescription" rows="2" placeholder="Ej: Domicilio $3.000. Gratis desde $50.000." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 gradient-bg text-white font-bold rounded-xl shadow hover:opacity-95 transition-all text-sm mt-2">
+                        Registrar Cuenta de Administrador
+                    </button>
+                </form>
+                <p class="text-xs text-center text-slate-500 mt-4">
+                    ¿Ya tienes cuenta? <button onclick="toggleAuthMode('login')" class="text-brand-700 font-bold underline">Inicia Sesión</button>
+                </p>
+            </div>
         </div>
-      </div>
-      <div class="md:col-span-5 flex justify-center">
-        <a href="#inscripcion" class="relative group max-w-sm w-full block transform transition hover:-translate-y-1">
-          <div class="absolute -inset-1 bg-gradient-to-r from-brand-orange via-brand-yellow to-brand-cyan rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-          <div class="relative bg-slate-900 rounded-3xl p-6 text-center border border-slate-700 hover:border-brand-yellow/50 transition">
-            <img src="logo.jpeg" alt="Logo Coro Armonía Resonante" class="mx-auto h-48 w-48 object-contain mb-4 rounded-2xl bg-white p-3 shadow-inner" onerror="this.onerror=null; this.src='https://placehold.co/300x300/1A2B4C/FFFFFF?text=Armonia+Resonante';">
-            <h3 class="text-lg font-bold text-white flex items-center justify-center gap-2">
-              ¡Únete a nuestra agrupación! <i class="fa-solid fa-arrow-right text-brand-yellow text-sm group-hover:translate-x-1 transition"></i>
-            </h3>
-            <p class="text-xs text-brand-yellow mt-1 font-medium">Haz clic aquí para ir al formulario de inscripción</p>
-          </div>
-        </a>
-      </div>
     </div>
-  </section>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
-
-    <!-- Section: Maestros / Equipo Docente -->
-    <section id="maestros" class="space-y-8">
-      <div class="text-center max-w-3xl mx-auto">
-        <h2 class="text-3xl font-bold text-brand-navy">Nuestra Dirección y Docencia</h2>
-        <div class="w-20 h-1 bg-brand-yellow mx-auto mt-2 rounded-full"></div>
-        <p class="text-slate-600 mt-3">Formación de alta excelencia académica y sensibilidad humana al servicio de la música.</p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-8">
-        <!-- Maestra Marcela Card -->
-        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-md border border-slate-100 hover:shadow-xl transition relative overflow-hidden flex flex-col justify-between">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-brand-cyan/10 rounded-bl-full -z-0"></div>
-          <div class="relative z-10 space-y-4">
-            <div class="flex items-center gap-4">
-              <div class="w-16 h-16 rounded-2xl bg-brand-navy text-brand-yellow flex items-center justify-center text-2xl font-bold shadow-md">
-                <i class="fa-solid fa-music"></i>
-              </div>
-              <div>
-                <h3 class="text-xl font-bold text-brand-navy">Maestra Marcela González Forero</h3>
-                <p class="text-sm font-semibold text-brand-blue">Directora y Fundadora</p>
-              </div>
-            </div>
-            <p class="text-slate-700 text-sm leading-relaxed text-justify">
-              Directora y Fundadora. Maestra en música con énfasis en Canto y Pedagogía musical y Especialista en Dirección de Coros Infantiles y Juveniles de la Pontificia Universidad Javeriana de Bogotá, con estudios en el Conservatorio de la Universidad Nacional de Colombia y Maestría en Música Elemental y Pedagogía del Movimiento en el renombrado Mozarteum de Salzburgo, Austria. Especializada en los métodos Orff y Kodály, integrando movimiento, técnica vocal y práctica coral.
-            </p>
-          </div>
-          <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-2 text-xs font-medium text-slate-500">
-            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Pontificia Univ. Javeriana</span>
-            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Mozarteum Salzburgo</span>
-            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Métodos Kodály & Orff</span>
-          </div>
-        </div>
-
-        <!-- Arturo Conde Card -->
-        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-md border border-slate-100 hover:shadow-xl transition relative overflow-hidden flex flex-col justify-between">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-brand-orange/10 rounded-bl-full -z-0"></div>
-          <div class="relative z-10 space-y-4">
-            <div class="flex items-center gap-4">
-              <div class="w-16 h-16 rounded-2xl bg-brand-orange text-white flex items-center justify-center text-2xl font-bold shadow-md">
-                <i class="fa-solid fa-compact-disc"></i>
-              </div>
-              <div>
-                <h3 class="text-xl font-bold text-brand-navy">Arturo Conde González</h3>
-                <p class="text-sm font-semibold text-brand-orange">Compositor y Arreglista</p>
-              </div>
-            </div>
-            <p class="text-slate-700 text-sm leading-relaxed text-justify">
-              Acompaña la labor de la academia demostrando una extraordinaria habilidad musical respaldada por su oído absoluto y una especial sensibilidad artística. Expresa su talento a través de una profunda capacidad para la composición musical, la creación de arreglos y el acompañamiento dinámico en el desarrollo del proceso coral e instrumental.
-            </p>
-          </div>
-          <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-2 text-xs font-medium text-slate-500">
-            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Oído Absoluto</span>
-            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Composición Musical</span>
-            <span class="bg-slate-100 px-2.5 py-1 rounded-md">Arreglos Corales</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section: Coro Infantil y Juvenil + Espacios para Fotos -->
-    <section id="coro" class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200/80 space-y-8">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-slate-100 pb-6">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-brand-orange">Agrupación Representativa</span>
-          <h2 class="text-3xl font-bold text-brand-navy">Coro Infantil y Juvenil Polifónico</h2>
-          <p class="text-slate-600 mt-1 max-w-2xl">
-            Interpretamos un variado repertorio de obras nacionales e internacionales, abarcando géneros clásicos, contemporáneos, sacros y profanos.
-          </p>
-        </div>
-        <div class="flex items-center gap-2 text-xs text-slate-500 bg-slate-100 px-4 py-2 rounded-xl">
-          <i class="fa-solid fa-users text-brand-blue"></i>
-          <span>Coro Vocacional y de Formación</span>
-        </div>
-      </div>
-
-      <!-- Espacios para Imágenes del Coro con Texto Descriptivo -->
-      <div class="space-y-3">
-        <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Galería Fotográfica</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Foto 0 -->
-          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-            <div class="relative h-64 overflow-hidden bg-slate-100">
-              <img src="foto00.jpg" alt="Presentaciones y Conciertos" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1A2B4C/FFFFFF?text=Fotografia+0';">
-              <div class="absolute top-3 left-3 bg-brand-navy/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
-                Directora en concierto
-              </div>
-            </div>
-            <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Conciertos</h4>
-              <p class="text-xs text-slate-500 mt-1">Conciertos y participaciones en vivo en escenarios locales y virtuales.</p>
-            </div>
-          </div>
-          
-          <!-- Foto 1 -->
-          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-            <div class="relative h-64 overflow-hidden bg-slate-100">
-              <img src="foto01.jpg" alt="Presentaciones y Conciertos" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1A2B4C/FFFFFF?text=Fotografia+1';">
-              <div class="absolute top-3 left-3 bg-brand-navy/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
-                Conciertos
-              </div>
-            </div>
-            <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Conciertos</h4>
-              <p class="text-xs text-slate-500 mt-1">Conciertos y participaciones en vivo en escenarios locales y virtuales.</p>
-            </div>
-          </div>
-
-          <!-- Foto 2 -->
-          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-            <div class="relative h-64 overflow-hidden bg-slate-100">
-              <img src="foto02.jpg" alt="Ensayos y Talla Pedagógica" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2B50AA/FFFFFF?text=Fotografia+2';">
-              <div class="absolute top-3 left-3 bg-brand-blue/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
-                Pedagogía Vivencial
-              </div>
-            </div>
-            <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Ensayos y Movimiento</h4>
-              <p class="text-xs text-slate-500 mt-1">Práctica vocal integral mediante los métodos Kodály y Orff con niños y jóvenes.</p>
-            </div>
-          </div>
-
-          <!-- Foto 3 -->
-          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-            <div class="relative h-64 overflow-hidden bg-slate-100">
-              <img src="foto03.jpg" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+3';">
-              <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
-                Vestuario y preparación
-              </div>
-            </div>
-            <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Previos de conciertos para promosiones y posters</h4>
-              <p class="text-xs text-slate-500 mt-1">Túnicas y preparación para presentaciones.</p>
-            </div>
-          </div>
-
-          <!-- Foto 4 (Ajustada sin recorte a lo alto) -->
-          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-            <div class="relative h-64 overflow-hidden bg-slate-100 flex items-center justify-center p-1">
-              <img src="foto04.jpg" alt="Conciertos y Eventos Especiales" class="h-full w-auto object-contain object-center group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+4';">
-              <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
-                Movimiento
-              </div>
-            </div>
-            <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Repertorio Polifónico</h4>
-              <p class="text-xs text-slate-500 mt-1">Túnicas y preparación para presentaciones.</p>
-            </div>
-          </div>
-
-          <!-- Foto 5 -->
-          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-            <div class="relative h-64 overflow-hidden bg-slate-100">
-              <img src="foto05.jpeg" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+5';">
-              <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
-                Belleza y Armonía
-              </div>
-            </div>
-            <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Música, Arte y Belleza</h4>
-              <p class="text-xs text-slate-500 mt-1">Sensibilidad en los detalles.</p>
-            </div>
-          </div>
-
-          <!-- Foto 6 -->
-          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-            <div class="relative h-64 overflow-hidden bg-slate-100">
-              <img src="foto06.JPG" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+6';">
-              <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
-                Cultura y Tradición
-              </div>
-            </div>
-            <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Obras populares, orgullo de nuestra tierra</h4>
-              <p class="text-xs text-slate-500 mt-1">Lugares icónicos para nuestras presentaciones</p>
-            </div>
-          </div>
-
-          <!-- Foto 7 -->
-          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-            <div class="relative h-64 overflow-hidden bg-slate-100">
-              <img src="foto07.jpeg" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+7';">
-              <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
-                 Acompañamiento y Juego
-              </div>
-            </div>
-            <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Acompañamiento instrumental y grupo coral </h4>
-              <p class="text-xs text-slate-500 mt-1">Práctica coral con acompañamiento musical, la mejor forma de ocupar el tiempo</p>
-            </div>
-          </div>
-
-          <!-- Foto 8 -->
-          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-            <div class="relative h-64 overflow-hidden bg-slate-100">
-              <img src="foto08.jpeg" alt="Conciertos y Eventos Especiales" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FF6B35/FFFFFF?text=Fotografia+8';">
-              <div class="absolute top-3 left-3 bg-brand-orange/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
-                Vestuario y preparación
-              </div>
-            </div>
-            <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Previos de conciertos para promosiones y posters</h4>
-              <p class="text-xs text-slate-500 mt-1">Túnicas y preparación para presentaciones.</p>
-            </div>
-          </div>
-
-          <!-- Foto 9 -->
-          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-            <div class="relative h-64 overflow-hidden bg-slate-100">
-              <img src="foto09.jpg" alt="Ensayos y Talla Pedagógica" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2B50AA/FFFFFF?text=Fotografia+9';">
-              <div class="absolute top-3 left-3 bg-brand-blue/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
-                Conciertos
-              </div>
-            </div>
-            <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Música, Canto y Movimiento</h4>
-              <p class="text-xs text-slate-500 mt-1">Práctica vocal integral mediante los métodos Kodály y Orff con niños y jóvenes.</p>
-            </div>
-          </div>
-
-          <!-- Foto 10 -->
-          <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-            <div class="relative h-64 overflow-hidden bg-slate-100">
-              <img src="foto10.jpg" alt="Ensayos y Talla Pedagógica" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2B50AA/FFFFFF?text=Fotografia+10';">
-              <div class="absolute top-3 left-3 bg-brand-blue/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm shadow-sm">
-                Pedagogía Vivencial
-              </div>
-            </div>
-            <div class="p-4 bg-white border-t border-slate-100">
-              <h4 class="font-bold text-slate-800 text-sm">Ensayos y Movimiento</h4>
-              <p class="text-xs text-slate-500 mt-1">Práctica integral instrumental y vocal.</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- Section: Videos con Pestañas y Selector Dinámico -->
-    <section id="videos" class="space-y-6">
-      <div class="text-center max-w-3xl mx-auto">
-        <h2 class="text-3xl font-bold text-brand-navy">Galería de Muestras y Conciertos</h2>
-        <div class="w-20 h-1 bg-brand-cyan mx-auto mt-2 rounded-full"></div>
-        <p class="text-slate-600 mt-3">Disfruta de nuestras interpretaciones vocales e instrumentales. Selecciona cualquier video de la lista para reproducirlo.</p>
-      </div>
-
-      <div class="bg-slate-900 rounded-3xl p-4 sm:p-8 shadow-2xl text-white">
-        <!-- Pestañas / Selector de Videos -->
-        <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-4 mb-6" id="videoTabs">
-          <!-- Generado o administrado dinámicamente -->
-        </div>
-
-        <!-- Reproductor Principal -->
-        <div class="grid lg:grid-cols-12 gap-8 items-start">
-          <div class="lg:col-span-8">
-            <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-lg border border-slate-800">
-              <iframe id="mainVideoPlayer" class="w-full h-full" src="https://www.youtube-nocookie.com/embed/CRwrRhnl6lM?rel=0" title="Reproductor de Video Armonía Resonante" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div class="mt-4">
-              <h3 id="currentVideoTitle" class="text-lg font-bold text-brand-yellow">Presentación Musical 1</h3>
-              <p id="currentVideoDesc" class="text-xs text-slate-400 mt-1">Interpretación del Coro Infantil y Juvenil Armonía Resonante.</p>
-            </div>
-          </div>
-
-          <!-- Lista lateral de Selección -->
-          <div class="lg:col-span-4 space-y-3">
-            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Lista de Reproducción</h4>
-            <div class="space-y-3 max-h-[420px] overflow-y-auto pr-1" id="videoPlaylist">
-              <!-- Items de videos insertados por JS -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section: Formulario de Inscripción -->
-    <section id="inscripcion" class="bg-white rounded-3xl p-6 sm:p-10 shadow-lg border border-slate-200">
-      <div class="max-w-3xl mx-auto text-center space-y-2 mb-8">
-        <span class="px-3 py-1 bg-brand-yellow/20 text-slate-900 text-xs font-bold rounded-full uppercase">Admisiones Abiertas</span>
-        <h2 class="text-3xl font-extrabold text-brand-navy">Formulario de Inscripción</h2>
-        <p class="text-slate-600 text-sm">
-          Completa los datos para realizar el registro en nuestros programas. Los datos se sincronizan automáticamente con la hoja electrónica de inscripciones.
-        </p>
-      </div>
-
-      <form id="registrationForm" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+    <!-- INNER APPLICATION DASHBOARD VIEW (LOGGED IN USER) -->
+    <div id="viewDashboard" class="flex-grow hidden max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- Casilla Mayor de Edad -->
-        <div class="md:col-span-2 bg-brand-cyan/10 border border-brand-cyan/30 rounded-2xl p-4 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <input type="checkbox" id="esMayorDeEdad" name="esMayorDeEdad" class="w-5 h-5 text-brand-blue rounded focus:ring-brand-blue border-slate-300 cursor-pointer">
-            <div>
-              <label for="esMayorDeEdad" class="text-sm font-bold text-slate-800 cursor-pointer">El / La estudiante es mayor de edad (18 años o más)</label>
-              <p class="text-xs text-slate-500">Al marcar esta casilla, los datos de acudientes o padres no serán requeridos.</p>
+        <!-- SECTION 1: CLIENT INVENTORY (DESPENSA) -->
+        <section id="appTabInventory" class="space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-900">Control de Despensa e Inventario</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">Sincroniza diariamente los consumos de alimentos en tu hogar.</p>
+                </div>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button onclick="openCategoryModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm rounded-xl transition-all">
+                        <i class="fa-solid fa-folder-plus mr-1"></i> Categorías
+                    </button>
+                    <button onclick="openProductModal()" class="px-4 py-2.5 gradient-bg text-white font-bold text-xs sm:text-sm rounded-xl shadow hover:opacity-95 transition-all">
+                        <i class="fa-solid fa-plus mr-1"></i> Nuevo Producto
+                    </button>
+                </div>
             </div>
-          </div>
-        </div>
 
-        <!-- Datos del Estudiante -->
-        <div class="md:col-span-2 border-b border-slate-200 pb-2">
-          <h3 class="text-base font-bold text-brand-blue flex items-center gap-2">
-            <i class="fa-solid fa-user-graduate"></i> Información del Estudiante
-          </h3>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombre">Nombre *</label>
-          <input type="text" id="nombre" name="nombre" required placeholder="Ej. Sofia" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="apellido">Apellido *</label>
-          <input type="text" id="apellido" name="apellido" required placeholder="Ej. Rodríguez" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="sexo">Sexo *</label>
-          <select id="sexo" name="sexo" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm bg-white">
-            <option value="">Seleccione...</option>
-            <option value="Femenino">Femenino</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Otro">Otro</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="fechaNacimiento">Fecha de Nacimiento *</label>
-          <input type="date" id="fechaNacimiento" name="fechaNacimiento" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-        </div>
-
-        <!-- Selección múltiple de programas ofrecidos -->
-        <div class="md:col-span-2">
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Programas de Interés (Selecciona una o más opciones) *</label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="programasContainer">
-            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
-              <input type="checkbox" name="programa" value="Coro Infantil y Juvenil Polifónico" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
-              <span class="text-xs font-medium text-slate-700"><strong>Coro Infantil y Juvenil Polifónico</strong><br><span class="text-slate-500">Práctica coral y ensamble vocal polifónico</span></span>
-            </label>
-
-            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
-              <input type="checkbox" name="programa" value="Coro Infantil Semillero" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
-              <span class="text-xs font-medium text-slate-700"><strong>Coro Infantil Semillero</strong><br><span class="text-slate-500">Iniciación coral y desarrollo auditivo infantil</span></span>
-            </label>
-
-            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
-              <input type="checkbox" name="programa" value="Clases Particulares de Canto (Niños y Adultos)" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
-              <span class="text-xs font-medium text-slate-700"><strong>Clases Particulares de Canto</strong><br><span class="text-slate-500">Formación y técnica vocal personalizada</span></span>
-            </label>
-
-            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
-              <input type="checkbox" name="programa" value="Clases Particulares de Piano" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
-              <span class="text-xs font-medium text-slate-700"><strong>Clases Particulares de Piano</strong><br><span class="text-slate-500">Iniciación al piano, técnica y lenguaje musical</span></span>
-            </label>
-
-            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
-              <input type="checkbox" name="programa" value="Solfeo (lectura musical)" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
-              <span class="text-xs font-medium text-slate-700"><strong>Solfeo (Lectura Musical)</strong><br><span class="text-slate-500">Entrenamiento auditivo, gramática y lectura musical</span></span>
-            </label>
-
-            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
-              <input type="checkbox" name="programa" value="Práctica Vocal y Ensamble para Adultos" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
-              <span class="text-xs font-medium text-slate-700"><strong>Taller Vocal para Adultos</strong><br><span class="text-slate-500">Técnica y experiencia coral para adultos</span></span>
-            </label>
-
-            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
-              <input type="checkbox" name="programa" value="Semillero de Cuerdas (Violín, Viola y Violonchelo)" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
-              <span class="text-xs font-medium text-slate-700"><strong>Semillero de Cuerdas</strong><br><span class="text-slate-500">Iniciación instrumental en violín, viola y violonchelo</span></span>
-            </label>
-
-            <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition cursor-pointer">
-              <input type="checkbox" name="programa" value="Ensamble de Cuerdas (Violín, Viola, Violonchelo y Contrabajo)" class="mt-1 w-4 h-4 text-brand-blue rounded focus:ring-brand-blue border-slate-300 programa-checkbox">
-              <span class="text-xs font-medium text-slate-700"><strong>Ensamble de Cuerdas</strong><br><span class="text-slate-500">Práctica grupal para músicos con experiencia en violín, viola, violonchelo o contrabajo</span></span>
-            </label>
-          </div>
-          <p id="programaError" class="text-xs text-rose-500 mt-1 hidden font-semibold">Por favor selecciona al menos un programa de interés.</p>
-        </div>
-
-        <!-- Contenedor Padres y Acudiente (Ocultable si es mayor de edad) -->
-        <div id="seccionPadresAcudiente" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-          
-          <div class="md:col-span-2 border-b border-slate-200 pb-2 flex items-center justify-between">
-            <h3 class="text-base font-bold text-brand-blue flex items-center gap-2">
-              <i class="fa-solid fa-users"></i> Información de Padres / Acudiente
-            </h3>
-            <span id="badgeMayorEdad" class="hidden text-xs bg-brand-yellow/30 text-slate-800 font-bold px-2.5 py-1 rounded-md">
-              Opcional (Estudiante mayor de edad)
-            </span>
-          </div>
-
-          <!-- Datos Papá -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombrePapa">Nombre del Papá</label>
-            <input type="text" id="nombrePapa" name="nombrePapa" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="celularPapa">Celular del Papá</label>
-            <input type="tel" id="celularPapa" name="celularPapa" placeholder="Ej. 300 123 4567" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="emailPapa">Email del Papá</label>
-            <input type="email" id="emailPapa" name="emailPapa" placeholder="correo@ejemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="ocupacionPapa">Ocupación del Papá</label>
-            <input type="text" id="ocupacionPapa" name="ocupacionPapa" placeholder="Ej. Ingeniero, Docente..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <!-- Datos Mamá -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombreMama">Nombre de la Mamá</label>
-            <input type="text" id="nombreMama" name="nombreMama" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="celularMama">Celular de la Mamá</label>
-            <input type="tel" id="celularMama" name="celularMama" placeholder="Ej. 310 987 6543" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="emailMama">Email de la Mamá</label>
-            <input type="email" id="emailMama" name="emailMama" placeholder="correo@ejemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="ocupacionMama">Ocupación de la Mamá</label>
-            <input type="text" id="ocupacionMama" name="ocupacionMama" placeholder="Ej. Arquitecta, Médica..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <!-- Datos Acudiente (Opcional) -->
-          <div class="md:col-span-2 pt-2 border-t border-slate-100">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Información del Acudiente (Opcional)</h4>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="nombreAcudiente">Nombre del Acudiente</label>
-            <input type="text" id="nombreAcudiente" name="nombreAcudiente" placeholder="Nombre completo" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="parentescoAcudiente">Parentesco</label>
-            <input type="text" id="parentescoAcudiente" name="parentescoAcudiente" placeholder="Ej. Tío, Abuelo, Tutor..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="celularAcudiente">Celular del Acudiente</label>
-            <input type="tel" id="celularAcudiente" name="celularAcudiente" placeholder="Ej. 315 000 0000" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="emailAcudiente">Email del Acudiente</label>
-            <input type="email" id="emailAcudiente" name="emailAcudiente" placeholder="acudiente@ejemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-          <div class="md:col-span-2">
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="ocupacionAcudiente">Ocupación del Acudiente</label>
-            <input type="text" id="ocupacionAcudiente" name="ocupacionAcudiente" placeholder="Ej. Comercio, Contador..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-          </div>
-
-        </div>
-
-        <!-- Salud y Seguridad -->
-        <div class="md:col-span-2 border-b border-slate-200 pb-2 mt-4">
-          <h3 class="text-base font-bold text-brand-blue flex items-center gap-2">
-            <i class="fa-solid fa-notes-medical"></i> Salud y Observaciones
-          </h3>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="eps">EPS *</label>
-          <input type="text" id="eps" name="eps" required placeholder="Nombre de la entidad EPS" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" for="alergias">Alergias o Cuidados Especiales</label>
-          <input type="text" id="alergias" name="alergias" placeholder="Indicar si aplica o escribir 'Ninguna'" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm">
-        </div>
-
-        <!-- Submit Button -->
-        <div class="md:col-span-2 pt-4">
-          <button type="submit" id="submitBtn" class="w-full bg-brand-yellow hover:bg-yellow-400 text-slate-900 font-bold text-base py-4 px-6 rounded-2xl shadow-lg transition duration-200 flex items-center justify-center gap-2 hover:shadow-xl">
-            <i class="fa-solid fa-paper-plane"></i> Enviar Inscripción
-          </button>
-        </div>
-      </form>
-
-      <!-- Feedback Modal / Notification -->
-      <div id="statusModal" class="hidden mt-6 p-4 rounded-2xl text-center text-sm font-semibold transition"></div>
-    </section>
-
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-slate-900 text-white mt-16 border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="space-y-3">
-        <div class="flex items-center space-x-3">
-          <img src="logo.jpeg" alt="Logo Footer" class="h-10 w-auto bg-white rounded-full p-1" onerror="this.onerror=null; this.src='https://placehold.co/100x100/1A2B4C/FFFFFF?text=AR';">
-          <span class="font-bold text-lg">Armonía Resonante</span>
-        </div>
-        <p class="text-xs text-slate-400 leading-relaxed">
-          Academia musical especializada en la formación vocal de niños, jóvenes y adultos. Directora Maestra Marcela González Forero.
-        </p>
-      </div>
-
-      <div class="space-y-2 text-xs text-slate-300">
-        <h4 class="font-bold text-white uppercase text-sm mb-3">Ubicación y Contacto</h4>
-        <p class="flex items-center gap-2">
-          <i class="fa-solid fa-location-dot text-brand-yellow"></i> Armenia, Quindío - Colombia
-        </p>
-        <p class="flex items-center gap-2">
-          <i class="fa-solid fa-envelope text-brand-yellow"></i> Notificaciones administrativas: margonfo@gmail.com
-        </p>
-      </div>
-
-      <div class="space-y-2 text-xs text-slate-300">
-        <h4 class="font-bold text-white uppercase text-sm mb-3">Programas</h4>
-        <ul class="space-y-1">
-          <li>• Coro Infantil y Juvenil Polifónico</li>
-          <li>• Coro Infantil Semillero</li>
-          <li>• Clases Particulares de Canto y Piano</li>
-          <li>• Solfeo y Lectura Musical</li>
-          <li>• Semillero y Ensamble de Cuerdas</li>
-        </ul>
-      </div>
-    </div>
-    <div class="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-      &copy; <span id="yearSpan"></span> Armonía Resonante. Todos los derechos reservados.
-    </div>
-  </footer>
-
-  <script>
-    // Año dinámico footer
-    document.getElementById('yearSpan').textContent = new Date().getFullYear();
-
-    // -------------------------------------------------------------
-    // URL DEL GOOGLE APPS SCRIPT
-    // -------------------------------------------------------------
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUdi8Ms2DyHXurwFj17F_z_VEZ0iKiAVXoXHWJQW_nXM-bNJp5SwGK8tB5ESpgcmmF/exec";
-
-    // Manejo visual de mayor de edad
-    const esMayorCheck = document.getElementById('esMayorDeEdad');
-    const badgeMayor = document.getElementById('badgeMayorEdad');
-    const seccionPadres = document.getElementById('seccionPadresAcudiente');
-
-    esMayorCheck.addEventListener('change', function() {
-      if (this.checked) {
-        badgeMayor.classList.remove('hidden');
-        seccionPadres.classList.add('opacity-60');
-      } else {
-        badgeMayor.classList.add('hidden');
-        seccionPadres.classList.remove('opacity-60');
-      }
-    });
-
-    // -------------------------------------------------------------
-    // GESTOR DE VIDEOS DE YOUTUBE
-    // -------------------------------------------------------------
-    const videosList = [
-      {
-        id: "CRwrRhnl6lM",
-        title: "Presentación Coral 1",
-        desc: "Muestra musical del Coro Infantil y Juvenil Armonía Resonante."
-      },
-      {
-        id: "HU7RDucguGs",
-        title: "Presentación Coral 2",
-        desc: "Interpretación polifónica y ensamble vocal."
-      },
-      {
-        id: "bsUJlicsiZU",
-        title: "Presentación Coral 3",
-        desc: "Repertorio sacro, profano y pedagógico."
-      },
-      {
-        id: "LeHpgSDGVEY",
-        title: "Canción de cuna para arrullar un arroyo",
-        desc: "Repertorio popular, Armonía Resonante Campesino."
-      },
-      {
-        id: "FIM4WMBrZB0",
-        title: "Colombia es amor",
-        desc: "Repertorio popular, Armonía Resonante Campesino."
-      },
-      {
-        id: "Z8CPIQxziZI",
-        title: "Dona Nobis Pacem",
-        desc: "Repertorio sacro, Armonía Resonante Campesino."
-      },
-      {
-        id: "GFJfakbLxJU",
-        title: "Ay si si",
-        desc: "Repertorio popular, Armonía Resonante Campesino."
-      },
-      {
-        id: "jcwtVUpgAEg",
-        title: "Niña Guabina",
-        desc: "Repertorio popular, Armonía Resonante Campesino."
-      }
-    ];
-
-    let currentVideoIndex = 0;
-
-    function renderVideos() {
-      const tabsContainer = document.getElementById('videoTabs');
-      const playlistContainer = document.getElementById('videoPlaylist');
-
-      tabsContainer.innerHTML = '';
-      playlistContainer.innerHTML = '';
-
-      videosList.forEach((video, index) => {
-        const isActive = index === currentVideoIndex;
-
-        // Render Tabs
-        const tabBtn = document.createElement('button');
-        tabBtn.className = `px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 ${
-          isActive 
-            ? 'bg-brand-yellow text-slate-900 shadow-md' 
-            : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-        }`;
-        tabBtn.innerHTML = `<i class="fa-solid ${isActive ? 'fa-circle-play' : 'fa-play'}"></i> Video ${index + 1}`;
-        tabBtn.onclick = () => selectVideo(index);
-        tabsContainer.appendChild(tabBtn);
-
-        // Render Playlist Card
-        const playlistItem = document.createElement('div');
-        playlistItem.className = `p-3 rounded-2xl cursor-pointer transition border flex gap-3 items-center ${
-          isActive 
-            ? 'bg-slate-800 border-brand-yellow/50 shadow-md' 
-            : 'bg-slate-900/60 border-slate-800 hover:bg-slate-800/80'
-        }`;
-        playlistItem.onclick = () => selectVideo(index);
-
-        playlistItem.innerHTML = `
-          <div class="relative w-24 aspect-video rounded-lg overflow-hidden bg-slate-950 flex-shrink-0 border border-slate-700">
-            <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="${video.title}" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
-              <i class="fa-solid fa-play text-white text-xs"></i>
+            <!-- Category Filter Bar -->
+            <div id="catFilterContainer" class="flex items-center space-x-2 overflow-x-auto custom-scrollbar pb-2">
+                <button onclick="filterInventoryByCat('all')" class="px-4 py-2 bg-brand-600 text-white font-bold text-xs rounded-xl shadow-sm shrink-0">Todas</button>
             </div>
-          </div>
-          <div class="overflow-hidden">
-            <h5 class="text-xs font-bold text-white truncate">${video.title}</h5>
-            <p class="text-[10px] text-slate-400 line-clamp-2 mt-0.5">${video.desc}</p>
-          </div>
-        `;
-        playlistContainer.appendChild(playlistItem);
-      });
 
-      // Actualizar reproductor principal
-      const current = videosList[currentVideoIndex];
-      document.getElementById('mainVideoPlayer').src = `https://www.youtube-nocookie.com/embed/${current.id}?autoplay=1&rel=0`;
-      document.getElementById('currentVideoTitle').textContent = current.title;
-      document.getElementById('currentVideoDesc').textContent = current.desc;
-    }
+            <!-- Inventory Items Grid -->
+            <div id="gridClientInventory" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Populated dynamically via JS -->
+            </div>
+        </section>
 
-    function selectVideo(index) {
-      currentVideoIndex = index;
-      renderVideos();
-    }
+        <!-- SECTION 2: AUTOMATED CHECKLIST -->
+        <section id="appTabChecklist" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-black text-slate-900">Lista de Chequeo para Mercado</h2>
+                <p class="text-slate-500 text-xs sm:text-sm">Generada automáticamente en base a productos con faltantes mayores a cero (<code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-xs">Faltante = Mínimo - Disponible</code>).</p>
+            </div>
 
-    // Inicializar reproductor
-    renderVideos();
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                    <span class="text-xs font-bold uppercase text-slate-500">Ítems Pendientes por Comprar</span>
+                    <button onclick="renderChecklist()" class="px-3 py-1.5 bg-brand-600 text-white font-bold text-xs rounded-lg shadow">
+                        <i class="fa-solid fa-rotate mr-1"></i> Recalcular Lista
+                    </button>
+                </div>
+                <ul id="listChecklistItems" class="divide-y divide-slate-100">
+                    <!-- Populated dynamically -->
+                </ul>
+            </div>
+        </section>
 
-    // -------------------------------------------------------------
-    // ENVÍO DE FORMULARIO DE INSCRIPCIÓN
-    // -------------------------------------------------------------
-    document.getElementById('registrationForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+        <!-- SECTION 3: SUPPLIERS & MAP COVERAGE -->
+        <section id="appTabSuppliers" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-black text-slate-900">Proveedores Cercanos y Cobertura GPS</h2>
+                <p class="text-slate-500 text-xs sm:text-sm">Consulta la ubicación y el radio de despacho de tiendas que cubren tu zona.</p>
+            </div>
 
-      // Validar selección de programas
-      const checkedProgramas = Array.from(document.querySelectorAll('input[name="programa"]:checked')).map(cb => cb.value);
-      const programaError = document.getElementById('programaError');
+            <div class="grid lg:grid-cols-12 gap-6">
+                <!-- Leaflet Map Container -->
+                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-2 shadow-sm">
+                    <div id="leafletMap" class="rounded-xl w-full"></div>
+                </div>
+                <!-- Supplier Info & Ordering Panel -->
+                <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between" id="panelSupplierDetails">
+                    <div class="text-center py-12 text-slate-400">
+                        <i class="fa-solid fa-store text-4xl mb-3"></i>
+                        <p class="text-sm font-semibold">Haz clic en un proveedor marcado en el mapa para ver su descripción, costos de domicilio y realizar pedidos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      if (checkedProgramas.length === 0) {
-        programaError.classList.remove('hidden');
-        document.getElementById('programasContainer').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      } else {
-        programaError.classList.add('hidden');
-      }
+        <!-- SECTION 4: ACCOUNT USER MANAGEMENT -->
+        <section id="appTabUsers" class="hidden space-y-6">
+            <div class="flex justify-between items-center bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-900">Usuarios de la Cuenta</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">Administra todos los accesos de familiares o colaboradores vinculados a esta cuenta.</p>
+                </div>
+                <button id="btnAddSubUser" onclick="openSubUserModal()" class="px-4 py-2.5 gradient-bg text-white font-bold text-xs sm:text-sm rounded-xl shadow">
+                    <i class="fa-solid fa-user-plus mr-1"></i> Registrar Nuevo Usuario
+                </button>
+            </div>
 
-      const btn = document.getElementById('submitBtn');
-      const modal = document.getElementById('statusModal');
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-slate-50 text-slate-500 font-bold text-xs uppercase border-b border-slate-200">
+                        <tr>
+                            <th class="px-6 py-3">Nombre Completo</th>
+                            <th class="px-6 py-3">Usuario Login</th>
+                            <th class="px-6 py-3">Rol en la Cuenta</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblAccountUsers" class="divide-y divide-slate-100">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
 
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Registrando inscripción...`;
+    <!-- API CONFIG MODAL -->
+    <div id="modalApiConfig" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+            <h3 class="text-lg font-bold mb-2">URL del Script de Google Sheets</h3>
+            <p class="text-xs text-slate-500 mb-4">Dirección Web App vinculada a la hoja de cálculo <strong>mercapp</strong>.</p>
+            <input type="url" id="txtApiUrl" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs mb-4">
+            <div class="flex justify-end gap-2">
+                <button onclick="closeApiConfigModal()" class="px-4 py-2 text-xs font-bold text-slate-600">Cancelar</button>
+                <button onclick="saveApiUrl()" class="px-4 py-2 text-xs font-bold bg-brand-600 text-white rounded-lg">Guardar URL</button>
+            </div>
+        </div>
+    </div>
 
-      modal.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-blue-50 text-blue-800 border border-blue-200 block";
-      modal.innerHTML = "Enviando información y notificando a los administradores...";
+    <!-- PRODUCT CREATION MODAL -->
+    <div id="modalProduct" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+            <h3 class="text-lg font-bold mb-4">Nuevo Producto de Despensa</h3>
+            <form onsubmit="handleSaveProduct(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nombre Producto</label>
+                    <input type="text" id="prodName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Unidad</label>
+                        <input type="text" id="prodUnit" placeholder="Ej: Kg, Litro, Unid" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Categoría</label>
+                        <select id="prodCategory" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                            <!-- Populated -->
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Mínimo Deseado</label>
+                        <input type="number" step="0.1" id="prodMin" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Disponible Actual</label>
+                        <input type="number" step="0.1" id="prodAvailable" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-4">
+                    <button type="button" onclick="closeProductModal()" class="px-4 py-2 text-xs font-bold text-slate-600">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 text-xs font-bold bg-brand-600 text-white rounded-lg">Guardar Producto</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-      const payload = {
-        esMayorDeEdad: esMayorCheck.checked ? "Sí" : "No",
-        nombre: document.getElementById('nombre').value.trim(),
-        apellido: document.getElementById('apellido').value.trim(),
-        sexo: document.getElementById('sexo').value,
-        fechaNacimiento: document.getElementById('fechaNacimiento').value,
-        programas: checkedProgramas.join(", "),
+    <!-- CATEGORY CREATION MODAL -->
+    <div id="modalCategory" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative">
+            <h3 class="text-lg font-bold mb-4">Nueva Categoría</h3>
+            <form onsubmit="handleSaveCategory(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nombre Categoría</label>
+                    <input type="text" id="catName" placeholder="Ej: Frutas y Verduras, Carnes, Aseo" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div class="flex justify-end gap-2 pt-4">
+                    <button type="button" onclick="closeCategoryModal()" class="px-4 py-2 text-xs font-bold text-slate-600">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 text-xs font-bold bg-brand-600 text-white rounded-lg">Guardar Categoría</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SUB-USER CREATION MODAL -->
+    <div id="modalSubUser" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+            <h3 class="text-lg font-bold mb-1">Agregar Usuario a la Cuenta</h3>
+            <p class="text-xs text-slate-500 mb-4">Crea un acceso con rol general para un familiar o colaborador.</p>
+            <form onsubmit="handleSaveSubUser(event)" class="space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nombre</label>
+                        <input type="text" id="subName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Apellido</label>
+                        <input type="text" id="subLastName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Usuario Login</label>
+                    <input type="text" id="subUser" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Contraseña</label>
+                    <input type="password" id="subPass" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <div class="flex justify-end gap-2 pt-4">
+                    <button type="button" onclick="closeSubUserModal()" class="px-4 py-2 text-xs font-bold text-slate-600">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 text-xs font-bold bg-brand-600 text-white rounded-lg">Crear Usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // Default Google Apps Script URL provided by user
+        let DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbwBJO_HqurAcn6SOdtNl_r0AH0jdnXSS6HSgaSI135eWfWzEdLaHmhYhnpDfgWghEkWeg/exec";
+        let API_URL = localStorage.getItem("mercapp_api_url") || DEFAULT_API_URL;
+
+        let currentUser = null;
+        let currentAccount = null;
+        let mapInstance = null;
         
-        // Papá
-        nombrePapa: document.getElementById('nombrePapa').value.trim(),
-        celularPapa: document.getElementById('celularPapa').value.trim(),
-        emailPapa: document.getElementById('emailPapa').value.trim(),
-        ocupacionPapa: document.getElementById('ocupacionPapa').value.trim(),
+        let clientProducts = [];
+        let clientCategories = [];
+        let accountUsers = [];
 
-        // Mamá
-        nombreMama: document.getElementById('nombreMama').value.trim(),
-        celularMama: document.getElementById('celularMama').value.trim(),
-        emailMama: document.getElementById('emailMama').value.trim(),
-        ocupacionMama: document.getElementById('ocupacionMama').value.trim(),
+        // Application Startup Handler
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedUser = localStorage.getItem("mercapp_session_user");
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                loadAccountInfoAndInit();
+            } else {
+                showPublicLanding();
+            }
+        });
 
-        // Acudiente (Opcional)
-        nombreAcudiente: document.getElementById('nombreAcudiente').value.trim(),
-        parentescoAcudiente: document.getElementById('parentescoAcudiente').value.trim(),
-        celularAcudiente: document.getElementById('celularAcudiente').value.trim(),
-        emailAcudiente: document.getElementById('emailAcudiente').value.trim(),
-        ocupacionAcudiente: document.getElementById('ocupacionAcudiente').value.trim(),
+        function showPublicLanding() {
+            document.getElementById("viewLanding").classList.remove("hidden");
+            document.getElementById("viewDashboard").classList.add("hidden");
+            document.getElementById("navPublic").classList.remove("hidden");
+            document.getElementById("navPrivate").classList.add("hidden");
+        }
 
-        // Salud
-        eps: document.getElementById('eps').value.trim(),
-        alergias: document.getElementById('alergias').value.trim()
-      };
+        function showDashboard() {
+            document.getElementById("viewLanding").classList.add("hidden");
+            document.getElementById("viewDashboard").classList.remove("hidden");
+            document.getElementById("navPublic").classList.add("hidden");
+            document.getElementById("navPrivate").classList.remove("hidden");
 
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(() => {
-        modal.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 block";
-        modal.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 text-lg mr-1"></i> ¡Inscripción realizada con éxito! La información ha sido registrada y notificada por correo a la dirección general de la academia.`;
-        document.getElementById('registrationForm').reset();
-        badgeMayor.classList.add('hidden');
-        seccionPadres.classList.remove('opacity-60');
-      })
-      .catch(error => {
-        modal.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-rose-50 text-rose-800 border border-rose-200 block";
-        modal.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 text-lg mr-1"></i> Ocurrió un error de conexión al enviar el registro. Por favor, intenta de nuevo.`;
-        console.error('Error enviando formulario:', error);
-      })
-      .finally(() => {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Enviar Inscripción`;
-      });
-    });
-  </script>
+            document.getElementById("lblAccountName").textContent = currentAccount?.Nombre || "Mi Cuenta";
+            document.getElementById("lblUserRole").textContent = currentUser.rol;
+
+            if (currentUser.rol !== 'administrador') {
+                document.getElementById("btnAddSubUser")?.classList.add("hidden");
+            } else {
+                document.getElementById("btnAddSubUser")?.classList.remove("hidden");
+            }
+
+            switchAppTab('inventory');
+            loadClientInventory();
+            loadCategories();
+            loadAccountUsers();
+        }
+
+        function switchPresentationTab(role) {
+            const btnClient = document.getElementById("presTabClientBtn");
+            const btnSupplier = document.getElementById("presTabSupplierBtn");
+            const contentClient = document.getElementById("presTabClient");
+            const contentSupplier = document.getElementById("presTabSupplier");
+
+            if (role === 'cliente') {
+                btnClient.className = "px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all bg-white text-brand-700 shadow-sm";
+                btnSupplier.className = "px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all text-slate-600 hover:text-slate-900";
+                contentClient.classList.remove("hidden");
+                contentSupplier.classList.add("hidden");
+            } else {
+                btnSupplier.className = "px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all bg-slate-900 text-white shadow-sm";
+                btnClient.className = "px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all text-slate-600 hover:text-slate-900";
+                contentSupplier.classList.remove("hidden");
+                contentClient.classList.add("hidden");
+            }
+        }
+
+        function switchAppTab(tabName) {
+            ['Inventory', 'Checklist', 'Suppliers', 'Users'].forEach(t => {
+                document.getElementById(`appTab${t}`)?.classList.add("hidden");
+                const btn = document.getElementById(`tabBtn${t}`);
+                if (btn) {
+                    btn.className = "px-2.5 py-2 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-800";
+                }
+            });
+
+            const targetTab = document.getElementById(`appTab${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`);
+            const targetBtn = document.getElementById(`tabBtn${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`);
+
+            if (targetTab) targetTab.classList.remove("hidden");
+            if (targetBtn) targetBtn.className = "px-2.5 py-2 text-xs sm:text-sm font-bold text-brand-700 border-b-2 border-brand-600";
+
+            if (tabName === 'checklist') renderChecklist();
+            if (tabName === 'suppliers') initLeafletMap();
+        }
+
+        function openAuthModal(mode, role = 'cliente') {
+            document.getElementById("modalAuth").classList.remove("hidden");
+            toggleAuthMode(mode);
+            if (mode === 'register') setRegAccountType(role === 'cliente' ? 'Cliente' : 'Proveedor');
+        }
+
+        function closeAuthModal() {
+            document.getElementById("modalAuth").classList.add("hidden");
+        }
+
+        function toggleAuthMode(mode) {
+            if (mode === 'login') {
+                document.getElementById("formLoginContainer").classList.remove("hidden");
+                document.getElementById("formRegisterContainer").classList.add("hidden");
+            } else {
+                document.getElementById("formLoginContainer").classList.add("hidden");
+                document.getElementById("formRegisterContainer").classList.remove("hidden");
+            }
+        }
+
+        function setRegAccountType(type) {
+            document.getElementById("regAccountType").value = type;
+            const btnC = document.getElementById("regTypeClientBtn");
+            const btnS = document.getElementById("regTypeSupplierBtn");
+            const supplierFields = document.getElementById("supplierOnlyFields");
+
+            if (type === 'Cliente') {
+                btnC.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-white shadow-sm text-brand-700";
+                btnS.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900";
+                supplierFields.classList.add("hidden");
+            } else {
+                btnS.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-slate-900 text-white shadow-sm";
+                btnC.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900";
+                supplierFields.classList.remove("hidden");
+            }
+        }
+
+        function getCurrentGpsLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    document.getElementById("regLocation").value = `${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`;
+                }, err => {
+                    alert("No se pudo obtener la ubicación GPS automática. Por favor digita Latitud,Longitud manualmente.");
+                });
+            }
+        }
+
+        async function fetchAPI(sheet, action = 'read', body = null) {
+            try {
+                if (action === 'read') {
+                    const res = await fetch(`${API_URL}?action=read&sheet=${sheet}`);
+                    return await res.json();
+                } else {
+                    const res = await fetch(API_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action, sheet, ...body })
+                    });
+                    return await res.json();
+                }
+            } catch (e) {
+                console.error("API Error:", e);
+                return { status: 'error', message: 'Error de conexión con el backend de Google Sheets' };
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById("loginUser").value;
+            const p = document.getElementById("loginPass").value;
+
+            const res = await fetchAPI('Usuarios', 'read');
+            if (res.status === 'success') {
+                const user = res.data.find(x => String(x.usuario) === String(u) && String(x.contrasena) === String(p));
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem("mercapp_session_user", JSON.stringify(user));
+                    closeAuthModal();
+                    await loadAccountInfoAndInit();
+                } else {
+                    alert("Usuario o contraseña incorrectos");
+                }
+            } else {
+                alert("Error al verificar credenciales. Verifica la URL configurada para Google Apps Script.");
+            }
+        }
+
+        async function handleRegistration(e) {
+            e.preventDefault();
+            const accType = document.getElementById("regAccountType").value;
+            const accName = document.getElementById("regAccountName").value;
+            const location = document.getElementById("regLocation").value;
+            const coverage = document.getElementById("regCoverage").value;
+            const desc = document.getElementById("regDescription").value;
+
+            const adminName = document.getElementById("regAdminName").value;
+            const adminLastName = document.getElementById("regAdminLastName").value;
+            const user = document.getElementById("regUser").value;
+            const pass = document.getElementById("regPass").value;
+
+            const accId = 'acc_' + Date.now();
+            const userId = 'usr_' + Date.now();
+
+            // 1. Create Cuenta Record
+            const resAcc = await fetchAPI('Cuentas', 'create', {
+                data: {
+                    id: accId,
+                    tipo: accType,
+                    Nombre: accName,
+                    Ubicacion: location,
+                    Cobertura: coverage,
+                    Descripcion: desc
+                }
+            });
+
+            // 2. Create Administrator User Record
+            const resUsr = await fetchAPI('Usuarios', 'create', {
+                data: {
+                    id: userId,
+                    idCuenta: accId,
+                    rol: 'administrador',
+                    usuario: user,
+                    contrasena: pass,
+                    Nombre: adminName,
+                    Apellido: adminLastName
+                }
+            });
+
+            if (resAcc.status === 'success' && resUsr.status === 'success') {
+                alert("¡Cuenta de Administrador registrada con éxito! Ya puedes iniciar sesión.");
+                toggleAuthMode('login');
+            } else {
+                alert("Ocurrió un inconveniente al guardar el registro en Google Sheets.");
+            }
+        }
+
+        async function loadAccountInfoAndInit() {
+            const resAcc = await fetchAPI('Cuentas', 'read');
+            if (resAcc.status === 'success') {
+                currentAccount = resAcc.data.find(a => String(a.id) === String(currentUser.idCuenta));
+            }
+            showDashboard();
+        }
+
+        async function loadClientInventory() {
+            const res = await fetchAPI('ProductosCliente', 'read');
+            if (res.status === 'success') {
+                clientProducts = res.data.filter(p => String(p.idCuenta) === String(currentUser.idCuenta));
+                renderInventoryGrid(clientProducts);
+            }
+        }
+
+        async function loadCategories() {
+            const res = await fetchAPI('Categorias', 'read');
+            if (res.status === 'success') {
+                clientCategories = res.data.filter(c => String(c.idCuenta) === String(currentUser.idCuenta));
+                renderCategoryFilters();
+            }
+        }
+
+        function renderCategoryFilters() {
+            const container = document.getElementById("catFilterContainer");
+            container.innerHTML = `<button onclick="filterInventoryByCat('all')" class="px-4 py-2 bg-brand-600 text-white font-bold text-xs rounded-xl shadow-sm shrink-0">Todas</button>`;
+            
+            clientCategories.forEach(c => {
+                container.innerHTML += `
+                    <button onclick="filterInventoryByCat('${c.id}')" class="px-4 py-2 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 shrink-0">
+                        ${c.Nombre}
+                    </button>
+                `;
+            });
+        }
+
+        function filterInventoryByCat(catId) {
+            if (catId === 'all') {
+                renderInventoryGrid(clientProducts);
+            } else {
+                const filtered = clientProducts.filter(p => String(p.idCategoria) === String(catId));
+                renderInventoryGrid(filtered);
+            }
+        }
+
+        function renderInventoryGrid(items) {
+            const container = document.getElementById("gridClientInventory");
+            container.innerHTML = "";
+
+            if (items.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-medium">No hay productos registrados en esta despensa.</div>`;
+                return;
+            }
+
+            items.forEach(p => {
+                const min = parseFloat(p.Minimo) || 0;
+                const avail = parseFloat(p.Disponible) || 0;
+                const faltante = Math.max(0, min - avail);
+                const hasAlert = faltante > 0;
+
+                container.innerHTML += `
+                    <div class="bg-white rounded-2xl border ${hasAlert ? 'border-rose-300 ring-2 ring-rose-100' : 'border-slate-200'} p-5 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold text-slate-800 text-base">${p.Nombre}</h4>
+                                <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${hasAlert ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">
+                                    ${hasAlert ? 'FALTANTE' : 'AL DÍA'}
+                                </span>
+                            </div>
+                            <span class="text-xs text-slate-400 block mb-4">Unidad: ${p.Unidad}</span>
+
+                            <div class="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl text-center text-xs mb-4">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Mínimo</span>
+                                    <span class="font-extrabold text-slate-700">${min}</span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Disponible</span>
+                                    <span class="font-extrabold text-brand-600">${avail}</span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Faltante</span>
+                                    <span class="font-extrabold ${faltante > 0 ? 'text-rose-600' : 'text-slate-400'}">${faltante}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                            <span class="text-xs font-bold text-slate-500">Actualizar Consumo:</span>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="adjustQty('${p.id}', -1)" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-800 font-bold flex items-center justify-center">-</button>
+                                <button onclick="adjustQty('${p.id}', 1)" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-800 font-bold flex items-center justify-center">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function adjustQty(id, delta) {
+            const prod = clientProducts.find(p => String(p.id) === String(id));
+            if (!prod) return;
+            const newAvail = Math.max(0, (parseFloat(prod.Disponible) || 0) + delta);
+            prod.Disponible = newAvail;
+            prod.Faltante = Math.max(0, (parseFloat(prod.Minimo) || 0) - newAvail);
+
+            renderInventoryGrid(clientProducts);
+
+            await fetchAPI('ProductosCliente', 'update', {
+                data: { id: id, Disponible: newAvail, Faltante: prod.Faltante }
+            });
+        }
+
+        function openProductModal() {
+            document.getElementById("modalProduct").classList.remove("hidden");
+            const select = document.getElementById("prodCategory");
+            select.innerHTML = `<option value="">Sin categoría</option>`;
+            clientCategories.forEach(c => {
+                select.innerHTML += `<option value="${c.id}">${c.Nombre}</option>`;
+            });
+        }
+
+        function closeProductModal() {
+            document.getElementById("modalProduct").classList.add("hidden");
+        }
+
+        async function handleSaveProduct(e) {
+            e.preventDefault();
+            const name = document.getElementById("prodName").value;
+            const unit = document.getElementById("prodUnit").value;
+            const cat = document.getElementById("prodCategory").value;
+            const min = parseFloat(document.getElementById("prodMin").value);
+            const avail = parseFloat(document.getElementById("prodAvailable").value);
+            const faltante = Math.max(0, min - avail);
+
+            const res = await fetchAPI('ProductosCliente', 'create', {
+                data: {
+                    id: 'prd_' + Date.now(),
+                    idCuenta: currentUser.idCuenta,
+                    Nombre: name,
+                    Unidad: unit,
+                    Minimo: min,
+                    Disponible: avail,
+                    Faltante: faltante,
+                    idCategoria: cat
+                }
+            });
+
+            if (res.status === 'success') {
+                closeProductModal();
+                loadClientInventory();
+            }
+        }
+
+        function openCategoryModal() {
+            document.getElementById("modalCategory").classList.remove("hidden");
+        }
+
+        function closeCategoryModal() {
+            document.getElementById("modalCategory").classList.add("hidden");
+        }
+
+        async function handleSaveCategory(e) {
+            e.preventDefault();
+            const name = document.getElementById("catName").value;
+
+            const res = await fetchAPI('Categorias', 'create', {
+                data: {
+                    id: 'cat_' + Date.now(),
+                    idCuenta: currentUser.idCuenta,
+                    Nombre: name
+                }
+            });
+
+            if (res.status === 'success') {
+                closeCategoryModal();
+                loadCategories();
+            }
+        }
+
+        function renderChecklist() {
+            const ul = document.getElementById("listChecklistItems");
+            ul.innerHTML = "";
+
+            const faltantes = clientProducts.filter(p => (parseFloat(p.Minimo) - parseFloat(p.Disponible)) > 0);
+
+            if (faltantes.length === 0) {
+                ul.innerHTML = `<li class="p-8 text-center text-slate-400 text-sm font-medium">¡Enhorabuena! No tienes productos faltantes en tu despensa.</li>`;
+                return;
+            }
+
+            faltantes.forEach(p => {
+                const cant = parseFloat(p.Minimo) - parseFloat(p.Disponible);
+                ul.innerHTML += `
+                    <li class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 rounded border-slate-300 text-brand-600 focus:ring-brand-500">
+                            <span class="font-bold text-slate-800 text-sm">${p.Nombre}</span>
+                        </label>
+                        <span class="text-xs font-extrabold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">
+                            Comprar: ${cant} ${p.Unidad}
+                        </span>
+                    </li>
+                `;
+            });
+        }
+
+        function initLeafletMap() {
+            if (mapInstance) return;
+
+            const userCoords = currentAccount?.Ubicacion ? currentAccount.Ubicacion.split(',').map(Number) : [4.53389, -75.68111];
+
+            mapInstance = L.map('leafletMap').setView(userCoords, 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(mapInstance);
+
+            // User Location Marker
+            L.marker(userCoords).addTo(mapInstance).bindPopup("<b>Ubicación de tu Cuenta</b>").openPopup();
+
+            // Load Suppliers
+            fetchAPI('Cuentas', 'read').then(res => {
+                if (res.status === 'success') {
+                    const suppliers = res.data.filter(c => c.tipo === 'Proveedor');
+                    suppliers.forEach(s => {
+                        if (s.Ubicacion) {
+                            const [sLat, sLng] = s.Ubicacion.split(',').map(Number);
+                            const radiusKm = parseFloat(s.Cobertura) || 3;
+
+                            const marker = L.marker([sLat, sLng]).addTo(mapInstance);
+                            L.circle([sLat, sLng], { color: '#16a34a', fillColor: '#22c55e', fillOpacity: 0.15, radius: radiusKm * 1000 }).addTo(mapInstance);
+
+                            marker.on('click', () => {
+                                document.getElementById("panelSupplierDetails").innerHTML = `
+                                    <div>
+                                        <div class="flex items-center space-x-2 mb-2">
+                                            <span class="bg-brand-100 text-brand-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">Proveedor Cercano</span>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-slate-900 mb-2">${s.Nombre}</h3>
+                                        <p class="text-xs text-slate-600 mb-4 leading-relaxed">${s.Descripcion || 'Sin información adicional de envíos.'}</p>
+                                        <div class="bg-slate-50 p-4 rounded-xl text-xs space-y-2 mb-6 border border-slate-200">
+                                            <div><strong>Radio Cobertura GPS:</strong> ${radiusKm} Kilómetros</div>
+                                            <div><strong>Ubicación GPS:</strong> ${s.Ubicacion}</div>
+                                        </div>
+                                        <button onclick="alert('Iniciando gestión de pedido con el comercio ${s.Nombre}')" class="w-full py-3 gradient-bg text-white font-bold text-xs rounded-xl shadow hover:opacity-95 transition-all">
+                                            Ver Catálogo y Hacer Pedido
+                                        </button>
+                                    </div>
+                                `;
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        async function loadAccountUsers() {
+            const res = await fetchAPI('Usuarios', 'read');
+            if (res.status === 'success') {
+                accountUsers = res.data.filter(u => String(u.idCuenta) === String(currentUser.idCuenta));
+                const tbody = document.getElementById("tblAccountUsers");
+                tbody.innerHTML = "";
+                accountUsers.forEach(u => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="px-6 py-4 font-bold text-slate-800">${u.Nombre} ${u.Apellido}</td>
+                            <td class="px-6 py-4 text-slate-600 font-mono text-xs">${u.usuario}</td>
+                            <td class="px-6 py-4"><span class="px-2.5 py-1 ${u.rol === 'administrador' ? 'bg-brand-100 text-brand-800' : 'bg-slate-100 text-slate-600'} rounded-lg text-[10px] uppercase font-bold">${u.rol}</span></td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        function openSubUserModal() {
+            document.getElementById("modalSubUser").classList.remove("hidden");
+        }
+
+        function closeSubUserModal() {
+            document.getElementById("modalSubUser").classList.add("hidden");
+        }
+
+        async function handleSaveSubUser(e) {
+            e.preventDefault();
+            const name = document.getElementById("subName").value;
+            const lastName = document.getElementById("subLastName").value;
+            const user = document.getElementById("subUser").value;
+            const pass = document.getElementById("subPass").value;
+
+            const res = await fetchAPI('Usuarios', 'create', {
+                data: {
+                    id: 'usr_' + Date.now(),
+                    idCuenta: currentUser.idCuenta,
+                    rol: 'general',
+                    usuario: user,
+                    contrasena: pass,
+                    Nombre: name,
+                    Apellido: lastName
+                }
+            });
+
+            if (res.status === 'success') {
+                closeSubUserModal();
+                loadAccountUsers();
+            }
+        }
+
+        // API CONFIGURATION MODAL CONTROLS
+        function openApiConfigModal() {
+            document.getElementById("modalApiConfig").classList.remove("hidden");
+            document.getElementById("txtApiUrl").value = API_URL;
+        }
+
+        function closeApiConfigModal() {
+            document.getElementById("modalApiConfig").classList.add("hidden");
+        }
+
+        function saveApiUrl() {
+            const url = document.getElementById("txtApiUrl").value;
+            if (url) {
+                API_URL = url;
+                localStorage.setItem("mercapp_api_url", url);
+                closeApiConfigModal();
+                alert("URL de la API actualizada correctamente.");
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("mercapp_session_user");
+            location.reload();
+        }
+    </script>
 </body>
 </html>
-```eoc
-
----
-
-### Resumen de cambios:
-1. **Centrado de `foto04.jpg`:** Se aplicó `flex items-center justify-center` en su contenedor y las clases Tailwind `w-full h-full object-cover object-center` a la etiqueta `<img>` para que quede centrada en su tarjeta independientemente de sus dimensiones.
-2. **Imágenes completas:** Se mantuvieron todas las 11 imágenes de la galería (`foto00.jpg` hasta `foto10.jpg`) con sus títulos y descripciones.
-3. **Pestañas y lista de videos de YouTube:** Se mantuvieron los 8 videos configurados en la lista interactiva.
