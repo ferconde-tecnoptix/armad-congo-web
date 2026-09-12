@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-slate-50">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mercApp - Tu Mercado Inteligente y Gestión de Despensa</title>
-    <!-- Tailwind CSS CDN -->
+    <title>mercApp - Sistema Inteligente de Mercado y Despensa</title>
+    <!-- Tailwind CSS for Modern Responsive UI -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -18,7 +18,6 @@
                             600: '#16a34a',
                             700: '#15803d',
                             800: '#166534',
-                            900: '#14532d',
                         }
                     }
                 }
@@ -26,789 +25,581 @@
         }
     </script>
     <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <!-- Leaflet CSS for Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #16a34a 0%, #0d9488 100%);
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        #leafletMap {
-            min-height: 420px;
-            z-index: 10;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        #leafletMap { height: 420px; width: 100%; z-index: 10; }
+        .tab-active { border-bottom: 3px solid #16a34a; color: #15803d; font-weight: 700; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body class="h-full text-slate-800 flex flex-col font-sans antialiased">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
 
-    <!-- Navbar Header -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="showPublicLanding()">
-                    <div class="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center text-white shadow-md">
-                        <i class="fa-solid fa-basket-shopping text-xl"></i>
-                    </div>
-                    <div>
-                        <span class="text-xl font-extrabold text-slate-900 tracking-tight">merc<span class="text-brand-600">App</span></span>
-                        <span class="block text-[10px] text-slate-400 -mt-1 font-medium tracking-wide">SMART MARKET & DESPENSA</span>
-                    </div>
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('landing')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                    <i class="fa-solid fa-basket-shopping text-xl"></i>
                 </div>
+                <div>
+                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-800 to-brand-600 bg-clip-text text-transparent">mercApp</span>
+                    <span class="hidden sm:inline-block text-xs font-semibold px-2 py-0.5 ml-2 bg-emerald-100 text-emerald-800 rounded-full">v2.5</span>
+                </div>
+            </div>
 
-                <!-- Navigation Controls for Public vs Private Session -->
-                <div id="navPublic" class="flex items-center space-x-2 sm:space-x-3">
-                    <button onclick="openApiConfigModal()" class="text-slate-400 hover:text-slate-700 p-2 rounded-lg text-sm" title="Configurar URL Backend Google Apps Script">
-                        <i class="fa-solid fa-gear text-lg"></i>
-                    </button>
-                    <button onclick="openAuthModal('login')" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-brand-700 hover:text-brand-800 transition-colors">
-                        Iniciar Sesión
-                    </button>
-                    <button onclick="openAuthModal('register')" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-white gradient-bg rounded-xl shadow hover:opacity-95 transition-all">
-                        Crear Cuenta
-                    </button>
-                </div>
+            <!-- Public Header Actions -->
+            <div id="publicNav" class="flex items-center gap-2 sm:gap-4">
+                <button onclick="navigateTo('landing')" class="text-sm font-medium text-slate-600 hover:text-brand-600 px-3 py-2 rounded-lg transition">Presentación</button>
+                <button onclick="openModal('modalLogin')" class="text-sm font-semibold text-slate-700 hover:text-brand-700 px-3 py-2 rounded-lg border border-slate-200 hover:border-brand-300 transition">Ingresar</button>
+                <button onclick="openRegisterModal()" class="text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-xl shadow-md shadow-brand-600/20 transition">Crear Cuenta</button>
+            </div>
 
-                <div id="navPrivate" class="hidden flex items-center space-x-1 sm:space-x-3">
-                    <button onclick="switchAppTab('inventory')" id="tabBtnInventory" class="px-2.5 py-2 text-xs sm:text-sm font-bold text-brand-700 border-b-2 border-brand-600">
-                        <i class="fa-solid fa-boxes-stacked mr-1"></i> <span class="hidden sm:inline">Despensa</span>
-                    </button>
-                    <button onclick="switchAppTab('checklist')" id="tabBtnChecklist" class="px-2.5 py-2 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-800">
-                        <i class="fa-solid fa-clipboard-list mr-1"></i> <span class="hidden sm:inline">Lista Mercado</span>
-                    </button>
-                    <button onclick="switchAppTab('suppliers')" id="tabBtnSuppliers" class="px-2.5 py-2 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-800">
-                        <i class="fa-solid fa-store mr-1"></i> <span class="hidden sm:inline">Proveedores</span>
-                    </button>
-                    <button onclick="switchAppTab('users')" id="tabBtnUsers" class="px-2.5 py-2 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-800">
-                        <i class="fa-solid fa-users-gear mr-1"></i> <span class="hidden sm:inline">Usuarios</span>
-                    </button>
-                    <div class="h-6 w-px bg-slate-200 my-auto mx-1"></div>
-                    <div class="flex items-center space-x-2">
-                        <div class="text-right hidden md:block">
-                            <span id="lblAccountName" class="block text-xs font-bold text-slate-700"></span>
-                            <span id="lblUserRole" class="block text-[10px] text-slate-400 capitalize"></span>
-                        </div>
-                        <button onclick="logout()" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Cerrar Sesión">
-                            <i class="fa-solid fa-right-from-bracket text-lg"></i>
-                        </button>
-                    </div>
+            <!-- Authenticated User Nav Header -->
+            <div id="authNav" class="hidden flex items-center gap-3">
+                <div class="hidden md:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-medium">
+                    <i class="fa-solid fa-user-gear text-brand-600"></i>
+                    <span id="navAccountName" class="font-bold text-slate-700">Mi Cuenta</span>
+                    <span id="navUserRoleBadge" class="bg-brand-600 text-white px-2 py-0.5 rounded text-[10px] uppercase font-bold">Admin</span>
                 </div>
+                <button onclick="openModal('modalUserManagement')" id="btnManageUsers" class="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition">
+                    <i class="fa-solid fa-users text-brand-600"></i> Usuarios
+                </button>
+                <button onclick="handleLogout()" class="text-xs font-semibold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 px-3 py-2 rounded-lg border border-rose-200 transition">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Salir
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard App Tab Sub-Header (Only visible when logged in) -->
+        <div id="appTabNav" class="hidden bg-emerald-950 text-white border-t border-emerald-800 px-4">
+            <div class="max-w-7xl mx-auto flex overflow-x-auto space-x-1 sm:space-x-4 py-2 text-xs sm:text-sm font-medium">
+                <button onclick="switchAppTab('inventario')" id="tabBtnInventario" class="px-4 py-2 rounded-lg bg-emerald-800/80 text-white font-semibold flex items-center gap-2">
+                    <i class="fa-solid fa-boxes-stacked"></i> Mi Inventario
+                </button>
+                <button onclick="switchAppTab('listaMercado')" id="tabBtnListaMercado" class="px-4 py-2 rounded-lg hover:bg-emerald-900/60 text-emerald-200 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check"></i> Lista de Compras
+                </button>
+                <button onclick="switchAppTab('proveedores')" id="tabBtnProveedores" class="px-4 py-2 rounded-lg hover:bg-emerald-900/60 text-emerald-200 flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot"></i> Mapa de Proveedores
+                </button>
+                <button onclick="switchAppTab('catalogoProveedor')" id="tabBtnCatalogoProveedor" class="hidden px-4 py-2 rounded-lg hover:bg-emerald-900/60 text-emerald-200 flex items-center gap-2">
+                    <i class="fa-solid fa-store"></i> Mis Productos & Precios
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- PUBLIC LANDING PRESENTATION & INSTRUCTIONS -->
-    <div id="viewLanding" class="flex-grow">
-        <!-- Hero Banner -->
-        <section class="gradient-bg text-white py-14 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
-            <div class="max-w-4xl mx-auto relative z-10">
-                <span class="inline-block bg-white/20 backdrop-blur-md text-white text-xs font-bold px-3.5 py-1.5 rounded-full mb-4 shadow-sm">
-                    <i class="fa-solid fa-sparkles mr-1"></i> Sistema de Abastecimiento Diario Inteligente
-                </span>
-                <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight mb-4">
-                    Controla tu despensa y conecta directamente con proveedores cercanos
-                </h1>
-                <p class="text-base sm:text-lg text-emerald-100 max-w-2xl mx-auto mb-8 font-light">
-                    Sincroniza el consumo diario de tu hogar, genera listas automáticas de faltantes y realiza pedidos a comercios con cobertura GPS en tiempo real.
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <button onclick="openAuthModal('register', 'cliente')" class="w-full sm:w-auto px-7 py-3.5 bg-white text-brand-800 font-bold rounded-xl shadow-lg hover:bg-emerald-50 transition-all text-sm sm:text-base">
-                        <i class="fa-solid fa-house-user mr-2 text-brand-600"></i> Registro Cuenta de Cliente
-                    </button>
-                    <button onclick="openAuthModal('register', 'proveedor')" class="w-full sm:w-auto px-7 py-3.5 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-all text-sm sm:text-base">
-                        <i class="fa-solid fa-store mr-2 text-emerald-400"></i> Registro Cuenta de Proveedor
-                    </button>
-                </div>
-            </div>
-        </section>
+    <!-- CUSTOM TOAST NOTIFICATION CONTAINER -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
-        <!-- Role-based Interactive Presentation Tabs (Clientes vs Proveedores) -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            
-            <!-- Presentation Tabs Selector Header -->
-            <div class="flex justify-center mb-10">
-                <div class="inline-flex p-1.5 bg-slate-200/80 rounded-2xl shadow-inner border border-slate-300">
-                    <button id="presTabClientBtn" onclick="switchPresentationTab('cliente')" class="px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all bg-white text-brand-700 shadow-sm">
-                        <i class="fa-solid fa-user-gear mr-2"></i> Para Clientes / Hogares
-                    </button>
-                    <button id="presTabSupplierBtn" onclick="switchPresentationTab('proveedor')" class="px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all text-slate-600 hover:text-slate-900">
-                        <i class="fa-solid fa-shop mr-2"></i> Para Proveedores / Comercios
-                    </button>
-                </div>
-            </div>
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-            <!-- CLIENT / HOUSEHOLD PRESENTATION TAB CONTENT -->
-            <div id="presTabClient" class="space-y-12">
-                <!-- Core Concept Explanation Box -->
-                <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-sm">
-                    <div class="w-16 h-16 bg-brand-600 text-white rounded-2xl flex items-center justify-center text-3xl shrink-0 shadow-md">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="bg-brand-200 text-brand-900 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full">Regla de Cuenta Única</span>
-                            <h3 class="text-xl font-bold text-slate-900">1 Solo Registro por Hogar = Usuarios Ilimitados</h3>
-                        </div>
-                        <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-                            No es necesario que cada miembro de la familia cree una cuenta separada. <strong>Quien registra la cuenta obtiene automáticamente el rol de Administrador</strong>. Desde su panel, el Administrador puede registrar e invitar un número <strong>ilimitado de usuarios</strong> (pareja, hijos, colaboradores) asignándoles sus credenciales. Todos actualizarán la misma despensa sincronizada en tiempo real desde sus teléfonos celulares.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- 3-Step Guided Process for Clients -->
-                <div>
-                    <h3 class="text-2xl font-bold text-slate-900 text-center mb-8">¿Cómo funciona mercApp para Hogares?</h3>
-                    <div class="grid md:grid-cols-3 gap-8">
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
-                            <div class="w-10 h-10 bg-brand-100 text-brand-700 rounded-xl font-black flex items-center justify-center text-lg mb-4">1</div>
-                            <h4 class="font-bold text-lg text-slate-800 mb-2">1. Control Diario de Despensa</h4>
-                            <p class="text-slate-600 text-xs sm:text-sm">Registra tus productos especificando su unidad de medida y cantidad mínima deseada. Cada vez que consumas un alimento, suma o resta existencias rápidamente desde tu celular.</p>
-                        </div>
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
-                            <div class="w-10 h-10 bg-brand-100 text-brand-700 rounded-xl font-black flex items-center justify-center text-lg mb-4">2</div>
-                            <h4 class="font-bold text-lg text-slate-800 mb-2">2. Lista Inteligente de Chequeo</h4>
-                            <p class="text-slate-600 text-xs sm:text-sm">El sistema calcula de forma instantánea el faltante exacto (<code class="bg-slate-100 px-1 py-0.5 rounded text-xs font-mono">Mínimo - Disponible</code>). Al ir de compras, la aplicación te brinda una lista interactiva para marcar tus productos en el supermercado.</p>
-                        </div>
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
-                            <div class="w-10 h-10 bg-brand-100 text-brand-700 rounded-xl font-black flex items-center justify-center text-lg mb-4">3</div>
-                            <h4 class="font-bold text-lg text-slate-800 mb-2">3. Pedidos Directos en Mapa</h4>
-                            <p class="text-slate-600 text-xs sm:text-sm">En el mapa interactivo con tecnología Leaflet, descubre comercios locales cuyo radio de cobertura abarca tu ubicación. Revisa sus listas de precios, políticas de domicilio y realiza tu orden en línea.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Video & Graphic Placeholder Sections for Clients -->
-                <div class="space-y-6 pt-4">
-                    <h3 class="text-xl font-bold text-slate-900 text-center">Video Tutoriales y Demostración Visual (Clientes)</h3>
-                    <div class="grid lg:grid-cols-2 gap-8">
-                        <!-- Video Tutorial Container Placeholder -->
-                        <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-xl aspect-video relative flex flex-col justify-center items-center text-white p-6 text-center group border border-slate-800">
-                            <div class="w-16 h-16 bg-brand-600 rounded-full flex items-center justify-center text-2xl shadow-lg mb-3 group-hover:scale-110 transition-transform cursor-pointer">
-                                <i class="fa-solid fa-play ml-1"></i>
-                            </div>
-                            <h5 class="font-bold text-lg">Guía en Video: Gestión de Despensa y Lista Automática</h5>
-                            <p class="text-xs text-slate-400 mt-1 max-w-md">Aprende a registrar mínimos, actualizar consumos diarios y crear usuarios secundarios para tu hogar.</p>
-                            <span class="absolute bottom-3 right-3 text-[10px] bg-slate-800/90 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700">
-                                <i class="fa-solid fa-film mr-1"></i> Contenedor de Video (MP4 / YouTube)
-                            </span>
-                        </div>
-
-                        <!-- Explanatory Infographic / Screenshot Placeholder -->
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-                            <div class="flex items-center space-x-3 mb-4">
-                                <i class="fa-solid fa-mobile-screen text-brand-600 text-2xl"></i>
-                                <div>
-                                    <h5 class="font-bold text-slate-800 text-base">Vista Previa de Interfaz Móvil</h5>
-                                    <p class="text-xs text-slate-500">Optimizado para actualización rápida en teléfonos celulares</p>
-                                </div>
-                            </div>
-                            <div class="bg-slate-100 rounded-xl h-52 border-2 border-dashed border-slate-300 flex flex-col items-center justify-center p-6 text-center">
-                                <i class="fa-solid fa-layer-group text-4xl text-slate-400 mb-2"></i>
-                                <span class="text-xs font-bold text-slate-700">Espacio Reservado para Captura de Pantalla / Infografía</span>
-                                <span class="text-[11px] text-slate-400 mt-1">Muestra la lista de chequeo y categorización (Frutas, Carnes, Aseo)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Call to Action Banner -->
-                <div class="bg-slate-900 text-white rounded-2xl p-8 text-center flex flex-col items-center shadow-md">
-                    <h4 class="text-2xl font-bold mb-2">Comienza a organizar la despensa de tu hogar hoy</h4>
-                    <p class="text-slate-400 max-w-xl text-xs sm:text-sm mb-6">Suscripción única por cuenta familiar de solo COP $5.000 al mes.</p>
-                    <button onclick="openAuthModal('register', 'cliente')" class="px-8 py-3.5 gradient-bg text-white font-bold rounded-xl shadow-lg hover:opacity-95 text-sm transition-all">
-                        <i class="fa-solid fa-user-plus mr-2"></i> Registrar Cuenta de Cliente Ahora
-                    </button>
-                </div>
-            </div>
-
-            <!-- SUPPLIER / COMMERCIAL PRESENTATION TAB CONTENT -->
-            <div id="presTabSupplier" class="hidden space-y-12">
-                <!-- Core Concept Explanation Box -->
-                <div class="bg-slate-900 text-white border border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-md">
-                    <div class="w-16 h-16 bg-teal-500 text-slate-950 rounded-2xl flex items-center justify-center text-3xl shrink-0 shadow-md">
-                        <i class="fa-solid fa-store"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full">Perfil Comercial</span>
-                            <h3 class="text-xl font-bold text-white">Publicación de Catálogos y Cobertura GPS</h3>
-                        </div>
-                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                            Registra tu negocio, supermercado, fruver o distribuidora. Delimita la <strong>ubicación exacta de tu local en el mapa</strong> y define tu <strong>radio de cobertura de entregas en kilómetros</strong>. La cuenta de proveedor otorga perfil Administrador a quien la crea para añadir empleados o vendedores.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- 3-Step Guided Process for Suppliers -->
-                <div>
-                    <h3 class="text-2xl font-bold text-slate-900 text-center mb-8">¿Cómo funciona mercApp para Proveedores?</h3>
-                    <div class="grid md:grid-cols-3 gap-8">
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
-                            <div class="w-10 h-10 bg-teal-100 text-teal-800 rounded-xl font-black flex items-center justify-center text-lg mb-4">1</div>
-                            <h4 class="font-bold text-lg text-slate-800 mb-2">1. Carga de Productos y Precios</h4>
-                            <p class="text-slate-600 text-xs sm:text-sm">Registra tu catálogo de productos (<code class="bg-slate-100 px-1 py-0.5 rounded text-xs font-mono">ProductosProveedor</code>) y activa tus Listas de Precios vigentes con fotos, unidades y montos.</p>
-                        </div>
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
-                            <div class="w-10 h-10 bg-teal-100 text-teal-800 rounded-xl font-black flex items-center justify-center text-lg mb-4">2</div>
-                            <h4 class="font-bold text-lg text-slate-800 mb-2">2. Configuración de Radio Domiciliario</h4>
-                            <p class="text-slate-600 text-xs sm:text-sm">Establece tu cobertura GPS en kilómetros. Tu comercio aparecerá automáticamente en el mapa de los clientes situados dentro de tu perímetro.</p>
-                        </div>
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
-                            <div class="w-10 h-10 bg-teal-100 text-teal-800 rounded-xl font-black flex items-center justify-center text-lg mb-4">3</div>
-                            <h4 class="font-bold text-lg text-slate-800 mb-2">3. Recepción Directa de Pedidos</h4>
-                            <p class="text-slate-600 text-xs sm:text-sm">Recibe pedidos generados directamente desde las listas de faltantes de los clientes de tu zona. Solo pagas una tarifa del 1% sobre ventas efectivas.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Video & Graphic Placeholder Sections for Suppliers -->
-                <div class="space-y-6 pt-4">
-                    <h3 class="text-xl font-bold text-slate-900 text-center">Video Tutoriales y Configuración (Proveedores)</h3>
-                    <div class="grid lg:grid-cols-2 gap-8">
-                        <!-- Video Container Placeholder -->
-                        <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-xl aspect-video relative flex flex-col justify-center items-center text-white p-6 text-center group border border-slate-800">
-                            <div class="w-16 h-16 bg-teal-500 text-slate-950 rounded-full flex items-center justify-center text-2xl shadow-lg mb-3 group-hover:scale-110 transition-transform cursor-pointer">
-                                <i class="fa-solid fa-play ml-1"></i>
-                            </div>
-                            <h5 class="font-bold text-lg">Guía para Comercios: Carga de Catálogo y Mapa</h5>
-                            <p class="text-xs text-slate-400 mt-1 max-w-md">Paso a paso para subir listas de precios, establecer montos de domicilio gratis y recibir pedidos.</p>
-                            <span class="absolute bottom-3 right-3 text-[10px] bg-slate-800/90 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700">
-                                <i class="fa-solid fa-film mr-1"></i> Contenedor de Video (MP4 / YouTube)
-                            </span>
-                        </div>
-
-                        <!-- Geographic Coverage Infographic Placeholder -->
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-                            <div class="flex items-center space-x-3 mb-4">
-                                <i class="fa-solid fa-map-location-dot text-teal-600 text-2xl"></i>
-                                <div>
-                                    <h5 class="font-bold text-slate-800 text-base">Esquema de Radio de Cobertura GPS</h5>
-                                    <p class="text-xs text-slate-500">Visualización de clientes alcanzados según coordenadas</p>
-                                </div>
-                            </div>
-                            <div class="bg-slate-100 rounded-xl h-52 border-2 border-dashed border-slate-300 flex flex-col items-center justify-center p-6 text-center">
-                                <i class="fa-solid fa-circle-dot text-4xl text-teal-600/60 mb-2"></i>
-                                <span class="text-xs font-bold text-slate-700">Espacio Reservado para Diagrama de Cobertura Leaflet</span>
-                                <span class="text-[11px] text-slate-400 mt-1">Demostración gráfica del perímetro de entregas en la ciudad</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Call to Action Banner -->
-                <div class="gradient-bg text-white rounded-2xl p-8 text-center flex flex-col items-center shadow-md">
-                    <h4 class="text-2xl font-bold mb-2">Conecta con los clientes de tu zona geográfica</h4>
-                    <p class="text-emerald-100 max-w-xl text-xs sm:text-sm mb-6">Incrementa las ventas de tu negocio capturando pedidos directo de la despensa del consumidor.</p>
-                    <button onclick="openAuthModal('register', 'proveedor')" class="px-8 py-3.5 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 text-sm transition-all">
-                        <i class="fa-solid fa-store mr-2"></i> Registrar Cuenta de Proveedor
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Pricing Section -->
-        <section class="bg-slate-100 border-t border-slate-200 py-16 px-4 sm:px-6 lg:px-8">
-            <div class="max-w-5xl mx-auto text-center">
-                <h2 class="text-3xl font-black text-slate-900 mb-2">Modelo de Tarifas Transparente</h2>
-                <p class="text-slate-600 max-w-xl mx-auto mb-10 text-xs sm:text-sm">Precios claros y accesibles sin cláusulas de permanencia</p>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <!-- Client Plan -->
-                    <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
-                        <div>
-                            <span class="text-[10px] font-extrabold text-brand-700 bg-brand-50 px-3 py-1 rounded-full uppercase tracking-wider">Plan Hogar / Cliente</span>
-                            <h3 class="text-3xl sm:text-4xl font-black text-slate-900 my-4">COP $5.000 <span class="text-xs font-normal text-slate-500">/ mes por cuenta</span></h3>
-                            <ul class="text-left text-xs sm:text-sm text-slate-600 space-y-3 my-6">
-                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Usuarios ilimitados sincronizados en la misma cuenta</li>
-                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Control completo de existencias e inventario</li>
-                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Cálculo automático de faltantes y lista de mercado</li>
-                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Localización de comercios y ofertas en mapa</li>
-                            </ul>
-                        </div>
-                        <button onclick="openAuthModal('register', 'cliente')" class="w-full py-3 bg-slate-100 text-slate-800 font-bold text-xs sm:text-sm rounded-xl hover:bg-brand-600 hover:text-white transition-all">
-                            Crear Cuenta Cliente
+        <!-- 1. LANDING & PRESENTATION VIEW -->
+        <section id="viewLanding" class="space-y-10">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-900 via-brand-900 to-slate-900 text-white p-8 sm:p-12 shadow-2xl">
+                <div class="absolute -right-20 -top-20 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-3xl space-y-6">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/20 border border-brand-400/30 text-brand-300 text-xs font-semibold uppercase tracking-wider">
+                        <i class="fa-solid fa-sparkles"></i> Plataforma Inteligente de Mercado
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                        Tu Despensa en Orden y Compras Eficientes en un Solo Lugar
+                    </h1>
+                    <p class="text-base sm:text-lg text-emerald-100/90 leading-relaxed">
+                        Controla el consumo diario de tu hogar, genera listas automáticas de mercado según tus faltantes reales y realiza pedidos directos a los proveedores locales que cubren tu ubicación.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <button onclick="openRegisterModal()" class="px-6 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold shadow-lg shadow-brand-500/30 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                            <i class="fa-solid fa-rocket"></i> Comenzar Ahora
                         </button>
-                    </div>
-
-                    <!-- Supplier Plan -->
-                    <div class="bg-white rounded-2xl p-8 border-2 border-brand-500 shadow-md flex flex-col justify-between relative">
-                        <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-600 text-white text-[10px] font-extrabold px-3.5 py-1 rounded-full uppercase tracking-wider">Comercial</span>
-                        <div>
-                            <span class="text-[10px] font-extrabold text-slate-600 bg-slate-100 px-3 py-1 rounded-full uppercase tracking-wider">Plan Proveedor</span>
-                            <h3 class="text-3xl sm:text-4xl font-black text-slate-900 my-4">1% <span class="text-xs font-normal text-slate-500">por venta efectuada</span></h3>
-                            <ul class="text-left text-xs sm:text-sm text-slate-600 space-y-3 my-6">
-                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Registro de catálogo de productos e imágenes</li>
-                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Configuración de radio de cobertura de domicilios</li>
-                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Definición de políticas de envío y monto mínimo</li>
-                                <li class="flex items-center"><i class="fa-solid fa-check text-brand-600 mr-2.5"></i> Recepción directa de órdenes de compra</li>
-                            </ul>
-                        </div>
-                        <button onclick="openAuthModal('register', 'proveedor')" class="w-full py-3 gradient-bg text-white font-bold text-xs sm:text-sm rounded-xl shadow hover:opacity-95 transition-all">
-                            Crear Cuenta Proveedor
+                        <button onclick="openModal('modalLogin')" class="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-sm border border-white/20 transition flex items-center gap-2">
+                            <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
                         </button>
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
 
-    <!-- AUTH MODAL (LOGIN & REGISTRATION) -->
-    <div id="modalAuth" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 relative my-8">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <!-- LOGIN FORM -->
-            <div id="formLoginContainer">
-                <h3 class="text-2xl font-black text-slate-900 mb-1">Iniciar Sesión</h3>
-                <p class="text-xs text-slate-500 mb-6">Accede a la despensa o panel de tu cuenta mercApp</p>
-                <form onsubmit="handleLogin(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Usuario</label>
-                        <input type="text" id="loginUser" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Contraseña</label>
-                        <input type="password" id="loginPass" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm">
-                    </div>
-                    <button type="submit" class="w-full py-3 gradient-bg text-white font-bold rounded-xl shadow hover:opacity-95 transition-all text-sm">
-                        Ingresar a la Plataforma
-                    </button>
-                </form>
-                <p class="text-xs text-center text-slate-500 mt-6">
-                    ¿Aún no tienes cuenta? <button onclick="toggleAuthMode('register')" class="text-brand-700 font-bold underline">Regístrate aquí</button>
-                </p>
+            <!-- Multi-User Account Notice Card -->
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center gap-5 shadow-sm">
+                <div class="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center flex-shrink-0 text-xl font-bold shadow-md shadow-amber-500/30">
+                    <i class="fa-solid fa-users-gear"></i>
+                </div>
+                <div class="flex-grow space-y-1">
+                    <h3 class="text-lg font-bold text-amber-900">¿Cómo funcionan las Cuentas en mercApp?</h3>
+                    <p class="text-sm text-amber-800 leading-relaxed">
+                        <strong>Una sola cuenta por Hogar o Negocio:</strong> Cada cuenta registrada puede incluir <strong>usuarios ilimitados</strong> (familiares o empleados). Quien realiza el registro inicial asume el rol de <strong>Administrador</strong> y podrá ingresar libremente a los demás usuarios de la cuenta.
+                    </p>
+                </div>
+                <button onclick="openRegisterModal()" class="flex-shrink-0 px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow transition">
+                    Registrar Cuenta
+                </button>
             </div>
 
-            <!-- REGISTRATION FORM -->
-            <div id="formRegisterContainer" class="hidden">
-                <h3 class="text-2xl font-black text-slate-900 mb-1">Registrar Cuenta</h3>
-                <p class="text-xs text-slate-500 mb-4">Quien registra la cuenta se asigna como <strong>Administrador</strong> principal.</p>
-
-                <!-- Role Switcher -->
-                <div class="flex bg-slate-100 p-1 rounded-xl mb-4 border border-slate-200">
-                    <button type="button" id="regTypeClientBtn" onclick="setRegAccountType('Cliente')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-white shadow-sm text-brand-700">
-                        <i class="fa-solid fa-house-user mr-1"></i> Cliente / Hogar
+            <!-- TABBED PRESENTATION SECTION -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+                <!-- Tabs Header -->
+                <div class="flex border-b border-slate-200 bg-slate-50/80">
+                    <button id="presTabClientBtn" onclick="togglePresTab('client')" class="flex-1 py-4 px-6 text-center text-sm sm:text-base font-bold text-brand-700 border-b-2 border-brand-600 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-house-chimney text-brand-600"></i> Para Clientes y Hogares
                     </button>
-                    <button type="button" id="regTypeSupplierBtn" onclick="setRegAccountType('Proveedor')" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900">
-                        <i class="fa-solid fa-store mr-1"></i> Proveedor
+                    <button id="presTabSupplierBtn" onclick="togglePresTab('supplier')" class="flex-1 py-4 px-6 text-center text-sm sm:text-base font-bold text-slate-500 hover:text-slate-800 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-store text-slate-400"></i> Para Proveedores y Comercios
                     </button>
                 </div>
 
-                <form onsubmit="handleRegistration(event)" class="space-y-3 text-left">
-                    <input type="hidden" id="regAccountType" value="Cliente">
-                    
-                    <div>
-                        <label class="block text-[10px] font-bold uppercase text-slate-600">Nombre de la Cuenta (Familia o Empresa)</label>
-                        <input type="text" id="regAccountName" placeholder="Ej: Familia Gómez / Fruver San José" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
-                    </div>
+                <!-- Tab Content: Clients -->
+                <div id="presTabClient" class="p-6 sm:p-10 space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold">1</div>
+                            <h4 class="font-bold text-slate-800 text-lg">Control de Despensa Diario</h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Define tus productos, cantidades mínimas aceptables e inventario disponible. Actualiza en segundos desde tu celular cada vez que consumes algo.
+                            </p>
+                        </div>
 
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase text-slate-600">Nombre Admin</label>
-                            <input type="text" id="regAdminName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
+                        <div class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold">2</div>
+                            <h4 class="font-bold text-slate-800 text-lg">Lista Automática Inteligente</h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                El sistema calcula automáticamente el faltante <code>(Faltante = Mínimo - Disponible)</code> y genera una lista de chequeo interactiva para tu día de compras.
+                            </p>
                         </div>
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase text-slate-600">Apellido Admin</label>
-                            <input type="text" id="regAdminLastName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
-                        </div>
-                    </div>
 
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase text-slate-600">Usuario Login</label>
-                            <input type="text" id="regUser" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase text-slate-600">Contraseña</label>
-                            <input type="password" id="regPass" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] font-bold uppercase text-slate-600">Ubicación (Latitud, Longitud)</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="regLocation" placeholder="Ej: 4.53389,-75.68111" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
-                            <button type="button" onclick="getCurrentGpsLocation()" class="px-3 py-2 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-300 shrink-0" title="Obtener GPS actual">
-                                <i class="fa-solid fa-location-crosshairs"></i>
-                            </button>
+                        <div class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold">3</div>
+                            <h4 class="font-bold text-slate-800 text-lg">Pedidos Directos por Cobertura</h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Encuentra proveedores en el mapa interactivo (Leaflet), revisa sus zonas de despacho, precios de domicilio y envía pedidos en un par de clics.
+                            </p>
                         </div>
                     </div>
 
-                    <!-- Supplier specific fields -->
-                    <div id="supplierOnlyFields" class="hidden space-y-3 border-t border-slate-200 pt-3">
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase text-slate-600">Cobertura de Domicilios (en Km)</label>
-                            <input type="number" step="0.5" id="regCoverage" placeholder="Ej: 5" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500">
+                    <!-- Client Video / Explanatory Media Placeholders -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
+                        <!-- Video Placeholder -->
+                        <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-lg border border-slate-800 relative group aspect-video flex flex-col items-center justify-center text-center p-6 text-white">
+                            <div class="w-16 h-16 rounded-full bg-brand-500/90 text-slate-950 flex items-center justify-center text-2xl font-bold shadow-lg shadow-brand-500/50 group-hover:scale-110 transition cursor-pointer">
+                                <i class="fa-solid fa-play ml-1"></i>
+                            </div>
+                            <h5 class="mt-4 font-bold text-base">Video Tutorial: Control de Despensa</h5>
+                            <p class="text-xs text-slate-400 mt-1">Aprende a registrar productos y descontar existencias desde tu celular.</p>
                         </div>
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase text-slate-600">Descripción (Costo domicilio, monto mínimo)</label>
-                            <textarea id="regDescription" rows="2" placeholder="Ej: Domicilio $3.000. Gratis desde $50.000." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-500"></textarea>
+
+                        <!-- Infographic / UI Image Placeholder -->
+                        <div class="bg-slate-100 rounded-2xl border border-slate-200 p-6 flex flex-col items-center justify-center text-center space-y-4">
+                            <div class="w-full h-48 rounded-xl bg-gradient-to-r from-emerald-100 to-teal-100 border border-emerald-200/80 flex items-center justify-center text-emerald-700">
+                                <div class="text-center">
+                                    <i class="fa-solid fa-mobile-screen-button text-4xl mb-2 text-brand-600"></i>
+                                    <p class="text-xs font-bold uppercase tracking-wider text-slate-600">Captura de Pantalla - Lista de Mercado</p>
+                                </div>
+                            </div>
+                            <div class="text-left w-full space-y-1">
+                                <h5 class="font-bold text-slate-800 text-sm">Organización por Categorías</h5>
+                                <p class="text-xs text-slate-500">Agrupa por Frutas, Carnes, Aseo Personal, Aseo General y Mercado para hacer tus compras mucho más ágiles.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Suppliers -->
+                <div id="presTabSupplier" class="hidden p-6 sm:p-10 space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold">1</div>
+                            <h4 class="font-bold text-slate-800 text-lg">Publica tu Catálogo y Listas</h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Carga tus productos con descripción, imágenes, unidades y mantén tus listas de precios activas para los clientes de tu región.
+                            </p>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold">2</div>
+                            <h4 class="font-bold text-slate-800 text-lg">Define tu Cobertura Geográfica</h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Ubica tu local en el mapa de Leaflet y establece tu radio de entrega en kilómetros para llegar únicamente a clientes a los que puedes atender.
+                            </p>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold">3</div>
+                            <h4 class="font-bold text-slate-800 text-lg">Modelo Transparente y Justo</h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Los clientes pagan $5.000 COP/mes y los proveedores aportan únicamente el 1% de lo vendido a través de mercApp.
+                            </p>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full py-3 gradient-bg text-white font-bold rounded-xl shadow hover:opacity-95 transition-all text-sm mt-2">
-                        Registrar Cuenta de Administrador
-                    </button>
-                </form>
-                <p class="text-xs text-center text-slate-500 mt-4">
-                    ¿Ya tienes cuenta? <button onclick="toggleAuthMode('login')" class="text-brand-700 font-bold underline">Inicia Sesión</button>
-                </p>
+                    <!-- Supplier Video / Explanatory Media Placeholders -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
+                        <!-- Video Placeholder -->
+                        <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-lg border border-slate-800 relative group aspect-video flex flex-col items-center justify-center text-center p-6 text-white">
+                            <div class="w-16 h-16 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-2xl font-bold shadow-lg shadow-emerald-500/50 group-hover:scale-110 transition cursor-pointer">
+                                <i class="fa-solid fa-play ml-1"></i>
+                            </div>
+                            <h5 class="mt-4 font-bold text-base">Video Tutorial: Configuración de Comercio</h5>
+                            <p class="text-xs text-slate-400 mt-1">Descubre cómo establecer zonas de cobertura y recibir pedidos en línea.</p>
+                        </div>
+
+                        <!-- Infographic / UI Image Placeholder -->
+                        <div class="bg-slate-100 rounded-2xl border border-slate-200 p-6 flex flex-col items-center justify-center text-center space-y-4">
+                            <div class="w-full h-48 rounded-xl bg-gradient-to-r from-slate-200 to-slate-300 border border-slate-300 flex items-center justify-center text-slate-700">
+                                <div class="text-center">
+                                    <i class="fa-solid fa-map-location text-4xl mb-2 text-slate-800"></i>
+                                    <p class="text-xs font-bold uppercase tracking-wider text-slate-600">Visualización de Cobertura en Mapa</p>
+                                </div>
+                            </div>
+                            <div class="text-left w-full space-y-1">
+                                <h5 class="font-bold text-slate-800 text-sm">Información de Envíos</h5>
+                                <p class="text-xs text-slate-500">Muestra el costo de domicilio, monto mínimo para despachos e importes para envío gratuito.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- INNER APPLICATION DASHBOARD VIEW (LOGGED IN USER) -->
-    <div id="viewDashboard" class="flex-grow hidden max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <!-- SECTION 1: CLIENT INVENTORY (DESPENSA) -->
-        <section id="appTabInventory" class="space-y-6">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <!-- 2. CLIENT INVENTORY VIEW (DESPENSA) -->
+        <section id="viewInventario" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
-                    <h2 class="text-2xl font-black text-slate-900">Control de Despensa e Inventario</h2>
-                    <p class="text-slate-500 text-xs sm:text-sm">Sincroniza diariamente los consumos de alimentos en tu hogar.</p>
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-boxes-stacked text-brand-600"></i> Mi Despensa & Inventario
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Actualiza rápidamente las existencias de tus productos día a día.</p>
                 </div>
-                <div class="flex gap-2 w-full sm:w-auto">
-                    <button onclick="openCategoryModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm rounded-xl transition-all">
-                        <i class="fa-solid fa-folder-plus mr-1"></i> Categorías
+                <div class="flex items-center gap-3">
+                    <button onclick="openModal('modalCategoria')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-folder-plus text-brand-600"></i> Nueva Categoría
                     </button>
-                    <button onclick="openProductModal()" class="px-4 py-2.5 gradient-bg text-white font-bold text-xs sm:text-sm rounded-xl shadow hover:opacity-95 transition-all">
-                        <i class="fa-solid fa-plus mr-1"></i> Nuevo Producto
+                    <button onclick="openModal('modalProductoCliente')" class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-600/20 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i> Nuevo Producto
                     </button>
                 </div>
             </div>
 
-            <!-- Category Filter Bar -->
-            <div id="catFilterContainer" class="flex items-center space-x-2 overflow-x-auto custom-scrollbar pb-2">
-                <button onclick="filterInventoryByCat('all')" class="px-4 py-2 bg-brand-600 text-white font-bold text-xs rounded-xl shadow-sm shrink-0">Todas</button>
+            <!-- Categories Filter Pills -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" id="categoryFilterContainer">
+                <button onclick="filterInventoryByCategory('ALL')" class="cat-pill active px-4 py-2 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm flex-shrink-0">
+                    Todos
+                </button>
+                <!-- Category pills dynamically injected -->
             </div>
 
-            <!-- Inventory Items Grid -->
-            <div id="gridClientInventory" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Populated dynamically via JS -->
+            <!-- Inventory Grid -->
+            <div id="gridProductosCliente" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- Product cards injected dynamically -->
             </div>
         </section>
 
-        <!-- SECTION 2: AUTOMATED CHECKLIST -->
-        <section id="appTabChecklist" class="hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                <h2 class="text-2xl font-black text-slate-900">Lista de Chequeo para Mercado</h2>
-                <p class="text-slate-500 text-xs sm:text-sm">Generada automáticamente en base a productos con faltantes mayores a cero (<code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-xs">Faltante = Mínimo - Disponible</code>).</p>
-            </div>
-
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                    <span class="text-xs font-bold uppercase text-slate-500">Ítems Pendientes por Comprar</span>
-                    <button onclick="renderChecklist()" class="px-3 py-1.5 bg-brand-600 text-white font-bold text-xs rounded-lg shadow">
-                        <i class="fa-solid fa-rotate mr-1"></i> Recalcular Lista
-                    </button>
-                </div>
-                <ul id="listChecklistItems" class="divide-y divide-slate-100">
-                    <!-- Populated dynamically -->
-                </ul>
-            </div>
-        </section>
-
-        <!-- SECTION 3: SUPPLIERS & MAP COVERAGE -->
-        <section id="appTabSuppliers" class="hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                <h2 class="text-2xl font-black text-slate-900">Proveedores Cercanos y Cobertura GPS</h2>
-                <p class="text-slate-500 text-xs sm:text-sm">Consulta la ubicación y el radio de despacho de tiendas que cubren tu zona.</p>
-            </div>
-
-            <div class="grid lg:grid-cols-12 gap-6">
-                <!-- Leaflet Map Container -->
-                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-2 shadow-sm">
-                    <div id="leafletMap" class="rounded-xl w-full"></div>
-                </div>
-                <!-- Supplier Info & Ordering Panel -->
-                <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between" id="panelSupplierDetails">
-                    <div class="text-center py-12 text-slate-400">
-                        <i class="fa-solid fa-store text-4xl mb-3"></i>
-                        <p class="text-sm font-semibold">Haz clic en un proveedor marcado en el mapa para ver su descripción, costos de domicilio y realizar pedidos.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 4: ACCOUNT USER MANAGEMENT -->
-        <section id="appTabUsers" class="hidden space-y-6">
-            <div class="flex justify-between items-center bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <!-- 3. AUTOMATED SHOPPING CHECKLIST VIEW -->
+        <section id="viewListaMercado" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl font-black text-slate-900">Usuarios de la Cuenta</h2>
-                    <p class="text-slate-500 text-xs sm:text-sm">Administra todos los accesos de familiares o colaboradores vinculados a esta cuenta.</p>
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-brand-600"></i> Lista de Mercado Sugerida
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Productos con faltantes en tu inventario (Mínimo > Disponible).</p>
                 </div>
-                <button id="btnAddSubUser" onclick="openSubUserModal()" class="px-4 py-2.5 gradient-bg text-white font-bold text-xs sm:text-sm rounded-xl shadow">
-                    <i class="fa-solid fa-user-plus mr-1"></i> Registrar Nuevo Usuario
+                <button onclick="saveCurrentShoppingList()" class="px-5 py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold shadow transition flex items-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar Histórico de Lista
                 </button>
             </div>
 
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-slate-50 text-slate-500 font-bold text-xs uppercase border-b border-slate-200">
-                        <tr>
-                            <th class="px-6 py-3">Nombre Completo</th>
-                            <th class="px-6 py-3">Usuario Login</th>
-                            <th class="px-6 py-3">Rol en la Cuenta</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tblAccountUsers" class="divide-y divide-slate-100">
-                        <!-- Populated dynamically -->
-                    </tbody>
-                </table>
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Ítems a Comprar</span>
+                    <span id="badgeTotalItemsToBuy" class="bg-rose-100 text-rose-800 font-extrabold px-3 py-1 rounded-full text-xs">0 Faltantes</span>
+                </div>
+                <ul id="ulListaChecklist" class="divide-y divide-slate-100">
+                    <!-- Dynamic checklist items -->
+                </ul>
             </div>
         </section>
+
+        <!-- 4. PROVIDER DISCOVERY MAP & ORDERS VIEW -->
+        <section id="viewProveedores" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot text-brand-600"></i> Proveedores en tu Zona de Cobertura
+                </h2>
+                <p class="text-sm text-slate-500 mt-1">Explora locales cercanos, verifica sus zonas de cobertura e inspecciona su oferta.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Map Container -->
+                <div class="lg:col-span-2 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+                    <div id="leafletMap" class="rounded-xl border border-slate-200"></div>
+                </div>
+
+                <!-- Provider Details & Quick Order Side Panel -->
+                <div id="panelProveedorDetalle" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+                    <div class="text-center py-10 text-slate-400 space-y-3">
+                        <i class="fa-solid fa-store-slash text-4xl text-slate-300"></i>
+                        <p class="text-sm font-medium">Haz clic en un proveedor en el mapa para ver sus detalles, costo de domicilio y catálogo de precios.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. PROVIDER CATALOGUE MANAGEMENT VIEW -->
+        <section id="viewCatalogoProveedor" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-store text-slate-800"></i> Catálogo del Proveedor
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Administra tus productos comercializados y listas de precios vigentes.</p>
+                </div>
+                <button onclick="openModal('modalProductoProveedor')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold shadow transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-plus"></i> Publicar Producto
+                </button>
+            </div>
+
+            <div id="gridProductosProveedor" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Provider product cards -->
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL: LOGIN -->
+    <div id="modalLogin" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl space-y-6 relative border border-slate-100">
+            <button onclick="closeModal('modalLogin')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-700 mx-auto flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-user-lock"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900">Iniciar Sesión</h3>
+                <p class="text-xs text-slate-500">Ingresa tus credenciales para acceder a tu cuenta mercApp.</p>
+            </div>
+
+            <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Usuario</label>
+                    <input type="text" id="loginUsername" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" placeholder="Ej: usuario123">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Contraseña</label>
+                    <input type="password" id="loginPassword" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" placeholder="••••••••">
+                </div>
+                <button type="submit" id="btnLoginSubmit" class="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md shadow-brand-600/20 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i> Ingresar
+                </button>
+            </form>
+        </div>
     </div>
 
-    <!-- API CONFIG MODAL -->
-    <div id="modalApiConfig" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
-            <h3 class="text-lg font-bold mb-2">URL del Script de Google Sheets</h3>
-            <p class="text-xs text-slate-500 mb-4">Dirección Web App vinculada a la hoja de cálculo <strong>mercapp</strong>.</p>
-            <input type="url" id="txtApiUrl" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs mb-4">
-            <div class="flex justify-end gap-2">
-                <button onclick="closeApiConfigModal()" class="px-4 py-2 text-xs font-bold text-slate-600">Cancelar</button>
-                <button onclick="saveApiUrl()" class="px-4 py-2 text-xs font-bold bg-brand-600 text-white rounded-lg">Guardar URL</button>
+    <!-- MODAL: REGISTER ACCOUNT & ADMIN -->
+    <div id="modalRegister" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-8 shadow-2xl space-y-6 relative border border-slate-100 my-8">
+            <button onclick="closeModal('modalRegister')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 mx-auto flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-building-user"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900">Registro de Cuenta y Administrador</h3>
+                <p class="text-xs text-slate-500">Crea la cuenta de tu hogar o comercio. Tú serás el usuario administrador inicial.</p>
+            </div>
+
+            <form onsubmit="handleRegistrationSubmit(event)" class="space-y-5">
+                <!-- Account Info -->
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+                    <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">1. Datos de la Cuenta</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tipo de Cuenta</label>
+                            <select id="regAccountType" onchange="toggleRegSupplierFields()" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                <option value="Cliente">Cliente (Hogar / Usuario)</option>
+                                <option value="Proveedor">Proveedor (Comercio / Tienda)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nombre de la Cuenta</label>
+                            <input type="text" id="regAccountName" required placeholder="Ej: Familia Pérez / Abastos Don José" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Ubicación GPS (Latitud, Longitud)</label>
+                        <input type="text" id="regLocation" required placeholder="Ej: 4.53389, -75.68111" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        <span class="text-[10px] text-slate-400">Pista: Puedes usar las coordenadas de tu municipio en Armenia (4.53389, -75.68111).</span>
+                    </div>
+
+                    <!-- Supplier Exclusive Fields -->
+                    <div id="regSupplierFields" class="hidden space-y-3 pt-2 border-t border-slate-200">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Cobertura de Entrega (Radio en Km)</label>
+                            <input type="number" step="0.5" id="regCoverage" placeholder="Ej: 5" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Descripción de Servicio & Tarifas de Domicilio</label>
+                            <textarea id="regDescription" rows="2" placeholder="Ej: Mínimo de envío $20.000. Domicilio gratis desde $50.000." class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin User Info -->
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+                    <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">2. Usuario Administrador de la Cuenta</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nombre</label>
+                            <input type="text" id="regAdminName" required placeholder="Tu Nombre" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Apellido</label>
+                            <input type="text" id="regAdminLastName" required placeholder="Tu Apellido" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Usuario de Acceso</label>
+                            <input type="text" id="regUser" required placeholder="usuario_admin" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Contraseña</label>
+                            <input type="password" id="regPass" required placeholder="••••••••" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="btnRegisterSubmit" class="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md shadow-brand-600/20 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i> Completar Registro
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD SUB-USER (FOR ADMINS) -->
+    <div id="modalUserManagement" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-8 shadow-2xl space-y-6 relative border border-slate-100 my-8">
+            <button onclick="closeModal('modalUserManagement')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="space-y-1">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-users text-brand-600"></i> Usuarios de mi Cuenta
+                </h3>
+                <p class="text-xs text-slate-500">Puedes agregar tantos usuarios adicionales a tu cuenta como desees.</p>
+            </div>
+
+            <!-- Form to Add Sub-user -->
+            <form onsubmit="handleAddSubUser(event)" class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+                <h4 class="text-xs font-extrabold text-slate-600 uppercase tracking-wider">Agregar Nuevo Integrante</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <input type="text" id="subName" required placeholder="Nombre" class="px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
+                    <input type="text" id="subLastName" required placeholder="Apellido" class="px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
+                    <input type="text" id="subUser" required placeholder="Usuario" class="px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
+                    <input type="password" id="subPass" required placeholder="Contraseña" class="px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
+                    <select id="subRol" class="px-3 py-2 rounded-xl border border-slate-200 text-sm font-semibold bg-white sm:col-span-2">
+                        <option value="general">Rol: General (Usuario estándar)</option>
+                        <option value="administrador">Rol: Administrador (Control total)</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs transition">
+                    + Registrar Integrante
+                </button>
+            </form>
+
+            <!-- Current Users List -->
+            <div class="space-y-2">
+                <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Integrantes de esta Cuenta</h4>
+                <div id="subUsersList" class="divide-y divide-slate-100 max-h-48 overflow-y-auto border border-slate-200 rounded-xl p-2 bg-white">
+                    <!-- Dynamic user list -->
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- PRODUCT CREATION MODAL -->
-    <div id="modalProduct" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
-            <h3 class="text-lg font-bold mb-4">Nuevo Producto de Despensa</h3>
-            <form onsubmit="handleSaveProduct(event)" class="space-y-3">
+    <!-- MODAL: ADD CLIENT PRODUCT -->
+    <div id="modalProductoCliente" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl space-y-5 relative border border-slate-100">
+            <button onclick="closeModal('modalProductoCliente')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 class="text-xl font-bold text-slate-900">Agregar Producto a Despensa</h3>
+            <form onsubmit="handleAddProductSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nombre Producto</label>
-                    <input type="text" id="prodName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nombre del Producto</label>
+                    <input type="text" id="prodName" required placeholder="Ej: Leche, Huevos, Manzanas" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Unidad</label>
-                        <input type="text" id="prodUnit" placeholder="Ej: Kg, Litro, Unid" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Unidad de Medida</label>
+                        <input type="text" id="prodUnit" required placeholder="Ej: Litros, Kilos, Cajas" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Categoría</label>
-                        <select id="prodCategory" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
-                            <!-- Populated -->
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Categoría</label>
+                        <select id="prodCategorySelect" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white">
+                            <!-- Injected dynamically -->
                         </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Mínimo Deseado</label>
-                        <input type="number" step="0.1" id="prodMin" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Stock Mínimo</label>
+                        <input type="number" step="0.1" id="prodMin" required placeholder="Ej: 5" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Disponible Actual</label>
-                        <input type="number" step="0.1" id="prodAvailable" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Disponible Actual</label>
+                        <input type="number" step="0.1" id="prodDisp" required placeholder="Ej: 2" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm">
                     </div>
                 </div>
-                <div class="flex justify-end gap-2 pt-4">
-                    <button type="button" onclick="closeProductModal()" class="px-4 py-2 text-xs font-bold text-slate-600">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 text-xs font-bold bg-brand-600 text-white rounded-lg">Guardar Producto</button>
-                </div>
+                <button type="submit" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm transition">
+                    Guardar Producto
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- CATEGORY CREATION MODAL -->
-    <div id="modalCategory" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative">
-            <h3 class="text-lg font-bold mb-4">Nueva Categoría</h3>
-            <form onsubmit="handleSaveCategory(event)" class="space-y-3">
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nombre Categoría</label>
-                    <input type="text" id="catName" placeholder="Ej: Frutas y Verduras, Carnes, Aseo" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
-                </div>
-                <div class="flex justify-end gap-2 pt-4">
-                    <button type="button" onclick="closeCategoryModal()" class="px-4 py-2 text-xs font-bold text-slate-600">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 text-xs font-bold bg-brand-600 text-white rounded-lg">Guardar Categoría</button>
-                </div>
+    <!-- MODAL: ADD CATEGORY -->
+    <div id="modalCategoria" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 relative">
+            <button onclick="closeModal('modalCategoria')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-lg font-bold text-slate-900">Nueva Categoría</h3>
+            <form onsubmit="handleAddCategorySubmit(event)" class="space-y-4">
+                <input type="text" id="catNameInput" required placeholder="Ej: Carnes, Frutas, Aseo General" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm">
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-brand-600 text-white font-bold text-xs">
+                    Crear Categoría
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- SUB-USER CREATION MODAL -->
-    <div id="modalSubUser" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
-            <h3 class="text-lg font-bold mb-1">Agregar Usuario a la Cuenta</h3>
-            <p class="text-xs text-slate-500 mb-4">Crea un acceso con rol general para un familiar o colaborador.</p>
-            <form onsubmit="handleSaveSubUser(event)" class="space-y-3">
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nombre</label>
-                        <input type="text" id="subName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Apellido</label>
-                        <input type="text" id="subLastName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Usuario Login</label>
-                    <input type="text" id="subUser" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Contraseña</label>
-                    <input type="password" id="subPass" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
-                </div>
-                <div class="flex justify-end gap-2 pt-4">
-                    <button type="button" onclick="closeSubUserModal()" class="px-4 py-2 text-xs font-bold text-slate-600">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 text-xs font-bold bg-brand-600 text-white rounded-lg">Crear Usuario</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Leaflet JS -->
+    <!-- APPLICATION JAVASCRIPT LOGIC -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
     <script>
-        // Default Google Apps Script URL provided by user
-        let DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbwBJO_HqurAcn6SOdtNl_r0AH0jdnXSS6HSgaSI135eWfWzEdLaHmhYhnpDfgWghEkWeg/exec";
-        let API_URL = localStorage.getItem("mercapp_api_url") || DEFAULT_API_URL;
+        // BACKEND GOOGLE APPS SCRIPT EXEC ENDPOINT
+        const API_URL = "https://script.google.com/macros/s/AKfycbwBJO_HqurAcn6SOdtNl_r0AH0jdnXSS6HSgaSI135eWfWzEdLaHmhYhnpDfgWghEkWeg/exec";
 
+        // APP GLOBAL STATE
         let currentUser = null;
         let currentAccount = null;
-        let mapInstance = null;
-        
-        let clientProducts = [];
-        let clientCategories = [];
-        let accountUsers = [];
+        let stateProducts = [];
+        let stateCategories = [];
+        let stateAccounts = [];
+        let stateSubUsers = [];
+        let leafletMapInstance = null;
+        let selectedCategoryFilter = 'ALL';
 
-        // Application Startup Handler
-        document.addEventListener("DOMContentLoaded", () => {
-            const savedUser = localStorage.getItem("mercapp_session_user");
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                loadAccountInfoAndInit();
-            } else {
-                showPublicLanding();
-            }
-        });
-
-        function showPublicLanding() {
-            document.getElementById("viewLanding").classList.remove("hidden");
-            document.getElementById("viewDashboard").classList.add("hidden");
-            document.getElementById("navPublic").classList.remove("hidden");
-            document.getElementById("navPrivate").classList.add("hidden");
-        }
-
-        function showDashboard() {
-            document.getElementById("viewLanding").classList.add("hidden");
-            document.getElementById("viewDashboard").classList.remove("hidden");
-            document.getElementById("navPublic").classList.add("hidden");
-            document.getElementById("navPrivate").classList.remove("hidden");
-
-            document.getElementById("lblAccountName").textContent = currentAccount?.Nombre || "Mi Cuenta";
-            document.getElementById("lblUserRole").textContent = currentUser.rol;
-
-            if (currentUser.rol !== 'administrador') {
-                document.getElementById("btnAddSubUser")?.classList.add("hidden");
-            } else {
-                document.getElementById("btnAddSubUser")?.classList.remove("hidden");
-            }
-
-            switchAppTab('inventory');
-            loadClientInventory();
-            loadCategories();
-            loadAccountUsers();
-        }
-
-        function switchPresentationTab(role) {
-            const btnClient = document.getElementById("presTabClientBtn");
-            const btnSupplier = document.getElementById("presTabSupplierBtn");
-            const contentClient = document.getElementById("presTabClient");
-            const contentSupplier = document.getElementById("presTabSupplier");
-
-            if (role === 'cliente') {
-                btnClient.className = "px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all bg-white text-brand-700 shadow-sm";
-                btnSupplier.className = "px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all text-slate-600 hover:text-slate-900";
-                contentClient.classList.remove("hidden");
-                contentSupplier.classList.add("hidden");
-            } else {
-                btnSupplier.className = "px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all bg-slate-900 text-white shadow-sm";
-                btnClient.className = "px-6 py-3 rounded-xl font-bold text-xs sm:text-base transition-all text-slate-600 hover:text-slate-900";
-                contentSupplier.classList.remove("hidden");
-                contentClient.classList.add("hidden");
-            }
-        }
-
-        function switchAppTab(tabName) {
-            ['Inventory', 'Checklist', 'Suppliers', 'Users'].forEach(t => {
-                document.getElementById(`appTab${t}`)?.classList.add("hidden");
-                const btn = document.getElementById(`tabBtn${t}`);
-                if (btn) {
-                    btn.className = "px-2.5 py-2 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-800";
-                }
-            });
-
-            const targetTab = document.getElementById(`appTab${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`);
-            const targetBtn = document.getElementById(`tabBtn${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`);
-
-            if (targetTab) targetTab.classList.remove("hidden");
-            if (targetBtn) targetBtn.className = "px-2.5 py-2 text-xs sm:text-sm font-bold text-brand-700 border-b-2 border-brand-600";
-
-            if (tabName === 'checklist') renderChecklist();
-            if (tabName === 'suppliers') initLeafletMap();
-        }
-
-        function openAuthModal(mode, role = 'cliente') {
-            document.getElementById("modalAuth").classList.remove("hidden");
-            toggleAuthMode(mode);
-            if (mode === 'register') setRegAccountType(role === 'cliente' ? 'Cliente' : 'Proveedor');
-        }
-
-        function closeAuthModal() {
-            document.getElementById("modalAuth").classList.add("hidden");
-        }
-
-        function toggleAuthMode(mode) {
-            if (mode === 'login') {
-                document.getElementById("formLoginContainer").classList.remove("hidden");
-                document.getElementById("formRegisterContainer").classList.add("hidden");
-            } else {
-                document.getElementById("formLoginContainer").classList.add("hidden");
-                document.getElementById("formRegisterContainer").classList.remove("hidden");
-            }
-        }
-
-        function setRegAccountType(type) {
-            document.getElementById("regAccountType").value = type;
-            const btnC = document.getElementById("regTypeClientBtn");
-            const btnS = document.getElementById("regTypeSupplierBtn");
-            const supplierFields = document.getElementById("supplierOnlyFields");
-
-            if (type === 'Cliente') {
-                btnC.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-white shadow-sm text-brand-700";
-                btnS.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900";
-                supplierFields.classList.add("hidden");
-            } else {
-                btnS.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-slate-900 text-white shadow-sm";
-                btnC.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900";
-                supplierFields.classList.remove("hidden");
-            }
-        }
-
-        function getCurrentGpsLocation() {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    document.getElementById("regLocation").value = `${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`;
-                }, err => {
-                    alert("No se pudo obtener la ubicación GPS automática. Por favor digita Latitud,Longitud manualmente.");
-                });
-            }
-        }
-
+        /**
+         * Robust fetch wrapper for Google Apps Script Backend
+         */
         async function fetchAPI(sheet, action = 'read', body = null) {
             try {
                 if (action === 'read') {
@@ -817,415 +608,684 @@
                 } else {
                     const res = await fetch(API_URL, {
                         method: 'POST',
+                        headers: {
+                            'Content-Type': 'text/plain;charset=utf-8'
+                        },
+                        redirect: 'follow',
                         body: JSON.stringify({ action, sheet, ...body })
                     });
                     return await res.json();
                 }
             } catch (e) {
-                console.error("API Error:", e);
-                return { status: 'error', message: 'Error de conexión con el backend de Google Sheets' };
+                console.error("API Fetch Error:", e);
+                return { status: 'error', message: 'Error de conexión con la hoja electrónica: ' + e.message };
             }
         }
 
-        async function handleLogin(e) {
-            e.preventDefault();
-            const u = document.getElementById("loginUser").value;
-            const p = document.getElementById("loginPass").value;
-
-            const res = await fetchAPI('Usuarios', 'read');
-            if (res.status === 'success') {
-                const user = res.data.find(x => String(x.usuario) === String(u) && String(x.contrasena) === String(p));
-                if (user) {
-                    currentUser = user;
-                    localStorage.setItem("mercapp_session_user", JSON.stringify(user));
-                    closeAuthModal();
-                    await loadAccountInfoAndInit();
-                } else {
-                    alert("Usuario o contraseña incorrectos");
+        // INITIALIZATION ON LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedSession = localStorage.getItem('mercapp_session_user');
+            if (savedSession) {
+                try {
+                    currentUser = JSON.parse(savedSession);
+                    setupUserSessionUI();
+                } catch(e) {
+                    localStorage.removeItem('mercapp_session_user');
                 }
-            } else {
-                alert("Error al verificar credenciales. Verifica la URL configurada para Google Apps Script.");
             }
-        }
+        });
 
-        async function handleRegistration(e) {
+        /**
+         * User Registration Submission (Account + Admin User)
+         */
+        async function handleRegistrationSubmit(e) {
             e.preventDefault();
-            const accType = document.getElementById("regAccountType").value;
-            const accName = document.getElementById("regAccountName").value;
-            const location = document.getElementById("regLocation").value;
-            const coverage = document.getElementById("regCoverage").value;
-            const desc = document.getElementById("regDescription").value;
+            const btnSubmit = document.getElementById("btnRegisterSubmit");
+            const originalText = btnSubmit.innerHTML;
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Guardando en Google Sheets...`;
 
-            const adminName = document.getElementById("regAdminName").value;
-            const adminLastName = document.getElementById("regAdminLastName").value;
-            const user = document.getElementById("regUser").value;
-            const pass = document.getElementById("regPass").value;
+            try {
+                const accType = document.getElementById("regAccountType").value;
+                const accName = document.getElementById("regAccountName").value.trim();
+                const location = document.getElementById("regLocation").value.trim();
+                const coverage = document.getElementById("regCoverage").value.trim();
+                const desc = document.getElementById("regDescription").value.trim();
 
-            const accId = 'acc_' + Date.now();
-            const userId = 'usr_' + Date.now();
+                const adminName = document.getElementById("regAdminName").value.trim();
+                const adminLastName = document.getElementById("regAdminLastName").value.trim();
+                const username = document.getElementById("regUser").value.trim();
+                const password = document.getElementById("regPass").value.trim();
 
-            // 1. Create Cuenta Record
-            const resAcc = await fetchAPI('Cuentas', 'create', {
-                data: {
-                    id: accId,
-                    tipo: accType,
-                    Nombre: accName,
-                    Ubicacion: location,
-                    Cobertura: coverage,
-                    Descripcion: desc
+                const accId = 'acc_' + Date.now();
+                const userId = 'usr_' + Date.now();
+
+                // 1. Create Cuenta Record
+                const resAcc = await fetchAPI('Cuentas', 'create', {
+                    data: {
+                        id: accId,
+                        tipo: accType,
+                        Nombre: accName,
+                        Ubicacion: location,
+                        Cobertura: coverage,
+                        Descripcion: desc
+                    }
+                });
+
+                if (resAcc.status !== 'success') {
+                    throw new Error(resAcc.message || "No se pudo registrar la Cuenta.");
                 }
-            });
 
-            // 2. Create Administrator User Record
-            const resUsr = await fetchAPI('Usuarios', 'create', {
-                data: {
+                // 2. Create Administrator User Record
+                const resUsr = await fetchAPI('Usuarios', 'create', {
+                    data: {
+                        id: userId,
+                        idCuenta: accId,
+                        rol: 'administrador',
+                        usuario: username,
+                        contrasena: password,
+                        Nombre: adminName,
+                        Apellido: adminLastName
+                    }
+                });
+
+                if (resUsr.status !== 'success') {
+                    throw new Error(resUsr.message || "No se pudo registrar el Usuario Administrador.");
+                }
+
+                showToast("¡Cuenta y usuario Administrador registrados correctamente!", "success");
+                closeModal('modalRegister');
+                
+                // Auto login
+                currentUser = {
                     id: userId,
                     idCuenta: accId,
                     rol: 'administrador',
-                    usuario: user,
-                    contrasena: pass,
+                    usuario: username,
                     Nombre: adminName,
                     Apellido: adminLastName
+                };
+                localStorage.setItem('mercapp_session_user', JSON.stringify(currentUser));
+                setupUserSessionUI();
+
+            } catch (err) {
+                console.error("Error en registro:", err);
+                showToast("Inconveniente al registrar: " + err.message, "error");
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = originalText;
+            }
+        }
+
+        /**
+         * Login Handling
+         */
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+            const btnSubmit = document.getElementById("btnLoginSubmit");
+            const originalText = btnSubmit.innerHTML;
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Verificando...`;
+
+            try {
+                const usernameInput = document.getElementById("loginUsername").value.trim();
+                const passwordInput = document.getElementById("loginPassword").value.trim();
+
+                const response = await fetchAPI('Usuarios', 'read');
+                if (response.status === 'success' && Array.isArray(response.data)) {
+                    const foundUser = response.data.find(u => 
+                        String(u.usuario).trim().toLowerCase() === usernameInput.toLowerCase() && 
+                        String(u.contrasena).trim() === passwordInput
+                    );
+
+                    if (foundUser) {
+                        currentUser = foundUser;
+                        localStorage.setItem('mercapp_session_user', JSON.stringify(currentUser));
+                        closeModal('modalLogin');
+                        showToast(`¡Bienvenido de nuevo, ${currentUser.Nombre}!`, "success");
+                        setupUserSessionUI();
+                    } else {
+                        showToast("Usuario o contraseña incorrectos.", "error");
+                    }
+                } else {
+                    showToast("No se pudo consultar la lista de usuarios.", "error");
                 }
-            });
+            } catch(err) {
+                showToast("Error al iniciar sesión: " + err.message, "error");
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = originalText;
+            }
+        }
 
-            if (resAcc.status === 'success' && resUsr.status === 'success') {
-                alert("¡Cuenta de Administrador registrada con éxito! Ya puedes iniciar sesión.");
-                toggleAuthMode('login');
+        function handleLogout() {
+            currentUser = null;
+            currentAccount = null;
+            localStorage.removeItem('mercapp_session_user');
+            document.getElementById('publicNav').classList.remove('hidden');
+            document.getElementById('authNav').classList.add('hidden');
+            document.getElementById('appTabNav').classList.add('hidden');
+            navigateTo('landing');
+            showToast("Has cerrado sesión.", "info");
+        }
+
+        /**
+         * Session UI Setup
+         */
+        async function setupUserSessionUI() {
+            document.getElementById('publicNav').classList.add('hidden');
+            document.getElementById('authNav').classList.remove('hidden');
+            document.getElementById('appTabNav').classList.remove('hidden');
+
+            document.getElementById('navAccountName').textContent = currentUser.Nombre;
+            document.getElementById('navUserRoleBadge').textContent = currentUser.rol;
+
+            if (currentUser.rol === 'administrador') {
+                document.getElementById('btnManageUsers').classList.remove('hidden');
             } else {
-                alert("Ocurrió un inconveniente al guardar el registro en Google Sheets.");
+                document.getElementById('btnManageUsers').classList.add('hidden');
+            }
+
+            // Load Account Details
+            const accRes = await fetchAPI('Cuentas', 'read');
+            if (accRes.status === 'success' && Array.isArray(accRes.data)) {
+                currentAccount = accRes.data.find(a => String(a.id) === String(currentUser.idCuenta));
+                if (currentAccount && currentAccount.tipo === 'Proveedor') {
+                    document.getElementById('tabBtnCatalogoProveedor').classList.remove('hidden');
+                }
+            }
+
+            // Load Client Initial Data
+            loadCategories();
+            loadClientProducts();
+            navigateTo('app');
+        }
+
+        // NAVIGATION CONTROL
+        function navigateTo(viewName) {
+            document.getElementById('viewLanding').classList.add('hidden');
+            document.getElementById('viewInventario').classList.add('hidden');
+            document.getElementById('viewListaMercado').classList.add('hidden');
+            document.getElementById('viewProveedores').classList.add('hidden');
+            document.getElementById('viewCatalogoProveedor').classList.add('hidden');
+
+            if (viewName === 'landing') {
+                document.getElementById('viewLanding').classList.remove('hidden');
+            } else if (viewName === 'app') {
+                switchAppTab('inventario');
             }
         }
 
-        async function loadAccountInfoAndInit() {
-            const resAcc = await fetchAPI('Cuentas', 'read');
-            if (resAcc.status === 'success') {
-                currentAccount = resAcc.data.find(a => String(a.id) === String(currentUser.idCuenta));
+        function switchAppTab(tab) {
+            document.getElementById('viewInventario').classList.add('hidden');
+            document.getElementById('viewListaMercado').classList.add('hidden');
+            document.getElementById('viewProveedores').classList.add('hidden');
+            document.getElementById('viewCatalogoProveedor').classList.add('hidden');
+
+            if (tab === 'inventario') {
+                document.getElementById('viewInventario').classList.remove('hidden');
+            } else if (tab === 'listaMercado') {
+                document.getElementById('viewListaMercado').classList.remove('hidden');
+                renderShoppingChecklist();
+            } else if (tab === 'proveedores') {
+                document.getElementById('viewProveedores').classList.remove('hidden');
+                setTimeout(() => initLeafletMap(), 200);
+            } else if (tab === 'catalogoProveedor') {
+                document.getElementById('viewCatalogoProveedor').classList.remove('hidden');
             }
-            showDashboard();
         }
 
-        async function loadClientInventory() {
-            const res = await fetchAPI('ProductosCliente', 'read');
-            if (res.status === 'success') {
-                clientProducts = res.data.filter(p => String(p.idCuenta) === String(currentUser.idCuenta));
-                renderInventoryGrid(clientProducts);
-            }
-        }
-
+        /**
+         * Load Client Categories
+         */
         async function loadCategories() {
             const res = await fetchAPI('Categorias', 'read');
-            if (res.status === 'success') {
-                clientCategories = res.data.filter(c => String(c.idCuenta) === String(currentUser.idCuenta));
-                renderCategoryFilters();
+            if (res.status === 'success' && Array.isArray(res.data)) {
+                stateCategories = res.data.filter(c => String(c.idCuenta) === String(currentUser.idCuenta));
+                renderCategoryPills();
+                populateCategorySelects();
             }
         }
 
-        function renderCategoryFilters() {
-            const container = document.getElementById("catFilterContainer");
-            container.innerHTML = `<button onclick="filterInventoryByCat('all')" class="px-4 py-2 bg-brand-600 text-white font-bold text-xs rounded-xl shadow-sm shrink-0">Todas</button>`;
-            
-            clientCategories.forEach(c => {
-                container.innerHTML += `
-                    <button onclick="filterInventoryByCat('${c.id}')" class="px-4 py-2 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 shrink-0">
-                        ${c.Nombre}
+        function renderCategoryPills() {
+            const container = document.getElementById('categoryFilterContainer');
+            let html = `
+                <button onclick="filterInventoryByCategory('ALL')" class="cat-pill ${selectedCategoryFilter === 'ALL' ? 'bg-brand-600 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100'} px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 border border-slate-200">
+                    Todos
+                </button>
+            `;
+
+            stateCategories.forEach(cat => {
+                const isActive = selectedCategoryFilter === String(cat.id);
+                html += `
+                    <button onclick="filterInventoryByCategory('${cat.id}')" class="cat-pill ${isActive ? 'bg-brand-600 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100'} px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 border border-slate-200">
+                        ${cat.Nombre}
                     </button>
                 `;
             });
+            container.innerHTML = html;
         }
 
-        function filterInventoryByCat(catId) {
-            if (catId === 'all') {
-                renderInventoryGrid(clientProducts);
-            } else {
-                const filtered = clientProducts.filter(p => String(p.idCategoria) === String(catId));
-                renderInventoryGrid(filtered);
-            }
-        }
-
-        function renderInventoryGrid(items) {
-            const container = document.getElementById("gridClientInventory");
-            container.innerHTML = "";
-
-            if (items.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-medium">No hay productos registrados en esta despensa.</div>`;
-                return;
-            }
-
-            items.forEach(p => {
-                const min = parseFloat(p.Minimo) || 0;
-                const avail = parseFloat(p.Disponible) || 0;
-                const faltante = Math.max(0, min - avail);
-                const hasAlert = faltante > 0;
-
-                container.innerHTML += `
-                    <div class="bg-white rounded-2xl border ${hasAlert ? 'border-rose-300 ring-2 ring-rose-100' : 'border-slate-200'} p-5 shadow-sm flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <h4 class="font-bold text-slate-800 text-base">${p.Nombre}</h4>
-                                <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${hasAlert ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">
-                                    ${hasAlert ? 'FALTANTE' : 'AL DÍA'}
-                                </span>
-                            </div>
-                            <span class="text-xs text-slate-400 block mb-4">Unidad: ${p.Unidad}</span>
-
-                            <div class="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl text-center text-xs mb-4">
-                                <div>
-                                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Mínimo</span>
-                                    <span class="font-extrabold text-slate-700">${min}</span>
-                                </div>
-                                <div>
-                                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Disponible</span>
-                                    <span class="font-extrabold text-brand-600">${avail}</span>
-                                </div>
-                                <div>
-                                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Faltante</span>
-                                    <span class="font-extrabold ${faltante > 0 ? 'text-rose-600' : 'text-slate-400'}">${faltante}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between border-t border-slate-100 pt-3">
-                            <span class="text-xs font-bold text-slate-500">Actualizar Consumo:</span>
-                            <div class="flex items-center space-x-2">
-                                <button onclick="adjustQty('${p.id}', -1)" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-800 font-bold flex items-center justify-center">-</button>
-                                <button onclick="adjustQty('${p.id}', 1)" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-800 font-bold flex items-center justify-center">+</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        async function adjustQty(id, delta) {
-            const prod = clientProducts.find(p => String(p.id) === String(id));
-            if (!prod) return;
-            const newAvail = Math.max(0, (parseFloat(prod.Disponible) || 0) + delta);
-            prod.Disponible = newAvail;
-            prod.Faltante = Math.max(0, (parseFloat(prod.Minimo) || 0) - newAvail);
-
-            renderInventoryGrid(clientProducts);
-
-            await fetchAPI('ProductosCliente', 'update', {
-                data: { id: id, Disponible: newAvail, Faltante: prod.Faltante }
-            });
-        }
-
-        function openProductModal() {
-            document.getElementById("modalProduct").classList.remove("hidden");
-            const select = document.getElementById("prodCategory");
-            select.innerHTML = `<option value="">Sin categoría</option>`;
-            clientCategories.forEach(c => {
+        function populateCategorySelects() {
+            const select = document.getElementById('prodCategorySelect');
+            select.innerHTML = `<option value="">Sin Categoría</option>`;
+            stateCategories.forEach(c => {
                 select.innerHTML += `<option value="${c.id}">${c.Nombre}</option>`;
             });
         }
 
-        function closeProductModal() {
-            document.getElementById("modalProduct").classList.add("hidden");
+        function filterInventoryByCategory(catId) {
+            selectedCategoryFilter = String(catId);
+            renderCategoryPills();
+            renderProductsGrid();
         }
 
-        async function handleSaveProduct(e) {
-            e.preventDefault();
-            const name = document.getElementById("prodName").value;
-            const unit = document.getElementById("prodUnit").value;
-            const cat = document.getElementById("prodCategory").value;
-            const min = parseFloat(document.getElementById("prodMin").value);
-            const avail = parseFloat(document.getElementById("prodAvailable").value);
-            const faltante = Math.max(0, min - avail);
-
-            const res = await fetchAPI('ProductosCliente', 'create', {
-                data: {
-                    id: 'prd_' + Date.now(),
-                    idCuenta: currentUser.idCuenta,
-                    Nombre: name,
-                    Unidad: unit,
-                    Minimo: min,
-                    Disponible: avail,
-                    Faltante: faltante,
-                    idCategoria: cat
-                }
-            });
-
-            if (res.status === 'success') {
-                closeProductModal();
-                loadClientInventory();
+        /**
+         * Load Client Inventory Products
+         */
+        async function loadClientProducts() {
+            const res = await fetchAPI('ProductosCliente', 'read');
+            if (res.status === 'success' && Array.isArray(res.data)) {
+                stateProducts = res.data.filter(p => String(p.idCuenta) === String(currentUser.idCuenta));
+                renderProductsGrid();
             }
         }
 
-        function openCategoryModal() {
-            document.getElementById("modalCategory").classList.remove("hidden");
-        }
+        function renderProductsGrid() {
+            const grid = document.getElementById('gridProductosCliente');
+            grid.innerHTML = '';
 
-        function closeCategoryModal() {
-            document.getElementById("modalCategory").classList.add("hidden");
-        }
-
-        async function handleSaveCategory(e) {
-            e.preventDefault();
-            const name = document.getElementById("catName").value;
-
-            const res = await fetchAPI('Categorias', 'create', {
-                data: {
-                    id: 'cat_' + Date.now(),
-                    idCuenta: currentUser.idCuenta,
-                    Nombre: name
-                }
-            });
-
-            if (res.status === 'success') {
-                closeCategoryModal();
-                loadCategories();
+            let filtered = stateProducts;
+            if (selectedCategoryFilter !== 'ALL') {
+                filtered = stateProducts.filter(p => String(p.idCategoria) === selectedCategoryFilter);
             }
-        }
 
-        function renderChecklist() {
-            const ul = document.getElementById("listChecklistItems");
-            ul.innerHTML = "";
-
-            const faltantes = clientProducts.filter(p => (parseFloat(p.Minimo) - parseFloat(p.Disponible)) > 0);
-
-            if (faltantes.length === 0) {
-                ul.innerHTML = `<li class="p-8 text-center text-slate-400 text-sm font-medium">¡Enhorabuena! No tienes productos faltantes en tu despensa.</li>`;
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-dashed border-slate-300">
+                        <i class="fa-solid fa-box-open text-4xl text-slate-300 mb-2"></i>
+                        <p class="text-sm text-slate-500 font-medium">No hay productos en esta vista.</p>
+                    </div>
+                `;
                 return;
             }
 
-            faltantes.forEach(p => {
-                const cant = parseFloat(p.Minimo) - parseFloat(p.Disponible);
-                ul.innerHTML += `
-                    <li class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
-                        <label class="flex items-center space-x-3 cursor-pointer">
-                            <input type="checkbox" class="w-5 h-5 rounded border-slate-300 text-brand-600 focus:ring-brand-500">
-                            <span class="font-bold text-slate-800 text-sm">${p.Nombre}</span>
-                        </label>
-                        <span class="text-xs font-extrabold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">
-                            Comprar: ${cant} ${p.Unidad}
-                        </span>
-                    </li>
+            filtered.forEach(p => {
+                const minimo = parseFloat(p.Minimo) || 0;
+                const disponible = parseFloat(p.Disponible) || 0;
+                const faltante = Math.max(0, minimo - disponible);
+                const isAlert = faltante > 0;
+
+                const cardHtml = `
+                    <div class="bg-white rounded-2xl border ${isAlert ? 'border-rose-300 shadow-rose-100' : 'border-slate-200'} p-5 shadow-sm hover:shadow-md transition space-y-4">
+                        <div class="flex justify-between items-start gap-2">
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-base leading-snug">${p.Nombre}</h4>
+                                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">${p.Unidad}</span>
+                            </div>
+                            ${isAlert ? 
+                                `<span class="bg-rose-100 text-rose-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase"><i class="fa-solid fa-triangle-exclamation"></i> Faltante</span>` : 
+                                `<span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">OK</span>`
+                            }
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 py-2 px-3 bg-slate-50 rounded-xl text-center">
+                            <div>
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase">Mínimo</span>
+                                <span class="text-sm font-bold text-slate-700">${minimo}</span>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase">Disponible</span>
+                                <span class="text-sm font-bold text-brand-600">${disponible}</span>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase">Faltante</span>
+                                <span class="text-sm font-bold ${faltante > 0 ? 'text-rose-600' : 'text-slate-400'}">${faltante}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-2 pt-1">
+                            <span class="text-xs font-semibold text-slate-500">Consumo Hoy:</span>
+                            <div class="flex items-center gap-1">
+                                <button onclick="adjustQuantity('${p.id}', -1)" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm flex items-center justify-center transition">-</button>
+                                <span class="w-8 text-center text-xs font-bold">${disponible}</span>
+                                <button onclick="adjustQuantity('${p.id}', 1)" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm flex items-center justify-center transition">+</button>
+                            </div>
+                        </div>
+                    </div>
                 `;
+                grid.innerHTML += cardHtml;
             });
         }
 
-        function initLeafletMap() {
-            if (mapInstance) return;
+        async function adjustQuantity(productId, delta) {
+            const prod = stateProducts.find(p => String(p.id) === String(productId));
+            if (!prod) return;
 
-            const userCoords = currentAccount?.Ubicacion ? currentAccount.Ubicacion.split(',').map(Number) : [4.53389, -75.68111];
+            const currentDisp = parseFloat(prod.Disponible) || 0;
+            const newDisp = Math.max(0, currentDisp + delta);
+            prod.Disponible = newDisp;
+            prod.Faltante = Math.max(0, (parseFloat(prod.Minimo) || 0) - newDisp);
 
-            mapInstance = L.map('leafletMap').setView(userCoords, 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(mapInstance);
+            renderProductsGrid();
 
-            // User Location Marker
-            L.marker(userCoords).addTo(mapInstance).bindPopup("<b>Ubicación de tu Cuenta</b>").openPopup();
-
-            // Load Suppliers
-            fetchAPI('Cuentas', 'read').then(res => {
-                if (res.status === 'success') {
-                    const suppliers = res.data.filter(c => c.tipo === 'Proveedor');
-                    suppliers.forEach(s => {
-                        if (s.Ubicacion) {
-                            const [sLat, sLng] = s.Ubicacion.split(',').map(Number);
-                            const radiusKm = parseFloat(s.Cobertura) || 3;
-
-                            const marker = L.marker([sLat, sLng]).addTo(mapInstance);
-                            L.circle([sLat, sLng], { color: '#16a34a', fillColor: '#22c55e', fillOpacity: 0.15, radius: radiusKm * 1000 }).addTo(mapInstance);
-
-                            marker.on('click', () => {
-                                document.getElementById("panelSupplierDetails").innerHTML = `
-                                    <div>
-                                        <div class="flex items-center space-x-2 mb-2">
-                                            <span class="bg-brand-100 text-brand-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">Proveedor Cercano</span>
-                                        </div>
-                                        <h3 class="text-xl font-bold text-slate-900 mb-2">${s.Nombre}</h3>
-                                        <p class="text-xs text-slate-600 mb-4 leading-relaxed">${s.Descripcion || 'Sin información adicional de envíos.'}</p>
-                                        <div class="bg-slate-50 p-4 rounded-xl text-xs space-y-2 mb-6 border border-slate-200">
-                                            <div><strong>Radio Cobertura GPS:</strong> ${radiusKm} Kilómetros</div>
-                                            <div><strong>Ubicación GPS:</strong> ${s.Ubicacion}</div>
-                                        </div>
-                                        <button onclick="alert('Iniciando gestión de pedido con el comercio ${s.Nombre}')" class="w-full py-3 gradient-bg text-white font-bold text-xs rounded-xl shadow hover:opacity-95 transition-all">
-                                            Ver Catálogo y Hacer Pedido
-                                        </button>
-                                    </div>
-                                `;
-                            });
-                        }
-                    });
+            // Background update to Google Sheets
+            await fetchAPI('ProductosCliente', 'update', {
+                data: {
+                    id: prod.id,
+                    Disponible: newDisp,
+                    Faltante: prod.Faltante
                 }
             });
         }
 
-        async function loadAccountUsers() {
-            const res = await fetchAPI('Usuarios', 'read');
+        async function handleAddProductSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('prodName').value.trim();
+            const unit = document.getElementById('prodUnit').value.trim();
+            const catId = document.getElementById('prodCategorySelect').value;
+            const min = parseFloat(document.getElementById('prodMin').value) || 0;
+            const disp = parseFloat(document.getElementById('prodDisp').value) || 0;
+            const faltante = Math.max(0, min - disp);
+
+            const prodId = 'prc_' + Date.now();
+            const newProd = {
+                id: prodId,
+                idCuenta: currentUser.idCuenta,
+                Nombre: name,
+                Unidad: unit,
+                Cantidad: disp,
+                Minimo: min,
+                Disponible: disp,
+                Faltante: faltante,
+                idCategoria: catId
+            };
+
+            const res = await fetchAPI('ProductosCliente', 'create', { data: newProd });
             if (res.status === 'success') {
-                accountUsers = res.data.filter(u => String(u.idCuenta) === String(currentUser.idCuenta));
-                const tbody = document.getElementById("tblAccountUsers");
-                tbody.innerHTML = "";
-                accountUsers.forEach(u => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td class="px-6 py-4 font-bold text-slate-800">${u.Nombre} ${u.Apellido}</td>
-                            <td class="px-6 py-4 text-slate-600 font-mono text-xs">${u.usuario}</td>
-                            <td class="px-6 py-4"><span class="px-2.5 py-1 ${u.rol === 'administrador' ? 'bg-brand-100 text-brand-800' : 'bg-slate-100 text-slate-600'} rounded-lg text-[10px] uppercase font-bold">${u.rol}</span></td>
-                        </tr>
+                showToast("Producto agregado a la despensa.", "success");
+                stateProducts.push(newProd);
+                renderProductsGrid();
+                closeModal('modalProductoCliente');
+            } else {
+                showToast("Error al guardar producto.", "error");
+            }
+        }
+
+        async function handleAddCategorySubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('catNameInput').value.trim();
+            const catId = 'cat_' + Date.now();
+            const newCat = { id: catId, idCuenta: currentUser.idCuenta, Nombre: name };
+
+            const res = await fetchAPI('Categorias', 'create', { data: newCat });
+            if (res.status === 'success') {
+                showToast("Categoría agregada.", "success");
+                stateCategories.push(newCat);
+                renderCategoryPills();
+                populateCategorySelects();
+                closeModal('modalCategoria');
+            }
+        }
+
+        /**
+         * Automated Shopping List Generator
+         */
+        function renderShoppingChecklist() {
+            const ul = document.getElementById('ulListaChecklist');
+            ul.innerHTML = '';
+
+            const itemsToBuy = stateProducts.filter(p => {
+                const min = parseFloat(p.Minimo) || 0;
+                const disp = parseFloat(p.Disponible) || 0;
+                return (min - disp) > 0;
+            });
+
+            document.getElementById('badgeTotalItemsToBuy').textContent = `${itemsToBuy.length} Faltantes`;
+
+            if (itemsToBuy.length === 0) {
+                ul.innerHTML = `
+                    <li class="p-8 text-center text-slate-400 text-sm">
+                        <i class="fa-solid fa-circle-check text-3xl text-emerald-500 mb-2"></i>
+                        <p class="font-semibold text-slate-700">¡Tu despensa está completa!</p>
+                        <p class="text-xs">No hay productos con existencias por debajo del mínimo.</p>
+                    </li>
+                `;
+                return;
+            }
+
+            itemsToBuy.forEach(p => {
+                const min = parseFloat(p.Minimo) || 0;
+                const disp = parseFloat(p.Disponible) || 0;
+                const qtyToBuy = min - disp;
+
+                const li = document.createElement('li');
+                li.className = "p-4 flex items-center justify-between hover:bg-slate-50 transition";
+                li.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" class="w-5 h-5 accent-brand-600 rounded cursor-pointer">
+                        <div>
+                            <span class="font-bold text-slate-800 text-sm">${p.Nombre}</span>
+                            <span class="block text-xs text-slate-400">Stock Mín: ${min} | Disp: ${disp}</span>
+                        </div>
+                    </div>
+                    <span class="bg-rose-100 text-rose-800 text-xs font-bold px-3 py-1 rounded-xl">
+                        Comprar: ${qtyToBuy} ${p.Unidad}
+                    </span>
+                `;
+                ul.appendChild(li);
+            });
+        }
+
+        /**
+         * Leaflet Spatial Provider Map Initialization
+         */
+        async function initLeafletMap() {
+            if (leafletMapInstance) return;
+
+            // Default fallback Armenian coordinates
+            let lat = 4.53389;
+            let lng = -75.68111;
+
+            if (currentAccount && currentAccount.Ubicacion) {
+                const parts = currentAccount.Ubicacion.split(',').map(n => parseFloat(n.trim()));
+                if (parts.length === 2 && !isNaN(parts[0])) {
+                    lat = parts[0];
+                    lng = parts[1];
+                }
+            }
+
+            leafletMapInstance = L.map('leafletMap').setView([lat, lng], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(leafletMapInstance);
+
+            // Client Location Marker
+            L.marker([lat, lng]).addTo(leafletMapInstance)
+                .bindPopup('<b>Tu Ubicación</b>').openPopup();
+
+            // Fetch and render provider spatial radii
+            const res = await fetchAPI('Cuentas', 'read');
+            if (res.status === 'success' && Array.isArray(res.data)) {
+                const suppliers = res.data.filter(a => a.tipo === 'Proveedor');
+                suppliers.forEach(supp => {
+                    if (supp.Ubicacion) {
+                        const parts = supp.Ubicacion.split(',').map(n => parseFloat(n.trim()));
+                        if (parts.length === 2 && !isNaN(parts[0])) {
+                            const pLat = parts[0];
+                            const pLng = parts[1];
+                            const covRadiusKm = parseFloat(supp.Cobertura) || 5;
+
+                            // Provider Marker
+                            const marker = L.marker([pLat, pLng]).addTo(leafletMapInstance);
+                            
+                            // Coverage Circle
+                            L.circle([pLat, pLng], {
+                                color: '#16a34a',
+                                fillColor: '#22c55e',
+                                fillOpacity: 0.15,
+                                radius: covRadiusKm * 1000
+                            }).addTo(leafletMapInstance);
+
+                            marker.on('click', () => {
+                                displayProviderDetails(supp);
+                            });
+                        }
+                    }
+                });
+            }
+        }
+
+        function displayProviderDetails(supp) {
+            const panel = document.getElementById('panelProveedorDetalle');
+            panel.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-bold text-xl">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-lg">${supp.Nombre}</h4>
+                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Cobertura: ${supp.Cobertura || 5} km</span>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 rounded-xl text-xs text-slate-600 leading-relaxed border border-slate-200">
+                        <span class="font-bold text-slate-800 block mb-1">Descripción & Envíos:</span>
+                        ${supp.Descripcion || 'Sin información de envíos especificada.'}
+                    </div>
+
+                    <div class="space-y-2 pt-2">
+                        <button onclick="showToast('Catálogo de ${supp.Nombre} abierto', 'info')" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cart-plus"></i> Ver Oferta y Montar Pedido
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Sub-user Management for Administrators
+         */
+        async function handleAddSubUser(e) {
+            e.preventDefault();
+            const name = document.getElementById('subName').value.trim();
+            const lastName = document.getElementById('subLastName').value.trim();
+            const user = document.getElementById('subUser').value.trim();
+            const pass = document.getElementById('subPass').value.trim();
+            const rol = document.getElementById('subRol').value;
+
+            const newUserId = 'usr_' + Date.now();
+            const newUser = {
+                id: newUserId,
+                idCuenta: currentUser.idCuenta,
+                rol: rol,
+                usuario: user,
+                contrasena: pass,
+                Nombre: name,
+                Apellido: lastName
+            };
+
+            const res = await fetchAPI('Usuarios', 'create', { data: newUser });
+            if (res.status === 'success') {
+                showToast("Sub-usuario registrado correctamente.", "success");
+                loadSubUsersList();
+                e.target.reset();
+            } else {
+                showToast("Error al agregar sub-usuario.", "error");
+            }
+        }
+
+        async function loadSubUsersList() {
+            const container = document.getElementById('subUsersList');
+            container.innerHTML = `<p class="text-xs text-slate-400 p-2">Cargando integrantes...</p>`;
+
+            const res = await fetchAPI('Usuarios', 'read');
+            if (res.status === 'success' && Array.isArray(res.data)) {
+                const users = res.data.filter(u => String(u.idCuenta) === String(currentUser.idCuenta));
+                container.innerHTML = '';
+                users.forEach(u => {
+                    container.innerHTML += `
+                        <div class="py-2 px-3 flex justify-between items-center text-xs">
+                            <div>
+                                <span class="font-bold text-slate-800">${u.Nombre} ${u.Apellido}</span>
+                                <span class="block text-[10px] text-slate-400">@${u.usuario}</span>
+                            </div>
+                            <span class="px-2 py-0.5 rounded font-bold uppercase text-[9px] ${u.rol === 'administrador' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'}">${u.rol}</span>
+                        </div>
                     `;
                 });
             }
         }
 
-        function openSubUserModal() {
-            document.getElementById("modalSubUser").classList.remove("hidden");
-        }
-
-        function closeSubUserModal() {
-            document.getElementById("modalSubUser").classList.add("hidden");
-        }
-
-        async function handleSaveSubUser(e) {
-            e.preventDefault();
-            const name = document.getElementById("subName").value;
-            const lastName = document.getElementById("subLastName").value;
-            const user = document.getElementById("subUser").value;
-            const pass = document.getElementById("subPass").value;
-
-            const res = await fetchAPI('Usuarios', 'create', {
-                data: {
-                    id: 'usr_' + Date.now(),
-                    idCuenta: currentUser.idCuenta,
-                    rol: 'general',
-                    usuario: user,
-                    contrasena: pass,
-                    Nombre: name,
-                    Apellido: lastName
-                }
-            });
-
-            if (res.status === 'success') {
-                closeSubUserModal();
-                loadAccountUsers();
+        // UI HELPERS & MODALS
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            if (modalId === 'modalUserManagement') {
+                loadSubUsersList();
             }
         }
 
-        // API CONFIGURATION MODAL CONTROLS
-        function openApiConfigModal() {
-            document.getElementById("modalApiConfig").classList.remove("hidden");
-            document.getElementById("txtApiUrl").value = API_URL;
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
         }
 
-        function closeApiConfigModal() {
-            document.getElementById("modalApiConfig").classList.add("hidden");
+        function openRegisterModal() {
+            openModal('modalRegister');
         }
 
-        function saveApiUrl() {
-            const url = document.getElementById("txtApiUrl").value;
-            if (url) {
-                API_URL = url;
-                localStorage.setItem("mercapp_api_url", url);
-                closeApiConfigModal();
-                alert("URL de la API actualizada correctamente.");
+        function toggleRegSupplierFields() {
+            const type = document.getElementById('regAccountType').value;
+            const supplierFields = document.getElementById('regSupplierFields');
+            if (type === 'Proveedor') {
+                supplierFields.classList.remove('hidden');
+            } else {
+                supplierFields.classList.add('hidden');
             }
         }
 
-        function logout() {
-            localStorage.removeItem("mercapp_session_user");
-            location.reload();
+        function togglePresTab(tab) {
+            const clientTab = document.getElementById('presTabClient');
+            const supplierTab = document.getElementById('presTabSupplier');
+            const clientBtn = document.getElementById('presTabClientBtn');
+            const supplierBtn = document.getElementById('presTabSupplierBtn');
+
+            if (tab === 'client') {
+                clientTab.classList.remove('hidden');
+                supplierTab.classList.add('hidden');
+                clientBtn.className = "flex-1 py-4 px-6 text-center text-sm sm:text-base font-bold text-brand-700 border-b-2 border-brand-600 transition flex items-center justify-center gap-2";
+                supplierBtn.className = "flex-1 py-4 px-6 text-center text-sm sm:text-base font-bold text-slate-500 hover:text-slate-800 transition flex items-center justify-center gap-2";
+            } else {
+                supplierTab.classList.remove('hidden');
+                clientTab.classList.add('hidden');
+                supplierBtn.className = "flex-1 py-4 px-6 text-center text-sm sm:text-base font-bold text-brand-700 border-b-2 border-brand-600 transition flex items-center justify-center gap-2";
+                clientBtn.className = "flex-1 py-4 px-6 text-center text-sm sm:text-base font-bold text-slate-500 hover:text-slate-800 transition flex items-center justify-center gap-2";
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            let bgClass = "bg-slate-900 text-white";
+            if (type === 'success') bgClass = "bg-emerald-600 text-white";
+            if (type === 'error') bgClass = "bg-rose-600 text-white";
+
+            toast.className = `p-4 rounded-xl shadow-xl text-xs font-bold ${bgClass} pointer-events-auto transition transform translate-y-2 opacity-0 flex items-center justify-between gap-3`;
+            toast.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" class="text-white/80 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 4500);
         }
     </script>
 </body>
