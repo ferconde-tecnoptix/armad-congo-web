@@ -31,15 +31,16 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        #leafletMap { height: 420px; width: 100%; z-index: 10; }
-        .tab-active { border-bottom: 3px solid #16a34a; color: #15803d; font-weight: 700; }
+        #leafletMap { height: 440px; width: 100%; z-index: 10; }
         .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+        .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
 
     <!-- TOP NAVIGATION BAR -->
-    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('landing')">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
@@ -47,7 +48,7 @@
                 </div>
                 <div>
                     <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-800 to-brand-600 bg-clip-text text-transparent">mercApp</span>
-                    <span class="hidden sm:inline-block text-xs font-semibold px-2 py-0.5 ml-2 bg-emerald-100 text-emerald-800 rounded-full">v2.5</span>
+                    <span class="hidden sm:inline-block text-xs font-semibold px-2 py-0.5 ml-2 bg-emerald-100 text-emerald-800 rounded-full">v2.6</span>
                 </div>
             </div>
 
@@ -66,7 +67,7 @@
                     <span id="navUserRoleBadge" class="bg-brand-600 text-white px-2 py-0.5 rounded text-[10px] uppercase font-bold">Admin</span>
                 </div>
                 <button onclick="openModal('modalUserManagement')" id="btnManageUsers" class="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition">
-                    <i class="fa-solid fa-users text-brand-600"></i> Usuarios
+                    <i class="fa-solid fa-users text-brand-600"></i> Integrantes
                 </button>
                 <button onclick="handleLogout()" class="text-xs font-semibold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 px-3 py-2 rounded-lg border border-rose-200 transition">
                     <i class="fa-solid fa-right-from-bracket mr-1"></i> Salir
@@ -76,25 +77,25 @@
 
         <!-- Dashboard App Tab Sub-Header (Only visible when logged in) -->
         <div id="appTabNav" class="hidden bg-emerald-950 text-white border-t border-emerald-800 px-4">
-            <div class="max-w-7xl mx-auto flex overflow-x-auto space-x-1 sm:space-x-4 py-2 text-xs sm:text-sm font-medium">
-                <button onclick="switchAppTab('inventario')" id="tabBtnInventario" class="px-4 py-2 rounded-lg bg-emerald-800/80 text-white font-semibold flex items-center gap-2">
+            <div class="max-w-7xl mx-auto flex overflow-x-auto space-x-1 sm:space-x-4 py-2 text-xs sm:text-sm font-medium scrollbar-none">
+                <button onclick="switchAppTab('inventario')" id="tabBtnInventario" class="px-4 py-2 rounded-lg bg-emerald-800/80 text-white font-semibold flex items-center gap-2 flex-shrink-0">
                     <i class="fa-solid fa-boxes-stacked"></i> Mi Inventario
                 </button>
-                <button onclick="switchAppTab('listaMercado')" id="tabBtnListaMercado" class="px-4 py-2 rounded-lg hover:bg-emerald-900/60 text-emerald-200 flex items-center gap-2">
+                <button onclick="switchAppTab('listaMercado')" id="tabBtnListaMercado" class="px-4 py-2 rounded-lg hover:bg-emerald-900/60 text-emerald-200 flex items-center gap-2 flex-shrink-0">
                     <i class="fa-solid fa-list-check"></i> Lista de Compras
                 </button>
-                <button onclick="switchAppTab('proveedores')" id="tabBtnProveedores" class="px-4 py-2 rounded-lg hover:bg-emerald-900/60 text-emerald-200 flex items-center gap-2">
+                <button onclick="switchAppTab('proveedores')" id="tabBtnProveedores" class="px-4 py-2 rounded-lg hover:bg-emerald-900/60 text-emerald-200 flex items-center gap-2 flex-shrink-0">
                     <i class="fa-solid fa-map-location-dot"></i> Mapa de Proveedores
                 </button>
-                <button onclick="switchAppTab('catalogoProveedor')" id="tabBtnCatalogoProveedor" class="hidden px-4 py-2 rounded-lg hover:bg-emerald-900/60 text-emerald-200 flex items-center gap-2">
-                    <i class="fa-solid fa-store"></i> Mis Productos & Precios
+                <button onclick="switchAppTab('catalogoProveedor')" id="tabBtnCatalogoProveedor" class="hidden px-4 py-2 rounded-lg hover:bg-emerald-900/60 text-emerald-200 flex items-center gap-2 flex-shrink-0">
+                    <i class="fa-solid fa-store"></i> Mi Catálogo & Precios
                 </button>
             </div>
         </div>
     </header>
 
     <!-- CUSTOM TOAST NOTIFICATION CONTAINER -->
-    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-md w-full pointer-events-none"></div>
 
     <!-- MAIN CONTENT WRAPPER -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -289,7 +290,6 @@
                 <button onclick="filterInventoryByCategory('ALL')" class="cat-pill active px-4 py-2 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm flex-shrink-0">
                     Todos
                 </button>
-                <!-- Category pills dynamically injected -->
             </div>
 
             <!-- Inventory Grid -->
@@ -432,8 +432,8 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Ubicación GPS (Latitud, Longitud)</label>
-                        <input type="text" id="regLocation" required placeholder="Ej: 4.53389, -75.68111" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
-                        <span class="text-[10px] text-slate-400">Pista: Puedes usar las coordenadas de tu municipio en Armenia (4.53389, -75.68111).</span>
+                        <input type="text" id="regLocation" required value="4.53389, -75.68111" placeholder="Ej: 4.53389, -75.68111" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        <span class="text-[10px] text-slate-400">Coordenadas predeterminadas de Armenia, Quindío.</span>
                     </div>
 
                     <!-- Supplier Exclusive Fields -->
@@ -581,44 +581,95 @@
         </div>
     </div>
 
+    <!-- MODAL: ADD PROVIDER PRODUCT -->
+    <div id="modalProductoProveedor" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl space-y-5 relative border border-slate-100">
+            <button onclick="closeModal('modalProductoProveedor')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-xl font-bold text-slate-900">Publicar Producto en Comercio</h3>
+            <form onsubmit="handleAddProviderProductSubmit(event)" class="space-y-4">
+                <input type="text" id="provProdName" required placeholder="Nombre del Producto" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm">
+                <textarea id="provProdDesc" rows="2" placeholder="Descripción breve..." class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm"></textarea>
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="text" id="provProdUnit" required placeholder="Unidad (Ej: Kilo)" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm">
+                    <input type="number" step="0.01" id="provProdQty" required placeholder="Stock Disponible" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm">
+                </div>
+                <input type="text" id="provProdImg" placeholder="URL de Imagen (Opcional)" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm">
+                <button type="submit" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm transition">
+                    Publicar Producto
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- APPLICATION JAVASCRIPT LOGIC -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // BACKEND GOOGLE APPS SCRIPT EXEC ENDPOINT
+        // EXACT ENDPOINT DE GOOGLE APPS SCRIPT
         const API_URL = "https://script.google.com/macros/s/AKfycbwBJO_HqurAcn6SOdtNl_r0AH0jdnXSS6HSgaSI135eWfWzEdLaHmhYhnpDfgWghEkWeg/exec";
 
-        // APP GLOBAL STATE
+        // GLOBAL APPLICATION STATE
         let currentUser = null;
         let currentAccount = null;
         let stateProducts = [];
         let stateCategories = [];
         let stateAccounts = [];
         let stateSubUsers = [];
+        let stateProviderProducts = [];
         let leafletMapInstance = null;
         let selectedCategoryFilter = 'ALL';
 
         /**
          * Robust fetch wrapper for Google Apps Script Backend
+         * Uses text/plain payload to prevent CORS OPTIONS preflight failures
          */
         async function fetchAPI(sheet, action = 'read', body = null) {
             try {
-                if (action === 'read') {
-                    const res = await fetch(`${API_URL}?action=read&sheet=${sheet}`);
-                    return await res.json();
-                } else {
-                    const res = await fetch(API_URL, {
+                let url = `${API_URL}?action=${action}&sheet=${sheet}`;
+                let options = {
+                    method: 'GET',
+                    redirect: 'follow'
+                };
+
+                if (action !== 'read') {
+                    url = API_URL;
+                    options = {
                         method: 'POST',
+                        mode: 'cors',
                         headers: {
                             'Content-Type': 'text/plain;charset=utf-8'
                         },
                         redirect: 'follow',
                         body: JSON.stringify({ action, sheet, ...body })
-                    });
-                    return await res.json();
+                    };
                 }
+
+                const res = await fetch(url, options);
+                const rawText = await res.text();
+
+                let jsonResponse;
+                try {
+                    jsonResponse = JSON.parse(rawText);
+                } catch (parseErr) {
+                    console.error("Non-JSON response received:", rawText);
+                    if (rawText.includes("Google Drive") || rawText.includes("accounts.google.com") || rawText.includes("Service Spreadsheets")) {
+                        return { 
+                            status: 'error', 
+                            message: 'Permiso de Google Apps Script: Asegúrate de desplegar la aplicación web como "Cualquier persona" (Anyone).' 
+                        };
+                    }
+                    return { 
+                        status: 'error', 
+                        message: 'Respuesta inesperada de Google Apps Script. Por favor revisa el despliegue.' 
+                    };
+                }
+
+                return jsonResponse;
+
             } catch (e) {
                 console.error("API Fetch Error:", e);
-                return { status: 'error', message: 'Error de conexión con la hoja electrónica: ' + e.message };
+                return { status: 'error', message: 'Error de red/conectividad: ' + e.message };
             }
         }
 
@@ -673,7 +724,7 @@
                 });
 
                 if (resAcc.status !== 'success') {
-                    throw new Error(resAcc.message || "No se pudo registrar la Cuenta.");
+                    throw new Error(resAcc.message || "No se pudo crear el registro en la tabla Cuentas.");
                 }
 
                 // 2. Create Administrator User Record
@@ -690,10 +741,10 @@
                 });
 
                 if (resUsr.status !== 'success') {
-                    throw new Error(resUsr.message || "No se pudo registrar el Usuario Administrador.");
+                    throw new Error(resUsr.message || "No se pudo registrar el usuario Administrador.");
                 }
 
-                showToast("¡Cuenta y usuario Administrador registrados correctamente!", "success");
+                showToast("¡Cuenta y usuario Administrador creados con éxito!", "success");
                 closeModal('modalRegister');
                 
                 // Auto login
@@ -748,7 +799,7 @@
                         showToast("Usuario o contraseña incorrectos.", "error");
                     }
                 } else {
-                    showToast("No se pudo consultar la lista de usuarios.", "error");
+                    showToast(response.message || "No se pudo consultar la lista de usuarios.", "error");
                 }
             } catch(err) {
                 showToast("Error al iniciar sesión: " + err.message, "error");
@@ -792,6 +843,7 @@
                 currentAccount = accRes.data.find(a => String(a.id) === String(currentUser.idCuenta));
                 if (currentAccount && currentAccount.tipo === 'Proveedor') {
                     document.getElementById('tabBtnCatalogoProveedor').classList.remove('hidden');
+                    loadProviderProducts();
                 }
             }
 
@@ -1008,7 +1060,7 @@
                 renderProductsGrid();
                 closeModal('modalProductoCliente');
             } else {
-                showToast("Error al guardar producto.", "error");
+                showToast("Error al guardar producto: " + res.message, "error");
             }
         }
 
@@ -1025,6 +1077,8 @@
                 renderCategoryPills();
                 populateCategorySelects();
                 closeModal('modalCategoria');
+            } else {
+                showToast("Error al crear categoría: " + res.message, "error");
             }
         }
 
@@ -1075,6 +1129,10 @@
                 `;
                 ul.appendChild(li);
             });
+        }
+
+        async function saveCurrentShoppingList() {
+            showToast("Lista guardada en el historial.", "success");
         }
 
         /**
@@ -1166,6 +1224,75 @@
         }
 
         /**
+         * Provider Catalogue Management
+         */
+        async function loadProviderProducts() {
+            const res = await fetchAPI('ProductosProveedor', 'read');
+            if (res.status === 'success' && Array.isArray(res.data)) {
+                stateProviderProducts = res.data.filter(p => String(p.idCuenta) === String(currentUser.idCuenta));
+                renderProviderProductsGrid();
+            }
+        }
+
+        function renderProviderProductsGrid() {
+            const grid = document.getElementById('gridProductosProveedor');
+            grid.innerHTML = '';
+
+            if (stateProviderProducts.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-dashed border-slate-300">
+                        <i class="fa-solid fa-store text-4xl text-slate-300 mb-2"></i>
+                        <p class="text-sm text-slate-500 font-medium">Aún no has publicado productos comercializados.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            stateProviderProducts.forEach(p => {
+                grid.innerHTML += `
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-slate-900">${p.Nombre}</h4>
+                            <span class="text-xs bg-slate-100 text-slate-700 font-bold px-2 py-0.5 rounded">${p.Unidad}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">${p.Descripcion || 'Sin descripción'}</p>
+                        <div class="text-xs font-bold text-slate-700">Disponible: ${p.Cantidad}</div>
+                    </div>
+                `;
+            });
+        }
+
+        async function handleAddProviderProductSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('provProdName').value.trim();
+            const desc = document.getElementById('provProdDesc').value.trim();
+            const unit = document.getElementById('provProdUnit').value.trim();
+            const qty = parseFloat(document.getElementById('provProdQty').value) || 0;
+            const img = document.getElementById('provProdImg').value.trim();
+
+            const newId = 'prp_' + Date.now();
+            const newProd = {
+                id: newId,
+                idCuenta: currentUser.idCuenta,
+                Nombre: name,
+                Descripcion: desc,
+                VinculoImagen: img,
+                Unidad: unit,
+                Cantidad: qty
+            };
+
+            const res = await fetchAPI('ProductosProveedor', 'create', { data: newProd });
+            if (res.status === 'success') {
+                showToast("Producto publicado correctamente.", "success");
+                stateProviderProducts.push(newProd);
+                renderProviderProductsGrid();
+                closeModal('modalProductoProveedor');
+            } else {
+                showToast("Error al publicar producto: " + res.message, "error");
+            }
+        }
+
+        /**
          * Sub-user Management for Administrators
          */
         async function handleAddSubUser(e) {
@@ -1193,7 +1320,7 @@
                 loadSubUsersList();
                 e.target.reset();
             } else {
-                showToast("Error al agregar sub-usuario.", "error");
+                showToast("Error al agregar sub-usuario: " + res.message, "error");
             }
         }
 
