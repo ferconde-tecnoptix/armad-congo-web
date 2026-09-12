@@ -432,8 +432,14 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Ubicación GPS (Latitud, Longitud)</label>
-                        <input type="text" id="regLocation" required value="4.53389, -75.68111" placeholder="Ej: 4.53389, -75.68111" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
-                        <span class="text-[10px] text-slate-400">Coordenadas predeterminadas de Armenia, Quindío.</span>
+                        <div class="flex gap-2">
+                            <input type="text" id="regLocation" required value="4.53389, -75.68111" placeholder="Ej: 4.53389, -75.68111" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <button type="button" onclick="getCurrentLocation('regLocation', event)" class="px-3.5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 flex-shrink-0 shadow-sm" title="Capturar mi ubicación GPS actual">
+                                <i class="fa-solid fa-location-crosshairs text-sm"></i>
+                                <span class="hidden sm:inline">Mi Ubicación</span>
+                            </button>
+                        </div>
+                        <span class="text-[10px] text-slate-400">Presiona "Mi Ubicación" para obtener tus coordenadas GPS reales o ingresa manualmente.</span>
                     </div>
 
                     <!-- Supplier Exclusive Fields -->
@@ -621,6 +627,72 @@
         let selectedCategoryFilter = 'ALL';
 
         /**
+         * Disables or enables all form inputs and submit buttons during asynchronous actions
+         */
+        function setFormState(formElement, isSubmitting, loadingText = "Procesando...") {
+            if (!formElement) return;
+            const elements = formElement.querySelectorAll('input, select, textarea, button');
+            const submitBtn = formElement.querySelector('button[type="submit"]');
+
+            if (isSubmitting) {
+                if (submitBtn) {
+                    submitBtn.dataset.originalHtml = submitBtn.innerHTML;
+                    submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> ${loadingText}`;
+                }
+                elements.forEach(el => el.disabled = true);
+            } else {
+                elements.forEach(el => el.disabled = false);
+                if (submitBtn && submitBtn.dataset.originalHtml) {
+                    submitBtn.innerHTML = submitBtn.dataset.originalHtml;
+                }
+            }
+        }
+
+        /**
+         * Captures current device GPS coordinates using standard HTML5 Geolocation API
+         */
+        function getCurrentLocation(inputId, evt) {
+            if (!navigator.geolocation) {
+                showToast("Tu navegador no soporta geolocalización.", "error");
+                return;
+            }
+            const input = document.getElementById(inputId);
+            const btn = evt ? evt.currentTarget : null;
+            let oldHtml = "";
+            if (btn) {
+                oldHtml = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Buscando...`;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude.toFixed(6);
+                    const lng = pos.coords.longitude.toFixed(6);
+                    input.value = `${lat}, ${lng}`;
+                    showToast("Ubicación GPS capturada con éxito.", "success");
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = oldHtml;
+                    }
+                },
+                (err) => {
+                    console.error("Error al capturar ubicación:", err);
+                    let msg = "No se pudo obtener la ubicación.";
+                    if (err.code === 1) msg = "Permiso de ubicación denegado por el usuario.";
+                    else if (err.code === 2) msg = "Ubicación GPS no disponible en este dispositivo.";
+                    else if (err.code === 3) msg = "Tiempo de espera agotado al consultar GPS.";
+                    showToast(msg, "error");
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = oldHtml;
+                    }
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        }
+
+        /**
          * Robust fetch wrapper for Google Apps Script Backend
          * Uses text/plain payload to prevent CORS OPTIONS preflight failures
          */
@@ -691,10 +763,8 @@
          */
         async function handleRegistrationSubmit(e) {
             e.preventDefault();
-            const btnSubmit = document.getElementById("btnRegisterSubmit");
-            const originalText = btnSubmit.innerHTML;
-            btnSubmit.disabled = true;
-            btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Guardando en Google Sheets...`;
+            const form = e.target;
+            setFormState(form, true, "Guardando en Google Sheets...");
 
             try {
                 const accType = document.getElementById("regAccountType").value;
@@ -745,6 +815,8 @@
                 }
 
                 showToast("¡Cuenta y usuario Administrador creados con éxito!", "success");
+                form.reset();
+                setFormState(form, false);
                 closeModal('modalRegister');
                 
                 // Auto login
@@ -762,9 +834,48 @@
             } catch (err) {
                 console.error("Error en registro:", err);
                 showToast("Inconveniente al registrar: " + err.message, "error");
-            } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.innerHTML = originalText;
+                setFormState(form, false);
+            }
+        }
+
+        /**
+         * Login Handling
+         */
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            setFormState(form, true, "Verificando...");
+
+            try {
+                const usernameInput = document.getElementById("loginUsername").value.trim();
+                const passwordInput = document.getElementById("loginPassword").value.trim();
+
+                const response = await fetchAPI('Usuarios', 'read');
+                if (response.status === 'success' && Array.isArray(response.data)) {
+                    const foundUser = response.data.find(u => 
+                        String(u.usuario).trim().toLowerCase() === usernameInput.toLowerCase() && 
+                        String(u.contrasena).trim() === passwordInput
+                    );
+
+                    if (foundUser) {
+                        currentUser = foundUser;
+                        localStorage.setItem('mercapp_session_user', JSON.stringify(currentUser));
+                        form.reset();
+                        setFormState(form, false);
+                        closeModal('modalLogin');
+                        showToast(`¡Bienvenido de nuevo, ${currentUser.Nombre}!`, "success");
+                        setupUserSessionUI();
+                    } else {
+                        showToast("Usuario o contraseña incorrectos.", "error");
+                        setFormState(form, false);
+                    }
+                } else {
+                    showToast(response.message || "No se pudo consultar la lista de usuarios.", "error");
+                    setFormState(form, false);
+                }
+            } catch(err) {
+                showToast("Error al iniciar sesión: " + err.message, "error");
+                setFormState(form, false);
             }
         }
 
@@ -1033,34 +1144,72 @@
 
         async function handleAddProductSubmit(e) {
             e.preventDefault();
-            const name = document.getElementById('prodName').value.trim();
-            const unit = document.getElementById('prodUnit').value.trim();
-            const catId = document.getElementById('prodCategorySelect').value;
-            const min = parseFloat(document.getElementById('prodMin').value) || 0;
-            const disp = parseFloat(document.getElementById('prodDisp').value) || 0;
-            const faltante = Math.max(0, min - disp);
+            const form = e.target;
+            setFormState(form, true, "Guardando producto...");
 
-            const prodId = 'prc_' + Date.now();
-            const newProd = {
-                id: prodId,
-                idCuenta: currentUser.idCuenta,
-                Nombre: name,
-                Unidad: unit,
-                Cantidad: disp,
-                Minimo: min,
-                Disponible: disp,
-                Faltante: faltante,
-                idCategoria: catId
-            };
+            try {
+                const name = document.getElementById('prodName').value.trim();
+                const unit = document.getElementById('prodUnit').value.trim();
+                const catId = document.getElementById('prodCategorySelect').value;
+                const min = parseFloat(document.getElementById('prodMin').value) || 0;
+                const disp = parseFloat(document.getElementById('prodDisp').value) || 0;
+                const faltante = Math.max(0, min - disp);
 
-            const res = await fetchAPI('ProductosCliente', 'create', { data: newProd });
-            if (res.status === 'success') {
-                showToast("Producto agregado a la despensa.", "success");
-                stateProducts.push(newProd);
-                renderProductsGrid();
-                closeModal('modalProductoCliente');
-            } else {
-                showToast("Error al guardar producto: " + res.message, "error");
+                const prodId = 'prc_' + Date.now();
+                const newProd = {
+                    id: prodId,
+                    idCuenta: currentUser.idCuenta,
+                    Nombre: name,
+                    Unidad: unit,
+                    Cantidad: disp,
+                    Minimo: min,
+                    Disponible: disp,
+                    Faltante: faltante,
+                    idCategoria: catId
+                };
+
+                const res = await fetchAPI('ProductosCliente', 'create', { data: newProd });
+                if (res.status === 'success') {
+                    showToast("Producto agregado a la despensa.", "success");
+                    stateProducts.push(newProd);
+                    renderProductsGrid();
+                    form.reset();
+                    setFormState(form, false);
+                    closeModal('modalProductoCliente');
+                } else {
+                    throw new Error(res.message || "No se pudo guardar el producto");
+                }
+            } catch (err) {
+                showToast("Error al guardar producto: " + err.message, "error");
+                setFormState(form, false);
+            }
+        }
+
+        async function handleAddCategorySubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            setFormState(form, true, "Creando categoría...");
+
+            try {
+                const name = document.getElementById('catNameInput').value.trim();
+                const catId = 'cat_' + Date.now();
+                const newCat = { id: catId, idCuenta: currentUser.idCuenta, Nombre: name };
+
+                const res = await fetchAPI('Categorias', 'create', { data: newCat });
+                if (res.status === 'success') {
+                    showToast("Categoría agregada.", "success");
+                    stateCategories.push(newCat);
+                    renderCategoryPills();
+                    populateCategorySelects();
+                    form.reset();
+                    setFormState(form, false);
+                    closeModal('modalCategoria');
+                } else {
+                    throw new Error(res.message || "No se pudo crear la categoría");
+                }
+            } catch (err) {
+                showToast("Error al crear categoría: " + err.message, "error");
+                setFormState(form, false);
             }
         }
 
@@ -1264,31 +1413,82 @@
 
         async function handleAddProviderProductSubmit(e) {
             e.preventDefault();
-            const name = document.getElementById('provProdName').value.trim();
-            const desc = document.getElementById('provProdDesc').value.trim();
-            const unit = document.getElementById('provProdUnit').value.trim();
-            const qty = parseFloat(document.getElementById('provProdQty').value) || 0;
-            const img = document.getElementById('provProdImg').value.trim();
+            const form = e.target;
+            setFormState(form, true, "Publicando producto...");
 
-            const newId = 'prp_' + Date.now();
-            const newProd = {
-                id: newId,
-                idCuenta: currentUser.idCuenta,
-                Nombre: name,
-                Descripcion: desc,
-                VinculoImagen: img,
-                Unidad: unit,
-                Cantidad: qty
-            };
+            try {
+                const name = document.getElementById('provProdName').value.trim();
+                const desc = document.getElementById('provProdDesc').value.trim();
+                const unit = document.getElementById('provProdUnit').value.trim();
+                const qty = parseFloat(document.getElementById('provProdQty').value) || 0;
+                const img = document.getElementById('provProdImg').value.trim();
 
-            const res = await fetchAPI('ProductosProveedor', 'create', { data: newProd });
-            if (res.status === 'success') {
-                showToast("Producto publicado correctamente.", "success");
-                stateProviderProducts.push(newProd);
-                renderProviderProductsGrid();
-                closeModal('modalProductoProveedor');
-            } else {
-                showToast("Error al publicar producto: " + res.message, "error");
+                const newId = 'prp_' + Date.now();
+                const newProd = {
+                    id: newId,
+                    idCuenta: currentUser.idCuenta,
+                    Nombre: name,
+                    Descripcion: desc,
+                    VinculoImagen: img,
+                    Unidad: unit,
+                    Cantidad: qty
+                };
+
+                const res = await fetchAPI('ProductosProveedor', 'create', { data: newProd });
+                if (res.status === 'success') {
+                    showToast("Producto publicado correctamente.", "success");
+                    stateProviderProducts.push(newProd);
+                    renderProviderProductsGrid();
+                    form.reset();
+                    setFormState(form, false);
+                    closeModal('modalProductoProveedor');
+                } else {
+                    throw new Error(res.message || "No se pudo publicar el producto");
+                }
+            } catch (err) {
+                showToast("Error al publicar producto: " + err.message, "error");
+                setFormState(form, false);
+            }
+        }
+
+        /**
+         * Sub-user Management for Administrators
+         */
+        async function handleAddSubUser(e) {
+            e.preventDefault();
+            const form = e.target;
+            setFormState(form, true, "Registrando...");
+
+            try {
+                const name = document.getElementById('subName').value.trim();
+                const lastName = document.getElementById('subLastName').value.trim();
+                const user = document.getElementById('subUser').value.trim();
+                const pass = document.getElementById('subPass').value.trim();
+                const rol = document.getElementById('subRol').value;
+
+                const newUserId = 'usr_' + Date.now();
+                const newUser = {
+                    id: newUserId,
+                    idCuenta: currentUser.idCuenta,
+                    rol: rol,
+                    usuario: user,
+                    contrasena: pass,
+                    Nombre: name,
+                    Apellido: lastName
+                };
+
+                const res = await fetchAPI('Usuarios', 'create', { data: newUser });
+                if (res.status === 'success') {
+                    showToast("Sub-usuario registrado correctamente.", "success");
+                    form.reset();
+                    setFormState(form, false);
+                    loadSubUsersList();
+                } else {
+                    throw new Error(res.message || "No se pudo agregar sub-usuario");
+                }
+            } catch (err) {
+                showToast("Error al agregar sub-usuario: " + err.message, "error");
+                setFormState(form, false);
             }
         }
 
