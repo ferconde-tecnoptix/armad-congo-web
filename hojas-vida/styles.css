@@ -1,1 +1,179 @@
+:root {
+  --primary: #0f172a;
+  --accent: #2563eb;
+  --bg-light: #f8fafc;
+  --border-color: #cbd5e1;
+  --text: #1e293b;
+}
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--bg-light);
+  color: var(--text);
+  line-height: 1.4;
+}
+
+/* Utilitarios */
+.hidden { display: none !important; }
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+.btn-secondary { background: #64748b; }
+
+/* Vista Login */
+#login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e2e8f0;
+}
+
+.login-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 380px;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+}
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+/* Layout Principal */
+header {
+  background: var(--primary);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Tabla de Equipos */
+table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  margin-top: 1rem;
+}
+
+table.data-table th, table.data-table td {
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+table.data-table th {
+  background: #f1f5f9;
+}
+
+/* ---------------------------------------------------
+   PL-010-F5 OPTIMIZADO PARA IMPRESIÓN EN TAMAÑO CARTA
+--------------------------------------------------- */
+.hoja-vida-container {
+  background: white;
+  width: 8.5in;
+  min-height: 11in;
+  margin: 0 auto;
+  padding: 0.5in;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
+
+.hv-header {
+  border: 2px solid #000;
+  text-align: center;
+  font-weight: bold;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.hv-section-title {
+  background: #e2e8f0;
+  border: 1px solid #000;
+  font-weight: bold;
+  text-align: center;
+  padding: 4px;
+  font-size: 0.85rem;
+  margin-top: 8px;
+  text-transform: uppercase;
+}
+
+.hv-grid {
+  display: grid;
+  border: 1px solid #000;
+  font-size: 0.8rem;
+}
+
+.hv-row {
+  display: flex;
+  border-bottom: 1px solid #000;
+}
+.hv-row:last-child { border-bottom: none; }
+
+.hv-cell {
+  padding: 4px 6px;
+  border-right: 1px solid #000;
+  flex: 1;
+}
+.hv-cell:last-child { border-right: none; }
+.hv-label { font-weight: bold; margin-right: 4px; }
+
+/* REGLAS EXCLUSIVAS DE IMPRESIÓN */
+@media print {
+  body {
+    background: white;
+  }
+  header, nav, .no-print, button {
+    display: none !important;
+  }
+  main {
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+  }
+  .hoja-vida-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+  @page {
+    size: letter portrait;
+    margin: 0.4in;
+  }
+}
