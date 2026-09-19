@@ -7,7 +7,76 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
+  <!-- En el <header>, agrega el botón para ir a la vista de Clientes -->
+  <header class="no-print">
+    <h1>Hojas de Vida - PL-010-F5</h1>
+    <div>
+      <button class="btn btn-secondary" onclick="showView('view-list')">Equipos</button>
+      <button class="btn btn-secondary" onclick="loadClientesView()">Clientes / Sedes</button>
+      <span id="user-display" style="margin: 0 15px;"></span>
+      <button id="logout-btn" class="btn btn-secondary">Cerrar Sesión</button>
+    </div>
+  </header>
+  
+  <!-- SECCIÓN GESTIÓN DE CLIENTES -->
+  <section id="view-clientes" class="hidden">
+    <div style="display: flex; justify-content: space-between; align-items: center;" class="no-print">
+      <h2>Clientes y Ubicaciones</h2>
+      <button class="btn" onclick="toggleForm('form-nuevo-cliente')">+ Nuevo Cliente / Sede</button>
+    </div>
+  
+    <!-- Formulario de Registro de Cliente -->
+    <form id="form-nuevo-cliente" class="hidden" style="background: white; padding: 1rem; border-radius: 6px; margin-top: 1rem; border: 1px solid var(--border-color);" onsubmit="guardarCliente(event)">
+      <h3>Registrar Cliente / Ubicación</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+        <div class="form-group">
+          <label>Nombre del Cliente / Razón Social *</label>
+          <input type="text" id="cli_nombre" required placeholder="Ej: Clínica Central / Dr. Pérez">
+        </div>
+        <div class="form-group">
+          <label>Ubicación / Área *</label>
+          <input type="text" id="cli_ubicacion" required placeholder="Ej: Consulta Externa, Quirófano 1">
+        </div>
+        <div class="form-group">
+          <label>Ciudad *</label>
+          <input type="text" id="cli_ciudad" required placeholder="Ej: Armenia">
+        </div>
+        <div class="form-group">
+          <label>Dirección</label>
+          <input type="text" id="cli_direccion" placeholder="Ej: Carrera 14 # 10-20">
+        </div>
+        <div class="form-group">
+          <label>Teléfono de Contacto</label>
+          <input type="text" id="cli_telefono">
+        </div>
+        <div class="form-group">
+          <label>Persona Responsable</label>
+          <input type="text" id="cli_contacto">
+        </div>
+      </div>
+      <div style="margin-top: 1rem; display: flex; gap: 10px;">
+        <button type="submit" class="btn">Guardar Cliente</button>
+        <button type="button" class="btn btn-secondary" onclick="toggleForm('form-nuevo-cliente')">Cancelar</button>
+      </div>
+    </form>
+  
+    <!-- Tabla de Clientes -->
+    <table class="data-table" style="margin-top: 1rem;">
+      <thead>
+        <tr>
+          <th>ID Cliente</th>
+          <th>Nombre Cliente</th>
+          <th>Ubicación / Área</th>
+          <th>Ciudad</th>
+          <th>Contacto</th>
+        </tr>
+      </thead>
+      <tbody id="clientes-tbody">
+        <!-- Carga dinámica -->
+      </tbody>
+    </table>
+  </section>
+  
   <!-- PANTALLA DE LOGIN -->
   <div id="login-screen">
     <div class="login-card">
