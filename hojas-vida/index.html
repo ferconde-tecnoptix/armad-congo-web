@@ -131,6 +131,119 @@
         </table>
       </section>
 
+      <!-- FORMULARIO DE REGISTRO / EDICIÓN DE EQUIPOS (PL-010-F5) -->
+      <section id="view-form-equipo" class="hidden no-print">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <h2 id="equipo-form-title">Registrar Nuevo Equipo</h2>
+          <button class="btn btn-secondary" onclick="showView('view-list')">Cancelar</button>
+        </div>
+      
+        <form id="form-equipo" style="background:white; padding:1.5rem; border-radius:8px; border:1px solid var(--border-color);" onsubmit="guardarEquipo(event)">
+          <input type="hidden" id="eq_id_equipo">
+      
+          <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 4px; margin-bottom: 1rem;">1. Ubicación y Localización</h3>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+            <div class="form-group">
+              <label>Sede / Cliente Asignado *</label>
+              <select id="eq_id_cliente" required>
+                <option value="">Cargando clientes...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Estado del Equipo</label>
+              <select id="eq_estado_equipo">
+                <option value="OPERATIVO">OPERATIVO</option>
+                <option value="EN_MANTENIMIENTO">EN MANTENIMIENTO</option>
+                <option value="FUERA_DE_SERVICIO">FUERA DE SERVICIO</option>
+                <option value="DADO_DE_BAJA">DADO DE BAJA</option>
+              </select>
+            </div>
+          </div>
+      
+          <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 4px; margin: 1.5rem 0 1rem 0;">2. Registro Histórico</h3>
+          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem;">
+            <div class="form-group"><label>Marca *</label><input type="text" id="eq_marca" required></div>
+            <div class="form-group"><label>Modelo *</label><input type="text" id="eq_modelo" required></div>
+            <div class="form-group"><label>Número de Serie *</label><input type="text" id="eq_serie" required></div>
+            <div class="form-group"><label>Proveedor</label><input type="text" id="eq_proveedor"></div>
+            <div class="form-group"><label>Representante</label><input type="text" id="eq_representante"></div>
+            <div class="form-group"><label>Teléfono Proveedor</label><input type="text" id="eq_telefono_proveedor"></div>
+            <div class="form-group"><label>Año Fabricación</label><input type="number" id="eq_ano_fabricacion"></div>
+            <div class="form-group"><label>Fecha Adquisición</label><input type="date" id="eq_fecha_adquisicion"></div>
+            <div class="form-group"><label>Fecha Instalación</label><input type="date" id="eq_fecha_instalacion"></div>
+            <div class="form-group"><label>Vida Útil (Años)</label><input type="number" id="eq_vida_util_anos"></div>
+          </div>
+      
+          <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 4px; margin: 1.5rem 0 1rem 0;">3. Registro Técnico y Alimentación</h3>
+          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem;">
+            <div class="form-group"><label>Voltaje Operación</label><input type="text" id="eq_voltaje_operacion" placeholder="Ej: 110V AC"></div>
+            <div class="form-group"><label>Frecuencia Trabajo</label><input type="text" id="eq_frecuencia_trabajo" placeholder="Ej: 60 Hz"></div>
+            <div class="form-group"><label>Potencia Salida</label><input type="text" id="eq_potencia_salida"></div>
+            <div class="form-group"><label>Presión</label><input type="text" id="eq_presion"></div>
+            <div class="form-group"><label>Velocidad</label><input type="text" id="eq_velocidad"></div>
+            <div class="form-group"><label>Temperatura</label><input type="text" id="eq_temperatura"></div>
+            <div class="form-group"><label>Humedad</label><input type="text" id="eq_humedad"></div>
+            <div class="form-group" style="grid-column: span 2;">
+              <label>Fuentes de Alimentación (Ej: Eléctrica, Agua, Batería)</label>
+              <input type="text" id="eq_fuentes_alimentacion" placeholder="Eléctrica / Batería">
+            </div>
+          </div>
+      
+          <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 4px; margin: 1.5rem 0 1rem 0;">4. Clasificación y Tecnología</h3>
+          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem;">
+            <div class="form-group">
+              <label>Empleo</label>
+              <select id="eq_empleo">
+                <option value="Médico">Médico</option>
+                <option value="Básico">Básico</option>
+                <option value="Apoyo">Apoyo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Riesgo</label>
+              <select id="eq_riesgo">
+                <option value="Bajo I">Bajo I</option>
+                <option value="Medio IIA">Medio IIA</option>
+                <option value="Alto IIB, III">Alto IIB, III</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Posición</label>
+              <select id="eq_posicion">
+                <option value="Fijo">Fijo</option>
+                <option value="Móvil">Móvil</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Clasificación Biomédica</label>
+              <select id="eq_clasificacion_biomedica">
+                <option value="Diagnóstico">Diagnóstico</option>
+                <option value="Tratamiento">Tratamiento</option>
+                <option value="Rehabilitación">Rehabilitación</option>
+                <option value="Prevención">Prevención</option>
+                <option value="Análisis de Laboratorio">Análisis de Laboratorio</option>
+                <option value="Mantenimiento de la Vida">Mantenimiento de la Vida</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tecnología</label>
+              <select id="eq_tecnologia">
+                <option value="Electrónico">Electrónico</option>
+                <option value="Eléctrico">Eléctrico</option>
+                <option value="Hidráulico">Hidráulico</option>
+                <option value="Neumático">Neumático</option>
+                <option value="Mecánico">Mecánico</option>
+              </select>
+            </div>
+          </div>
+      
+          <div style="margin-top: 2rem; display: flex; gap: 10px;">
+            <button type="submit" class="btn">Guardar Equipo</button>
+            <button type="button" class="btn btn-secondary" onclick="showView('view-list')">Cancelar</button>
+          </div>
+        </form>
+      </section>
+
       <!-- VISTA HOJA DE VIDA (PL-010-F5) -->
       <section id="view-hoja-vida" class="hidden">
         <div class="no-print" style="margin-bottom: 1rem; display: flex; gap: 10px;">
