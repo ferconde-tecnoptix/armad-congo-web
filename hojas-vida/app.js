@@ -118,8 +118,13 @@ async function loadEquipos() {
   }
 }
 
-// Cargar y Renderizar Formato PL-010-F5
+// Variable global para almacenar el equipo actual en pantalla
+let equipoActualId = null;
+
+// Modificación en viewHojaVida para asignar equipoActualId
 async function viewHojaVida(idEquipo) {
+  equipoActualId = idEquipo;
+  document.getElementById("evt_id_equipo").value = idEquipo;
   showView("view-hoja-vida");
   const container = document.getElementById("hv-content");
   container.innerHTML = "<p>Cargando Hoja de Vida...</p>";
@@ -148,8 +153,8 @@ async function viewHojaVida(idEquipo) {
         <div class="hv-section-title">LOCALIZACIÓN</div>
         <div class="hv-grid">
           <div class="hv-row">
-            <div class="hv-cell"><span class="hv-label">Nombre Cliente:</span> ${cliente.nombre_cliente || ''}</div>
-            <div class="hv-cell"><span class="hv-label">Ubicación:</span> ${cliente.ubicacion || ''}</div>
+            <div class="hv-cell"><span class="hv-label">Nombre Cliente:</span> ${cliente.nombre_cliente || 'N/A'}</div>
+            <div class="hv-cell"><span class="hv-label">Ubicación:</span> ${cliente.ubicacion || 'N/A'}</div>
           </div>
         </div>
 
@@ -187,12 +192,7 @@ async function viewHojaVida(idEquipo) {
           <div class="hv-row">
             <div class="hv-cell"><span class="hv-label">Frecuencia Trabajo:</span> ${equipo.frecuencia_trabajo || ''}</div>
             <div class="hv-cell"><span class="hv-label">Velocidad:</span> ${equipo.velocidad || ''}</div>
-            <div class="hv-cell"><span class="hv-label">Frecuencia:</span> ${equipo.frecuencia_trabajo || ''}</div>
-          </div>
-          <div class="hv-row">
             <div class="hv-cell"><span class="hv-label">Potencia Salida:</span> ${equipo.potencia_salida || ''}</div>
-            <div class="hv-cell"><span class="hv-label">Temperatura:</span> ${equipo.temperatura || ''}</div>
-            <div class="hv-cell"><span class="hv-label">Humedad:</span> ${equipo.humedad || ''}</div>
           </div>
         </div>
 
@@ -209,33 +209,68 @@ async function viewHojaVida(idEquipo) {
           </div>
         </div>
 
-        <div class="hv-section-title">HISTORIAL DE MANTENIMIENTO / EVENTOS</div>
+        <div class="hv-section-title">HISTORIAL DE MANTENIMIENTO Y EVENTOS</div>
         <table class="data-table" style="font-size:0.75rem; margin-top: 4px;">
           <thead>
             <tr>
               <th>Fecha</th>
-              <th>Tipo</th>
-              <th>Descripción</th>
+              <th>Tipo Evento</th>
+              <th>Descripción Trabajo</th>
               <th>Técnico</th>
-              <th>Reporte Ext.</th>
+              <th>Reporte PDF</th>
             </tr>
           </thead>
           <tbody>
             ${eventos.length > 0 ? eventos.map(ev => `
               <tr>
                 <td>${ev.fecha_evento}</td>
-                <td>${ev.tipo_evento}</td>
+                <td><b>${ev.tipo_evento}</b></td>
                 <td>${ev.descripcion_trabajo}</td>
                 <td>${ev.tecnico_responsable}</td>
-                <td>${ev.url_reporte_pdf ? `<a href="${ev.url_reporte_pdf}" target="_blank">Ver Enlace</a>` : 'N/A'}</td>
+                <td>${ev.url_reporte_pdf ? `<a href="${ev.url_reporte_pdf}" target="_blank">Ver Adjunto</a>` : 'N/A'}</td>
               </tr>
-            `).join('') : '<tr><td colspan="5">No hay eventos registrados.</td></tr>'}
+            `).join('') : '<tr><td colspan="5" style="text-align:center;">No hay eventos ni mantenimientos registrados aún.</td></tr>'}
           </tbody>
         </table>
       `;
     }
   } catch (err) {
-    container.innerHTML = "<p style='color:red;'>Error al generar la Hoja de Vida.</p>";
+    container.innerHTML = "<p style='color:red;'>Error al consultar la Hoja de Vida.</p>";
+  }
+}
+
+// Guardar Nuevo Evento / Mantenimiento
+async function guardarEvento(e) {
+  e.preventDefault();
+
+  const eventoData = {
+    id_equipo: equipoActualId,
+    fecha_evento: document.getElementById("evt_fecha").value,
+    tipo_evento: document.getElementById("evt_tipo").value,
+    descripcion_trabajo: document.getElementById("evt_descripcion").value,
+    tecnico_responsable: document.getElementById("evt_tecnico").value,
+    repuestos_utilizados: document.getElementById("evt_repuestos").value,
+    url_reporte_pdf: document.getElementById("evt_url_pdf").value
+  };
+
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({
+      action: "saveEvento",
+      payload: { id_cuenta: session.id_cuenta, eventoData }
+    })
+  });
+
+  const res = await response.json();
+
+  if (res.success) {
+    alert("Evento registrado exitosamente.");
+    document.getElementById("form-nuevo-evento").reset();
+    toggleForm("form-nuevo-evento");
+    viewHojaVida(equipoActualId); // Recarga la Hoja de Vida actualizada con el nuevo mantenimiento
+  } else {
+    alert("Error al guardar evento: " + res.message);
   }
 }
 
