@@ -238,3 +238,86 @@ async function viewHojaVida(idEquipo) {
     container.innerHTML = "<p style='color:red;'>Error al generar la Hoja de Vida.</p>";
   }
 }
+
+// Mostrar / Ocultar Formularios
+function toggleForm(formId) {
+  const form = document.getElementById(formId);
+  form.classList.toggle("hidden");
+}
+
+// Cargar Vista de Clientes
+async function loadClientesView() {
+  showView("view-clientes");
+  const tbody = document.getElementById("clientes-tbody");
+  tbody.innerHTML = `<tr><td colspan="5">Cargando clientes...</td></tr>`;
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "getClientes",
+        payload: { id_cuenta: session.id_cuenta }
+      })
+    });
+
+    const res = await response.json();
+
+    if (res.success && res.data.length > 0) {
+      tbody.innerHTML = res.data.map(c => `
+        <tr>
+          <td><b>${c.id_cliente}</b></td>
+          <td>${c.nombre_cliente}</td>
+          <td>${c.ubicacion}</td>
+          <td>${c.ciudad}</td>
+          <td>${c.contacto_nombre || ''} (${c.telefono || ''})</td>
+        </tr>
+      `).join("");
+    } else {
+      tbody.innerHTML = `<tr><td colspan="5">No hay clientes registrados aún.</td></tr>`;
+    }
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="5" style="color:red;">Error al cargar clientes.</td></tr>`;
+  }
+}
+
+// Guardar Nuevo Cliente
+async function guardarCliente(e) {
+  e.preventDefault();
+
+  const clienteData = {
+    nombre_cliente: document.getElementById("cli_nombre").value,
+    ubicacion: document.getElementById("cli_ubicacion").value,
+    ciudad: document.getElementById("cli_ciudad").value,
+    direccion: document.getElementById("cli_direccion").value,
+    telefono: document.getElementById("cli_telefono").value,
+    contacto_nombre: document.getElementById("cli_contacto").value
+  };
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "saveCliente",
+        payload: {
+          id_cuenta: session.id_cuenta,
+          clienteData: clienteData
+        }
+      })
+    });
+
+    const res = await response.json();
+
+    if (res.success) {
+      alert("Cliente guardado exitosamente.");
+      document.getElementById("form-nuevo-cliente").reset();
+      toggleForm("form-nuevo-cliente");
+      loadClientesView();
+    } else {
+      alert("Error: " + res.message);
+    }
+  } catch (err) {
+    alert("Error de conexión al guardar el cliente.");
+  }
+}
