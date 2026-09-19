@@ -245,13 +245,57 @@
         </form>
       </section>
 
-      <!-- VISTA HOJA DE VIDA (PL-010-F5) -->
+      <!-- Dentro de la sección view-hoja-vida en index.html -->
       <section id="view-hoja-vida" class="hidden">
-        <div class="no-print" style="margin-bottom: 1rem; display: flex; gap: 10px;">
-          <button class="btn btn-secondary" onclick="showView('view-list')">&larr; Volver al Listado</button>
-          <button class="btn" onclick="window.print()">Imprimir / Guardar PDF (Carta)</button>
+        <div class="no-print" style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+          <div style="display:flex; gap: 10px;">
+            <button class="btn btn-secondary" onclick="showView('view-list')">&larr; Volver al Listado</button>
+            <button class="btn" onclick="window.print()">Imprimir / Guardar PDF (Carta)</button>
+          </div>
+          <button class="btn" style="background:#059669;" onclick="toggleForm('form-nuevo-evento')">+ Registrar Evento / Mantenimiento</button>
         </div>
-
+      
+        <!-- Formulario de Nuevo Evento -->
+        <form id="form-nuevo-evento" class="hidden no-print" style="background: white; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border: 1px solid var(--border-color);" onsubmit="guardarEvento(event)">
+          <h3>Nuevo Evento / Mantenimiento</h3>
+          <input type="hidden" id="evt_id_equipo">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+            <div class="form-group">
+              <label>Fecha del Evento *</label>
+              <input type="date" id="evt_fecha" required>
+            </div>
+            <div class="form-group">
+              <label>Tipo de Evento *</label>
+              <select id="evt_tipo" required>
+                <option value="MANTENIMIENTO PREVENTIVO">MANTENIMIENTO PREVENTIVO</option>
+                <option value="MANTENIMIENTO CORRECTIVO">MANTENIMIENTO CORRECTIVO</option>
+                <option value="CALIBRACION">CALIBRACIÓN / CALIBRACION</option>
+                <option value="INSPECCION TECNICA">INSPECCIÓN TÉCNICA</option>
+              </select>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+              <label>Descripción del Trabajo Realizado *</label>
+              <textarea id="evt_descripcion" rows="2" required placeholder="Detalle de actividades, hallazgos y procedimientos..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Técnico Responsable *</label>
+              <input type="text" id="evt_tecnico" required placeholder="Nombre del técnico o ingeniero">
+            </div>
+            <div class="form-group">
+              <label>Repuestos / Insumos Utilizados</label>
+              <input type="text" id="evt_repuestos" placeholder="Ej: Filtro de aire, fusibles">
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+              <label>Enlace Externo al Reporte PDF (Drive, Cloud, etc.)</label>
+              <input type="url" id="evt_url_pdf" placeholder="https://drive.google.com/file/d/...">
+            </div>
+          </div>
+          <div style="margin-top: 1rem; display: flex; gap: 10px;">
+            <button type="submit" class="btn">Guardar Evento</button>
+            <button type="button" class="btn btn-secondary" onclick="toggleForm('form-nuevo-evento')">Cancelar</button>
+          </div>
+        </form>
+      
         <div class="hoja-vida-container" id="hv-content">
           <!-- Renderizado Dinámico de Formato PL-010-F5 -->
         </div>
