@@ -245,11 +245,14 @@ function toggleForm(formId) {
   form.classList.toggle("hidden");
 }
 
-// Cargar Vista de Clientes
+// Variable global para almacenar el listado de clientes activo
+let listaClientes = [];
+
+// Cargar Vista de Clientes con Botón de Edición
 async function loadClientesView() {
   showView("view-clientes");
   const tbody = document.getElementById("clientes-tbody");
-  tbody.innerHTML = `<tr><td colspan="5">Cargando clientes...</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="6">Cargando clientes...</td></tr>`;
 
   try {
     const response = await fetch(API_URL, {
@@ -264,6 +267,7 @@ async function loadClientesView() {
     const res = await response.json();
 
     if (res.success && res.data.length > 0) {
+      listaClientes = res.data; // Guardar en memoria
       tbody.innerHTML = res.data.map(c => `
         <tr>
           <td><b>${c.id_cliente}</b></td>
@@ -271,21 +275,124 @@ async function loadClientesView() {
           <td>${c.ubicacion}</td>
           <td>${c.ciudad}</td>
           <td>${c.contacto_nombre || ''} (${c.telefono || ''})</td>
+          <td>
+            <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.8rem;" onclick="editarCliente('${c.id_cliente}')">Editar</button>
+          </td>
         </tr>
       `).join("");
     } else {
-      tbody.innerHTML = `<tr><td colspan="5">No hay clientes registrados aún.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6">No hay clientes registrados aún.</td></tr>`;
     }
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="5" style="color:red;">Error al cargar clientes.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" style="color:red;">Error al cargar clientes.</td></tr>`;
   }
 }
 
-// Guardar Nuevo Cliente
+// Editar Cliente
+function editarCliente(idCliente) {
+  const c = listaClientes.find(item => String(item.id_cliente) === String(idCliente));
+  if (!c) return;
+
+  document.getElementById("cli_id_cliente").value = c.id_cliente;
+  document.getElementById("cli_nombre").value = c.nombre_cliente || "";
+  document.getElementById("cli_ubicacion").value = c.ubicacion || "";
+  document.getElementById("cli_ciudad").value = c.ciudad || "";
+  document.getElementById("cli_direccion").value = c.direccion || "";
+  document.getElementById("cli_telefono").value = c.telefono || "";
+  document.getElementById("cli_contacto").value = c.contacto_nombre || "";
+
+  document.getElementById("form-nuevo-cliente").classList.remove("hidden");
+}
+
+
+// Preparar y Mostrar Formulario de Registro de Equipos
+async function showNewEquipoForm() {
+  // Cargar primero los clientes en la lista desplegable
+  const selectClient = document.getElementById("eq_id_cliente");
+  selectClient.innerHTML = `<option value="">Cargando clientes...</option>`;
+
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({
+      action: "getClientes",
+      payload: { id_cuenta: session.id_cuenta }
+    })
+  });
+
+  const res = await response.json();
+
+  if (res.success && res.data.length > 0) {
+    selectClient.innerHTML = res.data.map(c => `<option value="${c.id_cliente}">${c.nombre_cliente} - ${c.ubicacion} (${c.ciudad})</option>`).join("");
+  } else {
+    selectClient.innerHTML = `<option value="">No hay clientes creados. Registre un cliente primero.</option>`;
+  }
+
+  document.getElementById("form-equipo").reset();
+  document.getElementById("eq_id_equipo").value = "";
+  document.getElementById("equipo-form-title").innerText = "Registrar Nuevo Equipo";
+  showView("view-form-equipo");
+}
+
+// Guardar Nuevo Equipo
+async function guardarEquipo(e) {
+  e.preventDefault();
+
+  const equipoData = {
+    id_equipo: document.getElementById("eq_id_equipo").value,
+    id_cliente: document.getElementById("eq_id_cliente").value,
+    estado_equipo: document.getElementById("eq_estado_equipo").value,
+    marca: document.getElementById("eq_marca").value,
+    modelo: document.getElementById("eq_modelo").value,
+    serie: document.getElementById("eq_serie").value,
+    proveedor: document.getElementById("eq_proveedor").value,
+    representante: document.getElementById("eq_representante").value,
+    telefono_proveedor: document.getElementById("eq_telefono_proveedor").value,
+    ano_fabricacion: document.getElementById("eq_ano_fabricacion").value,
+    fecha_adquisicion: document.getElementById("eq_fecha_adquisicion").value,
+    fecha_instalacion: document.getElementById("eq_fecha_instalacion").value,
+    vida_util_anos: document.getElementById("eq_vida_util_anos").value,
+    voltaje_operacion: document.getElementById("eq_voltaje_operacion").value,
+    frecuencia_trabajo: document.getElementById("eq_frecuencia_trabajo").value,
+    potencia_salida: document.getElementById("eq_potencia_salida").value,
+    presion: document.getElementById("eq_presion").value,
+    velocidad: document.getElementById("eq_velocidad").value,
+    temperatura: document.getElementById("eq_temperatura").value,
+    humedad: document.getElementById("eq_humedad").value,
+    fuentes_alimentacion: document.getElementById("eq_fuentes_alimentacion").value,
+    empleo: document.getElementById("eq_empleo").value,
+    riesgo: document.getElementById("eq_riesgo").value,
+    posicion: document.getElementById("eq_posicion").value,
+    clasificacion_biomedica: document.getElementById("eq_clasificacion_biomedica").value,
+    tecnologia: document.getElementById("eq_tecnologia").value
+  };
+
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({
+      action: "saveEquipo",
+      payload: { id_cuenta: session.id_cuenta, equipoData }
+    })
+  });
+
+  const res = await response.json();
+
+  if (res.success) {
+    alert("Equipo guardado exitosamente.");
+    showView("view-list");
+    loadEquipos();
+  } else {
+    alert("Error al guardar equipo: " + res.message);
+  }
+}
+
+// Guardar / Actualizar Cliente
 async function guardarCliente(e) {
   e.preventDefault();
 
   const clienteData = {
+    id_cliente: document.getElementById("cli_id_cliente") ? document.getElementById("cli_id_cliente").value : "",
     nombre_cliente: document.getElementById("cli_nombre").value,
     ubicacion: document.getElementById("cli_ubicacion").value,
     ciudad: document.getElementById("cli_ciudad").value,
@@ -294,30 +401,23 @@ async function guardarCliente(e) {
     contacto_nombre: document.getElementById("cli_contacto").value
   };
 
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        action: "saveCliente",
-        payload: {
-          id_cuenta: session.id_cuenta,
-          clienteData: clienteData
-        }
-      })
-    });
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({
+      action: "saveCliente",
+      payload: { id_cuenta: session.id_cuenta, clienteData }
+    })
+  });
 
-    const res = await response.json();
-
-    if (res.success) {
-      alert("Cliente guardado exitosamente.");
-      document.getElementById("form-nuevo-cliente").reset();
-      toggleForm("form-nuevo-cliente");
-      loadClientesView();
-    } else {
-      alert("Error: " + res.message);
-    }
-  } catch (err) {
-    alert("Error de conexión al guardar el cliente.");
+  const res = await response.json();
+  if (res.success) {
+    alert("Cliente guardado correctamente.");
+    document.getElementById("form-nuevo-cliente").reset();
+    if(document.getElementById("cli_id_cliente")) document.getElementById("cli_id_cliente").value = "";
+    toggleForm("form-nuevo-cliente");
+    loadClientesView();
+  } else {
+    alert("Error: " + res.message);
   }
 }
