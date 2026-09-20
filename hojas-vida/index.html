@@ -7,93 +7,23 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- En el <header>, agrega el botón para ir a la vista de Clientes -->
-  <header class="no-print">
-    <h1>Hojas de Vida - PL-010-F5</h1>
-    <div>
-      <button class="btn btn-secondary" onclick="showView('view-list')">Equipos</button>
-      <button class="btn btn-secondary" onclick="loadClientesView()">Clientes / Sedes</button>
-      <span id="user-display" style="margin: 0 15px;"></span>
-      <button id="logout-btn" class="btn btn-secondary">Cerrar Sesión</button>
-    </div>
-  </header>
-  
-  <!-- SECCIÓN GESTIÓN DE CLIENTES -->
-  <section id="view-clientes" class="hidden">
-    <div style="display: flex; justify-content: space-between; align-items: center;" class="no-print">
-      <h2>Clientes y Ubicaciones</h2>
-      <button class="btn" onclick="toggleForm('form-nuevo-cliente')">+ Nuevo Cliente / Sede</button>
-    </div>
-  
-    <!-- Formulario de Registro de Cliente -->
-    <form id="form-nuevo-cliente" class="hidden" style="background: white; padding: 1rem; border-radius: 6px; margin-top: 1rem; border: 1px solid var(--border-color);" onsubmit="guardarCliente(event)">
-      <input type="hidden" id="cli_id_cliente">
-      <h3>Registrar Cliente / Ubicación</h3>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
-        <div class="form-group">
-          <label>Nombre del Cliente / Razón Social *</label>
-          <input type="text" id="cli_nombre" required placeholder="Ej: Clínica Central / Dr. Pérez">
-        </div>
-        <div class="form-group">
-          <label>Ubicación / Área *</label>
-          <input type="text" id="cli_ubicacion" required placeholder="Ej: Consulta Externa, Quirófano 1">
-        </div>
-        <div class="form-group">
-          <label>Ciudad *</label>
-          <input type="text" id="cli_ciudad" required placeholder="Ej: Armenia">
-        </div>
-        <div class="form-group">
-          <label>Dirección</label>
-          <input type="text" id="cli_direccion" placeholder="Ej: Carrera 14 # 10-20">
-        </div>
-        <div class="form-group">
-          <label>Teléfono de Contacto</label>
-          <input type="text" id="cli_telefono">
-        </div>
-        <div class="form-group">
-          <label>Persona Responsable</label>
-          <input type="text" id="cli_contacto">
-        </div>
-      </div>
-      <div style="margin-top: 1rem; display: flex; gap: 10px;">
-        <button type="submit" class="btn">Guardar Cliente</button>
-        <button type="button" class="btn btn-secondary" onclick="toggleForm('form-nuevo-cliente')">Cancelar</button>
-      </div>
-    </form>
-  
-    <!-- Tabla de Clientes -->
-    <table class="data-table" style="margin-top: 1rem;">
-      <thead>
-        <tr>
-          <th>ID Cliente</th>
-          <th>Nombre Cliente</th>
-          <th>Ubicación / Área</th>
-          <th>Ciudad</th>
-          <th>Contacto</th>
-        </tr>
-      </thead>
-      <tbody id="clientes-tbody">
-        <!-- Carga dinámica -->
-      </tbody>
-    </table>
-  </section>
-  
+
   <!-- PANTALLA DE LOGIN -->
   <div id="login-screen">
     <div class="login-card">
       <h2>Iniciar Sesión</h2>
-      <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;">Gestión de Equipos Médicos</p>
+      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">Gestión de Equipos Médicos</p>
       <form id="login-form">
         <div class="form-group">
           <label for="username">Usuario</label>
-          <input type="text" id="username" required>
+          <input type="text" id="username" required autocomplete="username">
         </div>
         <div class="form-group">
           <label for="password">Contraseña</label>
-          <input type="password" id="password" required>
+          <input type="password" id="password" required autocomplete="current-password">
         </div>
         <button type="submit" class="btn" style="width: 100%;">Ingresar</button>
-        <p id="login-error" style="color: red; font-size: 0.8rem; margin-top: 8px;"></p>
+        <p id="login-error" style="color: red; font-size: 0.85rem; margin-top: 8px;"></p>
       </form>
     </div>
   </div>
@@ -103,19 +33,21 @@
     <header class="no-print">
       <h1>Hojas de Vida - PL-010-F5</h1>
       <div>
-        <span id="user-display" style="margin-right: 15px;"></span>
+        <button class="btn btn-secondary" onclick="showView('view-list')">Equipos</button>
+        <button class="btn btn-secondary" onclick="loadClientesView()">Clientes / Sedes</button>
+        <span id="user-display" style="margin: 0 15px; font-weight: 600;"></span>
         <button id="logout-btn" class="btn btn-secondary">Cerrar Sesión</button>
       </div>
     </header>
 
     <main>
-      <!-- VISTA LISTADO DE EQUIPOS -->
+      <!-- 1. VISTA LISTADO DE EQUIPOS -->
       <section id="view-list">
         <div style="display: flex; justify-content: space-between; align-items: center;" class="no-print">
           <h2>Equipos Registrados</h2>
           <button class="btn" onclick="showNewEquipoForm()">+ Registrar Equipo</button>
         </div>
-        <table class="data-table">
+        <table class="data-table" style="margin-top: 1rem;">
           <thead>
             <tr>
               <th>ID Equipo</th>
@@ -123,7 +55,7 @@
               <th>Serie</th>
               <th>Ubicación / Cliente</th>
               <th>Estado</th>
-              <th>Acción</th>
+              <th class="no-print">Acciones</th>
             </tr>
           </thead>
           <tbody id="equipos-tbody">
@@ -132,16 +64,16 @@
         </table>
       </section>
 
-      <!-- FORMULARIO DE REGISTRO / EDICIÓN DE EQUIPOS (PL-010-F5) -->
+      <!-- 2. VISTA FORMULARIO REGISTRO / EDICIÓN DE EQUIPOS -->
       <section id="view-form-equipo" class="hidden no-print">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
           <h2 id="equipo-form-title">Registrar Nuevo Equipo</h2>
           <button class="btn btn-secondary" onclick="showView('view-list')">Cancelar</button>
         </div>
-      
+
         <form id="form-equipo" style="background:white; padding:1.5rem; border-radius:8px; border:1px solid var(--border-color);" onsubmit="guardarEquipo(event)">
           <input type="hidden" id="eq_id_equipo">
-      
+
           <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 4px; margin-bottom: 1rem;">1. Ubicación y Localización</h3>
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
             <div class="form-group">
@@ -160,7 +92,7 @@
               </select>
             </div>
           </div>
-      
+
           <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 4px; margin: 1.5rem 0 1rem 0;">2. Registro Histórico</h3>
           <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem;">
             <div class="form-group"><label>Marca *</label><input type="text" id="eq_marca" required></div>
@@ -174,7 +106,7 @@
             <div class="form-group"><label>Fecha Instalación</label><input type="date" id="eq_fecha_instalacion"></div>
             <div class="form-group"><label>Vida Útil (Años)</label><input type="number" id="eq_vida_util_anos"></div>
           </div>
-      
+
           <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 4px; margin: 1.5rem 0 1rem 0;">3. Registro Técnico y Alimentación</h3>
           <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem;">
             <div class="form-group"><label>Voltaje Operación</label><input type="text" id="eq_voltaje_operacion" placeholder="Ej: 110V AC"></div>
@@ -185,11 +117,11 @@
             <div class="form-group"><label>Temperatura</label><input type="text" id="eq_temperatura"></div>
             <div class="form-group"><label>Humedad</label><input type="text" id="eq_humedad"></div>
             <div class="form-group" style="grid-column: span 2;">
-              <label>Fuentes de Alimentación (Ej: Eléctrica, Agua, Batería)</label>
+              <label>Fuentes de Alimentación (Ej: Eléctrica, Batería)</label>
               <input type="text" id="eq_fuentes_alimentacion" placeholder="Eléctrica / Batería">
             </div>
           </div>
-      
+
           <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 4px; margin: 1.5rem 0 1rem 0;">4. Clasificación y Tecnología</h3>
           <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem;">
             <div class="form-group">
@@ -237,7 +169,7 @@
               </select>
             </div>
           </div>
-      
+
           <div style="margin-top: 2rem; display: flex; gap: 10px;">
             <button type="submit" class="btn">Guardar Equipo</button>
             <button type="button" class="btn btn-secondary" onclick="showView('view-list')">Cancelar</button>
@@ -245,20 +177,20 @@
         </form>
       </section>
 
-      <!-- Dentro de la sección view-hoja-vida en index.html -->
+      <!-- 3. VISTA HOJA DE VIDA (FORMATO PL-010-F5) -->
       <section id="view-hoja-vida" class="hidden">
         <div class="no-print" style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
           <div style="display:flex; gap: 10px;">
             <button class="btn btn-secondary" onclick="showView('view-list')">&larr; Volver al Listado</button>
             <button class="btn" onclick="window.print()">Imprimir / Guardar PDF (Carta)</button>
           </div>
-          <button class="btn" style="background:#059669;" onclick="toggleForm('form-nuevo-evento')">+ Registrar Evento / Mantenimiento</button>
+          <button class="btn" style="background:#059669;" onclick="nuevoEventoModal()">+ Registrar Evento / Mantenimiento</button>
         </div>
-      
-        <!-- Formulario de Nuevo Evento -->
+
+        <!-- FORMULARIO NUEVO / EDITAR EVENTO -->
         <form id="form-nuevo-evento" class="hidden no-print" style="background: white; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border: 1px solid var(--border-color);" onsubmit="guardarEvento(event)">
-          <h3>Nuevo Evento / Mantenimiento</h3>
-          <input type="hidden" id="evt_id_equipo">
+          <h3 id="evento-form-title">Nuevo Evento / Mantenimiento</h3>
+          <input type="hidden" id="evt_id_evento">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
             <div class="form-group">
               <label>Fecha del Evento *</label>
@@ -269,21 +201,21 @@
               <select id="evt_tipo" required>
                 <option value="MANTENIMIENTO PREVENTIVO">MANTENIMIENTO PREVENTIVO</option>
                 <option value="MANTENIMIENTO CORRECTIVO">MANTENIMIENTO CORRECTIVO</option>
-                <option value="CALIBRACION">CALIBRACIÓN / CALIBRACION</option>
+                <option value="CALIBRACION">CALIBRACIÓN</option>
                 <option value="INSPECCION TECNICA">INSPECCIÓN TÉCNICA</option>
               </select>
             </div>
             <div class="form-group" style="grid-column: span 2;">
               <label>Descripción del Trabajo Realizado *</label>
-              <textarea id="evt_descripcion" rows="2" required placeholder="Detalle de actividades, hallazgos y procedimientos..."></textarea>
+              <textarea id="evt_descripcion" rows="2" required placeholder="Detalle de actividades realizadas..."></textarea>
             </div>
             <div class="form-group">
               <label>Técnico Responsable *</label>
               <input type="text" id="evt_tecnico" required placeholder="Nombre del técnico o ingeniero">
             </div>
             <div class="form-group">
-              <label>Repuestos / Insumos Utilizados</label>
-              <input type="text" id="evt_repuestos" placeholder="Ej: Filtro de aire, fusibles">
+              <label>Repuestos Utilizados</label>
+              <input type="text" id="evt_repuestos" placeholder="Ej: Filtros, Fusibles">
             </div>
             <div class="form-group" style="grid-column: span 2;">
               <label>Enlace Externo al Reporte PDF (Drive, Cloud, etc.)</label>
@@ -295,10 +227,71 @@
             <button type="button" class="btn btn-secondary" onclick="toggleForm('form-nuevo-evento')">Cancelar</button>
           </div>
         </form>
-      
+
         <div class="hoja-vida-container" id="hv-content">
           <!-- Renderizado Dinámico de Formato PL-010-F5 -->
         </div>
+      </section>
+
+      <!-- 4. VISTA CLIENTES / SEDES -->
+      <section id="view-clientes" class="hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center;" class="no-print">
+          <h2>Clientes y Ubicaciones</h2>
+          <button class="btn" onclick="nuevoClienteModal()">+ Nuevo Cliente / Sede</button>
+        </div>
+
+        <!-- FORMULARIO CLIENTE -->
+        <form id="form-nuevo-cliente" class="hidden" style="background: white; padding: 1rem; border-radius: 6px; margin-top: 1rem; border: 1px solid var(--border-color);" onsubmit="guardarCliente(event)">
+          <h3 id="cliente-form-title">Registrar Cliente / Ubicación</h3>
+          <input type="hidden" id="cli_id_cliente">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+            <div class="form-group">
+              <label>Nombre del Cliente / Razón Social *</label>
+              <input type="text" id="cli_nombre" required placeholder="Ej: Clínica Central">
+            </div>
+            <div class="form-group">
+              <label>Ubicación / Área *</label>
+              <input type="text" id="cli_ubicacion" required placeholder="Ej: Consulta Externa">
+            </div>
+            <div class="form-group">
+              <label>Ciudad *</label>
+              <input type="text" id="cli_ciudad" required placeholder="Ej: Armenia">
+            </div>
+            <div class="form-group">
+              <label>Dirección</label>
+              <input type="text" id="cli_direccion" placeholder="Ej: Carrera 14 # 10-20">
+            </div>
+            <div class="form-group">
+              <label>Teléfono de Contacto</label>
+              <input type="text" id="cli_telefono">
+            </div>
+            <div class="form-group">
+              <label>Persona Responsable</label>
+              <input type="text" id="cli_contacto">
+            </div>
+          </div>
+          <div style="margin-top: 1rem; display: flex; gap: 10px;">
+            <button type="submit" class="btn">Guardar Cliente</button>
+            <button type="button" class="btn btn-secondary" onclick="toggleForm('form-nuevo-cliente')">Cancelar</button>
+          </div>
+        </form>
+
+        <!-- TABLA CLIENTES -->
+        <table class="data-table" style="margin-top: 1rem;">
+          <thead>
+            <tr>
+              <th>ID Cliente</th>
+              <th>Nombre Cliente</th>
+              <th>Ubicación / Área</th>
+              <th>Ciudad</th>
+              <th>Contacto</th>
+              <th class="no-print">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="clientes-tbody">
+            <!-- Carga dinámica -->
+          </tbody>
+        </table>
       </section>
     </main>
   </div>
