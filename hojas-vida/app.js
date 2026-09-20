@@ -107,6 +107,7 @@ async function loadEquipos() {
           <td>${eq.estado_equipo || 'OPERATIVO'}</td>
           <td>
             <button class="btn" style="padding: 4px 8px; font-size:0.8rem;" onclick="viewHojaVida('${eq.id_equipo}')">Ver HV</button>
+            <button class="btn btn-secondary" style="padding: 4px 8px; font-size:0.8rem;" onclick="editarEquipo('${eq.id_equipo}')">Editar</button>
           </td>
         </tr>
       `).join("");
@@ -120,9 +121,11 @@ async function loadEquipos() {
 
 // Variable global para almacenar el equipo actual en pantalla
 let equipoActualId = null;
+let listaEventosActuales = []; // Variable global para los eventos del equipo visible
 
 // Modificación en viewHojaVida para asignar equipoActualId
 async function viewHojaVida(idEquipo) {
+  listaEventosActuales = eventos;
   equipoActualId = idEquipo;
   document.getElementById("evt_id_equipo").value = idEquipo;
   showView("view-hoja-vida");
@@ -218,6 +221,7 @@ async function viewHojaVida(idEquipo) {
               <th>Descripción Trabajo</th>
               <th>Técnico</th>
               <th>Reporte PDF</th>
+              <th class="no-print">Acción</th>
             </tr>
           </thead>
           <tbody>
@@ -228,8 +232,11 @@ async function viewHojaVida(idEquipo) {
                 <td>${ev.descripcion_trabajo}</td>
                 <td>${ev.tecnico_responsable}</td>
                 <td>${ev.url_reporte_pdf ? `<a href="${ev.url_reporte_pdf}" target="_blank">Ver Adjunto</a>` : 'N/A'}</td>
+                <td class="no-print">
+                  <button class="btn btn-secondary" style="padding: 2px 6px; font-size: 0.7rem;" onclick="editarEvento('${ev.id_evento}')">Editar</button>
+                </td>
               </tr>
-            `).join('') : '<tr><td colspan="5" style="text-align:center;">No hay eventos ni mantenimientos registrados aún.</td></tr>'}
+            `).join('') : '<tr><td colspan="6" style="text-align:center;">No hay eventos ni mantenimientos registrados aún.</td></tr>'}
           </tbody>
         </table>
       `;
@@ -242,35 +249,44 @@ async function viewHojaVida(idEquipo) {
 // Guardar Nuevo Evento / Mantenimiento
 async function guardarEvento(e) {
   e.preventDefault();
+  const formId = "form-nuevo-evento";
+  setFormLoading(formId, true, "Guardando Evento...");
 
-  const eventoData = {
-    id_equipo: equipoActualId,
-    fecha_evento: document.getElementById("evt_fecha").value,
-    tipo_evento: document.getElementById("evt_tipo").value,
-    descripcion_trabajo: document.getElementById("evt_descripcion").value,
-    tecnico_responsable: document.getElementById("evt_tecnico").value,
-    repuestos_utilizados: document.getElementById("evt_repuestos").value,
-    url_reporte_pdf: document.getElementById("evt_url_pdf").value
-  };
+  try {
+    const eventoData = {
+      id_evento: document.getElementById("evt_id_evento").value,
+      id_equipo: equipoActualId,
+      fecha_evento: document.getElementById("evt_fecha").value,
+      tipo_evento: document.getElementById("evt_tipo").value,
+      descripcion_trabajo: document.getElementById("evt_descripcion").value,
+      tecnico_responsable: document.getElementById("evt_tecnico").value,
+      repuestos_utilizados: document.getElementById("evt_repuestos").value,
+      url_reporte_pdf: document.getElementById("evt_url_pdf").value
+    };
 
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({
-      action: "saveEvento",
-      payload: { id_cuenta: session.id_cuenta, eventoData }
-    })
-  });
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "saveEvento",
+        payload: { id_cuenta: session.id_cuenta, eventoData }
+      })
+    });
 
-  const res = await response.json();
-
-  if (res.success) {
-    alert("Evento registrado exitosamente.");
-    document.getElementById("form-nuevo-evento").reset();
-    toggleForm("form-nuevo-evento");
-    viewHojaVida(equipoActualId); // Recarga la Hoja de Vida actualizada con el nuevo mantenimiento
-  } else {
-    alert("Error al guardar evento: " + res.message);
+    const res = await response.json();
+    if (res.success) {
+      alert("Evento registrado/actualizado exitosamente.");
+      document.getElementById(formId).reset();
+      document.getElementById("evt_id_evento").value = "";
+      toggleForm(formId);
+      viewHojaVida(equipoActualId);
+    } else {
+      alert("Error al guardar evento: " + res.message);
+    }
+  } catch (err) {
+    alert("Error de conexión al guardar evento.");
+  } finally {
+    setFormLoading(formId, false);
   }
 }
 
@@ -372,87 +388,185 @@ async function showNewEquipoForm() {
 // Guardar Nuevo Equipo
 async function guardarEquipo(e) {
   e.preventDefault();
+  const formId = "form-equipo";
+  setFormLoading(formId, true, "Guardando Equipo...");
 
-  const equipoData = {
-    id_equipo: document.getElementById("eq_id_equipo").value,
-    id_cliente: document.getElementById("eq_id_cliente").value,
-    estado_equipo: document.getElementById("eq_estado_equipo").value,
-    marca: document.getElementById("eq_marca").value,
-    modelo: document.getElementById("eq_modelo").value,
-    serie: document.getElementById("eq_serie").value,
-    proveedor: document.getElementById("eq_proveedor").value,
-    representante: document.getElementById("eq_representante").value,
-    telefono_proveedor: document.getElementById("eq_telefono_proveedor").value,
-    ano_fabricacion: document.getElementById("eq_ano_fabricacion").value,
-    fecha_adquisicion: document.getElementById("eq_fecha_adquisicion").value,
-    fecha_instalacion: document.getElementById("eq_fecha_instalacion").value,
-    vida_util_anos: document.getElementById("eq_vida_util_anos").value,
-    voltaje_operacion: document.getElementById("eq_voltaje_operacion").value,
-    frecuencia_trabajo: document.getElementById("eq_frecuencia_trabajo").value,
-    potencia_salida: document.getElementById("eq_potencia_salida").value,
-    presion: document.getElementById("eq_presion").value,
-    velocidad: document.getElementById("eq_velocidad").value,
-    temperatura: document.getElementById("eq_temperatura").value,
-    humedad: document.getElementById("eq_humedad").value,
-    fuentes_alimentacion: document.getElementById("eq_fuentes_alimentacion").value,
-    empleo: document.getElementById("eq_empleo").value,
-    riesgo: document.getElementById("eq_riesgo").value,
-    posicion: document.getElementById("eq_posicion").value,
-    clasificacion_biomedica: document.getElementById("eq_clasificacion_biomedica").value,
-    tecnologia: document.getElementById("eq_tecnologia").value
-  };
+  try {
+    const equipoData = {
+      id_equipo: document.getElementById("eq_id_equipo").value,
+      id_cliente: document.getElementById("eq_id_cliente").value,
+      estado_equipo: document.getElementById("eq_estado_equipo").value,
+      marca: document.getElementById("eq_marca").value,
+      modelo: document.getElementById("eq_modelo").value,
+      serie: document.getElementById("eq_serie").value,
+      proveedor: document.getElementById("eq_proveedor").value,
+      representante: document.getElementById("eq_representante").value,
+      telefono_proveedor: document.getElementById("eq_telefono_proveedor").value,
+      ano_fabricacion: document.getElementById("eq_ano_fabricacion").value,
+      fecha_adquisicion: document.getElementById("eq_fecha_adquisicion").value,
+      fecha_instalacion: document.getElementById("eq_fecha_instalacion").value,
+      vida_util_anos: document.getElementById("eq_vida_util_anos").value,
+      voltaje_operacion: document.getElementById("eq_voltaje_operacion").value,
+      frecuencia_trabajo: document.getElementById("eq_frecuencia_trabajo").value,
+      potencia_salida: document.getElementById("eq_potencia_salida").value,
+      presion: document.getElementById("eq_presion").value,
+      velocidad: document.getElementById("eq_velocidad").value,
+      temperatura: document.getElementById("eq_temperatura").value,
+      humedad: document.getElementById("eq_humedad").value,
+      fuentes_alimentacion: document.getElementById("eq_fuentes_alimentacion").value,
+      empleo: document.getElementById("eq_empleo").value,
+      riesgo: document.getElementById("eq_riesgo").value,
+      posicion: document.getElementById("eq_posicion").value,
+      clasificacion_biomedica: document.getElementById("eq_clasificacion_biomedica").value,
+      tecnologia: document.getElementById("eq_tecnologia").value
+    };
 
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({
-      action: "saveEquipo",
-      payload: { id_cuenta: session.id_cuenta, equipoData }
-    })
-  });
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "saveEquipo",
+        payload: { id_cuenta: session.id_cuenta, equipoData }
+      })
+    });
 
-  const res = await response.json();
-
-  if (res.success) {
-    alert("Equipo guardado exitosamente.");
-    showView("view-list");
-    loadEquipos();
-  } else {
-    alert("Error al guardar equipo: " + res.message);
+    const res = await response.json();
+    if (res.success) {
+      alert("Equipo guardado exitosamente.");
+      showView("view-list");
+      loadEquipos();
+    } else {
+      alert("Error al guardar equipo: " + res.message);
+    }
+  } catch (err) {
+    alert("Error de conexión al guardar equipo.");
+  } finally {
+    setFormLoading(formId, false);
   }
 }
 
 // Guardar / Actualizar Cliente
 async function guardarCliente(e) {
   e.preventDefault();
+  const formId = "form-nuevo-cliente";
+  setFormLoading(formId, true, "Guardando Cliente...");
 
-  const clienteData = {
-    id_cliente: document.getElementById("cli_id_cliente") ? document.getElementById("cli_id_cliente").value : "",
-    nombre_cliente: document.getElementById("cli_nombre").value,
-    ubicacion: document.getElementById("cli_ubicacion").value,
-    ciudad: document.getElementById("cli_ciudad").value,
-    direccion: document.getElementById("cli_direccion").value,
-    telefono: document.getElementById("cli_telefono").value,
-    contacto_nombre: document.getElementById("cli_contacto").value
-  };
+  try {
+    const clienteData = {
+      id_cliente: document.getElementById("cli_id_cliente") ? document.getElementById("cli_id_cliente").value : "",
+      nombre_cliente: document.getElementById("cli_nombre").value,
+      ubicacion: document.getElementById("cli_ubicacion").value,
+      ciudad: document.getElementById("cli_ciudad").value,
+      direccion: document.getElementById("cli_direccion").value,
+      telefono: document.getElementById("cli_telefono").value,
+      contacto_nombre: document.getElementById("cli_contacto").value
+    };
 
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({
-      action: "saveCliente",
-      payload: { id_cuenta: session.id_cuenta, clienteData }
-    })
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "saveCliente",
+        payload: { id_cuenta: session.id_cuenta, clienteData }
+      })
+    });
+
+    const res = await response.json();
+    if (res.success) {
+      alert("Cliente guardado correctamente.");
+      document.getElementById(formId).reset();
+      if (document.getElementById("cli_id_cliente")) document.getElementById("cli_id_cliente").value = "";
+      toggleForm(formId);
+      loadClientesView();
+    } else {
+      alert("Error: " + res.message);
+    }
+  } catch (err) {
+    alert("Error de conexión al guardar cliente.");
+  } finally {
+    setFormLoading(formId, false);
+  }
+}
+
+/**
+ * Bloquea/Desbloquea los controles de un formulario durante solicitudes
+ * @param {string} formId - ID del formulario
+ * @param {boolean} loading - true para inhabilitar, false para habilitar
+ * @param {string} customBtnText - Texto temporal para el botón (ej: "Guardando...")
+ */
+function setFormLoading(formId, loading, customBtnText = "") {
+  const form = document.getElementById(formId);
+  if (!form) return;
+
+  const elements = form.querySelectorAll("input, select, textarea, button");
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  elements.forEach(el => {
+    el.disabled = loading;
   });
 
-  const res = await response.json();
-  if (res.success) {
-    alert("Cliente guardado correctamente.");
-    document.getElementById("form-nuevo-cliente").reset();
-    if(document.getElementById("cli_id_cliente")) document.getElementById("cli_id_cliente").value = "";
-    toggleForm("form-nuevo-cliente");
-    loadClientesView();
-  } else {
-    alert("Error: " + res.message);
+  if (submitBtn) {
+    if (loading) {
+      submitBtn.dataset.originalText = submitBtn.innerText;
+      submitBtn.innerText = customBtnText || "Procesando...";
+      submitBtn.style.opacity = "0.7";
+      submitBtn.style.cursor = "not-allowed";
+    } else {
+      submitBtn.innerText = submitBtn.dataset.originalText || "Guardar";
+      submitBtn.style.opacity = "1";
+      submitBtn.style.cursor = "pointer";
+    }
   }
+}
+
+let listaEquipos = []; // Guardar lista general de equipos en memoria
+
+async function editarEquipo(idEquipo) {
+  const eq = listaEquipos.find(item => String(item.id_equipo) === String(idEquipo));
+  if (!eq) return;
+
+  await showNewEquipoForm(); // Carga primero los clientes en el desplegable
+
+  document.getElementById("equipo-form-title").innerText = "Editar Equipo: " + eq.id_equipo;
+  document.getElementById("eq_id_equipo").value = eq.id_equipo;
+  document.getElementById("eq_id_cliente").value = eq.id_cliente || "";
+  document.getElementById("eq_estado_equipo").value = eq.estado_equipo || "OPERATIVO";
+  document.getElementById("eq_marca").value = eq.marca || "";
+  document.getElementById("eq_modelo").value = eq.modelo || "";
+  document.getElementById("eq_serie").value = eq.serie || "";
+  document.getElementById("eq_proveedor").value = eq.proveedor || "";
+  document.getElementById("eq_representante").value = eq.representante || "";
+  document.getElementById("eq_telefono_proveedor").value = eq.telefono_proveedor || "";
+  document.getElementById("eq_ano_fabricacion").value = eq.ano_fabricacion || "";
+  document.getElementById("eq_fecha_adquisicion").value = eq.fecha_adquisicion || "";
+  document.getElementById("eq_fecha_instalacion").value = eq.fecha_instalacion || "";
+  document.getElementById("eq_vida_util_anos").value = eq.vida_util_anos || "";
+  document.getElementById("eq_voltaje_operacion").value = eq.voltaje_operacion || "";
+  document.getElementById("eq_frecuencia_trabajo").value = eq.frecuencia_trabajo || "";
+  document.getElementById("eq_potencia_salida").value = eq.potencia_salida || "";
+  document.getElementById("eq_presion").value = eq.presion || "";
+  document.getElementById("eq_velocidad").value = eq.velocidad || "";
+  document.getElementById("eq_temperatura").value = eq.temperatura || "";
+  document.getElementById("eq_humedad").value = eq.humedad || "";
+  document.getElementById("eq_fuentes_alimentacion").value = eq.fuentes_alimentacion || "";
+  document.getElementById("eq_empleo").value = eq.empleo || "Médico";
+  document.getElementById("eq_riesgo").value = eq.riesgo || "Bajo I";
+  document.getElementById("eq_posicion").value = eq.posicion || "Fijo";
+  document.getElementById("eq_clasificacion_biomedica").value = eq.clasificacion_biomedica || "Diagnóstico";
+  document.getElementById("eq_tecnologia").value = eq.tecnologia || "Electrónico";
+}
+
+function editarEvento(idEvento) {
+  const ev = listaEventosActuales.find(item => String(item.id_evento) === String(idEvento));
+  if (!ev) return;
+
+  document.getElementById("evt_id_evento").value = ev.id_evento;
+  document.getElementById("evt_fecha").value = ev.fecha_evento || "";
+  document.getElementById("evt_tipo").value = ev.tipo_evento || "MANTENIMIENTO PREVENTIVO";
+  document.getElementById("evt_descripcion").value = ev.descripcion_trabajo || "";
+  document.getElementById("evt_tecnico").value = ev.tecnico_responsable || "";
+  document.getElementById("evt_repuestos").value = ev.repuestos_utilizados || "";
+  document.getElementById("evt_url_pdf").value = ev.url_reporte_pdf || "";
+
+  document.getElementById("form-nuevo-evento").classList.remove("hidden");
 }
