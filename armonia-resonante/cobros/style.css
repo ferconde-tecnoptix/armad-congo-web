@@ -1,0 +1,153 @@
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f4f6f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header / Hero */
+.hero {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: #fff;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.hero h1 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.hero .subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* Tarjetas */
+.main-content {
+  margin-top: -20px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.card h2 {
+  font-size: 1.2rem;
+  color: #1e3c72;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #eef2f5;
+  padding-bottom: 8px;
+}
+
+.price-tag {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+/* Formularios y Selectores */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #2a5298;
+}
+
+.total-box {
+  background-color: #eef4fc;
+  border-left: 4px solid #2a5298;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+  font-size: 1.1rem;
+}
+
+/* Sección QR */
+.qr-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.qr-container img {
+  border: 2px dashed #2a5298;
+  padding: 10px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.qr-hint {
+  margin-top: 8px;
+  font-weight: bold;
+  color: #2a5298;
+}
+
+.payment-details {
+  background: #fafafa;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* Botón de Envió */
+.btn-submit {
+  width: 100%;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-submit:hover {
+  background-color: #219150;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.85rem;
+  color: #777;
+}
