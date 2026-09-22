@@ -45,7 +45,7 @@ body { background-color: #f4f6f9; color: #333; line-height: 1.5; }
   height: auto;
   object-fit: cover;
   /* AJUSTE DE ZOOM Y POSICIÓN */
-  transform: scale(1.4);    /* 1.4 equivale a un zoom del 140% */
+  transform: scale(1.35);    /* 1.35 equivale a un zoom del 135% */
   transform-origin: center; /* El zoom se hace desde el centro */
   transition: transform 0.3s ease;
 }
