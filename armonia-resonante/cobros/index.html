@@ -3,127 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boletas Concierto - Coro Armonía Resonante</title>
+  <title>Boletas Concierto - Armonía Resonante</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header class="hero">
     <div class="container">
-      <h1>Coro Infantil y Juvenil Armonía Resonante</h1>
-      <p class="subtitle">Gran Concierto en Vivo • Adquiere tus entradas</p>
+      <h1>Coro Armonía Resonante</h1>
+      <p>Adquiere tus entradas para el concierto</p>
     </div>
   </header>
 
   <main class="container main-content">
 
-    <!-- Sección de Selección de Boletas -->
-    <section class="card ticket-selection">
-      <h2>1. Selecciona tus entradas</h2>
+    <!-- SELECCIÓN DE BOLETAS -->
+    <section class="card">
+      <h2>1. Cantidad de Entradas</h2>
       <p class="price-tag">Precio por boleta: <strong>$10.000 COP</strong></p>
 
       <div class="form-group">
-        <label for="ticket-quantity">Cantidad de boletas:</label>
-        <input type="number" id="ticket-quantity" min="1" max="10" value="1" onchange="updateTotal()">
+        <label for="ticket-quantity">¿Cuántas entradas deseas?</label>
+        <input type="number" id="ticket-quantity" min="1" value="1" onchange="calculateTotal()">
       </div>
 
       <div class="total-box">
         <span>Total a pagar:</span>
         <strong id="total-price">$10.000 COP</strong>
       </div>
+
+      <button type="button" class="btn-primary" onclick="startPaymentProcess()">Continuar al Pago</button>
     </section>
 
-    <!-- Sección de Pago Bre-B / Nequi -->
-    <section class="card payment-section">
-      <h2>2. Realiza tu pago mediante Bre-B / Nequi</h2>
-      <p>Escanea el código QR desde la app de tu banco o transferencia directa a Nequi usando la llave Bre-B.</p>
+    <!-- SECCIÓN DE PAGO CON QR -->
+    <section class="card payment-section" id="payment-card" style="display: none;">
+      <h2>2. Realiza tu Pago por Nequi / Bre-B</h2>
+      
+      <div id="payment-step-indicator" class="step-badge"></div>
 
       <div class="qr-container">
-        <!-- Reemplaza la imagen por tu QR o la imagen estática correspondiente -->
-        <img id="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=Nequi-ArmoniaResonante-10000" alt="Código QR Bre-B Nequi">
-        <p class="qr-hint">Monto cargado en el QR: <span id="qr-amount">$10.000 COP</span></p>
+        <img id="qr-image" src="" alt="Código QR de Pago">
+        <h3 id="qr-instruction-title" class="qr-title"></h3>
+        <p id="qr-instruction-desc" class="qr-desc"></p>
       </div>
 
-      <div class="payment-details">
-        <p><strong>Llave Bre-B / Número Nequi:</strong> <span id="nequi-number">317 379 1045</span></p>
-        <p><strong>Titular:</strong> Marcela González</p>
-      </div>
+      <!-- Botón para avanzar si hay un segundo QR en la secuencia -->
+      <button type="button" id="next-qr-btn" class="btn-secondary" style="display: none;" onclick="showNextQR()">
+        Ya pagué este QR, mostrar el 2do QR
+      </button>
+
+      <p class="account-info">
+        <strong>Llave Bre-B / Nequi:</strong> @3173791045<br>
+        <strong>Titular:</strong> Marcela González
+      </p>
     </section>
 
-    <!-- Sección de Registro de Comprobante -->
-    <section class="card confirmation-section">
-      <h2>3. Confirma tu compra</h2>
-      <p>Una vez realizado el pago, ingresa tus datos y la referencia de la transferencia para validar tu entrada.</p>
+    <!-- FORMULARIO DE REPORTE -->
+    <section class="card" id="form-card" style="display: none;">
+      <h2>3. Registro del Comprobante</h2>
+      <p>Ingresa la referencia o adjunta la captura del pago realizado para validar tus boletas.</p>
 
-      <!-- Puedes enlazar este formulario a Formspree o FormSubmit cambiando el 'action' -->
-      <form action="https://formsubmit.co/contacto@armad-congo.com" method="POST" enctype="multipart/form-data">
-        
-        <!-- Campo oculto para llevar la cantidad comprada al correo -->
-        <input type="hidden" name="Cantidad de Boletas" id="hidden-quantity" value="1">
-        <input type="hidden" name="Total Pagado" id="hidden-total" value="$10.000 COP">
+      <form action="https://formsubmit.co/tu-correo@armad-congo.com" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="Cantidad Boletas" id="hidden-quantity">
+        <input type="hidden" name="Total COP" id="hidden-total">
 
         <div class="form-group">
-          <label for="fullname">Nombre completo:</label>
-          <input type="text" id="fullname" name="Nombre" required placeholder="Ej. María Pérez">
+          <label>Nombre Completo:</label>
+          <input type="text" name="Nombre" required placeholder="Ej. María Pérez">
         </div>
 
         <div class="form-group">
-          <label for="email">Correo electrónico (para recibir tus boletas):</label>
-          <input type="email" id="email" name="Email" required placeholder="ejemplo@correo.com">
+          <label>Correo Electrónico:</label>
+          <input type="email" name="Email" required placeholder="correo@ejemplo.com">
         </div>
 
         <div class="form-group">
-          <label for="phone">Teléfono / WhatsApp:</label>
-          <input type="tel" id="phone" name="Telefono" required placeholder="300 123 4567">
+          <label>Número de Referencia(s) / Aprobación:</label>
+          <input type="text" name="Referencia" required placeholder="Ej. M123456 / M123457">
         </div>
 
         <div class="form-group">
-          <label for="reference">Número de referencia / aprobación Nequi:</label>
-          <input type="text" id="reference" name="Numero_Referencia" required placeholder="Ej. M1234567">
+          <label>Comprobante de pago (Imagen):</label>
+          <input type="file" name="Comprobante" accept="image/*">
         </div>
 
-        <div class="form-group">
-          <label for="receipt">Comprobante de pago (Opcional - Imagen o PDF):</label>
-          <input type="file" id="receipt" name="Comprobante" accept="image/*,.pdf">
-        </div>
-
-        <button type="submit" class="btn-submit">Enviar Comprobante y Solicitar Boletas</button>
+        <button type="submit" class="btn-submit">Enviar Registro y Solicitar Boletas</button>
       </form>
     </section>
 
   </main>
 
-  <footer>
-    <p>&copy; 2026 Coro Infantil y Juvenil Armonía Resonante • armad-congo.com</p>
-  </footer>
+  <!-- VENTANA MODAL DE INSTRUCCIONES -->
+  <div id="instruction-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h3 id="modal-title">Instrucciones de Pago</h3>
+      <p id="modal-body"></p>
+      <button class="btn-modal" onclick="closeModal()">Entendido</button>
+    </div>
+  </div>
 
-  <script>
-    const TICKET_PRICE = 10000;
-    // Reemplaza por tu número Nequi o dato de tu Llave Bre-B
-    const NEQUI_LLAVE = "@3173791045"; 
-
-    function updateTotal() {
-      const quantityInput = document.getElementById('ticket-quantity');
-      let qty = parseInt(quantityInput.value);
-
-      if (isNaN(qty) || qty < 1) {
-        qty = 1;
-        quantityInput.value = 1;
-      }
-
-      const total = qty * TICKET_PRICE;
-      const formattedTotal = `$${total.toLocaleString('es-CO')} COP`;
-
-      // Actualizar valores en pantalla
-      document.getElementById('total-price').innerText = formattedTotal;
-      document.getElementById('qr-amount').innerText = formattedTotal;
-      document.getElementById('hidden-quantity').value = qty;
-      document.getElementById('hidden-total').value = formattedTotal;
-
-      // Actualizar enlace / QR (Generador de QR simple con el texto de cobro)
-      const qrData = encodeURIComponent(`Nequi Bre-B: ${NEQUI_LLAVE} - Valor: ${formattedTotal}`);
-      document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${qrData}`;
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
