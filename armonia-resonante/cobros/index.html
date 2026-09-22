@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boletas Concierto - Armonía Resonante</title>
+  <title>Venta de Boletas - Coro Armonía Resonante</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header class="hero">
     <div class="container">
-      <h1>Coro Armonía Resonante</h1>
-      <p>Adquiere tus entradas para el concierto</p>
+      <h1>Coro Infantil y Juvenil Armonía Resonante</h1>
+      <p>Gran Concierto en Vivo • Adquiere tus entradas</p>
     </div>
   </header>
 
   <main class="container main-content">
 
-    <!-- SELECCIÓN DE BOLETAS -->
+    <!-- PASO 1: SELECCIÓN DE BOLETAS -->
     <section class="card">
       <h2>1. Cantidad de Entradas</h2>
       <p class="price-tag">Precio por boleta: <strong>$10.000 COP</strong></p>
@@ -35,14 +35,14 @@
       <button type="button" class="btn-primary" onclick="startPaymentProcess()">Continuar al Pago</button>
     </section>
 
-    <!-- SECCIÓN DE PAGO CON QR -->
+    <!-- PASO 2: SECCIÓN DE PAGO Y QR -->
     <section class="card payment-section" id="payment-card" style="display: none;">
       <h2>2. Realiza tu Pago por Nequi / Bre-B</h2>
       
       <div id="payment-step-indicator" class="step-badge"></div>
 
       <div class="qr-container">
-        <!-- Marco contenedor que recorta los bordes de la imagen -->
+        <!-- MARCO DE RECORTE / ZOOM PARA EL QR -->
         <div class="qr-crop-frame">
           <img id="qr-image" src="" alt="Código QR de Pago">
         </div>
@@ -51,47 +51,53 @@
         <p id="qr-instruction-desc" class="qr-desc"></p>
       </div>
 
-      <!-- Botón para avanzar si hay un segundo QR en la secuencia -->
+      <!-- Botón para avanzar si el pago consta de 2 QRs en secuencia -->
       <button type="button" id="next-qr-btn" class="btn-secondary" style="display: none;" onclick="showNextQR()">
         Ya pagué este QR, mostrar el 2do QR
       </button>
 
-      <p class="account-info">
-        <strong>Llave Bre-B / Nequi:</strong> @3173791045<br>
-        <strong>Titular:</strong> Marcela González
-      </p>
+      <div class="account-info">
+        <p><strong>Llave Bre-B / Nequi:</strong> @3173791045</p>
+        <p><strong>Titular:</strong> Marcela González</p>
+      </div>
     </section>
 
-    <!-- FORMULARIO DE REPORTE -->
+    <!-- PASO 3: FORMULARIO DE REGISTRO / ENVÍO DE COMPROBANTE -->
     <section class="card" id="form-card" style="display: none;">
       <h2>3. Registro del Comprobante</h2>
-      <p>Ingresa la referencia o adjunta la captura del pago realizado para validar tus boletas.</p>
+      <p>Ingresa tus datos y la referencia de la transferencia para validar tus boletas.</p>
 
-      <form action="https://formsubmit.co/tu-correo@armad-congo.com" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="Cantidad Boletas" id="hidden-quantity">
-        <input type="hidden" name="Total COP" id="hidden-total">
+      <form id="payment-form">
+        <!-- Campos ocultos que se calculan con el script JS -->
+        <input type="hidden" name="Cantidad_Boletas" id="hidden-quantity" value="1">
+        <input type="hidden" name="Total_COP" id="hidden-total" value="$10.000 COP">
 
         <div class="form-group">
-          <label>Nombre Completo:</label>
-          <input type="text" name="Nombre" required placeholder="Ej. María Pérez">
+          <label for="fullname">Nombre completo:</label>
+          <input type="text" id="fullname" name="Nombre" required placeholder="Ej. María Pérez">
         </div>
 
         <div class="form-group">
-          <label>Correo Electrónico:</label>
-          <input type="email" name="Email" required placeholder="correo@ejemplo.com">
+          <label for="email">Correo electrónico (donde recibirás tus entradas con QR):</label>
+          <input type="email" id="email" name="Email" required placeholder="ejemplo@correo.com">
         </div>
 
         <div class="form-group">
-          <label>Número de Referencia(s) / Aprobación:</label>
-          <input type="text" name="Referencia" required placeholder="Ej. M123456 / M123457">
+          <label for="phone">Teléfono / WhatsApp:</label>
+          <input type="tel" id="phone" name="Telefono" required placeholder="Ej. 3001234567">
         </div>
 
         <div class="form-group">
-          <label>Comprobante de pago (Imagen):</label>
-          <input type="file" name="Comprobante" accept="image/*">
+          <label for="reference">Número de referencia / aprobación Nequi:</label>
+          <input type="text" id="reference" name="Referencia" required placeholder="Ej. M1234567">
         </div>
 
-        <button type="submit" class="btn-submit">Enviar Registro y Solicitar Boletas</button>
+        <div class="form-group">
+          <label for="receipt">Comprobante de pago (Opcional - Imagen o PDF):</label>
+          <input type="file" id="receipt" name="Comprobante" accept="image/*,.pdf">
+        </div>
+
+        <button type="submit" id="btn-submit-form" class="btn-submit">Enviar Registro y Solicitar Boletas</button>
       </form>
     </section>
 
@@ -102,9 +108,13 @@
     <div class="modal-content">
       <h3 id="modal-title">Instrucciones de Pago</h3>
       <p id="modal-body"></p>
-      <button class="btn-modal" onclick="closeModal()">Entendido</button>
+      <button type="button" class="btn-modal" onclick="closeModal()">Entendido</button>
     </div>
   </div>
+
+  <footer>
+    <p>&copy; 2026 Coro Infantil y Juvenil Armonía Resonante • armad-congo.com</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
