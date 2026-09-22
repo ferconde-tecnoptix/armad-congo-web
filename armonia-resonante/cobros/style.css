@@ -23,8 +23,47 @@ body { background-color: #f4f6f9; color: #333; line-height: 1.5; }
 /* Contenedor QR */
 .qr-container { text-align: center; margin: 20px 0; padding: 15px; border: 2px dashed #2a5298; border-radius: 8px; background: #fff; }
 .qr-container img { max-width: 220px; height: auto; margin-bottom: 10px; }
-.qr-title { color: #1e3c72; font-size: 1.2rem; }
-.qr-desc { color: #e67e22; font-weight: bold; margin-top: 5px; }
+/* Marco contenedor (Crop Frame) */
+.qr-crop-frame {
+  width: 260px;             /* Ancho fijo del marco en pantalla */
+  height: 260px;            /* Alto fijo del marco en pantalla */
+  margin: 0 auto 15px auto; /* Centrado automático */
+  overflow: hidden;         /* Oculta todo lo que se salga del marco (recorte) */
+  border-radius: 12px;      /* Bordes redondeados modernos */
+  border: 3px solid #1e3c72;/* Borde azul elegante */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Imagen del QR dentro del marco */
+.qr-crop-frame img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  /* AJUSTE DE ZOOM Y POSICIÓN */
+  transform: scale(1.4);    /* 1.4 equivale a un zoom del 140% */
+  transform-origin: center; /* El zoom se hace desde el centro */
+  transition: transform 0.3s ease;
+}
+
+/* Título e instrucciones dentro de la tarjeta */
+.qr-title {
+  color: #1e3c72;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.qr-desc {
+  color: #d35400;
+  font-weight: bold;
+  margin-top: 5px;
+  font-size: 0.95rem;
+}
 
 .step-badge { background: #e67e22; color: white; font-weight: bold; text-align: center; padding: 5px 10px; border-radius: 4px; font-size: 0.85rem; margin-bottom: 10px; }
 .account-info { text-align: center; font-size: 0.9rem; background: #fafafa; padding: 10px; border-radius: 5px; margin-top: 15px; }
