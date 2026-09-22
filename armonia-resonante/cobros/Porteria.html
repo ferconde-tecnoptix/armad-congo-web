@@ -53,96 +53,113 @@
   </div>
 
   <script>
-    // Obtiene el parámetro 'id' de la URL (Ejemplo: ?id=AR-001)
-    const urlParams = new URLSearchParams(window.location.search);
-    const idRegistro = urlParams.get('id');
-    
-    // URL Web App de tu Google Apps Script para consultar la hoja
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwh735VkvDwFgj30VFnLJF0tEjop26bjFa-iB-ngu_M0sHXClg1xOnXPN53cAq9FoM6/exec";
-    
-    let currentRecord = null;
-    
-    document.addEventListener("DOMContentLoaded", () => {
-      if (idRegistro) {
-        verifyCode(idRegistro);
-      } else {
-        document.getElementById("loading").innerText = "⚠️ No se especificó ningún código de entrada en la URL.";
-      }
-    });
-    
-    function verifyCode(id) {
-      fetch(`${GOOGLE_SCRIPT_URL}?action=checkEntryStatus&id=${encodeURIComponent(id)}`)
-        .then(response => response.json())
-        .then(showResult)
-        .catch(err => {
-          console.error("Error al consultar:", err);
-          document.getElementById("loading").innerText = "❌ Error al consultar la base de datos.";
-        });
+  // 1. REEMPLAZA ESTA URL CON LA DE TU DESPLIEGUE EN GOOGLE APPS SCRIPT
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwh735VkvDwFgj30VFnLJF0tEjop26bjFa-iB-ngu_M0sHXClg1xOnXPN53cAq9FoM6/exec";
+
+  // 2. Extraer el ID de la URL (Ejemplo: Porteria.html?id=AR-001)
+  const urlParams = new URLSearchParams(window.location.search);
+  const idRegistro = urlParams.get('id');
+
+  let currentRecord = null;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (idRegistro) {
+      verifyCode(idRegistro);
+    } else {
+      document.getElementById("loading").innerText = "⚠️ No se especificó ningún código de entrada en la URL.";
     }
-    
-    function showResult(response) {
-      document.getElementById("loading").style.display = "none";
-      const card = document.getElementById("result-card");
-      const banner = document.getElementById("status-banner");
-      const btnConfirm = document.getElementById("btn-confirm-entry");
-    
-      if (!response.found) {
-        document.getElementById("loading").innerText = "❌ Código no encontrado en la base de datos.";
-        document.getElementById("loading").style.display = "block";
-        return;
-      }
-    
-      currentRecord = response;
-    
-      document.getElementById("info-id").innerText = response.idRegistro;
-      document.getElementById("info-nombre").innerText = response.nombre;
-      document.getElementById("info-boletas").innerText = response.cantidad;
-      document.getElementById("info-pago").innerText = response.estadoPago;
-      document.getElementById("info-ingreso").innerText = response.estadoIngreso;
-    
-      if (response.estadoPago !== "CONFIRMADO") {
-        banner.innerText = "❌ PAGO NO CONFIRMADO";
-        banner.className = "status-banner state-NO_CONFIRMADO";
-        btnConfirm.style.display = "none";
-        document.getElementById("row-fecha-ingreso").style.display = "none";
-    
-      } else if (response.estadoIngreso === "INGRESADO") {
-        banner.innerText = "⚠️ QR YA UTILIZADO";
-        banner.className = "status-banner state-USADO";
-        btnConfirm.style.display = "none";
-        document.getElementById("row-fecha-ingreso").style.display = "block";
-        document.getElementById("info-fecha-ingreso").innerText = response.fechaIngreso;
-    
-      } else {
-        banner.innerText = "✅ ACCESO PERMITIDO";
-        banner.className = "status-banner state-PERMITIDO";
-        btnConfirm.style.display = "block";
-        btnConfirm.innerText = `Confirmar Ingreso (${response.cantidad} Entradas)`;
-        document.getElementById("row-fecha-ingreso").style.display = "none";
-      }
-    
-      card.style.display = "block";
+  });
+
+  function verifyCode(id) {
+    document.getElementById("loading").innerText = "🔍 Consultando estado en tiempo real...";
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("result-card").style.display = "none";
+
+    const fetchUrl = `${GOOGLE_SCRIPT_URL}?action=checkEntryStatus&id=${encodeURIComponent(id)}`;
+
+    fetch(fetchUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Respuesta de red no OK");
+        }
+        return response.json();
+      })
+      .then(showResult)
+      .catch(err => {
+        console.error("Error al consultar:", err);
+        document.getElementById("loading").innerText = "❌ Error al consultar la base de datos. Revisa la consola o la conexión.";
+      });
+  }
+
+  function showResult(response) {
+    document.getElementById("loading").style.display = "none";
+    const card = document.getElementById("result-card");
+    const banner = document.getElementById("status-banner");
+    const btnConfirm = document.getElementById("btn-confirm-entry");
+
+    if (!response || !response.found) {
+      document.getElementById("loading").innerText = "❌ Código no encontrado en la base de datos.";
+      document.getElementById("loading").style.display = "block";
+      return;
     }
-    
-    function confirmEntry() {
-      if (!currentRecord) return;
-    
-      const btnConfirm = document.getElementById("btn-confirm-entry");
-      btnConfirm.disabled = true;
-      btnConfirm.innerText = "Registrando...";
-    
-      fetch(`${GOOGLE_SCRIPT_URL}?action=setConfirmedEntry&id=${encodeURIComponent(currentRecord.idRegistro)}`)
-        .then(response => response.json())
-        .then(response => {
-          if (response.success) {
-            alert(`✅ Ingreso registrado exitosamente para ${currentRecord.nombre}`);
-            location.reload();
-          } else {
-            alert("Error: " + response.message);
-            btnConfirm.disabled = false;
-          }
-        });
+
+    currentRecord = response;
+
+    document.getElementById("info-id").innerText = response.idRegistro;
+    document.getElementById("info-nombre").innerText = response.nombre;
+    document.getElementById("info-boletas").innerText = response.cantidad;
+    document.getElementById("info-pago").innerText = response.estadoPago;
+    document.getElementById("info-ingreso").innerText = response.estadoIngreso;
+
+    if (response.estadoPago !== "CONFIRMADO") {
+      banner.innerText = "❌ PAGO NO CONFIRMADO";
+      banner.className = "status-banner state-NO_CONFIRMADO";
+      btnConfirm.style.display = "none";
+      document.getElementById("row-fecha-ingreso").style.display = "none";
+
+    } else if (response.estadoIngreso === "INGRESADO") {
+      banner.innerText = "⚠️ QR YA UTILIZADO";
+      banner.className = "status-banner state-USADO";
+      btnConfirm.style.display = "none";
+      document.getElementById("row-fecha-ingreso").style.display = "block";
+      document.getElementById("info-fecha-ingreso").innerText = response.fechaIngreso;
+
+    } else {
+      banner.innerText = "✅ ACCESO PERMITIDO";
+      banner.className = "status-banner state-PERMITIDO";
+      btnConfirm.style.display = "block";
+      btnConfirm.innerText = `Confirmar Ingreso (${response.cantidad} Entradas)`;
+      document.getElementById("row-fecha-ingreso").style.display = "none";
     }
+
+    card.style.display = "block";
+  }
+
+  function confirmEntry() {
+    if (!currentRecord) return;
+
+    const btnConfirm = document.getElementById("btn-confirm-entry");
+    btnConfirm.disabled = true;
+    btnConfirm.innerText = "Registrando...";
+
+    const fetchUrl = `${GOOGLE_SCRIPT_URL}?action=setConfirmedEntry&id=${encodeURIComponent(currentRecord.idRegistro)}`;
+
+    fetch(fetchUrl)
+      .then(response => response.json())
+      .then(response => {
+        if (response.success) {
+          alert(`✅ Ingreso registrado exitosamente para ${currentRecord.nombre}`);
+          location.reload();
+        } else {
+          alert("Error: " + response.message);
+          btnConfirm.disabled = false;
+        }
+      })
+      .catch(err => {
+        alert("Error de conexión al registrar ingreso.");
+        btnConfirm.disabled = false;
+      });
+  }
   </script>
 </body>
 </html>
