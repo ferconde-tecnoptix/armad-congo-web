@@ -2,12 +2,12 @@ const TICKET_PRICE = 10000;
 
 // Diccionario de imágenes de QR según el monto
 const QR_IMAGES = {
-  10000: 'qr_10000.jpg',
-  20000: 'qr_20000.jpg',
-  30000: 'qr_30000.jpg',
-  40000: 'qr_40000.jpg',
-  50000: 'qr_50000.jpg',
-  0:     'qr_abierto.jpg' // QR sin monto asignado
+  10000: 'qr_10000.jpeg',
+  20000: 'qr_20000.jpeg',
+  30000: 'qr_30000.jpeg',
+  40000: 'qr_40000.jpeg',
+  50000: 'qr_50000.jpeg',
+  0:     'qr_abierto.jpeg' // QR sin monto asignado
 };
 
 let currentQty = 1;
