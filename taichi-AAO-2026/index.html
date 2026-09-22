@@ -159,8 +159,8 @@
               </div>
               <div>
                 <h3 class="text-xl font-bold text-white">Fernando Conde</h3>
-                <p class="text-amber-300 text-sm font-medium">Representante & Staff Taichi Holdings</p>
-                <p class="text-xs text-slate-300"><i class="fa-solid fa-globe mr-1"></i> Colombia & Latinoamérica</p>
+                <p class="text-amber-300 text-sm font-medium">Taichi Holdings Staff</p>
+                <p class="text-xs text-slate-300"><i class="fa-solid fa-location-dot mr-1"></i> Colombia</p>
               </div>
             </div>
 
@@ -563,23 +563,10 @@
             <!-- Visual Device Render Container -->
             <div class="bg-gradient-to-br from-slate-900 via-taichi-navy to-slate-950 p-6 text-white relative flex flex-col items-center">
               <span class="bg-sky-500 text-white text-[10px] font-extrabold px-2.5 py-1 rounded uppercase tracking-wider absolute top-4 right-4 shadow">
-                BigVision BV1000S
+                <i class="fa-solid fa-circle-play mr-1"></i> Demo en Vivo AAO #4043
               </span>
               
-              <!-- SVG Visual Representation of OCT BV1000S -->
-              <!--<svg viewBox="0 0 300 160" class="w-full h-36 my-2 drop-shadow-2xl select-none">
-                <rect x="20" y="125" width="260" height="20" rx="4" fill="#334155"/>
-                <rect x="60" y="30" width="100" height="95" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
-                <rect x="75" y="45" width="70" height="65" rx="8" fill="#0f172a"/>
-                <circle cx="110" cy="77" r="22" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/>
-                <circle cx="110" cy="77" r="10" fill="#0369a1"/>
-                <path d="M 170 40 L 250 40 L 250 115 L 170 115 Z" fill="#1e293b" stroke="#475569" stroke-width="2" rx="4"/>
-                <path d="M 175 45 Q 210 65 245 48" fill="none" stroke="#38bdf8" stroke-width="2"/>
-                <path d="M 175 75 Q 210 95 245 78" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                <text x="210" y="105" fill="#a7f3d0" font-size="7" font-weight="bold" text-anchor="middle">OCT AI Scan 80kHz</text>
-                <path d="M 110 125 L 110 140" stroke="#94a3b8" stroke-width="6"/>
-                <path d="M 50 50 C 40 50 35 70 35 90 C 35 110 40 120 50 120" fill="none" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
-              </svg>-->
+              <!-- Real Image Render Container for OCT BV1000S -->
               <div class="w-full h-40 my-2 flex items-center justify-center p-2">
                 <img 
                   src="OCTBigVision.webp" 
@@ -589,25 +576,29 @@
                   decoding="async"
                 />
               </div>
+
               <h3 class="text-xl font-bold font-display text-center">OCT Scanner Artificial Intelligence</h3>
               <p class="text-xs text-sky-200 mt-1 text-center">Tomografía de Coherencia Óptica de Alta Velocidad (80,000 A-scans/sec)</p>
             </div>
 
             <div class="p-6 space-y-4">
               <p class="text-sm text-slate-600 leading-relaxed">
-                Escaneo ultra-rápido con cobertura de gran campo (12mm x 9mm) que abarca la mácula y el disco óptico simultáneamente. Análisis automatizado con inteligencia artificial para detección de hasta 16 lesiones retinales principales.
+                Escaneo ultra-rápido con cobertura de gran campo (12mm x 9mm) que abarca la mácula y el disco óptico simultáneamente. **Estará físicamente en exhibición y demostración en vivo en AAO New Orleans (Stand #4043)**.
               </p>
               <ul class="text-xs text-slate-700 space-y-2 border-t border-slate-100 pt-4">
+                <li class="flex items-center"><i class="fa-solid fa-circle-check text-sky-500 mr-2"></i> Pruebas funcionales e inspección en vivo en AAO #4043</li>
                 <li class="flex items-center"><i class="fa-solid fa-circle-check text-sky-500 mr-2"></i> Operación 100% automática con guiado por voz</li>
-                <li class="flex items-center"><i class="fa-solid fa-circle-check text-sky-500 mr-2"></i> Mapeo cuantitativo de espesor de retina y coroides</li>
-                <li class="flex items-center"><i class="fa-solid fa-circle-check text-sky-500 mr-2"></i> Examen completo de ambos ojos en un promedio de 2 minutos</li>
+                <li class="flex items-center"><i class="fa-solid fa-circle-check text-sky-500 mr-2"></i> Agendamiento prioritario para Demos y Cotizaciones en Colombia</li>
               </ul>
             </div>
           </div>
 
-          <div class="p-6 pt-0">
-            <a href="#registro" onclick="selectProduct('OCT BigVision')" class="block text-center w-full py-3 border-2 border-taichi-navy text-taichi-navy font-bold rounded-xl text-xs hover:bg-taichi-navy hover:text-white transition shadow-sm">
-              Solicitar Cotización / Demo en Colombia
+          <div class="p-6 pt-0 space-y-2">
+            <a href="#registro" onclick="selectProduct('OCT BigVision'); setOption('aao');" class="block text-center w-full py-3 bg-taichi-navy text-white font-bold rounded-xl text-xs hover:bg-slate-800 transition shadow">
+              <i class="fa-solid fa-calendar-check mr-1.5 text-amber-400"></i> Agendar Demo en Vivo en AAO #4043
+            </a>
+            <a href="#registro" onclick="selectProduct('OCT BigVision'); setOption('colombia');" class="block text-center w-full py-2.5 border border-slate-300 text-slate-700 font-semibold rounded-xl text-xs hover:bg-slate-100 transition">
+              <i class="fa-solid fa-truck-medical mr-1.5 text-sky-500"></i> Solicitar Demo / Cotización en Colombia
             </a>
           </div>
         </div>
@@ -617,27 +608,14 @@
           <div>
             <div class="bg-gradient-to-br from-taichi-navy via-slate-900 to-amber-950 p-6 text-white relative flex flex-col items-center">
               <span class="gold-gradient text-taichi-navy text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider absolute top-4 right-4 shadow-lg">
-                Estrella AAO #4043
+                <i class="fa-solid fa-user-check mr-1"></i> Soporte Directo Fabricante AAO
               </span>
 
-              <!-- SVG Visual Representation of Biometer + OCT BVB2000 -->
-              <!--<svg viewBox="0 0 300 160" class="w-full h-36 my-2 drop-shadow-2xl select-none">
-                <rect x="20" y="125" width="260" height="20" rx="4" fill="#334155"/>
-                <rect x="80" y="25" width="90" height="100" rx="10" fill="#ffffff" stroke="#fbbf24" stroke-width="2.5"/>
-                <rect x="95" y="40" width="60" height="70" rx="6" fill="#0b1c38"/>
-                <circle cx="125" cy="75" r="18" fill="#d4af37" stroke="#ffffff" stroke-width="2"/>
-                <circle cx="125" cy="75" r="8" fill="#0b1c38"/>
-                
-                <rect x="185" y="35" width="85" height="80" rx="6" fill="#0f172a" stroke="#d4af37" stroke-width="1.5"/>
-                <path d="M 195 95 L 210 65 L 225 80 L 240 50 L 260 95" fill="none" stroke="#fbbf24" stroke-width="2"/>
-                <text x="227" y="108" fill="#38bdf8" font-size="7" font-weight="bold" text-anchor="middle">12 Optometric Params</text>
-                <path d="M 65 45 C 55 45 50 65 50 85 C 50 105 55 115 65 115" fill="none" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
-              </svg>-->
-
+              <!-- Real Image Render Container for Biometer + OCT BVB2000 -->
               <div class="w-full h-40 my-2 flex items-center justify-center p-2">
                 <img 
                   src="biometerBigVision.webp" 
-                  alt="BigVision BVB2000 Biómetro basado en OCT" 
+                  alt="BigVision BVB2000 Biómetro basado en OCT 2 en 1" 
                   class="max-h-full w-auto object-contain filter drop-shadow-[0_12px_20px_rgba(0,0,0,0.65)] hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                   decoding="async"
@@ -650,19 +628,22 @@
 
             <div class="p-6 space-y-4">
               <p class="text-sm text-slate-600 leading-relaxed">
-                Revolucionario instrumento óptico de 2ª generación con inteligencia artificial. Captura en 1 solo clic hasta 12 parámetros biométricos esenciales para un cálculo ultraclaro de lentes intraoculares (LIO).
+                Revolucionario instrumento óptico de 2ª generación. **En AAO contaremos con los fabricantes de BigVision de primera mano para responder todas sus inquietudes técnicas y comerciales, previo a la llegada de las unidades demo a Colombia.**
               </p>
               <ul class="text-xs text-slate-700 space-y-2 border-t border-slate-100 pt-4">
-                <li class="flex items-center"><i class="fa-solid fa-circle-check text-amber-500 mr-2"></i> Medición de CCT, AL, K1/K2, ACD, LT, WTW y grosor coroidal</li>
-                <li class="flex items-center"><i class="fa-solid fa-circle-check text-amber-500 mr-2"></i> Predicción del desarrollo del eje ocular y control de miopía</li>
-                <li class="flex items-center"><i class="fa-solid fa-circle-check text-amber-500 mr-2"></i> Plataforma 3D automática con enfoque en menos de 60s</li>
+                <li class="flex items-center"><i class="fa-solid fa-circle-check text-amber-500 mr-2"></i> Reunión con fabricantes e ingenieros de BigVision en AAO</li>
+                <li class="flex items-center"><i class="fa-solid fa-circle-check text-amber-500 mr-2"></i> Captura de 12 parámetros biométricos en 1 solo clic</li>
+                <li class="flex items-center"><i class="fa-solid fa-circle-check text-amber-500 mr-2"></i> Agendamiento prioritario para la Gira de Demos en Colombia</li>
               </ul>
             </div>
           </div>
 
-          <div class="p-6 pt-0">
-            <a href="#registro" onclick="selectProduct('Biómetro basado en OCT')" class="block text-center w-full py-3 gold-gradient text-taichi-navy font-extrabold rounded-xl text-xs hover:brightness-105 transition shadow-lg">
-              Programar Cita de Presentación en AAO
+          <div class="p-6 pt-0 space-y-2">
+            <a href="#registro" onclick="selectProduct('Biómetro basado en OCT'); setOption('aao');" class="block text-center w-full py-3 gold-gradient text-taichi-navy font-extrabold rounded-xl text-xs hover:brightness-105 transition shadow-lg">
+              <i class="fa-solid fa-comments mr-1.5"></i> Consultar con Fabricante en AAO
+            </a>
+            <a href="#registro" onclick="selectProduct('Biómetro basado en OCT'); setOption('colombia');" class="block text-center w-full py-2.5 border border-amber-400 text-taichi-navy font-semibold rounded-xl text-xs hover:bg-amber-50 transition">
+              <i class="fa-solid fa-calendar-plus mr-1.5 text-amber-600"></i> Pre-Agendar Demo en Colombia
             </a>
           </div>
         </div>
