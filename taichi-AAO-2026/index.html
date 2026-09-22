@@ -138,7 +138,7 @@
 
           <div class="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <a href="#registro" onclick="setOption('aao')" class="gold-gradient text-taichi-navy font-bold px-7 py-3.5 rounded-lg text-base shadow-lg hover:brightness-110 transition text-center">
-              <i class="fa-solid fa-ticket mr-2"></i> Asistiré a AAO (Solicitar Bono)
+              <i class="fa-solid fa-ticket mr-2"></i> Asistiré a AAO (Programar Visita)
             </a>
             <a href="#mapa-stand" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-7 py-3.5 rounded-lg text-base transition text-center">
               <i class="fa-solid fa-map-location-dot mr-2 text-amber-400"></i> Guiado Interactiva Stand #4043
@@ -568,8 +568,8 @@
               <li class="flex items-center"><i class="fa-solid fa-check text-amber-500 mr-2"></i> Fórmulas LIO avanzadas de última generación</li>
               <li class="flex items-center"><i class="fa-solid fa-check text-amber-500 mr-2"></i> Medición corneal y de cámara anterior precisa</li>
             </ul>
-            <a href="#registro" onclick="selectProduct('Biómetro basado en OCT')" class="block text-center w-full py-2.5 gold-gradient text-taichi-navy font-bold rounded-lg text-xs hover:brightness-105 transition shadow">
-              Solicitar Bono de Descuento
+            <a href="#registro" onclick="selectProduct('Biómetro basado en OCT')" class="block text-center w-full py-2.5 border border-taichi-navy text-taichi-navy font-bold rounded-lg text-xs hover:bg-taichi-navy hover:text-white transition">
+              Solicitar Cotización / Demo
             </a>
           </div>
         </div>
@@ -675,7 +675,7 @@
             <input type="radio" name="asistencia_tipo" value="aao" id="opt-aao" checked onchange="toggleFormOption()" class="mt-1 text-taichi-navy focus:ring-amber-400">
             <div>
               <span class="font-bold text-sm text-taichi-navy block"><i class="fa-solid fa-plane-departure text-amber-500 mr-1.5"></i>Asistiré a AAO (New Orleans)</span>
-              <span class="text-xs text-slate-500 block mt-0.5">Visitaré el stand #4043 de BigVision para recibir atención y bono exclusivo.</span>
+              <span class="text-xs text-slate-500 block mt-0.5">Visitaré el stand #4043 de BigVision para recibir atención personalizada.</span>
             </div>
           </label>
 
@@ -697,7 +697,7 @@
             <div class="flex">
               <i class="fa-solid fa-circle-info text-amber-600 text-lg mr-3 mt-0.5"></i>
               <p class="text-xs text-amber-800 leading-relaxed">
-                <strong>Atención Asistentes a AAO:</strong> Al completar el formulario recibirá un bono de descuento en su WhatsApp y correo electrónico, redimible únicamente presentando su código en el stand #4043 de BigVision con Fernando Conde.
+                <strong>Atención Asistentes a AAO:</strong> Al completar el formulario recibirá la programación de su visita al stand #4043 de BigVision con Fernando Conde en su WhatsApp y correo electrónico, .
               </p>
             </div>
           </div>
@@ -769,7 +769,7 @@
 
           <button type="submit" class="w-full gold-gradient text-taichi-navy font-extrabold py-4 rounded-xl text-base shadow-lg hover:brightness-105 transition flex items-center justify-center space-x-2">
             <i class="fa-solid fa-paper-plane"></i>
-            <span id="btn-submit-text">Confirmar Registro & Generar Bono</span>
+            <span id="btn-submit-text">Confirmar Registro & Programar Visita</span>
           </button>
 
           <p class="text-center text-[11px] text-slate-400">
@@ -866,7 +866,7 @@
         </div>
 
         <p class="text-[11px] text-slate-500">
-          Un mensaje automatizado ha sido enviado a su <strong>WhatsApp</strong> y correo electrónico registrado con la guía de ubicación del stand #4043 y su bono comercial.
+          Un mensaje automatizado ha sido enviado a su <strong>WhatsApp</strong> y correo electrónico registrado con la guía de ubicación del stand #4043 y la programación de su visita.
         </p>
 
         <button onclick="closeModal()" class="w-full bg-taichi-navy text-white font-bold py-3 rounded-xl text-xs hover:bg-slate-800 transition">
@@ -1044,7 +1044,7 @@
 
         bannerAAO.classList.remove('hidden');
         bannerColombia.classList.add('hidden');
-        btnSubmitText.textContent = 'Confirmar Registro & Generar Bono AAO';
+        btnSubmitText.textContent = 'Confirmar Registro & Programar visita en AAO';
       } else {
         labelB.classList.add('border-taichi-navy');
         labelB.classList.remove('border-slate-200');
