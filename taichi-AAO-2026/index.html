@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taichi Holdings - AAO 2026 New Orleans | Registro & Presentación</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter & Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            taichi: {
+              navy: '#0b1c38',
+              blue: '#1A365D',
+              lightBlue: '#2B6CB0',
+              gold: '#d4af37',
+              goldHover: '#b89428',
+              slate: '#f8fafc',
+              darkSlate: '#0f172a'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Montserrat', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+    .gold-gradient { background: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #b89428 100%); }
+    .navy-gradient { background: linear-gradient(135deg, #0b1c38 0%, #1A365D 100%); }
+    .card-shadow { box-shadow: 0 10px 30px -5px rgba(11, 28, 56, 0.08); }
+    .glass-effect { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px); }
+
+    /* Map pulse & animations */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.9); opacity: 0.9; }
+      50% { transform: scale(1.4); opacity: 0.3; }
+      100% { transform: scale(0.9); opacity: 0.9; }
+    }
+    .map-beacon {
+      animation: pulse-ring 2s infinite ease-in-out;
+    }
+    .dash-animated {
+      stroke-dasharray: 8, 8;
+      animation: dash-move 1.2s linear infinite;
+    }
+    @keyframes dash-move {
+      to { stroke-dashoffset: -16; }
+    }
+    .hud-glow {
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.3);
+    }
+    .landmark-active {
+      stroke: #f59e0b !important;
+      stroke-width: 2.5px !important;
+    }
+  </style>
+</head>
+<body class="antialiased text-slate-800 bg-slate-50 min-h-screen flex flex-col justify-between">
+
+  <!-- Navigation Header -->
+  <header class="sticky top-0 z-50 glass-effect border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 navy-gradient rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-md border border-amber-400/30">
+            T
+          </div>
+          <div>
+            <span class="text-xl font-extrabold tracking-wider text-taichi-navy font-display">TAICHI</span>
+            <span class="text-xs block font-semibold text-amber-600 tracking-widest uppercase">HOLDINGS COLOMBIA</span>
+          </div>
+        </div>
+
+        <!-- Right Quick Info / Event Tag -->
+        <div class="hidden md:flex items-center space-x-6">
+          <div class="text-right">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Evento Oficial</span>
+            <span class="text-sm font-bold text-taichi-navy"><i class="fa-solid fa-location-dot text-amber-500 mr-1.5"></i>AAO 2026 • Stand BigVision #4043</span>
+          </div>
+          <a href="#mapa-stand" class="border border-taichi-navy text-taichi-navy hover:bg-taichi-navy hover:text-white px-4 py-2 rounded-lg text-xs font-semibold transition">
+            <i class="fa-solid fa-map-location-dot mr-1.5"></i> Ver Mapa Recorrido
+          </a>
+          <a href="#registro" class="navy-gradient text-white hover:opacity-90 px-5 py-2.5 rounded-lg text-sm font-semibold transition shadow-md flex items-center">
+            <i class="fa-regular fa-calendar-check mr-2 text-amber-400"></i> Registrarme Ahora
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="navy-gradient text-white py-16 lg:py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#d4af37_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-semibold tracking-wide uppercase">
+            <i class="fa-solid fa-ribbon text-amber-400"></i> Presencia Oficial Taichi Holdings
+          </div>
+          
+          <h1 class="text-3xl sm:text-5xl font-extrabold font-display leading-tight tracking-tight text-white">
+            Innovación Oftalmológica de Vanguardia en <span class="text-transparent bg-clip-text gold-gradient">AAO 2026</span>
+          </h1>
+
+          <p class="text-lg text-slate-300 leading-relaxed font-normal max-w-2xl mx-auto lg:mx-0">
+            Acompañe a <strong>Fernando Conde</strong> en el stand de <strong>BigVision (#4043)</strong> en New Orleans para conocer el nuevo <strong>OCT Scanner</strong> y el <strong>Biómetro basado en OCT</strong>. O regístrese para coordinar una presentación personalizada en la próxima <strong>Gira de Demos en Colombia</strong>.
+          </p>
+
+          <!-- Badges for Brands -->
+          <div class="pt-2 flex flex-wrap justify-center lg:justify-start gap-4 items-center">
+            <span class="text-xs uppercase font-bold text-slate-400 tracking-wider">Marcas Representadas:</span>
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-white/10 backdrop-blur-md px-3 py-1 rounded-md text-xs font-semibold border border-white/20 text-white"><i class="fa-solid fa-eye text-sky-400 mr-1.5"></i>BigVision</span>
+              <span class="bg-white/10 backdrop-blur-md px-3 py-1 rounded-md text-xs font-semibold border border-white/20 text-white"><i class="fa-solid fa-microscope text-amber-400 mr-1.5"></i>Takagi</span>
+              <span class="bg-white/10 backdrop-blur-md px-3 py-1 rounded-md text-xs font-semibold border border-white/20 text-white"><i class="fa-solid fa-lightbulb text-emerald-400 mr-1.5"></i>Kowa</span>
+            </div>
+          </div>
+
+          <div class="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a href="#registro" onclick="setOption('aao')" class="gold-gradient text-taichi-navy font-bold px-7 py-3.5 rounded-lg text-base shadow-lg hover:brightness-110 transition text-center">
+              <i class="fa-solid fa-ticket mr-2"></i> Asistiré a AAO (Solicitar Bono)
+            </a>
+            <a href="#mapa-stand" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-7 py-3.5 rounded-lg text-base transition text-center">
+              <i class="fa-solid fa-map-location-dot mr-2 text-amber-400"></i> Guiado Interactiva Stand #4043
+            </a>
+          </div>
+        </div>
+
+        <!-- Fernando Conde Host Card -->
+        <div class="lg:col-span-5">
+          <div class="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/20 shadow-2xl relative">
+            <div class="absolute -top-3 -right-3 bg-amber-400 text-taichi-navy text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow">
+              Atención Personalizada
+            </div>
+            
+            <div class="flex items-center space-x-4 mb-6">
+              <div class="w-16 h-16 rounded-full navy-gradient border-2 border-amber-400 flex items-center justify-center text-white text-2xl font-bold shadow">
+                FC
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">Fernando Conde</h3>
+                <p class="text-amber-300 text-sm font-medium">Representante & Staff Taichi Holdings</p>
+                <p class="text-xs text-slate-300"><i class="fa-solid fa-globe mr-1"></i> Colombia & Latinoamérica</p>
+              </div>
+            </div>
+
+            <blockquote class="text-sm italic text-slate-200 border-l-2 border-amber-400 pl-4 py-1 mb-6">
+              "Será un verdadero placer recibir a los doctores colombianos en el stand de BigVision (#4043) en New Orleans para compartir innovaciones y entregarles un cupón de descuento especial."
+            </blockquote>
+
+            <div class="space-y-2 text-xs text-slate-300 border-t border-white/10 pt-4">
+              <div class="flex items-center justify-between">
+                <span><i class="fa-solid fa-location-dot text-amber-400 mr-2"></i> Ubicación del Stand:</span>
+                <span class="font-bold text-white bg-amber-500/20 px-2.5 py-0.5 rounded text-amber-300">BigVision #4043 (Aisle 4000)</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span><i class="fa-solid fa-star text-amber-400 mr-2"></i> Referencia Cercana:</span>
+                <span class="font-bold text-white">EyePlay Experience & Learning Lounge</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Detailed Interactive Map Section based on PDF -->
+  <section id="mapa-stand" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-10 space-y-3">
+        <span class="text-xs font-bold text-amber-600 uppercase tracking-widest bg-amber-100 px-3 py-1 rounded-full">
+          Plano Táctico AAO 2026 • Zona Hall G / H (Stand #4043)
+        </span>
+        <h2 class="text-3xl font-extrabold text-taichi-navy font-display sm:text-4xl">
+          Simulador de Recorrido Exacto al Stand BigVision #4043
+        </h2>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          Ubicación precisa en el Aisle 4000: adyacente a <strong>GreenMan Vision</strong> y <strong>MEDIMAX TECH INC</strong>, frente a <strong>Visionix</strong> y a pasos de <strong>EyePlay Experience</strong>.
+        </p>
+      </div>
+
+      <!-- Controls & Selector Bar -->
+      <div class="bg-slate-900 rounded-2xl p-4 sm:p-6 shadow-2xl border border-slate-800 space-y-4">
+        
+        <div class="flex flex-wrap items-center justify-between gap-4 text-xs border-b border-slate-800 pb-4">
+          
+          <!-- Entrance Route Selector -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-slate-400 font-bold uppercase tracking-wider mr-1"><i class="fa-solid fa-door-open text-amber-400 mr-1"></i> Punto de Acceso:</span>
+            <button onclick="selectRoute('entrance-fg')" id="btn-route-fg" class="px-3 py-1.5 rounded-lg font-bold bg-amber-500 text-slate-950 transition">
+              Hall F/G (Vía Zeiss & EyePlay)
+            </button>
+            <button onclick="selectRoute('entrance-h')" id="btn-route-h" class="px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 hover:text-white transition">
+              Hall H (Vía Learning Lounge)
+            </button>
+          </div>
+
+          <!-- Video Simulation Playback Controls -->
+          <div class="flex items-center space-x-2">
+            <button onclick="toggleWalkAnimation()" id="playPauseBtn" class="bg-amber-400 hover:bg-amber-300 text-taichi-navy font-bold px-4 py-1.5 rounded-lg flex items-center space-x-1.5 shadow transition">
+              <i class="fa-solid fa-play" id="playIcon"></i>
+              <span id="playText">Iniciar Simulador</span>
+            </button>
+            <button onclick="resetWalkAnimation()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition" title="Reiniciar Recorrido">
+              <i class="fa-solid fa-rotate-right"></i>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Quick Landmark Focus Bar -->
+        <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-300 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+          <span class="font-bold text-amber-400 mr-2"><i class="fa-solid fa-location-crosshairs mr-1"></i> Resaltar Referencia:</span>
+          <button onclick="highlightLandmark('eyeplay')" class="bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded border border-slate-700 text-slate-200 transition">
+            EyePlay Experience
+          </button>
+          <button onclick="highlightLandmark('zeiss')" class="bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded border border-slate-700 text-slate-200 transition">
+            Carl Zeiss Meditec
+          </button>
+          <button onclick="highlightLandmark('neighbors')" class="bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded border border-slate-700 text-slate-200 transition">
+            China Weiren / Seonix Bio
+          </button>
+          <button onclick="highlightLandmark('visionix')" class="bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded border border-slate-700 text-slate-200 transition">
+            Visionix
+          </button>
+          <button onclick="highlightLandmark('lounge')" class="bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded border border-slate-700 text-slate-200 transition">
+            Learning Lounge
+          </button>
+          <button onclick="highlightLandmark('bigvision')" class="bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 px-2.5 py-1 rounded border border-amber-500/40 font-bold transition">
+            <i class="fa-solid fa-star text-amber-400 mr-1"></i> Stand BigVision #4043
+          </button>
+        </div>
+
+        <!-- SVG Map Container matching exact image crop provided -->
+        <div class="relative w-full overflow-hidden rounded-xl bg-slate-950 border border-slate-800 p-2 min-h-[420px] sm:min-h-[520px] flex items-center justify-center">
+          
+          <!-- Turn-by-Turn HUD Overlay -->
+          <div class="absolute top-4 left-4 z-20 bg-slate-900/95 backdrop-blur-md border border-amber-400/40 p-4 rounded-xl hud-glow max-w-xs space-y-1.5 text-white shadow-2xl">
+            <div class="flex items-center justify-between text-[10px] text-amber-400 font-bold uppercase tracking-wider">
+              <span><i class="fa-solid fa-compass text-amber-400 mr-1"></i> Navegación Guiada</span>
+              <span id="hudStepBadge" class="bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded font-mono">PASO 1 DE 3</span>
+            </div>
+            <h4 id="hudTitle" class="font-bold text-xs text-white">Ingreso por Hall F/G</h4>
+            <p id="hudDesc" class="text-[11px] text-slate-300 leading-snug">Acceda por Hall F/G pasando a la derecha de Carl Zeiss Meditec USA.</p>
+          </div>
+
+          <!-- Target Destination Badge -->
+          <div class="absolute top-4 right-4 z-20 bg-taichi-navy/95 backdrop-blur-md border border-amber-400 p-3.5 rounded-xl text-right text-white shadow-2xl">
+            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">Destino Confirmado</span>
+            <span class="text-sm font-extrabold text-white block"><i class="fa-solid fa-flag-checkered text-amber-400 mr-1"></i> BIGVISION MEDICAL #4043</span>
+            <span class="text-[10px] text-sky-300 block">Junto a GreenMan Vision & MEDIMAX</span>
+            <span class="text-[9px] text-slate-300 block mt-0.5">Atención: Fernando Conde / Taichi</span>
+          </div>
+
+          <!-- SVG Floor Plan Representation matching exact crop details -->
+          <svg viewBox="0 0 1000 560" class="w-full h-auto max-h-[520px] select-none" id="aaoPdfFloorPlan">
+            <defs>
+              <linearGradient id="routeGlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#38bdf8" />
+                <stop offset="50%" stop-color="#fbbf24" />
+                <stop offset="100%" stop-color="#f59e0b" />
+              </linearGradient>
+              <filter id="glowEffect">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Outer Area Boundary & Wall Outline -->
+            <rect x="20" y="20" width="960" height="520" fill="#070e20" stroke="#1e293b" stroke-width="2" rx="8"/>
+
+            <!-- Gate 20 Marker at top -->
+            <g font-size="9" fill="#94a3b8" font-weight="bold">
+              <rect x="380" y="20" width="100" height="15" fill="#1e293b" rx="2"/>
+              <text x="430" y="31" text-anchor="middle" fill="#cbd5e1">GATE 20</text>
+            </g>
+
+            <!-- Aisle Corridors Lines (Aisle 4000) -->
+            <line x1="30" y1="215" x2="970" y2="215" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.3"/>
+            <text x="940" y="210" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="end">PASILLO / AISLE 4000</text>
+
+            <!-- 1. EyePlay Experience (Top Left Anchor) -->
+            <g id="lm-eyeplay">
+              <rect x="40" y="55" width="250" height="145" rx="6" fill="#1a2e05" stroke="#84cc16" stroke-width="2"/>
+              <text x="165" y="130" fill="#a3e635" font-size="20" font-weight="extrabold" text-anchor="middle">EyePlay Experience</text>
+            </g>
+
+            <!-- 2. Neighboring Booths Block Left of BigVision (#3943 / #4042 / #4036) -->
+            <g id="lm-neighbors">
+              <!-- Precision Vision #3943 & China Weiren Meditech #4042 -->
+              <rect x="305" y="55" width="70" height="70" rx="3" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+              <text x="340" y="80" fill="#cbd5e1" font-size="7" font-weight="bold" text-anchor="middle">Precision Vision #3943</text>
+              <line x1="305" y1="92" x2="375" y2="92" stroke="#334155" stroke-width="1"/>
+              <text x="340" y="112" fill="#94a3b8" font-size="7" font-weight="bold" text-anchor="middle">China Weiren #4042</text>
+              
+              <!-- Seonix Bio #4036 / Shanghai Bolan -->
+              <rect x="305" y="130" width="70" height="70" rx="3" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+              <text x="340" y="160" fill="#94a3b8" font-size="8" font-weight="bold" text-anchor="middle">Seonix Bio #4036</text>
+              <text x="340" y="175" fill="#64748b" font-size="6" text-anchor="middle">Mass Eye & Ear</text>
+            </g>
+
+            <!-- TARGET: BIGVISION MEDICAL #4043 & Micro-Neighbors (GreenMan & MEDIMAX) -->
+            <g filter="url(#glowEffect)" id="lm-bigvision">
+              <!-- Red Boundary Box corresponding to user capture -->
+              <rect x="388" y="48" width="115" height="158" rx="6" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-dasharray="6,4"/>
+              
+              <!-- BigVision Medical Main Stand Box (#4043) -->
+              <rect x="393" y="55" width="55" height="85" rx="4" fill="#0b1c38" stroke="#f59e0b" stroke-width="2.5"/>
+              <rect x="396" y="58" width="49" height="79" rx="3" fill="#1e3a8a"/>
+              <text x="420" y="82" fill="#ffffff" font-size="8" font-weight="extrabold" text-anchor="middle">BIGVISION</text>
+              <text x="420" y="94" fill="#ffffff" font-size="7" font-weight="bold" text-anchor="middle">MEDICAL</text>
+              <text x="420" y="112" fill="#fbbf24" font-size="10" font-weight="extrabold" text-anchor="middle">#4043</text>
+              <text x="420" y="126" fill="#38bdf8" font-size="6" font-weight="bold" text-anchor="middle">OCT / Biómetro</text>
+
+              <!-- MEDIMAX TECH INC (Below BigVision) -->
+              <rect x="393" y="143" width="55" height="57" rx="3" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>
+              <text x="420" y="168" fill="#e2e8f0" font-size="6.5" font-weight="bold" text-anchor="middle">MEDIMAX</text>
+              <text x="420" y="178" fill="#cbd5e1" font-size="6" font-weight="bold" text-anchor="middle">TECH INC</text>
+
+              <!-- GreenMan Vision #4142 (Right side of BigVision) -->
+              <rect x="451" y="55" width="48" height="145" rx="3" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+              <text x="475" y="120" fill="#a7f3d0" font-size="7" font-weight="bold" text-anchor="middle" transform="rotate(-90 475 120)">GreenMan Vision #4142</text>
+            </g>
+
+            <!-- Cluster 3: Biocon / Wolters Kluwer -->
+            <rect x="510" y="55" width="45" height="145" rx="3" fill="#1e293b" stroke="#334155"/>
+            <text x="532" y="120" fill="#64748b" font-size="7" font-weight="bold" text-anchor="middle" transform="rotate(-90 532 120)">Biocon / Wolters</text>
+
+            <!-- Cluster 4: RET, Inc. -->
+            <rect x="565" y="115" width="60" height="85" rx="3" fill="#1e293b" stroke="#334155"/>
+            <text x="595" y="155" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">RET, Inc.</text>
+
+            <!-- Cluster 5: VSP Vision -->
+            <rect x="635" y="115" width="55" height="85" rx="3" fill="#1e293b" stroke="#334155"/>
+            <text x="662" y="155" fill="#64748b" font-size="7" font-weight="bold" text-anchor="middle">VSP Vision</text>
+
+            <!-- 3. Carl Zeiss Meditec USA, Inc. (Bottom Left Anchor) -->
+            <g id="lm-zeiss">
+              <rect x="110" y="240" width="210" height="170" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+              <text x="215" y="305" fill="#38bdf8" font-size="16" font-weight="extrabold" text-anchor="middle">Carl Zeiss</text>
+              <text x="215" y="330" fill="#38bdf8" font-size="16" font-weight="extrabold" text-anchor="middle">Meditec USA, Inc.</text>
+              <text x="215" y="355" fill="#0284c7" font-size="9" font-weight="bold" text-anchor="middle">HALL G</text>
+            </g>
+
+            <!-- 4. Visionix & Middle Booths (Directly south across aisle) -->
+            <g id="lm-visionix">
+              <!-- Visionix -->
+              <rect x="360" y="240" width="75" height="60" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="397" y="275" fill="#e2e8f0" font-size="10" font-weight="bold" text-anchor="middle">Visionix</text>
+
+              <!-- FCI Ophthalmics -->
+              <rect x="360" y="310" width="75" height="60" rx="3" fill="#1e293b" stroke="#334155"/>
+              <text x="397" y="342" fill="#64748b" font-size="7" font-weight="bold" text-anchor="middle">FCI Ophthalmics</text>
+
+              <!-- Nova Eye Medical -->
+              <rect x="445" y="240" width="75" height="75" rx="4" fill="#1e293b" stroke="#334155"/>
+              <text x="482" y="275" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">Nova Eye</text>
+              <text x="482" y="288" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">Medical</text>
+
+              <!-- Reichert, Inc. -->
+              <rect x="530" y="240" width="65" height="75" rx="4" fill="#1e293b" stroke="#334155"/>
+              <text x="562" y="275" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">Reichert,</text>
+              <text x="562" y="288" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">Inc.</text>
+
+              <!-- Rayner -->
+              <rect x="445" y="325" width="150" height="85" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="520" y="375" fill="#e2e8f0" font-size="16" font-weight="extrabold" text-anchor="middle">Rayner</text>
+            </g>
+
+            <!-- 5. Learning Lounge (Bottom Right Anchor) -->
+            <g id="lm-lounge">
+              <rect x="670" y="240" width="220" height="210" rx="8" fill="#2e1065" stroke="#a855f7" stroke-width="2.5"/>
+              <text x="780" y="335" fill="#c084fc" font-size="20" font-weight="extrabold" text-anchor="middle">Learning Lounge</text>
+              <text x="780" y="365" fill="#a855f7" font-size="11" font-weight="bold" text-anchor="middle">HALL H</text>
+            </g>
+
+            <!-- Bottom Entrance Wall & Doors -->
+            <rect x="20" y="490" width="960" height="20" fill="#1e293b" />
+            
+            <g font-size="9" fill="#cbd5e1" font-weight="bold" text-anchor="middle">
+              <!-- Hall F/G Entrance Door (Aligned with corridor at x=340) -->
+              <rect id="doorFG" x="280" y="485" width="120" height="15" fill="#f59e0b" rx="3"/>
+              <text x="340" y="478" fill="#fbbf24">ACCESO HALL F/G (RECOMENDADO)</text>
+
+              <!-- Hall H Entrance Door (Aligned with corridor at x=660) -->
+              <rect id="doorH" x="600" y="485" width="120" height="15" fill="#0284c7" rx="3"/>
+              <text x="660" y="478">ACCESO HALL H</text>
+            </g>
+
+            <!-- ANIMATED PATH LINE targeting BigVision #4043 (Strictly along open aisles) -->
+            <path id="walkPath" d="M 340 485 L 340 220 L 388 220 L 388 100 L 398 100" 
+                  fill="none" stroke="url(#routeGlowGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"
+                  class="dash-animated" filter="url(#glowEffect)" />
+
+            <!-- Entrance Marker Dot -->
+            <circle id="startPointNode" cx="340" cy="485" r="9" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+
+            <!-- Moving Visitor Pin Avatar -->
+            <g id="visitorPin" transform="translate(340, 485)" filter="url(#glowEffect)">
+              <circle cx="0" cy="0" r="12" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+              <circle cx="0" cy="0" r="20" fill="#f59e0b" opacity="0.3" class="map-beacon"/>
+              <text x="0" y="4" fill="#0b1c38" font-size="11" font-weight="extrabold" text-anchor="middle">★</text>
+            </g>
+
+            <!-- Target Pin Star on BigVision #4043 Entrance -->
+            <g transform="translate(398, 100)">
+              <circle cx="0" cy="0" r="11" fill="#f59e0b" stroke="#ffffff" stroke-width="2" />
+              <text x="0" y="4" fill="#0b1c38" font-size="10" font-weight="bold" text-anchor="middle">✓</text>
+            </g>
+
+          </svg>
+
+        </div>
+
+        <!-- Progress Bar & Time Display -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center text-xs text-slate-400">
+            <span><i class="fa-solid fa-play-circle text-amber-400 mr-1"></i> Progresión del Recorrido Virtual</span>
+            <span id="timeDisplay" class="font-mono text-amber-300">00:00 / 00:08</span>
+          </div>
+          
+          <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden cursor-pointer" onclick="seekWalkAnimation(event)">
+            <div id="walkProgressBar" class="bg-gradient-to-r from-sky-400 via-amber-400 to-amber-500 h-full w-0 transition-all duration-100"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Step-by-Step Wayfinding Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        
+        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl card-shadow space-y-2">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-full bg-sky-500 text-white font-bold flex items-center justify-center text-sm">1</span>
+            <h4 class="font-bold text-taichi-navy text-sm font-display">Ingreso Hall F/G</h4>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Ingrese por el acceso principal de <strong>Hall F/G</strong> pasando a la derecha del gran estand de <strong>Carl Zeiss Meditec USA</strong>.
+          </p>
+        </div>
+
+        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl card-shadow space-y-2">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm">2</span>
+            <h4 class="font-bold text-taichi-navy text-sm font-display">Avance por Aisle 4000</h4>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Avance hacia el norte hasta el pasillo <strong>Aisle 4000</strong>, entre <strong>EyePlay Experience</strong> y <strong>Seonix Bio</strong>, justo frente a <strong>Visionix</strong>.
+          </p>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-300 p-5 rounded-2xl card-shadow space-y-2">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-full gold-gradient text-taichi-navy font-extrabold flex items-center justify-center text-sm">3</span>
+            <h4 class="font-bold text-taichi-navy text-sm font-display">Llegada Stand #4043</h4>
+          </div>
+          <p class="text-xs text-slate-700 leading-relaxed">
+            En el <strong>Stand #4043 (BigVision Medical)</strong>, junto a <strong>GreenMan Vision (#4142)</strong> y <strong>MEDIMAX TECH INC</strong>, lo esperará Fernando Conde.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Featured Products Section -->
+  <section class="py-20 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+        <span class="text-xs font-bold text-amber-600 uppercase tracking-widest bg-amber-100 px-3 py-1 rounded-full">
+          Catálogo Seleccionado AAO 2026
+        </span>
+        <h2 class="text-3xl font-extrabold text-taichi-navy font-display sm:text-4xl">
+          Tecnología Japonesa y Global en Oftalmología
+        </h2>
+        <p class="text-slate-600 text-base">
+          Explore las soluciones diagnósticas y quirúrgicas que Taichi Holdings tiene preparadas para su institución.
+        </p>
+      </div>
+
+      <!-- Tab Filters -->
+      <div class="flex justify-center mb-10">
+        <div class="inline-flex p-1 bg-slate-200 rounded-xl space-x-1">
+          <button onclick="filterProducts('all')" id="btn-all" class="tab-btn active px-5 py-2.5 rounded-lg text-sm font-bold transition bg-taichi-navy text-white shadow">
+            Todos
+          </button>
+          <button onclick="filterProducts('bigvision')" id="btn-bigvision" class="tab-btn px-5 py-2.5 rounded-lg text-sm font-bold transition text-slate-600 hover:text-taichi-navy">
+            BigVision
+          </button>
+          <button onclick="filterProducts('takagi')" id="btn-takagi" class="tab-btn px-5 py-2.5 rounded-lg text-sm font-bold transition text-slate-600 hover:text-taichi-navy">
+            Takagi
+          </button>
+          <button onclick="filterProducts('kowa')" id="btn-kowa" class="tab-btn px-5 py-2.5 rounded-lg text-sm font-bold transition text-slate-600 hover:text-taichi-navy">
+            Kowa
+          </button>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- BigVision OCT -->
+        <div class="prod-card bigvision bg-white rounded-2xl border border-slate-200 overflow-hidden card-shadow transition hover:-translate-y-1">
+          <div class="bg-gradient-to-br from-slate-900 to-taichi-navy p-6 text-white relative">
+            <span class="bg-sky-500 text-white text-[10px] font-extrabold px-2.5 py-1 rounded uppercase tracking-wider absolute top-4 right-4">
+              BigVision
+            </span>
+            <i class="fa-solid fa-eye text-4xl text-sky-400 mb-3 block"></i>
+            <h3 class="text-xl font-bold font-display">OCT Scanner Alta Definición</h3>
+            <p class="text-xs text-sky-200 mt-1">Tomografía de Coherencia Óptica</p>
+          </div>
+          <div class="p-6 space-y-4">
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Escaneo ultra-rápido de retina y segmento anterior. Imágenes nítidas para diagnósticos precoces de glaucoma y maculopatías.
+            </p>
+            <ul class="text-xs text-slate-700 space-y-2 border-t border-slate-100 pt-4">
+              <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i> Alta resolución y mapa de capas</li>
+              <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i> Interfaz amigable para captura rápida</li>
+            </ul>
+            <a href="#registro" onclick="selectProduct('OCT BigVision')" class="block text-center w-full py-2.5 border border-taichi-navy text-taichi-navy font-bold rounded-lg text-xs hover:bg-taichi-navy hover:text-white transition">
+              Solicitar Cotización / Demo
+            </a>
+          </div>
+        </div>
+
+        <!-- BigVision Biometer OCT -->
+        <div class="prod-card bigvision bg-white rounded-2xl border border-amber-200 overflow-hidden card-shadow transition hover:-translate-y-1 relative">
+          <div class="bg-gradient-to-br from-taichi-navy to-slate-900 p-6 text-white relative">
+            <span class="gold-gradient text-taichi-navy text-[10px] font-extrabold px-2.5 py-1 rounded uppercase tracking-wider absolute top-4 right-4 shadow">
+              Estrella AAO #4043
+            </span>
+            <i class="fa-solid fa-wave-square text-4xl text-amber-400 mb-3 block"></i>
+            <h3 class="text-xl font-bold font-display">Biómetro basado en OCT</h3>
+            <p class="text-xs text-amber-200 mt-1">Biometría Óptica de Nueva Generación</p>
+          </div>
+          <div class="p-6 space-y-4">
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Precisión de vanguardia para cálculo de lentes intraoculares (LIO). Integración total con tomografía para medición axial exacta.
+            </p>
+            <ul class="text-xs text-slate-700 space-y-2 border-t border-slate-100 pt-4">
+              <li class="flex items-center"><i class="fa-solid fa-check text-amber-500 mr-2"></i> Fórmulas LIO avanzadas de última generación</li>
+              <li class="flex items-center"><i class="fa-solid fa-check text-amber-500 mr-2"></i> Medición corneal y de cámara anterior precisa</li>
+            </ul>
+            <a href="#registro" onclick="selectProduct('Biómetro basado en OCT')" class="block text-center w-full py-2.5 gold-gradient text-taichi-navy font-bold rounded-lg text-xs hover:brightness-105 transition shadow">
+              Solicitar Bono de Descuento
+            </a>
+          </div>
+        </div>
+
+        <!-- Takagi Slit Lamp / Microscope -->
+        <div class="prod-card takagi bg-white rounded-2xl border border-slate-200 overflow-hidden card-shadow transition hover:-translate-y-1">
+          <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-6 text-white relative">
+            <span class="bg-amber-500 text-white text-[10px] font-extrabold px-2.5 py-1 rounded uppercase tracking-wider absolute top-4 right-4">
+              Takagi Japan
+            </span>
+            <i class="fa-solid fa-microscope text-4xl text-amber-400 mb-3 block"></i>
+            <h3 class="text-xl font-bold font-display">Sistemas Takagi Japan</h3>
+            <p class="text-xs text-slate-300 mt-1">Lámparas de Hendidura & Microscopios</p>
+          </div>
+          <div class="p-6 space-y-4">
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Ingeniería de óptica japonesa pura. Claridad visual insuperable, ergonomía avanzada y durabilidad clínica excepcional.
+            </p>
+            <ul class="text-xs text-slate-700 space-y-2 border-t border-slate-100 pt-4">
+              <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i> Óptica estereoscópica de alta definición</li>
+              <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i> Iluminación LED homogénea y suave</li>
+            </ul>
+            <a href="#registro" onclick="selectProduct('Equipos Takagi')" class="block text-center w-full py-2.5 border border-taichi-navy text-taichi-navy font-bold rounded-lg text-xs hover:bg-taichi-navy hover:text-white transition">
+              Consultar Modelos Takagi
+            </a>
+          </div>
+        </div>
+
+        <!-- Kowa Slit Lamps -->
+        <div class="prod-card kowa bg-white rounded-2xl border border-slate-200 overflow-hidden card-shadow transition hover:-translate-y-1">
+          <div class="bg-gradient-to-br from-slate-900 to-emerald-950 p-6 text-white relative">
+            <span class="bg-emerald-500 text-white text-[10px] font-extrabold px-2.5 py-1 rounded uppercase tracking-wider absolute top-4 right-4">
+              Kowa Japan
+            </span>
+            <i class="fa-solid fa-lightbulb text-4xl text-emerald-400 mb-3 block"></i>
+            <h3 class="text-xl font-bold font-display">Lámparas de Hendidura Kowa</h3>
+            <p class="text-xs text-emerald-200 mt-1">Precisión Óptica Japonesa Portátil y de Mesa</p>
+          </div>
+          <div class="p-6 space-y-4">
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Sistemas de iluminación de alta nitidez y lámparas portátiles ligeras de vanguardia para diagnóstico en cualquier entorno clínico.
+            </p>
+            <ul class="text-xs text-slate-700 space-y-2 border-t border-slate-100 pt-4">
+              <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i> Diseño ergonómico de alta precisión</li>
+              <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i> Sistemas LED portátiles de alta intensidad</li>
+            </ul>
+            <a href="#registro" onclick="selectProduct('Lámparas Kowa')" class="block text-center w-full py-2.5 border border-taichi-navy text-taichi-navy font-bold rounded-lg text-xs hover:bg-taichi-navy hover:text-white transition">
+              Consultar Lámparas Kowa
+            </a>
+          </div>
+        </div>
+
+        <!-- Kowa Intraocular Lenses (Coming Soon) -->
+        <div class="prod-card kowa bg-white rounded-2xl border border-amber-300 overflow-hidden card-shadow transition hover:-translate-y-1 relative">
+          <div class="bg-gradient-to-br from-emerald-900 to-slate-900 p-6 text-white relative">
+            <span class="bg-amber-400 text-taichi-navy text-[10px] font-extrabold px-2.5 py-1 rounded uppercase tracking-wider absolute top-4 right-4 shadow">
+              Próximamente
+            </span>
+            <i class="fa-solid fa-circle-dot text-4xl text-amber-400 mb-3 block"></i>
+            <h3 class="text-xl font-bold font-display">Lentes Intraoculares Kowa</h3>
+            <p class="text-xs text-amber-200 mt-1">Innovación Quirúrgica en Implantología</p>
+          </div>
+          <div class="p-6 space-y-4">
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Próximo lanzamiento para Colombia: Lentes intraoculares de alta biocompatibilidad y óptica de precisión para cirugía de catarata.
+            </p>
+            <ul class="text-xs text-slate-700 space-y-2 border-t border-slate-100 pt-4">
+              <li class="flex items-center"><i class="fa-solid fa-clock text-amber-500 mr-2"></i> Lanzamiento exclusivo en Colombia</li>
+              <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i> Biocompatibilidad y nitidez óptica avanzada</li>
+            </ul>
+            <a href="#registro" onclick="selectProduct('Lentes Intraoculares Kowa')" class="block text-center w-full py-2.5 gold-gradient text-taichi-navy font-bold rounded-lg text-xs hover:brightness-105 transition shadow">
+              Registrar Interés Previo
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Registration Form Section -->
+  <section id="registro" class="py-16 bg-white border-t border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-10 card-shadow">
+        
+        <div class="text-center space-y-3 mb-8">
+          <span class="text-xs font-bold text-amber-600 tracking-wider uppercase bg-amber-100 px-3 py-1 rounded-full">
+            Formulario de Registro Prioritario
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-taichi-navy font-display">
+            Registre sus Datos y Seleccione su Opción
+          </h2>
+          <p class="text-sm text-slate-600">
+            Asegure su cupón de descuento para AAO o inscríbase para la gira de demostraciones en Colombia.
+          </p>
+        </div>
+
+        <!-- Option Selector Switcher -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          
+          <label id="label-option-a" class="option-card cursor-pointer border-2 border-taichi-navy bg-white p-4 rounded-xl shadow-sm flex items-start space-x-3 transition">
+            <input type="radio" name="asistencia_tipo" value="aao" id="opt-aao" checked onchange="toggleFormOption()" class="mt-1 text-taichi-navy focus:ring-amber-400">
+            <div>
+              <span class="font-bold text-sm text-taichi-navy block"><i class="fa-solid fa-plane-departure text-amber-500 mr-1.5"></i>Asistiré a AAO (New Orleans)</span>
+              <span class="text-xs text-slate-500 block mt-0.5">Visitaré el stand #4043 de BigVision para recibir atención y bono exclusivo.</span>
+            </div>
+          </label>
+
+          <label id="label-option-b" class="option-card cursor-pointer border-2 border-slate-200 bg-white p-4 rounded-xl shadow-sm flex items-start space-x-3 transition">
+            <input type="radio" name="asistencia_tipo" value="colombia" id="opt-colombia" onchange="toggleFormOption()" class="mt-1 text-taichi-navy focus:ring-amber-400">
+            <div>
+              <span class="font-bold text-sm text-taichi-navy block"><i class="fa-solid fa-house-medical text-sky-500 mr-1.5"></i>Gira de Demos en Colombia</span>
+              <span class="text-xs text-slate-500 block mt-0.5">No iré a AAO; deseo coordinar demostración presencial en Colombia.</span>
+            </div>
+          </label>
+
+        </div>
+
+        <!-- Form Fields -->
+        <form id="aaoForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+          
+          <!-- Conditional Alert Banner -->
+          <div id="banner-aao" class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
+            <div class="flex">
+              <i class="fa-solid fa-circle-info text-amber-600 text-lg mr-3 mt-0.5"></i>
+              <p class="text-xs text-amber-800 leading-relaxed">
+                <strong>Atención Asistentes a AAO:</strong> Al completar el formulario recibirá un bono de descuento en su WhatsApp y correo electrónico, redimible únicamente presentando su código en el stand #4043 de BigVision con Fernando Conde.
+              </p>
+            </div>
+          </div>
+
+          <div id="banner-colombia" class="hidden bg-sky-50 border-l-4 border-sky-500 p-4 rounded-r-lg">
+            <div class="flex">
+              <i class="fa-solid fa-circle-info text-sky-600 text-lg mr-3 mt-0.5"></i>
+              <p class="text-xs text-sky-800 leading-relaxed">
+                <strong>Gira de Demos Colombia:</strong> Le agendaremos en nuestra lista prioritaria. Un asesor técnico se comunicará para coordinar la visita a su clínica en Bogotá, Medellín, Cali, Barranquilla, Armenia, Pereira, Bucaramanga o Eje Cafetero.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nombre Completo *</label>
+              <input type="text" id="nombre" required placeholder="Dr. / Dra. Nombre Apellido" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-taichi-navy focus:border-transparent outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Correo Electrónico *</label>
+              <input type="email" id="email" required placeholder="doctor@clinica.com" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-taichi-navy focus:border-transparent outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">WhatsApp / Teléfono de Contacto *</label>
+              <input type="tel" id="telefono" required placeholder="+57 300 000 0000" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-taichi-navy focus:border-transparent outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Clínica / Institución / Ciudad *</label>
+              <input type="text" id="institucion" required placeholder="Centro Oftalmológico - Ciudad" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-taichi-navy focus:border-transparent outline-none">
+            </div>
+          </div>
+
+          <!-- Products Checkboxes -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Equipos de Interés (Seleccione los que apliquen):</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <label class="flex items-center space-x-2 p-2.5 bg-white border rounded-lg cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" name="productos" value="OCT BigVision" class="rounded text-taichi-navy">
+                <span class="font-medium text-slate-700">OCT Scanner BigVision</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2.5 bg-white border rounded-lg cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" name="productos" value="Biómetro basado en OCT" checked class="rounded text-taichi-navy">
+                <span class="font-medium text-slate-700">Biómetro basado en OCT (BigVision)</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2.5 bg-white border rounded-lg cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" name="productos" value="Equipos Takagi" class="rounded text-taichi-navy">
+                <span class="font-medium text-slate-700">Lámparas / Microscopios Takagi</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2.5 bg-white border rounded-lg cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" name="productos" value="Lámparas Kowa" class="rounded text-taichi-navy">
+                <span class="font-medium text-slate-700">Lámparas de Hendidura Kowa</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2.5 bg-white border rounded-lg cursor-pointer hover:bg-slate-100 sm:col-span-2">
+                <input type="checkbox" name="productos" value="Lentes Intraoculares Kowa" class="rounded text-taichi-navy">
+                <span class="font-medium text-slate-700">Lentes Intraoculares Kowa (Próximamente)</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Mensaje o Requerimiento Específico</label>
+            <textarea id="mensaje" rows="3" placeholder="Indíquenos el modelo exacto, fechas tentativas o requerimientos comerciales..." class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-taichi-navy focus:border-transparent outline-none"></textarea>
+          </div>
+
+          <button type="submit" class="w-full gold-gradient text-taichi-navy font-extrabold py-4 rounded-xl text-base shadow-lg hover:brightness-105 transition flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span id="btn-submit-text">Confirmar Registro & Generar Bono</span>
+          </button>
+
+          <p class="text-center text-[11px] text-slate-400">
+            Sus datos serán tratados confidencialmente por Taichi Holdings Colombia conforme a la política de protección de datos personales.
+          </p>
+
+        </form>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="navy-gradient text-white border-t border-slate-800 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-sm">
+        
+        <div>
+          <div class="flex items-center space-x-2 mb-3">
+            <div class="w-7 h-7 gold-gradient text-taichi-navy rounded font-bold flex items-center justify-center text-sm">T</div>
+            <span class="font-bold text-base font-display">TAICHI HOLDINGS</span>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Compañía japonesa líder en comercio internacional de tecnología médica de alta precisión para Colombia y Latinoamérica.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-amber-400 text-xs uppercase tracking-wider mb-3">Oficina Principal Colombia</h4>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            <i class="fa-solid fa-location-dot text-amber-400 mr-2"></i> Cra. 15 No. 93A-62 OF: 304-305<br/>
+            Bogotá D.C., Colombia<br/>
+            <i class="fa-solid fa-phone text-amber-400 mr-2 mt-2"></i> +57 (601) 7559348<br/>
+            <i class="fa-solid fa-envelope text-amber-400 mr-2 mt-1"></i> taichi-colombia@anabas.co.jp
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-amber-400 text-xs uppercase tracking-wider mb-3">AAO 2026 Contacto Directo</h4>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            <strong>Fernando Conde</strong><br/>
+            Staff Taichi Holdings en Stand BigVision #4043<br/>
+            Ernest N. Morial Convention Center • New Orleans, LA
+          </p>
+        </div>
+
+      </div>
+
+      <div class="border-t border-white/10 pt-6 text-center text-xs text-slate-400">
+        &copy; 2026 Taichi Holdings Colombia S.A.S. Todos los derechos reservados.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal Confirmation / Voucher Generator -->
+  <div id="voucherModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 card-shadow border border-amber-300 relative">
+      
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+        &times;
+      </button>
+
+      <div class="text-center space-y-3">
+        <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mx-auto text-taichi-navy text-3xl shadow-lg">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+
+        <h3 class="text-2xl font-extrabold text-taichi-navy font-display">¡Registro Exitoso!</h3>
+        
+        <p id="modal-desc" class="text-xs text-slate-600">
+          Hemos procesado su solicitud correctamente.
+        </p>
+
+        <!-- Simulated Voucher Card -->
+        <div class="navy-gradient p-5 rounded-2xl text-left text-white space-y-3 my-4 border border-amber-400/50 shadow-inner">
+          <div class="flex justify-between items-center border-b border-white/10 pb-2">
+            <span class="text-[10px] text-amber-300 font-bold uppercase tracking-wider">Voucher Oficial AAO 2026</span>
+            <span class="text-[10px] bg-amber-400 text-taichi-navy font-bold px-2 py-0.5 rounded">STAND BIGVISION #4043</span>
+          </div>
+          
+          <div>
+            <p id="modal-doctor-name" class="font-bold text-sm text-white">Dr(a). Fernando Conde</p>
+            <p id="modal-institucion" class="text-xs text-slate-300">Clínica Oftalmológica</p>
+          </div>
+
+          <div class="bg-white/10 p-3 rounded-lg flex items-center justify-between text-xs">
+            <div>
+              <span class="text-[10px] text-slate-300 block">Código de Redención:</span>
+              <span id="modal-code" class="font-mono font-bold text-amber-300 text-sm tracking-wider">TAICHI-AAO-4043</span>
+            </div>
+            <i class="fa-solid fa-qrcode text-3xl text-amber-300"></i>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-slate-500">
+          Un mensaje automatizado ha sido enviado a su <strong>WhatsApp</strong> y correo electrónico registrado con la guía de ubicación del stand #4043 y su bono comercial.
+        </p>
+
+        <button onclick="closeModal()" class="w-full bg-taichi-navy text-white font-bold py-3 rounded-xl text-xs hover:bg-slate-800 transition">
+          Entendido / Cerrar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Map Simulator Logic Engine
+    let isPlaying = false;
+    let animProgress = 0; // 0 to 1
+    let animTimer = null;
+    let currentRouteKey = 'entrance-fg';
+
+    const routesData = {
+      'entrance-fg': {
+        startX: 340, startY: 485,
+        pathD: "M 340 485 L 340 220 L 388 220 L 388 100 L 398 100",
+        label: "Ingreso Hall F/G",
+        steps: [
+          { time: 0.0, title: "Paso 1: Acceso por Pasillo Hall F/G", desc: "Ingrese por Hall F/G avanzando por el pasillo libre entre Carl Zeiss Meditec y Visionix." },
+          { time: 0.5, title: "Paso 2: Giro al Este por Aisle 4000", desc: "Al llegar a Aisle 4000, gire a la derecha y avance por el pasillo frente a MEDIMAX TECH." },
+          { time: 1.0, title: "Paso 3: Llegada a Stand BigVision #4043", desc: "Gire al norte por el pasillo de acceso. ¡Llegó al Stand #4043 de BigVision Medical!" }
+        ]
+      },
+      'entrance-h': {
+        startX: 660, startY: 485,
+        pathD: "M 660 485 L 660 220 L 388 220 L 388 100 L 398 100",
+        label: "Ingreso Hall H",
+        steps: [
+          { time: 0.0, title: "Paso 1: Acceso por Pasillo Hall H", desc: "Ingrese por Hall H por el pasillo abierto entre el Learning Lounge y Rayner." },
+          { time: 0.5, title: "Paso 2: Recorrido al Oeste por Aisle 4000", desc: "Avance hacia el oeste por Aisle 4000 bordeando Reichert y Nova Eye Medical." },
+          { time: 1.0, title: "Paso 3: Llegada a Stand BigVision #4043", desc: "Gire al norte hacia el acceso del Stand #4043 de BigVision Medical (junto a GreenMan Vision)." }
+        ]
+      }
+    };
+
+    function selectRoute(key) {
+      currentRouteKey = key;
+      const r = routesData[key];
+      
+      // Update buttons style
+      ['entrance-fg', 'entrance-h'].forEach(k => {
+        const btn = document.getElementById('btn-route-' + (k === 'entrance-fg' ? 'fg' : 'h'));
+        if (btn) {
+          if (k === key) {
+            btn.className = "px-3 py-1.5 rounded-lg font-bold bg-amber-500 text-slate-950 transition";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 hover:text-white transition";
+          }
+        }
+      });
+
+      // Update SVG Path & Start Point
+      const pathEl = document.getElementById('walkPath');
+      if (pathEl) pathEl.setAttribute('d', r.pathD);
+
+      const startDot = document.getElementById('startPointNode');
+      if (startDot) {
+        startDot.setAttribute('cx', r.startX);
+        startDot.setAttribute('cy', r.startY);
+      }
+
+      resetWalkAnimation();
+    }
+
+    function highlightLandmark(id) {
+      // Clear previous highlights
+      ['lm-zeiss', 'lm-eyeplay', 'lm-lounge', 'lm-visionix', 'lm-neighbors'].forEach(l => {
+        const el = document.getElementById(l);
+        if (el) el.classList.remove('landmark-active');
+      });
+
+      const target = document.getElementById('lm-' + id);
+      if (target) {
+        target.classList.add('landmark-active');
+      }
+    }
+
+    function toggleWalkAnimation() {
+      if (isPlaying) {
+        pauseWalkAnimation();
+      } else {
+        playWalkAnimation();
+      }
+    }
+
+    function playWalkAnimation() {
+      isPlaying = true;
+      document.getElementById('playIcon').className = "fa-solid fa-pause";
+      document.getElementById('playText').textContent = "Pausar Recorrido";
+
+      if (animProgress >= 1) animProgress = 0;
+
+      animTimer = setInterval(() => {
+        animProgress += 0.015;
+        if (animProgress >= 1) {
+          animProgress = 1;
+          pauseWalkAnimation();
+        }
+        updateAnimationState();
+      }, 70);
+    }
+
+    function pauseWalkAnimation() {
+      isPlaying = false;
+      clearInterval(animTimer);
+      document.getElementById('playIcon').className = "fa-solid fa-play";
+      document.getElementById('playText').textContent = "Iniciar Simulador";
+    }
+
+    function resetWalkAnimation() {
+      pauseWalkAnimation();
+      animProgress = 0;
+      updateAnimationState();
+    }
+
+    function seekWalkAnimation(e) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      animProgress = Math.max(0, Math.min(1, clickX / rect.width));
+      updateAnimationState();
+    }
+
+    function updateAnimationState() {
+      // Progress Bar Update
+      document.getElementById('walkProgressBar').style.width = (animProgress * 100) + '%';
+      
+      // Time string (8 seconds total)
+      const sec = Math.floor(animProgress * 8);
+      document.getElementById('timeDisplay').textContent = `00:0${sec} / 00:08`;
+
+      // Move Visitor Avatar Pin along Path
+      const pathEl = document.getElementById('walkPath');
+      const totalLen = pathEl.getTotalLength();
+      const currentPoint = pathEl.getPointAtLength(animProgress * totalLen);
+
+      const pinGroup = document.getElementById('visitorPin');
+      pinGroup.setAttribute('transform', `translate(${currentPoint.x}, ${currentPoint.y})`);
+
+      // Update HUD step description
+      const steps = routesData[currentRouteKey].steps;
+      let activeStep = steps[0];
+      let stepNum = 1;
+
+      if (animProgress > 0.4 && animProgress <= 0.85) {
+        activeStep = steps[1];
+        stepNum = 2;
+      } else if (animProgress > 0.85) {
+        activeStep = steps[2];
+        stepNum = 3;
+      }
+
+      document.getElementById('hudStepBadge').textContent = `PASO ${stepNum} DE 3`;
+      document.getElementById('hudTitle').textContent = activeStep.title;
+      document.getElementById('hudDesc').textContent = activeStep.desc;
+    }
+
+    function toggleFormOption() {
+      const isAAO = document.getElementById('opt-aao').checked;
+      const labelA = document.getElementById('label-option-a');
+      const labelB = document.getElementById('label-option-b');
+      const bannerAAO = document.getElementById('banner-aao');
+      const bannerColombia = document.getElementById('banner-colombia');
+      const btnSubmitText = document.getElementById('btn-submit-text');
+
+      if (isAAO) {
+        labelA.classList.add('border-taichi-navy');
+        labelA.classList.remove('border-slate-200');
+        labelB.classList.add('border-slate-200');
+        labelB.classList.remove('border-taichi-navy');
+
+        bannerAAO.classList.remove('hidden');
+        bannerColombia.classList.add('hidden');
+        btnSubmitText.textContent = 'Confirmar Registro & Generar Bono AAO';
+      } else {
+        labelB.classList.add('border-taichi-navy');
+        labelB.classList.remove('border-slate-200');
+        labelA.classList.add('border-slate-200');
+        labelA.classList.remove('border-taichi-navy');
+
+        bannerColombia.classList.remove('hidden');
+        bannerAAO.classList.add('hidden');
+        btnSubmitText.textContent = 'Registrarme para la Gira en Colombia';
+      }
+    }
+
+    function setOption(type) {
+      if (type === 'aao') {
+        document.getElementById('opt-aao').checked = true;
+      } else {
+        document.getElementById('opt-colombia').checked = true;
+      }
+      toggleFormOption();
+    }
+
+    function filterProducts(category) {
+      const cards = document.querySelectorAll('.prod-card');
+      const buttons = document.querySelectorAll('.tab-btn');
+
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-taichi-navy', 'text-white', 'shadow');
+        btn.classList.add('text-slate-600');
+      });
+
+      const activeBtn = document.getElementById('btn-' + category);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-taichi-navy', 'text-white', 'shadow');
+        activeBtn.classList.remove('text-slate-600');
+      }
+
+      cards.forEach(card => {
+        if (category === 'all' || card.classList.contains(category)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function selectProduct(productName) {
+      const checkboxes = document.querySelectorAll('input[name="productos"]');
+      checkboxes.forEach(cb => {
+        if (cb.value.toLowerCase().includes(productName.toLowerCase())) {
+          cb.checked = true;
+        }
+      });
+      document.getElementById('registro').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      
+      const nombre = document.getElementById('nombre').value;
+      const institucion = document.getElementById('institucion').value;
+      const isAAO = document.getElementById('opt-aao').checked;
+      
+      const randomCode = 'AAO-' + Math.floor(1000 + Math.random() * 9000);
+
+      document.getElementById('modal-doctor-name').textContent = nombre || 'Estimado Doctor';
+      document.getElementById('modal-institucion').textContent = institucion || 'Institución Oftalmológica';
+      document.getElementById('modal-code').textContent = 'TAICHI-' + randomCode;
+
+      if (isAAO) {
+        document.getElementById('modal-desc').textContent = 'Se ha generado su cupón especial de descuento para el Biómetro / OCT de BigVision en el Stand #4043.';
+      } else {
+        document.getElementById('modal-desc').textContent = 'Ha sido registrado prioritariamente en la Gira de Demostraciones en Colombia.';
+      }
+
+      document.getElementById('voucherModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('voucherModal').classList.add('hidden');
+    }
+
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const option = urlParams.get('option');
+      if (option === 'colombia') {
+        setOption('colombia');
+      } else {
+        setOption('aao');
+      }
+
+      selectRoute('entrance-fg');
+    }
+  </script>
+</body>
+</html>
