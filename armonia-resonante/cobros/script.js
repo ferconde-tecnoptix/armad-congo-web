@@ -1,3 +1,4 @@
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwh735VkvDwFgj30VFnLJF0tEjop26bjFa-iB-ngu_M0sHXClg1xOnXPN53cAq9FoM6/exec";
 const TICKET_PRICE = 10000;
 
 // Diccionario de imágenes de QR según el monto
@@ -118,4 +119,84 @@ function renderQRStep() {
 function showNextQR() {
   currentStep = 2;
   renderQRStep();
+}
+
+// =========================================================================
+// EMPALME Y ENVÍO A LA HOJA ELECTRÓNICA (GOOGLE APPS SCRIPT)
+// =========================================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("payment-form");
+
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault(); // Detener recarga de página por defecto
+
+      const btnSubmit = document.getElementById("btn-submit-form");
+      btnSubmit.disabled = true;
+      btnSubmit.innerText = "Procesando y guardando registro...";
+
+      const fileInput = document.getElementById("receipt");
+      let fileData = "";
+      let fileName = "";
+      let fileType = "";
+
+      // Si el usuario adjuntó imagen/pdf del comprobante, lo convertimos a Base64
+      if (fileInput && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        fileName = file.name;
+        fileType = file.type;
+        fileData = await convertBase64(file);
+      }
+
+      // Payload JSON formateado para el Google Apps Script
+      const payload = {
+        Nombre: document.getElementById("fullname").value,
+        Email: document.getElementById("email").value,
+        Telefono: document.getElementById("phone").value,
+        Cantidad_Boletas: document.getElementById("hidden-quantity").value,
+        Total_COP: document.getElementById("hidden-total").value,
+        Referencia: document.getElementById("reference").value,
+        fileName: fileName,
+        fileType: fileType,
+        fileData: fileData
+      };
+
+      try {
+        // Petición POST al Google Apps Script
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.result === "success") {
+          alert(`¡REGISTRO EXITOSO!\n\nTu código de registro es: ${result.idRegistro}.\nValidaremos tu pago a la brevedad en Nequi y te enviaremos la boleta con tu código QR al correo asignado.`);
+          form.reset();
+          document.getElementById("payment-card").style.display = "none";
+          document.getElementById("form-card").style.display = "none";
+          calculateTotal();
+        } else {
+          alert(`Error al registrar: ${result.message}`);
+        }
+      } catch (error) {
+        console.error("Error de envío:", error);
+        alert("Ocurrió un error al enviar el registro a la hoja de Google. Por favor revisa tu conexión.");
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = "Enviar Registro y Solicitar Boletas";
+      }
+    });
+  }
+});
+
+// Función de apoyo para convertir archivos a Base64
+function convertBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 }
