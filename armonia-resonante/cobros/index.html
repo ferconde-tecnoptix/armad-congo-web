@@ -42,7 +42,11 @@
       <div id="payment-step-indicator" class="step-badge"></div>
 
       <div class="qr-container">
-        <img id="qr-image" src="" alt="Código QR de Pago">
+        <!-- Marco contenedor que recorta los bordes de la imagen -->
+        <div class="qr-crop-frame">
+          <img id="qr-image" src="" alt="Código QR de Pago">
+        </div>
+        
         <h3 id="qr-instruction-title" class="qr-title"></h3>
         <p id="qr-instruction-desc" class="qr-desc"></p>
       </div>
