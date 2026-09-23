@@ -1241,26 +1241,71 @@
       document.getElementById('registro').scrollIntoView({ behavior: 'smooth' });
     }
 
+    // URL desplegada del servicio Google Apps Script Backend
+    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywSvubyV-u2tPeWRL1SIuEsbsze5utqSAOY-zLSLP4wyEsmlPMco929R6_M4FphDBP-Q/exec';
+
     function handleFormSubmit(event) {
       event.preventDefault();
-      
-      const nombre = document.getElementById('nombre').value;
-      const institucion = document.getElementById('institucion').value;
-      const isAAO = document.getElementById('opt-aao').checked;
-      
-      const randomCode = 'AAO-' + Math.floor(1000 + Math.random() * 9000);
 
-      document.getElementById('modal-doctor-name').textContent = nombre || 'Estimado Doctor';
-      document.getElementById('modal-institucion').textContent = institucion || 'Institución Oftalmológica';
-      document.getElementById('modal-code').textContent = 'TAICHI-' + randomCode;
+      const btnSubmit = document.querySelector('#aaoForm button[type="submit"]');
+      const btnSubmitText = document.getElementById('btn-submit-text');
+      const originalText = btnSubmitText.textContent;
 
-      if (isAAO) {
-        document.getElementById('modal-desc').textContent = 'Se ha registrado su cita para la presentación personalizada del Biómetro / OCT de BigVision en el Stand #4043.';
-      } else {
-        document.getElementById('modal-desc').textContent = 'Ha sido registrado prioritariamente en la Gira de Demostraciones en Colombia.';
-      }
+      // Deshabilitar botón mientras envía
+      btnSubmit.disabled = true;
+      btnSubmitText.textContent = 'Enviando Registro...';
 
-      document.getElementById('voucherModal').classList.remove('hidden');
+      // Capturar lista de productos seleccionados
+      const selectedProducts = [];
+      document.querySelectorAll('input[name="productos"]:checked').forEach(cb => {
+        selectedProducts.push(cb.value);
+      });
+
+      const payload = {
+        asistencia_tipo: document.querySelector('input[name="asistencia_tipo"]:checked').value,
+        nombre: document.getElementById('nombre').value,
+        email: document.getElementById('email').value,
+        telefono: document.getElementById('telefono').value,
+        institucion: document.getElementById('institucion').value,
+        productos: selectedProducts,
+        mensaje: document.getElementById('mensaje').value,
+        utm_source: document.getElementById('utm_source').value,
+        utm_medium: document.getElementById('utm_medium').value,
+        utm_campaign: document.getElementById('utm_campaign').value
+      };
+
+      fetch(GOOGLE_APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Evita bloqueos de CORS entre dominios con Apps Script
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        // Al usar no-cors, la respuesta es opaca pero la ejecución fue exitosa
+        const randomCode = 'AAO-' + Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('modal-doctor-name').textContent = payload.nombre || 'Estimado Doctor';
+        document.getElementById('modal-institucion').textContent = payload.institucion || 'Institución Oftalmológica';
+        document.getElementById('modal-code').textContent = 'TAICHI-' + randomCode;
+
+        if (payload.asistencia_tipo === 'aao') {
+          document.getElementById('modal-desc').textContent = 'Se ha registrado su cita para la presentación personalizada del Biómetro / OCT de BigVision en el Stand #4043.';
+        } else {
+          document.getElementById('modal-desc').textContent = 'Ha sido registrado prioritariamente en la Gira de Demostraciones en Colombia.';
+        }
+
+        document.getElementById('voucherModal').classList.remove('hidden');
+        document.getElementById('aaoForm').reset();
+      })
+      .catch(err => {
+        console.error('Error al enviar registro:', err);
+        alert('Ocurrió un error al procesar el envío. Por favor reintente o contáctenos directamente.');
+      })
+      .finally(() => {
+        btnSubmit.disabled = false;
+        btnSubmitText.textContent = originalText;
+      });
     }
 
     function closeModal() {
@@ -1275,6 +1320,11 @@
       } else {
         setOption('aao');
       }
+
+      // Automatically capture UTM parameters into form hidden fields
+      document.getElementById('utm_source').value = urlParams.get('utm_source') || 'direct';
+      document.getElementById('utm_medium').value = urlParams.get('utm_medium') || 'none';
+      document.getElementById('utm_campaign').value = urlParams.get('utm_campaign') || 'none';
 
       selectRoute('entrance-fg');
       
