@@ -1,14 +1,15 @@
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwh735VkvDwFgj30VFnLJF0tEjop26bjFa-iB-ngu_M0sHXClg1xOnXPN53cAq9FoM6/exec";
-const TICKET_PRICE = 10000;
+// Cambiar el precio unitario
+const TICKET_PRICE = 15000;
 
-// Diccionario de imágenes de QR según el monto
+// Actualizar el objeto con los valores múltiplos de $15.000
 const QR_IMAGES = {
-  10000: 'qr_10000.jpeg',
-  20000: 'qr_20000.jpeg',
+  15000: 'qr_15000.jpeg',
   30000: 'qr_30000.jpeg',
-  40000: 'qr_40000.jpeg',
-  50000: 'qr_50000.jpeg',
-  0:     'qr_abierto.jpeg' // QR sin monto asignado
+  45000: 'qr_45000.jpeg',
+  60000: 'qr_60000.jpeg',
+  75000: 'qr_75000.jpeg',
+  0:     'qr_abierto.jpeg' // Para valores personalizados o superiores
 };
 
 let currentQty = 1;
@@ -43,13 +44,13 @@ function startPaymentProcess() {
     modalBody.innerHTML = `Elegiste <strong>${currentQty} entrada(s)</strong> por un total de <strong>$${total.toLocaleString('es-CO')} COP</strong>.<br><br>A continuación se mostrará un código QR de Nequi generado exactamente por ese valor. Escanéalo desde tu app bancaria y confirma la transferencia.`;
   
   } else if (currentQty <= 10) {
-    // Caso 2: Combinación de 2 pagos (Ejemplo: 7 boletas = 1 QR de $50.000 + 1 QR de $20.000)
+    // Caso 2: Combinación de 2 pagos (Ejemplo: 7 boletas = 1 QR de $75.000 + 1 QR de $30.000)
     totalSteps = 2;
     secondaryAmount = (currentQty - 5) * TICKET_PRICE;
     
     modalTitle.innerText = "Instrucciones de Pago (2 Pasos)";
     modalBody.innerHTML = `Elegiste <strong>${currentQty} entradas</strong> por un total de <strong>$${total.toLocaleString('es-CO')} COP</strong>.<br><br>Para facilitar tu pago con valor exacto, realizaremos el cobro en <strong>dos transacciones seguidas</strong>:<br><br>
-    1. Primer pago: QR por <strong>$50.000 COP</strong>.<br>
+    1. Primer pago: QR por <strong>$75.000 COP</strong>.<br>
     2. Segundo pago: QR por <strong>$${secondaryAmount.toLocaleString('es-CO')} COP</strong>.<br><br>
     Presiona "Entendido" para escanear el primer código.`;
   
