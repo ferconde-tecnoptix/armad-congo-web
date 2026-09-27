@@ -20,6 +20,22 @@ body { background-color: #f4f6f9; color: #333; line-height: 1.5; }
 .btn-primary:hover, .btn-submit:hover { background: #219150; }
 .btn-secondary { width: 100%; background: #2a5298; color: white; border: none; padding: 10px; font-size: 0.95rem; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 15px; }
 
+/* Estilos Responsive para el Flyer */
+.flyer-container {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 25px;
+}
+
+.flyer-img {
+  width: 100%;
+  max-width: 480px; /* Tamaño ideal de lectura en PC y Tablet */
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  display: inline-block;
+}
+
 /* Contenedor QR */
 .qr-container { text-align: center; margin: 20px 0; padding: 15px; border: 2px dashed #2a5298; border-radius: 8px; background: #fff; }
 .qr-container img { max-width: 220px; height: auto; margin-bottom: 10px; }
