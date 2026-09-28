@@ -41,7 +41,7 @@ function startPaymentProcess() {
     // Caso 1: Pago único de 1 a 5 boletas
     totalSteps = 1;
     modalTitle.innerText = "Instrucción de Pago";
-    modalBody.innerHTML = `Elegiste <strong>${currentQty} entrada(s)</strong> por un total de <strong>$${total.toLocaleString('es-CO')} COP</strong>.<br><br>A continuación se mostrará un código QR de Nequi generado exactamente por ese valor. Escanéalo desde tu app bancaria y confirma la transferencia.`;
+    modalBody.innerHTML = `Elegiste <strong>${currentQty} entrada(s)</strong> por un total de <strong>$${total.toLocaleString('es-CO')} COP</strong>.<br><br>A continuación se mostrará un código QR de Bre-b generado exactamente por ese valor. Escanéalo desde tu app bancaria y confirma la transferencia. También puedes pagar con la llave @3173791045. Solo recuerda después de hacer el pago seguir bajando en la página para llenar el formulario con tu información para enviar la entrada a tu correo electrónico.`;
   
   } else if (currentQty <= 10) {
     // Caso 2: Combinación de 2 pagos (Ejemplo: 7 boletas = 1 QR de $75.000 + 1 QR de $30.000)
@@ -52,13 +52,15 @@ function startPaymentProcess() {
     modalBody.innerHTML = `Elegiste <strong>${currentQty} entradas</strong> por un total de <strong>$${total.toLocaleString('es-CO')} COP</strong>.<br><br>Para facilitar tu pago con valor exacto, realizaremos el cobro en <strong>dos transacciones seguidas</strong>:<br><br>
     1. Primer pago: QR por <strong>$75.000 COP</strong>.<br>
     2. Segundo pago: QR por <strong>$${secondaryAmount.toLocaleString('es-CO')} COP</strong>.<br><br>
-    Presiona "Entendido" para escanear el primer código.`;
+    Presiona "Entendido" para escanear el primer código. <br>
+    También puedes pagar con la llave @3173791045. Solo recuerda después de hacer el pago seguir bajando en la página para llenar el formulario con tu información para enviar la entrada a tu correo electrónico.`;
   
   } else {
     // Caso 3: Más de 10 entradas (QR abierto)
     totalSteps = 1;
     modalTitle.innerText = "Instrucción de Pago Manual";
-    modalBody.innerHTML = `Elegiste <strong>${currentQty} entradas</strong> por un total de <strong>$${total.toLocaleString('es-CO')} COP</strong>.<br><br>A continuación te mostraremos un código QR abierto. Cuando lo escanees en tu aplicación bancaria, **deberás digitar manualmente** el valor total: <strong>$${total.toLocaleString('es-CO')} COP</strong>.`;
+    modalBody.innerHTML = `Elegiste <strong>${currentQty} entradas</strong> por un total de <strong>$${total.toLocaleString('es-CO')} COP</strong>.<br><br>A continuación te mostraremos un código QR abierto. Cuando lo escanees en tu aplicación bancaria, **deberás digitar manualmente** el valor total: <strong>$${total.toLocaleString('es-CO')} COP</strong>.<br>
+    También puedes pagar con la llave @3173791045. Solo recuerda después de hacer el pago seguir bajando en la página para llenar el formulario con tu información para enviar la entrada a tu correo electrónico.`;
   }
 
   // Mostrar Modal
