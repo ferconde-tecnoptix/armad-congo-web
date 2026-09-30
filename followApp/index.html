@@ -1,0 +1,4242 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>FollowApp - Sistema de Gestión y Cotizaciones</title>
+		
+		<!-- External Stylesheets (W3.CSS, Theme Teal, FontAwesome) -->
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+		<style>
+			html, body {
+				height: 100%;
+				margin: 0;
+				overflow: hidden;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.main-wrapper {
+				display: flex;
+				flex-direction: column;
+				height: 100vh;
+			}
+
+			.content-area {
+				flex: 1; 
+				overflow-y: auto;
+				-webkit-overflow-scrolling: touch;
+			}
+
+			.logo-header { height: 45px; width: auto; vertical-align: middle; margin-right: 15px; }
+        
+			.w3-modal-content { border-radius: 8px; overflow: hidden; }
+			
+			.loading-overlay { 
+				display: none; 
+				position: fixed; 
+				top:0; left:0; 
+				width:100%; height:100%; 
+				background:rgba(255,255,255,0.85); 
+				z-index:9999; 
+				justify-content:center; 
+				align-items:center; 
+				flex-direction: column;
+			}
+			
+			.filtro-container {
+				position: relative;
+				display: flex;
+				align-items: center;
+			}
+
+			.btn-limpiar {
+				position: absolute;
+				right: 5px;
+				background: none;
+				border: none;
+				font-size: 14px;
+				color: #888;
+				cursor: pointer;
+				display: none;
+				padding: 0 6px;
+			}
+			.btn-limpiar:hover {
+				color: #f44336;
+			}
+
+			/* Panel lateral y tarjetas de historial */
+			#contenidoPanel, #contenidoPanelContactos {
+				white-space: normal !important;
+			}
+
+			.c_panelLateral textarea, .c_panelLateral input, .c_panelLateral select {
+				box-sizing: border-box !important;
+				width: 100% !important;
+				resize: vertical;
+			}
+
+			.panel-item-card {
+				background: #ffffff;
+				border-left: 4px solid #008080;
+				border-radius: 6px;
+				padding: 10px;
+				margin-bottom: 10px;
+				box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+				word-break: break-word;
+				white-space: normal;
+			}
+
+			/* Notification System */
+			#toastContainer {
+				position: fixed;
+				top: 20px;
+				right: 20px;
+				z-index: 10000;
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+			}
+
+			.toast-message {
+				min-width: 250px;
+				padding: 12px 20px;
+				border-radius: 6px;
+				color: white;
+				font-size: 14px;
+				box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				animation: fadeIn 0.3s ease-in-out;
+			}
+
+			.toast-info { background-color: #008080; }
+			.toast-error { background-color: #e53935; }
+			.toast-success { background-color: #43a047; }
+
+			@keyframes fadeIn {
+				from { opacity: 0; transform: translateY(-10px); }
+				to { opacity: 1; transform: translateY(0); }
+			}
+
+			/* Reglas de impresión en papel/PDF para Órdenes y Proformas */
+			@media print {
+				@page {
+					size: letter;
+					margin: 10mm;
+				}
+				body {
+					background: #fff !important;
+					margin: 0 !important;
+					padding: 0 !important;
+				}
+				body * { visibility: hidden; }
+				#modalImpresionPO, #modalImpresionPO *,
+				#modalImpresionProforma, #modalImpresionProforma * { visibility: visible; }
+				
+				#modalImpresionPO, #modalImpresionProforma {
+					position: absolute !important;
+					left: 0 !important;
+					top: 0 !important;
+					width: 100% !important;
+					margin: 0 !important;
+					padding: 0 !important;
+					background: white !important;
+					box-shadow: none !important;
+				}
+				
+				.w3-modal-content {
+					max-width: 100% !important;
+					width: 100% !important;
+					margin: 0 !important;
+					padding: 0 !important;
+					box-shadow: none !important;
+					border: none !important;
+					border-radius: 0 !important;
+				}
+				.w3-hide-print { display: none !important; }
+			}
+		</style>
+	</head>
+	<body>
+		<div id="loader" class="loading-overlay">
+			<i class="fa fa-spinner w3-spin w3-jumbo w3-text-teal"></i>
+			<p id="textoLoader" class="w3-large w3-margin-top w3-text-teal">Procesando...</p>
+		</div>
+
+		<div id="toastContainer"></div>
+
+		<div id="modalLogin" class="w3-modal" style="display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.7); z-index:9990;">
+			<div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-large" style="max-width:420px; width:90%; overflow:hidden;">
+				<div class="w3-container w3-teal w3-center w3-padding-24">
+					<i class="fa fa-user-circle-o w3-xxxlarge"></i>
+					<h3 style="margin:8px 0 0 0;"><b>FollowApp</b></h3>
+					<small>Control de Acceso de Usuarios</small>
+				</div>
+				<form class="w3-container w3-padding-24 w3-white" onsubmit="event.preventDefault(); IniciarSesion();">
+					<label class="w3-text-teal"><b>Usuario:</b></label>
+					<input id="login_usuario" class="w3-input w3-border w3-round w3-margin-bottom" type="text" placeholder="Ej: admin" required autofocus>
+					
+					<label class="w3-text-teal"><b>Contraseña:</b></label>
+					<input id="login_clave" class="w3-input w3-border w3-round w3-margin-bottom" type="password" placeholder="••••••••" required>
+					
+					<button type="submit" class="w3-button w3-teal w3-block w3-round-large w3-margin-top w3-medium"><i class="fa fa-sign-in"></i> Ingresar al Sistema</button>
+				</form>
+				<div class="w3-container w3-light-grey w3-padding w3-center w3-tiny w3-text-grey">
+					Tecnoptix S.A.S. • Control de Acceso Seguro
+				</div>
+			</div>
+		</div>
+
+		<div class="main-wrapper">
+			<header class="w3-container w3-theme-d4 w3-padding-0">
+				<div class="w3-left">
+					<span class="w3-white" style="padding:25px; display:inline-block;"><img src="images/logo_empresa.png" height="45px" alt="Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/140x45?text=Tecnoptix';"></span>
+					<span class="w3-large w3-hide-small" style="padding:20px"><b>Follow</b>App Sistema de Gestión y Cotizaciones</span>
+				</div>
+				<div class="w3-right w3-padding-16 w3-margin-right" id="badgeUsuario" style="display:none;">
+					<span class="w3-medium"><i class="fa fa-user-circle"></i> <span id="lblNombreUsuario">Usuario</span> (<small id="lblRolUsuario">Rol</small>)</span>
+					<button class="w3-button w3-tiny w3-red w3-round w3-margin-left" onclick="CerrarSesion()" title="Cerrar Sesión"><i class="fa fa-power-off"></i> Salir</button>
+				</div>
+			</header>
+
+			<main class="content-area w3-container">	
+				<div class="w3-bar w3-theme-l4 w3-padding-0">
+					<button class="navegacion w3-bar-item w3-button" id="binicio" onclick="AbrirSeccion('inicio','binicio')"><i class="fa fa-dashboard"></i> Inicio</button>
+					<button class="navegacion w3-bar-item w3-button" id="bempresas" onclick="AbrirSeccion('empresas','bempresas')"><i class="fa fa-university"></i> Empresas</button>
+					<button class="navegacion w3-bar-item w3-button" id="bcontactos" onclick="AbrirSeccion('contactos','bcontactos')"><i class="fa fa-users"></i> Contactos</button>
+					<button class="navegacion w3-bar-item w3-button" id="bproformas" onclick="AbrirSeccion('proformas','bproformas')"><i class="fa fa-file-text-o"></i> Proformas / Cotizaciones</button>
+					<button class="navegacion w3-bar-item w3-button" id="bcatalogo" onclick="AbrirSeccion('catalogo','bcatalogo')"><i class="fa fa-tags"></i> Catálogo y Precios</button>
+					<button class="navegacion w3-bar-item w3-button" id="bproveedores" onclick="AbrirSeccion('proveedores','bproveedores')"><i class="fa fa-truck"></i> Proveedores</button>
+					<button class="navegacion w3-bar-item w3-button" id="bordenes" onclick="AbrirSeccion('ordenes','bordenes')"><i class="fa fa-shopping-cart"></i> Órdenes de Compra</button>
+					<button class="navegacion w3-bar-item w3-button" id="busuarios" onclick="AbrirSeccion('usuarios','busuarios')" style="display:none;"><i class="fa fa-shield"></i> Usuarios</button>
+				</div>
+
+				<div class="w3-container w3-theme-d2 seccion w3-padding-0" id="inicio">					
+					<div class="w3-container">
+						<div class="w3-row-padding w3-margin-top">
+							<div class="w3-col l4 m12">
+								<div class="w3-card-4 w3-white w3-padding">
+									<h4>Matriz de Prioridad vs Urgencia</h4>
+									<div id="contenedorPlano" style="position: relative; height: 350px; width: 100%; border: 2px solid #ccc; background: #f9f9f9;">
+										<div style="position: absolute; top: 50%; left: 0; width: 100%; border-top: 1px dashed #999;"></div>
+										<div style="position: absolute; left: 50%; top: 0; height: 100%; border-left: 1px dashed #999;"></div>
+								
+										<span style="position: absolute; bottom: 5px; right: 5px;" class="w3-tiny w3-text-grey">URGENCIA →</span>
+										<span style="position: absolute; top: 5px; left: 5px;" class="w3-tiny w3-text-grey">PRIORIDAD ↑</span>
+
+										<div id="canvasTareas"></div>
+									</div>
+									<div class="w3-row w3-center w3-small w3-margin-top">
+										<div class="w3-col s6">← Menos Urgente</div>
+										<div class="w3-col s6">Más Urgente →</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="w3-col l8 m12">
+								<div class="w3-card-4 w3-white" style="height: 450px; display: flex; flex-direction: column;">
+									<h4 class="w3-margin-left">Tareas Pendientes</h4>
+							  
+									<div class="w3-row-padding w3-light-grey w3-padding-small w3-round w3-margin-left w3-margin-right">
+										<div class="w3-col s4">
+											<label class="w3-tiny"><b>Prioridad:</b></label><br>											
+											<input type="checkbox" id="p_maxima" class="w3-check" onclick="renderizarInterfaz()" checked><label class="w3-tiny">Máxima</label>
+											<input type="checkbox" id="p_alta" class="w3-check" onclick="renderizarInterfaz()" checked><label class="w3-tiny">Alta</label>
+											<input type="checkbox" id="p_media" class="w3-check" onclick="renderizarInterfaz()"><label class="w3-tiny">Media</label>
+											<input type="checkbox" id="p_baja" class="w3-check" onclick="renderizarInterfaz()"><label class="w3-tiny">Baja</label>
+										</div>
+										<div class="w3-col s4">
+											<label class="w3-tiny"><b>Estado:</b></label><br>
+											<input type="checkbox" id="e_noIniciada" class="w3-check" onclick="renderizarInterfaz()" checked><label class="w3-tiny">No Ini.</label>
+											<input type="checkbox" id="e_iniciada" class="w3-check" onclick="renderizarInterfaz()" checked><label class="w3-tiny">Ini.</label>
+											<input type="checkbox" id="e_terminada" class="w3-check" onclick="renderizarInterfaz()"><label class="w3-tiny">Fin.</label>
+											<input type="checkbox" id="e_suspendida" class="w3-check" onclick="renderizarInterfaz()"><label class="w3-tiny">Susp.</label>
+											<input type="checkbox" id="e_cancelada" class="w3-check" onclick="renderizarInterfaz()"><label class="w3-tiny">Canc.</label>
+										</div>
+										<div class="w3-col s4">
+											<label class="w3-tiny"><b>Urgencia:</b></label>
+											<select class="w3-select w3-border w3-white" id="filtroUrgencia" onchange="renderizarInterfaz()">
+												<option value="unDia">En un día</option>
+												<option value="unaSemana">En esta semana</option>
+												<option value="unaQuincena">En esta quincena</option>
+												<option value="unMes">En este mes</option>
+												<option value="cualquierMomento" selected>En cualquier momento</option>
+											</select>
+										</div>
+									</div>
+
+									<div id="i_listaTareas" class="w3-margin-top" style="flex: 1; overflow-y: auto; padding: 0 16px 16px 16px;">
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+				</div>
+
+				<div class="w3-container w3-theme-d2 seccion" id="empresas">
+					<div class="w3-container">
+						<div class="w3-row w3-margin-bottom w3-padding-16">
+							<div class="w3-col s8">
+								<h2 class="w3-text-teal"><i class="fa fa-university"></i> Gestión de Empresas</h2>
+							</div>
+							<div class="w3-col s4 w3-right-align">
+								<button id="btnNuevaEmpresa" onclick="EditarEmpresa(-1)" class="w3-button w3-teal w3-round">
+									<i class="fa fa-plus"></i> Nueva Empresa
+								</button>								
+							</div>
+						</div>
+
+						<div class="w3-responsive w3-card-4 w3-white">
+							<table class="w3-table-all w3-hoverable" id="tablaEmpresas">
+								<thead>
+									<tr class="w3-teal">
+										<th>Nombre Razón Social</th>
+										<th>Ciudad</th>
+										<th>Departamento</th>
+										<th>País</th>
+										<th>NIT / Identificación</th>
+										<th class="w3-center">Acciones</th>
+									</tr>
+									<tr class="w3-light-grey">
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroNombreEmpresa" type="text" placeholder="Filtrar nombre..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarNombreEmpresa');ListarEmpresas()">
+												<button id="btnLimpiarNombreEmpresa" class="btn-limpiar" onclick="limpiarCampo('filtroNombreEmpresa', 'btnLimpiarNombreEmpresa')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroCiudadEmpresa" type="text" placeholder="Filtrar ciudad..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarCiudadEmpresa');ListarEmpresas()">
+												<button id="btnLimpiarCiudadEmpresa" class="btn-limpiar" onclick="limpiarCampo('filtroCiudadEmpresa', 'btnLimpiarCiudadEmpresa')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroDepartamentoEmpresa" type="text" placeholder="Filtrar depto..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarDeptoEmpresa');ListarEmpresas()">
+												<button id="btnLimpiarDeptoEmpresa" class="btn-limpiar" onclick="limpiarCampo('filtroDepartamentoEmpresa', 'btnLimpiarDeptoEmpresa')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroPaisEmpresa" type="text" placeholder="Filtrar país..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarPaisEmpresa');ListarEmpresas()">
+												<button id="btnLimpiarPaisEmpresa" class="btn-limpiar" onclick="limpiarCampo('filtroPaisEmpresa', 'btnLimpiarPaisEmpresa')" title="Borrar texto">✖</button>
+											</div>											
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroIdentificacionEmpresa" type="text" placeholder="Filtrar ID..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarIDEmpresa');ListarEmpresas()">
+												<button id="btnLimpiarIDEmpresa" class="btn-limpiar" onclick="limpiarCampo('filtroIdentificacionEmpresa', 'btnLimpiarIDEmpresa')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td class="w3-center" id="accionesEmpresas"><i id="filtroEmpresas" class="fa fa-filter"></i><button id="agregarEmpresa" onclick="AgregarEmpresa()" style="display:none;" class="w3-button w3-teal w3-tiny w3-round">Agregar</button></td>
+									</tr>
+							</thead>
+							<tbody id="bodyEmpresas">
+							</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="w3-container w3-theme-d2 seccion" id="contactos">
+					<div class="w3-container">
+						<div class="w3-row w3-margin-bottom w3-padding-16">
+							<div class="w3-col s8">
+								<h2 class="w3-text-teal"><i class="fa fa-users"></i> Directorio de Contactos</h2>
+							</div>
+							<div class="w3-col s4 w3-right-align">
+								<button id="btnNuevoContacto" onclick="EditarContacto(-1)" class="w3-button w3-teal w3-round">
+									<i class="fa fa-plus"></i> Nuevo Contacto
+								</button>
+							</div>
+						</div>
+
+						<div class="w3-responsive w3-card-4 w3-white">
+							<table class="w3-table-all w3-hoverable" id="tablaContactos">
+								<thead>
+									<tr class="w3-teal">
+										<th>Nombre</th>
+										<th>Apellido</th>
+										<th>Cargo / Profesión</th>
+										<th>Empresa / Institución</th>										
+										<th class="w3-center">Acciones</th>
+									</tr>
+									<tr class="w3-light-grey">
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round" type="text" id="filtroNombreContacto" placeholder="Filtrar Nombre..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarNombreContacto');ListarContactos()">
+												<button id="btnLimpiarNombreContacto" class="btn-limpiar" onclick="limpiarCampo('filtroNombreContacto', 'btnLimpiarNombreContacto')" title="Borrar nombre">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round" type="text" id="filtroApellidoContacto" placeholder="Filtrar Apellido..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarApellidoContacto');ListarContactos()">
+												<button id="btnLimpiarApellidoContacto" class="btn-limpiar" onclick="limpiarCampo('filtroApellidoContacto', 'btnLimpiarApellidoContacto')" title="Borrar apellido">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round" type="text" id="filtroCargoContacto" placeholder="Filtrar Cargo..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarCargoContacto');ListarContactos()">
+												<button id="btnLimpiarCargoContacto" class="btn-limpiar" onclick="limpiarCampo('filtroCargoContacto', 'btnLimpiarCargoContacto')" title="Borrar cargo">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round" type="text" id="filtroEmpresaContacto" placeholder="Filtrar Empresa..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarEmpresaContacto');ListarContactos()">
+												<button id="btnLimpiarEmpresaContacto" class="btn-limpiar" onclick="limpiarCampo('filtroEmpresaContacto', 'btnLimpiarEmpresaContacto')" title="Borrar empresa">✖</button>
+											</div>
+										</td>
+										<td class="w3-center"><i id="filtroContactos" class="fa fa-filter"></i><button id="agregarContacto" onclick="AgregarContacto()" style="display:none;" class="w3-button w3-teal w3-tiny w3-round">Agregar</button></td>
+									</tr>
+								</thead>
+								<tbody id="bodyContactos">
+								</tbody>
+							</table>
+						</div>						
+					</div>
+				</div>
+
+				<div class="w3-container w3-theme-d2 seccion" id="proformas">
+					<div class="w3-container">
+						<div class="w3-row w3-margin-bottom w3-padding-16">
+							<div class="w3-col s8">
+								<h2 class="w3-text-teal"><i class="fa fa-file-text-o"></i> Proformas y Cotizaciones Comerciales</h2>
+							</div>
+							<div class="w3-col s4 w3-right-align">
+								<button id="btnNuevaProforma" onclick="EditarProforma(-1)" class="w3-button w3-teal w3-round">
+									<i class="fa fa-plus"></i> Nueva Proforma
+								</button>								
+							</div>
+						</div>
+
+						<div class="w3-responsive w3-card-4 w3-white">
+							<table class="w3-table-all w3-hoverable" id="tablaProformas">
+								<thead>
+									<tr class="w3-teal">
+										<th># Proforma</th>
+										<th>Empresa / Cliente</th>
+										<th>Fecha</th>
+										<th>Moneda</th>
+										<th>Estado</th>
+										<th>Total</th>
+										<th class="w3-center">Acciones</th>
+									</tr>
+									<tr class="w3-light-grey">
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroConsecutivoProforma" type="text" placeholder="Filtrar #..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarConsecutivoProforma');ListarProformas()">
+												<button id="btnLimpiarConsecutivoProforma" class="btn-limpiar" onclick="limpiarCampo('filtroConsecutivoProforma', 'btnLimpiarConsecutivoProforma')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroClienteProforma" type="text" placeholder="Filtrar cliente..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarClienteProforma');ListarProformas()">
+												<button id="btnLimpiarClienteProforma" class="btn-limpiar" onclick="limpiarCampo('filtroClienteProforma', 'btnLimpiarClienteProforma')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroFechaProforma" type="text" placeholder="Filtrar fecha..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarFechaProforma');ListarProformas()">
+												<button id="btnLimpiarFechaProforma" class="btn-limpiar" onclick="limpiarCampo('filtroFechaProforma', 'btnLimpiarFechaProforma')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<select id="filtroMonedaProforma" class="w3-select w3-border w3-round" onchange="ListarProformas()">
+												<option value="">Todas</option>
+												<option value="USD">USD ($)</option>
+												<option value="COP">COP ($)</option>
+												<option value="EUR">EUR (€)</option>
+											</select>
+										</td>
+										<td>
+											<select id="filtroEstadoProforma" class="w3-select w3-border w3-round" onchange="ListarProformas()">
+												<option value="">Todos</option>
+												<option value="Emitida">Emitida</option>
+												<option value="Enviada">Enviada</option>
+												<option value="Revisada">Revisada</option>
+												<option value="Aceptada">Aceptada</option>
+												<option value="Vencida">Vencida</option>
+												<option value="Facturada">Facturada</option>
+											</select>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroTotalProforma" type="text" placeholder="Filtrar total..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarTotalProforma');ListarProformas()">
+												<button id="btnLimpiarTotalProforma" class="btn-limpiar" onclick="limpiarCampo('filtroTotalProforma', 'btnLimpiarTotalProforma')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td class="w3-center"><i id="filtroProformas" class="fa fa-filter"></i></td>
+									</tr>
+							</thead>
+							<tbody id="bodyProformas">
+							</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="w3-container w3-theme-d2 seccion" id="catalogo">
+					<div class="w3-container">
+						<div class="w3-row w3-margin-bottom w3-padding-16">
+							<div class="w3-col s8">
+								<h2 class="w3-text-teal"><i class="fa fa-tags"></i> Catálogo de Productos y Precios de Venta</h2>
+							</div>
+							<div class="w3-col s4 w3-right-align">
+								<button id="btnNuevoProductoVenta" onclick="EditarProductoVenta(-1)" class="w3-button w3-teal w3-round">
+									<i class="fa fa-plus"></i> Nuevo Producto
+								</button>
+							</div>
+						</div>
+
+						<div class="w3-row-padding">
+							<div class="w3-half">
+								<div class="w3-card-4 w3-white w3-padding">
+									<h4 class="w3-text-teal"><b>Catálogo de Productos (`FA_ProductosVentas`)</b></h4>
+									<div class="w3-responsive" style="max-height: 450px; overflow-y: auto;">
+										<table class="w3-table-all w3-hoverable w3-small">
+											<thead>
+												<tr class="w3-teal">
+													<th>SKU / Ref</th>
+													<th>Nombre Producto</th>
+													<th>Estado</th>
+													<th class="w3-center">Acción</th>
+												</tr>
+											</thead>
+											<tbody id="bodyProductosVentas">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+
+							<div class="w3-half">
+								<div class="w3-card-4 w3-white w3-padding">
+									<h4 class="w3-text-teal"><b>Listas de Precios de Venta (`FA_ListasPreciosVentas`)</b></h4>
+									<div class="w3-responsive" style="max-height: 450px; overflow-y: auto;">
+										<table class="w3-table-all w3-hoverable w3-small">
+											<thead>
+												<tr class="w3-teal">
+													<th>Código Lista</th>
+													<th>Nombre / Descripción</th>
+													<th>Moneda</th>
+													<th>Estado</th>
+												</tr>
+											</thead>
+											<tbody id="bodyListasPreciosVentas">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="w3-container w3-theme-d2 seccion" id="proveedores">
+					<div class="w3-container">
+						<div class="w3-row w3-margin-bottom w3-padding-16">
+							<div class="w3-col s8">
+								<h2 class="w3-text-teal"><i class="fa fa-truck"></i> Gestión de Proveedores</h2>
+							</div>
+							<div class="w3-col s4 w3-right-align">
+								<button id="btnNuevoProveedor" onclick="EditarProveedor(-1)" class="w3-button w3-teal w3-round">
+									<i class="fa fa-plus"></i> Nuevo Proveedor
+								</button>								
+							</div>
+						</div>
+
+						<div class="w3-responsive w3-card-4 w3-white">
+							<table class="w3-table-all w3-hoverable" id="tablaProveedores">
+								<thead>
+									<tr class="w3-teal">
+										<th>Nombre</th>
+										<th>Persona Contacto</th>
+										<th>Correo</th>
+										<th>WhatsApp</th>
+										<th>Banco</th>
+										<th class="w3-center">Acciones</th>
+									</tr>
+									<tr class="w3-light-grey">
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroNombreProveedor" type="text" placeholder="Filtrar nombre..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarNombreProveedor');ListarProveedores()">
+												<button id="btnLimpiarNombreProveedor" class="btn-limpiar" onclick="limpiarCampo('filtroNombreProveedor', 'btnLimpiarNombreProveedor')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroContactoProveedor" type="text" placeholder="Filtrar contacto..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarContactoProveedor');ListarProveedores()">
+												<button id="btnLimpiarContactoProveedor" class="btn-limpiar" onclick="limpiarCampo('filtroContactoProveedor', 'btnLimpiarContactoProveedor')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroCorreoProveedor" type="text" placeholder="Filtrar correo..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarCorreoProveedor');ListarProveedores()">
+												<button id="btnLimpiarCorreoProveedor" class="btn-limpiar" onclick="limpiarCampo('filtroCorreoProveedor', 'btnLimpiarCorreoProveedor')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroWhatsAppProveedor" type="text" placeholder="Filtrar WhatsApp..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarWhatsAppProveedor');ListarProveedores()">
+												<button id="btnLimpiarWhatsAppProveedor" class="btn-limpiar" onclick="limpiarCampo('filtroWhatsAppProveedor', 'btnLimpiarWhatsAppProveedor')" title="Borrar texto">✖</button>
+											</div>											
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroBancoProveedor" type="text" placeholder="Filtrar banco..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarBancoProveedor');ListarProveedores()">
+												<button id="btnLimpiarBancoProveedor" class="btn-limpiar" onclick="limpiarCampo('filtroBancoProveedor', 'btnLimpiarBancoProveedor')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td class="w3-center"><i id="filtroProveedores" class="fa fa-filter"></i><button id="agregarProveedor" onclick="AgregarProveedor()" style="display:none;" class="w3-button w3-teal w3-tiny w3-round">Agregar</button></td>
+									</tr>
+							</thead>
+							<tbody id="bodyProveedores">
+							</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="w3-container w3-theme-d2 seccion" id="ordenes">
+					<div class="w3-container">
+						<div class="w3-row w3-margin-bottom w3-padding-16">
+							<div class="w3-col s8">
+								<h2 class="w3-text-teal"><i class="fa fa-shopping-cart"></i> Órdenes de Compra (PO)</h2>
+							</div>
+							<div class="w3-col s4 w3-right-align">
+								<button id="btnNuevaOrden" onclick="EditarOrden(-1)" class="w3-button w3-teal w3-round">
+									<i class="fa fa-plus"></i> Nueva Orden
+								</button>								
+							</div>
+						</div>
+
+						<div class="w3-responsive w3-card-4 w3-white">
+							<table class="w3-table-all w3-hoverable" id="tablaOrdenes">
+								<thead>
+									<tr class="w3-teal">
+										<th>Consecutivo</th>
+										<th>Proveedor</th>
+										<th>Fecha</th>
+										<th>Incluye Flete</th>
+										<th>Valor Total (USD)</th>
+										<th class="w3-center">Acciones</th>
+									</tr>
+									<tr class="w3-light-grey">
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroConsecutivoOrden" type="text" placeholder="Filtrar PO..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarConsecutivoOrden');ListarOrdenes()">
+												<button id="btnLimpiarConsecutivoOrden" class="btn-limpiar" onclick="limpiarCampo('filtroConsecutivoOrden', 'btnLimpiarConsecutivoOrden')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroProveedorOrden" type="text" placeholder="Filtrar proveedor..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarProveedorOrden');ListarOrdenes()">
+												<button id="btnLimpiarProveedorOrden" class="btn-limpiar" onclick="limpiarCampo('filtroProveedorOrden', 'btnLimpiarProveedorOrden')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroFechaOrden" type="text" placeholder="Filtrar fecha..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarFechaOrden');ListarOrdenes()">
+												<button id="btnLimpiarFechaOrden" class="btn-limpiar" onclick="limpiarCampo('filtroFechaOrden', 'btnLimpiarFechaOrden')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td>
+											<select id="filtroFleteOrden" class="w3-select w3-border w3-round" onchange="ListarOrdenes()">
+												<option value="">Todos</option>
+												<option value="SI">SI</option>
+												<option value="NO">NO</option>
+											</select>
+										</td>
+										<td>
+											<div class="filtro-container">
+												<input class="w3-input w3-border w3-round s-filter" id="filtroValorOrden" type="text" placeholder="Filtrar valor..." onkeyup="controlarBotonBorrado(this, 'btnLimpiarValorOrden');ListarOrdenes()">
+												<button id="btnLimpiarValorOrden" class="btn-limpiar" onclick="limpiarCampo('filtroValorOrden', 'btnLimpiarValorOrden')" title="Borrar texto">✖</button>
+											</div>
+										</td>
+										<td class="w3-center"><i id="filtroOrdenes" class="fa fa-filter"></i><button id="agregarOrden" onclick="AgregarOrden()" style="display:none;" class="w3-button w3-teal w3-tiny w3-round">Agregar</button></td>
+									</tr>
+							</thead>
+							<tbody id="bodyOrdenes">
+							</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="w3-container w3-theme-d2 seccion" id="usuarios">
+					<div class="w3-container">
+						<div class="w3-row w3-margin-bottom w3-padding-16">
+							<div class="w3-col s8">
+								<h2 class="w3-text-teal"><i class="fa fa-user-circle"></i> Control de Usuarios del Sistema</h2>
+							</div>
+							<div class="w3-col s4 w3-right-align">
+								<button onclick="EditarUsuario(-1)" class="w3-button w3-teal w3-round">
+									<i class="fa fa-user-plus"></i> Nuevo Usuario
+								</button>								
+							</div>
+						</div>
+
+						<div class="w3-responsive w3-card-4 w3-white">
+							<table class="w3-table-all w3-hoverable" id="tablaUsuarios">
+								<thead>
+									<tr class="w3-teal">
+										<th>Usuario</th>
+										<th>Nombre Completo</th>
+										<th>Rol</th>
+										<th>Estado</th>
+										<th class="w3-center">Acciones</th>
+									</tr>
+							</thead>
+							<tbody id="bodyUsuarios">
+							</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div id="modalInicio" class="w3-modal">
+					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:1000px">
+						<header class="w3-container w3-teal">
+							<span onclick="document.getElementById('modalInicio').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+							<h3 id="tituloModalInicio">Atención Tarea</h3>
+						</header>
+						<div class="w3-container w3-padding-16 w3-text-teal" style="flex: 1; position: relative;" id="i_formContacto">
+							<div class="w3-row-padding w3-small">
+								<div class="w3-col m4 s12">
+									<button id="i_verContacto" class="w3-button w3-block w3-teal w3-round w3-margin-bottom">Ver Contacto</button> 
+									<label>Nombre</label>
+									<div class="w3-input w3-border w3-round w3-margin-bottom modalInicio" id="i_nombre" style="min-height: 38px; word-break: break-word;"></div>
+
+									<label>Apellido</label>
+									<div class="w3-input w3-border w3-round w3-margin-bottom modalInicio" id="i_apellido" style="min-height: 38px; word-break: break-word;"></div>
+									
+									<label>Cargo</label>
+									<div class="w3-input w3-border w3-round w3-margin-bottom modalInicio" id="i_cargo" style="min-height: 38px; word-break: break-word;"></div>
+									
+									<label>Empresa</label>
+									<div class="w3-input w3-border w3-round w3-margin-bottom modalInicio" id="i_empresa" style="min-height: 38px; word-break: break-word;"></div>
+								</div>
+								<div class="w3-col m4 s12" style="overflow: hidden; box-sizing: border-box;">
+									<div id="i_panelDatos" class="w3-container" style="padding:0; width:100%; max-width:100%; overflow-x:auto;">
+										<table id="i_datosContacto" class="w3-table-all w3-tiny" style="width:100%; table-layout:fixed; word-break:break-word;">
+											<thead>
+												<tr class="w3-teal">
+													<th style="width:35%;">Tipo</th>
+													<th style="width:65%;">Dato</th>															
+												</tr>														
+											</thead>
+											<tbody id="i_listaDC">
+											</tbody>											
+										</table>
+									</div>
+								</div>
+								<div class="w3-col m4 s12 w3-small">
+									<label>Descripción</label>
+									<textarea class="w3-input w3-border w3-round w3-margin-bottom modalInicio" id="i_descripcion"></textarea>
+									<label>Estado</label>
+									<select class="w3-input w3-border w3-round w3-margin-bottom" id="i_estadoTarea">
+										<option value="No iniciada">No iniciada</option>
+										<option value="Iniciada">Iniciada</option>
+										<option value="Terminada">Terminada</option>
+										<option value="Suspendida">Suspendida</option>
+										<option value="Cancelada">Cancelada</option>
+									</select>
+									<label>Fecha</label>
+									<input type="date" class="w3-input w3-border w3-round w3-margin-bottom" id="i_fechaTarea">
+									<label>Prioridad</label>
+									<select class="w3-input w3-border w3-round w3-margin-bottom" id="i_prioridadTarea">
+										<option value="0">Baja prioridad</option>
+										<option value="1">Prioridad media</option>
+										<option value="2">Prioridad alta</option>
+										<option value="3">Máxima prioridad</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="w3-row-padding">
+								<div class="w3-col s6">
+									<button type="button" id="i_botonCancelar" onclick="document.getElementById('modalInicio').style.display = 'none'" class="w3-button w3-block w3-red w3-round-large w3-margin-top">
+										Cerrar
+									</button>
+								</div>
+								<div class="w3-col s6">
+									<button type="button" id="actualizarTarea" onclick="ActualizarTarea()" class="w3-button w3-block w3-teal w3-round-large w3-margin-top">
+										Actualizar
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div id="modalEmpresa" class="w3-modal">
+					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:1000px; height:500px; display: flex; flex-direction: row; overflow: hidden;">
+						<header class="w3-container w3-teal">
+							<h3 id="tituloModalEmpresa">Empresa</h3>
+						</header>
+						<div class="w3-container w3-padding-16 w3-text-teal" style="flex: 1; position: relative;">
+							<div class="w3-half">
+								<label>Nombre Empresa</label>
+								<input class="w3-input w3-border w3-round w3-margin-bottom modalEmpresa" type="text" id="e_nombre" required>
+								
+								<label>Descripción</label>
+								<textarea class="w3-input w3-border w3-round w3-margin-bottom modalEmpresa" id="e_descripcion" rows="3" required></textarea>
+								
+								<label>Tipo de Identificación</label>
+								<input class="w3-input w3-border w3-round w3-margin-bottom modalEmpresa" type="text" id="e_tipoID">
+								
+								<label>Identificación</label>
+								<input class="w3-input w3-border w3-round w3-margin-bottom modalEmpresa" type="text" id="e_identificacion">										
+							</div>
+							<div class="w3-half">
+								<label>País</label>
+								<input class="w3-input w3-border w3-round w3-margin-bottom modalEmpresa" type="text" id="e_pais" required>
+								
+								<label>Departamento Estado Provincia</label>
+								<input class="w3-input w3-border w3-round w3-margin-bottom modalEmpresa" type="text" id="e_departamento" required>
+								
+								<label>Ciudad</label>
+								<input class="w3-input w3-border w3-round w3-margin-bottom modalEmpresa" type="text" id="e_ciudad" required>
+									
+								<label>Dirección</label>
+								<textarea class="w3-input w3-border w3-round w3-margin-bottom modalEmpresa" rows="3" id="e_direccion"></textarea>										
+							</div>
+							<div class="w3-row">
+								<div class="w3-half">
+									<button type="button" id="cancelarEmpresa" onclick="document.getElementById('modalEmpresa').style.display = 'none'" class="w3-button w3-block w3-red w3-round-large w3-margin-top">
+										Cerrar
+									</button>
+								</div>
+								<div class="w3-half">
+									<button type="button" id="guardarEmpresa" onclick="GuardarEmpresa()" class="w3-button w3-block w3-teal w3-round-large w3-margin-top">
+										Guardar-Actualizar
+									</button>
+								</div>
+							</div>
+						</div>									
+						<div id="panelContactos" class="w3-light-grey w3-border-left w3-text-teal" style="width: 0; transition: 0.4s; overflow-x: hidden; white-space: nowrap;">
+							<div class="w3-container w3-padding">
+								<h4 id="tituloPanelContactos">Detalles</h4>
+								<div id="contenidoPanelContactos" class="w3-small">
+									<div id="e_panelcontactos" class="w3-container">
+										<table id="e_Contactos" class="w3-table-all w3-tiny">
+											<thead>
+												<tr class="w3-teal">
+													<th>Nombre</th>
+													<th>Apellido</th>
+													<th>Cargo</th>															
+													<th class="w3-center">
+														<button class="w3-button w3-gray" onclick="VerContacto(-1)">Nuevo</button>
+													</th>
+												</tr>
+											</thead>
+											<tbody id="e_listaC">
+											</tbody>											
+										</table>
+									</div>											
+								</div>																							
+							</div>
+						</div>
+
+						<div id="controlPanelContactos" class="w3-bar-block w3-dark-grey" style="width:50px;">	
+							<span class="w3-bar-item w3-input w3-dark-grey" onclick="document.getElementById('modalEmpresa').style.display='none'" style="visibility:hidden">✖</span>
+							<button onclick="AbrirContactos()" class="w3-bar-item w3-button w3-hover-blue" title="Contactos">👤</button>
+							<button onclick="CerrarContactos()" class="w3-bar-item w3-button w3-red" style="position:absolute; bottom:0; width:50px;">✖</button>
+						</div>
+						<div class="w3-bar-block" style="position:absolute; width:50px; right:0;">
+							<span onclick="document.getElementById('modalEmpresa').style.display='none'" title="Salir" class="w3-bar-item w3-button w3-teal" style="width:50px">✖</span>
+						</div>
+					</div>
+				</div>
+
+				<div id="modalContacto" class="w3-modal">
+					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:1000px; height:500px; display: flex; flex-direction: row; overflow: hidden;">
+						<header class="w3-container w3-teal">
+							<h3 id="tituloModalContacto">Contacto</h3>
+						</header>
+						
+						<div class="w3-container w3-padding-16 w3-text-teal" style="flex: 1; position: relative;" id="formContacto">
+							<label>Nombre</label>
+							<input class="w3-input w3-border w3-round w3-margin-bottom modalContacto" type="text" id="c_nombre" required>
+
+							<label>Apellido</label>
+							<input class="w3-input w3-border w3-round w3-margin-bottom modalContacto" type="text" id="c_apellido" required>
+							
+							<label>Cargo</label>
+							<input class="w3-input w3-border w3-round w3-margin-bottom modalContacto" type="text" id="c_cargo" required>
+							
+							<p><input type="checkbox" class="w3-check modalContacto" id="c_esEmpresa" onclick="EsEmpresa()"><label for="c_esEmpresa">Es empresa</label></p>
+							<label>Empresa</label>
+							<select class="w3-select w3-border modalContacto" id="c_empresa"></select>
+							
+							<div class="w3-row">
+								<div class="w3-col s12">
+									<button type="button" id="c_botonCancelar" onclick="document.getElementById('modalContacto').style.display = 'none'" class="w3-button w3-block w3-red w3-round-large w3-margin-top">
+										Cerrar
+									</button>
+								</div>
+								<div class="w3-col s12">
+									<button type="button" id="guardarContacto" onclick="GuardarContacto(-1)" class="w3-button w3-block w3-teal w3-round-large w3-margin-top">
+										Guardar-Actualizar
+									</button>
+								</div>
+							</div>
+						</div>
+						<datalist id="listaTiposDato"></datalist>							
+						<div id="panelLateral" class="w3-light-grey w3-border-left w3-text-teal" style="width: 0; transition: 0.4s; overflow-x: hidden; white-space: nowrap;">
+							<div class="w3-container w3-padding">
+								<h4 id="tituloPanel">Detalles</h4>
+								<div id="contenidoPanel" class="w3-small">
+									<div id="c_panelDatos" class="w3-container c_panelLateral">
+										<table id="c_datosContacto" class="w3-table-all w3-tiny">
+											<thead>
+												<tr class="w3-teal">
+													<th>Nombre datos</th>
+													<th>Dato</th>		
+													<th class="w3-center">Acciones</th>
+												</tr>
+												<tr>
+													<th>
+														<input type="text" list="listaTiposDato" class="w3-input w3-border w3-round w3-margin-bottom" id="nuevoTipoDato" onkeyup="ValidarDatoContacto()" placeholder="Tipo del nuevo dato">
+													</th>
+													<th>
+														<input type="text" class="w3-input w3-border w3-round w3-margin-bottom" id="nuevoDato" onkeyup="ValidarDatoContacto()" placeholder="Nuevo dato">
+													</th>
+													<th>
+														<button class="w3-button w3-block w3-teal w3-round-large" id="botonAgregrarDatoContacto" onclick="AgregarDatoContacto()">Agregar</button>
+													</th>
+												</tr>
+											</thead>
+											<tbody id="c_listaDC">
+											</tbody>											
+										</table>
+									</div>
+									<div id="c_panelSeguimiento" class="w3-container c_panelLateral">											
+										<div class="w3-card w3-white w3-padding w3-margin-bottom w3-round" id="nuevoRegistroSeguimiento">						
+											<div class="w3-row-padding" style="margin: 0 -8px;">
+												<div class="w3-col s12">
+													<label class="w3-text-teal"><b>Fecha</b></label>
+													<input type="date" class="w3-input w3-border w3-round w3-margin-bottom" onchange="ValidarSeguimiento()" id="fechaRegistroSeguimiento">
+													<label class="w3-text-teal"><b>Registro / Comentario</b></label>
+													<textarea id="registroSeguimiento" class="w3-input w3-border w3-round w3-margin-bottom" rows="3" placeholder="Detalles del seguimiento..." onkeyup="ValidarSeguimiento()"></textarea>
+													<button class="w3-button w3-teal w3-block w3-round" id="botonGuardarSeguimiento" onclick="GuardarSeguimiento(-1)"><i class="fa fa-plus-circle"></i> Agregar Registro</button>
+												</div>
+											</div>
+										</div>
+										<div id="listaRegistrosSeguimiento" style="max-height: 280px; overflow-y: auto;">
+										</div>
+									</div>
+									
+									<div id="c_panelTareas" class="w3-container c_panelLateral">
+										<div class="w3-card w3-white w3-padding w3-margin-bottom w3-round">
+											<div class="w3-row-padding" style="margin: 0 -8px;">
+												<div class="w3-col s12">
+													<label class="w3-text-teal"><b>Descripción de la Tarea</b></label>
+													<textarea class="w3-input w3-border w3-round w3-margin-bottom" id="descripcionTarea" rows="2" placeholder="Descripción de la tarea..." onkeyup="ValidarTarea()"></textarea>
+												</div>
+												<div class="w3-col s6">
+													<label class="w3-text-teal"><b>Fecha Ejecución</b></label>
+													<input type="date" class="w3-input w3-border w3-round w3-margin-bottom" onchange="ValidarTarea()" id="fechaTarea">
+												</div>
+												<div class="w3-col s6">
+													<label class="w3-text-teal"><b>Prioridad</b></label>
+													<select class="w3-select w3-border w3-round w3-margin-bottom" id="prioridadTarea" onchange="ValidarTarea()">
+														<option value="0">Baja</option>
+														<option value="1">Media</option>
+														<option value="2">Alta</option>
+														<option value="3">Máxima</option>
+													</select>
+												</div>
+												<div class="w3-col s12">
+													<label class="w3-text-teal"><b>Estado</b></label>
+													<select class="w3-select w3-border w3-round w3-margin-bottom" id="estadoTarea" onchange="ValidarTarea()">
+														<option value="No iniciada">No iniciada</option>
+														<option value="Iniciada">Iniciada</option>
+														<option value="Terminada">Terminada</option>
+														<option value="Suspendida">Suspendida</option>
+														<option value="Cancelada">Cancelada</option>
+													</select>
+													<button class="w3-button w3-teal w3-block w3-round" id="botonGuardarTarea" onclick="GuardarTarea(-1)"><i class="fa fa-plus-circle"></i> Agregar Tarea</button>
+												</div>
+											</div>
+										</div>												
+										<div id="listaTareas" style="max-height: 240px; overflow-y: auto;">
+										</div>
+									</div>
+								</div>																							
+							</div>
+						</div>
+
+						<div id="controlPanel" class="w3-bar-block w3-dark-grey" style="width:50px;">	
+							<span class="w3-bar-item w3-input w3-dark-grey" onclick="document.getElementById('modalContacto').style.display='none'" style="visibility:hidden">✖</span>
+							<button onclick="AbrirPanel('datos')" class="w3-bar-item w3-button w3-hover-blue c_controlPanel" title="Datos de Contacto">👤</button>
+							<button onclick="AbrirPanel('seguimiento')" class="w3-bar-item w3-button w3-hover-green c_controlPanel" title="Seguimiento">📜</button>
+							<button onclick="AbrirPanel('tareas')" class="w3-bar-item w3-button w3-hover-orange c_controlPanel" title="Tareas">✅</button>
+							<button onclick="CerrarPanel()" class="w3-bar-item w3-button w3-red c_controlPanel" style="position:absolute; bottom:0; width:50px;">✖</button>
+						</div>
+						<div class="w3-bar-block" style="position:absolute; width:50px; right:0;">
+							<span onclick="document.getElementById('modalContacto').style.display='none'" title="Salir" class="w3-bar-item w3-button w3-teal" style="width:50px">✖</span>
+						</div>
+					</div>
+				</div>
+
+				<div id="modalProforma" class="w3-modal">
+					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:1150px; height:650px; display: flex; flex-direction: column; overflow: hidden;">
+						<header class="w3-container w3-teal">
+							<span onclick="document.getElementById('modalProforma').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+							<h3 id="tituloModalProforma"><i class="fa fa-file-text-o"></i> Generar / Editar Proforma Comercial</h3>
+						</header>
+
+						<div class="w3-container w3-padding w3-small" style="flex: 1; overflow-y: auto;">
+							<div class="w3-row-padding">
+								<!-- Left Column: Header Parameters -->
+								<div class="w3-col m5 s12">
+									<div class="w3-card w3-white w3-padding w3-margin-bottom">
+										<h5 class="w3-text-teal" style="margin-top:0;"><b>1. Parámetros Principales de la Oferta</b></h5>
+										
+										<div class="w3-row-padding" style="margin: 0 -8px;">
+											<div class="w3-half">
+												<label><b># Proforma:</b></label>
+												<input type="text" id="pf_consecutivo" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Ej: PROF-2026-001">
+											</div>
+											<div class="w3-half">
+												<label><b>Fecha Emisión:</b></label>
+												<input type="date" id="pf_fecha" class="w3-input w3-border w3-round w3-margin-bottom">
+											</div>
+										</div>
+
+										<label><b>Empresa / Cliente:</b></label>
+										<select id="pf_empresa" class="w3-select w3-border w3-round w3-margin-bottom" onchange="CargarContactosProformaEmpresa()">
+										</select>
+
+										<label><b>Contacto Asignado:</b></label>
+										<select id="pf_contacto" class="w3-select w3-border w3-round w3-margin-bottom">
+										</select>
+
+										<div class="w3-row-padding" style="margin: 0 -8px;">
+											<div class="w3-half">
+												<label><b>Moneda Operación:</b></label>
+												<select id="pf_moneda" class="w3-select w3-border w3-round w3-margin-bottom" onchange="AlCambiarMonedaOListaProforma()">
+													<option value="USD">USD ($ - Dólar US)</option>
+													<option value="COP">COP ($ - Peso COP)</option>
+													<option value="EUR">EUR (€ - Euro)</option>
+												</select>
+											</div>
+											<div class="w3-half">
+												<label><b>Lista de Precios Base:</b></label>
+												<select id="pf_listaPrecios" class="w3-select w3-border w3-round w3-margin-bottom" onchange="AlCambiarMonedaOListaProforma()">
+												</select>
+											</div>
+										</div>
+
+										<div class="w3-row-padding" style="margin: 0 -8px;">
+											<div class="w3-third">
+												<label><b>TRM COP/USD:</b></label>
+												<input type="number" id="pf_copUsd" class="w3-input w3-border w3-round w3-margin-bottom" value="4000">
+											</div>
+											<div class="w3-third">
+												<label><b>Vigencia (Días):</b></label>
+												<input type="number" id="pf_vigencia" class="w3-input w3-border w3-round w3-margin-bottom" value="30">
+											</div>
+											<div class="w3-third">
+												<label><b>Estado:</b></label>
+												<select id="pf_estado" class="w3-select w3-border w3-round w3-margin-bottom">
+													<option value="Emitida">Emitida</option>
+													<option value="Enviada">Enviada</option>
+													<option value="Revisada">Revisada</option>
+													<option value="Aceptada">Aceptada</option>
+													<option value="Vencida">Vencida</option>
+													<option value="Facturada">Facturada</option>
+												</select>
+											</div>
+										</div>
+
+										<label><b>Razón / Concepto del Descuento:</b></label>
+										<input type="text" id="pf_razonDescuento" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Ej: Descuento comercial por volumen">
+
+										<div class="w3-row-padding" style="margin: 0 -8px;">
+											<div class="w3-third">
+												<label><b>Monto Descuento:</b></label>
+												<input type="number" id="pf_montoDescuento" class="w3-input w3-border w3-round w3-margin-bottom" value="0" oninput="CalcularTotalesProforma()">
+											</div>
+											<div class="w3-third">
+												<label><b>IVA (%):</b></label>
+												<input type="number" id="pf_porcentajeIva" class="w3-input w3-border w3-round w3-margin-bottom" value="19" oninput="CalcularTotalesProforma()">
+											</div>
+											<div class="w3-third">
+												<label><b>Retefuente (%):</b></label>
+												<input type="number" id="pf_porcentajeRetefuente" class="w3-input w3-border w3-round w3-margin-bottom" value="0" oninput="CalcularTotalesProforma()">
+											</div>
+										</div>
+
+										<label><b>Observaciones / Términos de Pago:</b></label>
+										<textarea id="pf_observaciones" class="w3-input w3-border w3-round" rows="2" placeholder="Garantía, tiempo de entrega, datos bancarios..."></textarea>
+									</div>
+								</div>
+
+								<!-- Right Column: Line Items Builder & Detail Table -->
+								<div class="w3-col m7 s12">
+									<div class="w3-card w3-white w3-padding w3-margin-bottom" id="boxAgregarItemProforma">
+										<h5 class="w3-text-teal" style="margin-top:0;"><b>2. Agregar Ítem a la Proforma</b></h5>
+										
+										<div class="w3-row-padding" style="margin: 0 -8px;">
+											<div class="w3-col m4 s12">
+												<label><b>Tipo Ítem:</b></label>
+												<select id="pf_tipoItem" class="w3-select w3-border w3-round w3-margin-bottom" onchange="CambiarTipoItemProforma()">
+													<option value="CATALOGO">Producto Catálogo</option>
+													<option value="INL">Ítem No Listado (INL)</option>
+												</select>
+											</div>
+
+											<div id="wrapperProdCat" class="w3-col m8 s12">
+												<label><b>Seleccionar Producto:</b></label>
+												<select id="pf_selectorProducto" class="w3-select w3-border w3-round w3-margin-bottom" onchange="AlSeleccionarProductoProforma()">
+												</select>
+											</div>
+										</div>
+
+										<div id="wrapperInl" class="w3-row-padding" style="margin: 0 -8px; display:none;">
+											<div class="w3-col m6 s12">
+												<label><b>Nombre Ítem Especial:</b></label>
+												<input type="text" id="pf_inlNombre" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Ej: Servicio de Instalación en Sitio">
+											</div>
+											<div class="w3-col m6 s12">
+												<label><b>Descripción Detallada:</b></label>
+												<input type="text" id="pf_inlDescripcion" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Ej: Incluye viáticos y soporte técnico">
+											</div>
+										</div>
+
+										<div class="w3-row-padding" style="margin: 0 -8px;">
+											<div class="w3-col m4 s12">
+												<label><b>Cantidad:</b></label>
+												<input type="number" id="pf_cantidadItem" class="w3-input w3-border w3-round" value="1" min="1" oninput="RecalcularItemTemporalProforma()">
+											</div>
+											<div class="w3-col m4 s12">
+												<label><b>Precio Unitario:</b></label>
+												<input type="number" id="pf_precioItem" class="w3-input w3-border w3-round" value="0.00" step="0.01" oninput="RecalcularItemTemporalProforma()">
+											</div>
+											<div class="w3-col m4 s12">
+												<label><b>Valor Total Ítem:</b></label>
+												<input type="text" id="pf_totalItemPreview" class="w3-input w3-border w3-round w3-light-grey" value="$0.00" readonly>
+											</div>
+										</div>
+
+										<button class="w3-button w3-teal w3-right w3-round w3-margin-top" onclick="AgregarItemAProforma()"><i class="fa fa-plus"></i> Añadir Ítem a la Oferta</button>
+										<div class="w3-clear"></div>
+									</div>
+
+									<h5 class="w3-text-teal"><b>Detalle de la Proforma:</b></h5>
+									<div class="w3-responsive">
+										<table class="w3-table-all w3-hoverable w3-white w3-tiny">
+											<thead>
+												<tr class="w3-teal">
+													<th>Pos</th>
+													<th>Ref / SKU</th>
+													<th>Producto / Descripción</th>
+													<th>Cant</th>
+													<th>P. Unit</th>
+													<th>Total</th>
+													<th>Acción</th>
+												</tr>
+											</thead>
+											<tbody id="bodyItemsProforma">
+											</tbody>
+										</table>
+									</div>
+
+									<div class="w3-card w3-light-grey w3-padding w3-margin-top">
+										<div class="w3-row">
+											<div class="w3-half"><b>Subtotal 1:</b></div>
+											<div class="w3-half w3-right-align" id="lblSubtotalProforma">$0.00</div>
+										</div>
+										<div class="w3-row">
+											<div class="w3-half"><b>Descuento Aplicado:</b></div>
+											<div class="w3-half w3-right-align" id="lblDescuentoProforma">$0.00</div>
+										</div>
+										<div class="w3-row">
+											<div class="w3-half"><b>Monto IVA:</b></div>
+											<div class="w3-half w3-right-align" id="lblIvaProforma">$0.00</div>
+										</div>
+										<div class="w3-row w3-large w3-text-teal" style="border-top: 1px solid #ccc; padding-top:4px;">
+											<div class="w3-half"><b>TOTAL PROFORMA:</b></div>
+											<div class="w3-half w3-right-align" id="lblTotalProforma"><b>$0.00</b></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<footer class="w3-container w3-light-grey w3-padding">
+							<button class="w3-button w3-red w3-round" onclick="document.getElementById('modalProforma').style.display='none'">Cancelar</button>
+							<button class="w3-button w3-teal w3-round w3-right" onclick="GuardarProforma()"><i class="fa fa-check"></i> Guardar Proforma</button>
+						</footer>
+					</div>
+				</div>
+
+				<div id="modalImpresionProforma" class="w3-modal">
+					<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:900px;">
+						<header class="w3-container w3-teal w3-hide-print">
+							<span onclick="document.getElementById('modalImpresionProforma').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+							<h3><i class="fa fa-print"></i> Propuesta Comercial / Proforma (Vista Previa)</h3>
+						</header>
+
+						<div class="w3-padding-24 w3-white" id="areaImpresionProforma" style="padding: 30px; font-family: Arial, sans-serif; color: #333;">
+							<table style="width: 100%; border-bottom: 3px solid #008080; padding-bottom: 12px;">
+								<tr>
+									<td>
+										<h2 style="color: #008080; margin: 0; font-weight: bold;">TECNOPTIX S.A.S.</h2>
+										<small>NIT: 900.338.198-6 • División de Ventas y Proyectos</small>
+									</td>
+									<td style="text-align: right;">
+										<h3 style="margin: 0; color: #444; font-weight: bold;">COTIZACIÓN / PROFORMA</h3>
+										<b>Proforma #: </b><span id="print_pf_number">PROF-2026-001</span><br>
+										<b>Fecha: </b><span id="print_pf_date">2026-09-30</span>
+									</td>
+								</tr>
+							</table>
+
+							<table style="width: 100%; margin-top: 20px; font-size: 13px;">
+								<tr>
+									<td style="width: 50%; vertical-align: top; padding-right: 10px;">
+										<h4 style="color: #008080; margin-bottom: 6px; border-bottom: 1px solid #ddd;">CLIENTE / EMPRESA:</h4>
+										<div id="print_pf_client_info"></div>
+									</td>
+									<td style="width: 50%; vertical-align: top; padding-left: 10px;">
+										<h4 style="color: #008080; margin-bottom: 6px; border-bottom: 1px solid #ddd;">CONDICIONES COMERCIALES:</h4>
+										<div id="print_pf_terms_info"></div>
+									</td>
+								</tr>
+							</table>
+
+							<table style="width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px;" border="1" borderColor="#ddd" cellPadding="8">
+								<thead>
+									<tr style="background-color: #008080; color: white;">
+										<th style="width: 5%;">#</th>
+										<th style="width: 20%;">Código Ref</th>
+										<th style="width: 40%;">Descripción del Producto / Servicio</th>
+										<th style="width: 10%;">Cant</th>
+										<th style="width: 12.5%;">Precio Unit.</th>
+										<th style="width: 12.5%;">Total</th>
+									</tr>
+								</thead>
+								<tbody id="print_pf_items_body">
+								</tbody>
+								<tfoot>
+									<tr style="background-color: #f9f9f9;">
+										<td colspan="5" style="text-align: right; font-weight: bold;">SUBTOTAL:</td>
+										<td id="print_pf_subtotal_amount" style="text-align: right;">$0.00</td>
+									</tr>
+									<tr style="background-color: #f9f9f9;">
+										<td colspan="5" style="text-align: right; font-weight: bold;">IVA / IMPUESTOS:</td>
+										<td id="print_pf_iva_amount" style="text-align: right;">$0.00</td>
+									</tr>
+									<tr style="background-color: #f9f9f9;">
+										<td colspan="5" style="text-align: right; font-weight: bold; font-size: 14px;">TOTAL OFERTA:</td>
+										<td id="print_pf_total_amount" style="font-weight: bold; text-align: right; font-size: 14px; color: #008080;">$0.00</td>
+									</tr>
+								</tfoot>
+							</table>
+
+							<div style="margin-top: 20px; font-size: 12px; color: #555;">
+								<b>Observaciones & Instrucciones de Pago:</b>
+								<p id="print_pf_notes" style="margin: 4px 0 0 0; white-space: pre-wrap;"></p>
+							</div>
+
+							<div style="margin-top: 40px; font-size: 13px;">
+								<table style="width:100%;">
+									<tr>
+										<td style="width: 50%;">
+											<br><br>
+											________________________________________<br>
+											<b>Asesor Comercial Responsable</b><br>
+											Tecnoptix S.A.S.
+										</td>
+										<td style="width: 50%; text-align: right;">
+											<br><br>
+											________________________________________<br>
+											<b>Aceptado por el Cliente</b>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+
+						<footer class="w3-container w3-light-grey w3-padding w3-hide-print">
+							<button class="w3-button w3-red w3-round" onclick="document.getElementById('modalImpresionProforma').style.display='none'">Cerrar</button>
+							<button class="w3-button w3-teal w3-round w3-right" onclick="window.print()"><i class="fa fa-print"></i> Imprimir / Guardar en PDF</button>
+						</footer>
+					</div>
+				</div>
+
+				<div id="modalProductoVenta" class="w3-modal">
+					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:600px">
+						<header class="w3-container w3-teal">
+							<span onclick="document.getElementById('modalProductoVenta').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+							<h3 id="tituloModalProductoVenta">Producto de Catálogo</h3>
+						</header>
+						<div class="w3-container w3-padding-16">
+							<label class="w3-text-teal"><b>Código / Referencia (SKU):</b></label>
+							<input id="pv_codigoRef" class="w3-input w3-border w3-round w3-margin-bottom" type="text" placeholder="Ej: POA09">
+
+							<label class="w3-text-teal"><b>Nombre del Producto:</b></label>
+							<input id="pv_nombre" class="w3-input w3-border w3-round w3-margin-bottom" type="text" placeholder="Ej: Oftalmoscopio Directo Pro">
+
+							<label class="w3-text-teal"><b>Descripción Comercial:</b></label>
+							<textarea id="pv_descripcion" class="w3-input w3-border w3-round w3-margin-bottom" rows="3" placeholder="Detalles de especificaciones..."></textarea>
+
+							<label class="w3-text-teal"><b>Estado:</b></label>
+							<select id="pv_estado" class="w3-select w3-border w3-round w3-margin-bottom">
+								<option value="Activo">Activo</option>
+								<option value="Inactivo">Inactivo</option>
+							</select>
+
+							<div class="w3-row-padding w3-margin-top">
+								<div class="w3-half">
+									<button type="button" onclick="document.getElementById('modalProductoVenta').style.display='none'" class="w3-button w3-block w3-red w3-round">Cancelar</button>
+								</div>
+								<div class="w3-half">
+									<button type="button" class="w3-button w3-block w3-teal w3-round" onclick="GuardarProductoVenta()">Guardar Producto</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="modalProveedor" class="w3-modal">
+					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:1100px; height:580px; display: flex; flex-direction: row; overflow: hidden;">
+						<header class="w3-container w3-teal">
+							<h3 id="tituloModalProveedor">Proveedor</h3>
+						</header>
+						<div class="w3-container w3-padding-16 w3-text-teal" style="flex: 1; overflow-y: auto;">
+							<div class="w3-row-padding">
+								<div class="w3-half">
+									<label>Nombre Proveedor</label>
+									<input class="w3-input w3-border w3-round w3-margin-bottom modalProveedor" type="text" id="p_nombre" required>
+
+									<label>Persona Contacto</label>
+									<input class="w3-input w3-border w3-round w3-margin-bottom modalProveedor" type="text" id="p_personaContacto">
+
+									<label>Correo Electrónico</label>
+									<input class="w3-input w3-border w3-round w3-margin-bottom modalProveedor" type="email" id="p_correo">
+
+									<label>WhatsApp / Teléfono</label>
+									<input class="w3-input w3-border w3-round w3-margin-bottom modalProveedor" type="text" id="p_whatsApp">
+
+									<label>Dirección Proveedor</label>
+									<textarea class="w3-input w3-border w3-round w3-margin-bottom modalProveedor" rows="2" id="p_direccion"></textarea>
+								</div>
+								<div class="w3-half">
+									<label>Banco</label>
+									<input class="w3-input w3-border w3-round w3-margin-bottom modalProveedor" type="text" id="p_banco">
+
+									<label>Cuenta de Pago (IBAN / Account Number)</label>
+									<input class="w3-input w3-border w3-round w3-margin-bottom modalProveedor" type="text" id="p_cuentaPago">
+
+									<label>Código SWIFT / BIC</label>
+									<input class="w3-input w3-border w3-round w3-margin-bottom modalProveedor" type="text" id="p_swift">
+
+									<label>Dirección del Banco</label>
+									<textarea class="w3-input w3-border w3-round w3-margin-bottom modalProveedor" rows="2" id="p_direccionBanco"></textarea>
+								</div>
+							</div>
+							<div class="w3-row">
+								<div class="w3-half">
+									<button type="button" onclick="document.getElementById('modalProveedor').style.display = 'none'" class="w3-button w3-block w3-red w3-round-large w3-margin-top">
+										Cerrar
+									</button>
+								</div>
+								<div class="w3-half">
+									<button type="button" id="guardarProveedor" onclick="GuardarProveedor()" class="w3-button w3-block w3-teal w3-round-large w3-margin-top">
+										Guardar-Actualizar
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="w3-bar-block w3-dark-grey" style="width:50px;">	
+							<button onclick="AbrirListasPrecios()" class="w3-bar-item w3-button w3-hover-blue" title="Listas de Precios">📋</button>
+						</div>
+						<div class="w3-bar-block" style="position:absolute; width:50px; right:0;">
+							<span onclick="document.getElementById('modalProveedor').style.display='none'" title="Salir" class="w3-bar-item w3-button w3-teal" style="width:50px">✖</span>
+						</div>
+					</div>
+				</div>
+
+				<div id="modalListasPrecios" class="w3-modal">
+					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:1100px; height:620px; display: flex; flex-direction: column; overflow: hidden;">
+						<header class="w3-container w3-teal">
+							<span onclick="document.getElementById('modalListasPrecios').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+							<h3 id="tituloModalListasPrecios"><i class="fa fa-list-alt"></i> Listas de Precios y Productos del Proveedor</h3>
+						</header>
+
+						<div class="w3-container w3-padding w3-small" style="flex: 1; overflow-y: auto;">
+							<div class="w3-row-padding">
+								<div class="w3-col m4 s12">
+									<div class="w3-card w3-white w3-padding w3-margin-bottom">
+										<h5 class="w3-text-teal" style="margin-top:0;"><b>1. Crear Nueva Lista de Precios</b></h5>
+										<label><b>Nombre de la Lista:</b></label>
+										<input type="text" id="lp_nombre" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Ej: Catálogo Equipos 2026-A">
+										
+										<label><b>Fecha de Emisión:</b></label>
+										<input type="date" id="lp_fecha" class="w3-input w3-border w3-round w3-margin-bottom">
+										
+										<button class="w3-button w3-teal w3-block w3-round" onclick="GuardarListaPrecios()"><i class="fa fa-plus"></i> Guardar Lista</button>
+									</div>
+
+									<div class="w3-card w3-white w3-padding">
+										<h5 class="w3-text-teal" style="margin-top:0;"><b>2. Seleccionar Lista Activa</b></h5>
+										<select id="lp_selectorLista" class="w3-select w3-border w3-round" onchange="CargarProductosDeLista()">
+										</select>
+									</div>
+								</div>
+
+								<div class="w3-col m8 s12">
+									<div id="boxAgregarProducto" class="w3-card w3-white w3-padding w3-margin-bottom" style="display:none;">
+										<h5 class="w3-text-teal" style="margin-top:0;"><b>3. Registrar Producto en la Lista Seleccionada</b></h5>
+										<div class="w3-row-padding">
+											<div class="w3-col m4 s12">
+												<label><b>Referencia (SKU):</b></label>
+												<input type="text" id="pr_referencia" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Ej: OPT-1002">
+											</div>
+											<div class="w3-col m5 s12">
+												<label><b>Nombre Producto:</b></label>
+												<input type="text" id="pr_nombre" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Ej: Lente Oftálmico HD">
+											</div>
+											<div class="w3-col m3 s12">
+												<label><b>Precio Proveedor (USD):</b></label>
+												<input type="number" id="pr_precio" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="0.00" step="0.01">
+											</div>
+										</div>
+										<label><b>Descripción / Características:</b></label>
+										<textarea id="pr_descripcion" class="w3-input w3-border w3-round w3-margin-bottom" rows="2" placeholder="Detalles técnicos, materiales, dimensiones, etc."></textarea>
+										
+										<button class="w3-button w3-green w3-right w3-round" onclick="AgregarProductoLista()"><i class="fa fa-plus-circle"></i> Agregar Producto a la Lista</button>
+										<div class="w3-clear"></div>
+									</div>
+
+									<h5 class="w3-text-teal"><b>Productos en esta Lista:</b></h5>
+									<div class="w3-responsive">
+										<table class="w3-table-all w3-hoverable w3-white">
+											<thead>
+												<tr class="w3-teal">
+													<th>Referencia</th>
+													<th>Producto</th>
+													<th>Descripción / Características</th>
+													<th>Precio Unit. (USD)</th>
+												</tr>
+											</thead>
+											<tbody id="bodyProductosLista">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<footer class="w3-container w3-light-grey w3-padding">
+							<button class="w3-button w3-red w3-round w3-right" onclick="document.getElementById('modalListasPrecios').style.display='none'">Cerrar</button>
+						</footer>
+					</div>
+				</div>
+
+				<div id="modalOrden" class="w3-modal">
+					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:1100px; height:620px; display: flex; flex-direction: column; overflow: hidden;">
+						<header class="w3-container w3-teal">
+							<span onclick="document.getElementById('modalOrden').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+							<h3><i class="fa fa-file-text-o"></i> Generar / Editar Orden de Compra (PO)</h3>
+						</header>
+
+						<div class="w3-container w3-padding w3-small" style="flex: 1; overflow-y: auto;">
+							<div class="w3-row-padding">
+								<div class="w3-col m5 s12">
+									<div class="w3-card w3-white w3-padding w3-margin-bottom">
+										<h5 class="w3-text-teal" style="margin-top:0;"><b>Información de la Orden</b></h5>
+										
+										<label><b>Proveedor:</b></label>
+										<select id="po_proveedor" class="w3-select w3-border w3-round w3-margin-bottom" onchange="CargarListasProveedor()">
+										</select>
+
+										<label><b>Lista de Precios Utilizada:</b></label>
+										<select id="po_listaPrecios" class="w3-select w3-border w3-round w3-margin-bottom" onchange="HabilitarSelectorProductos()">
+										</select>
+
+										<div class="w3-row-padding" style="margin: 0 -8px;">
+											<div class="w3-half">
+												<label><b>Consecutivo Orden:</b></label>
+												<input type="text" id="po_consecutivo" class="w3-input w3-border w3-round w3-margin-bottom">
+											</div>
+											<div class="w3-half">
+												<label><b>Fecha Orden:</b></label>
+												<input type="date" id="po_fecha" class="w3-input w3-border w3-round w3-margin-bottom">
+											</div>
+										</div>
+
+										<p style="margin:0 0 10px 0;">
+											<input type="checkbox" id="po_incluyeFlete" class="w3-check">
+											<label for="po_incluyeFlete"><b> ¿Solicitar que incluya flete?</b></label>
+										</p>
+
+										<label><b>Observaciones / Términos de Entrega:</b></label>
+										<textarea id="po_observaciones" class="w3-input w3-border w3-round" rows="2" placeholder="Notas especiales para el proveedor..."></textarea>
+									</div>
+								</div>
+
+								<div class="w3-col m7 s12">
+									<div class="w3-card w3-white w3-padding w3-margin-bottom">
+										<h5 class="w3-text-teal" style="margin-top:0;"><b>Agregar Producto a la Orden</b></h5>
+										<div class="w3-row-padding" style="margin: 0 -8px;">
+											<div class="w3-col m8 s12">
+												<label><b>Producto de la Lista:</b></label>
+												<select id="po_selectorProducto" class="w3-select w3-border w3-round" disabled>
+												</select>
+											</div>
+											<div class="w3-col m4 s12">
+												<label><b>Cantidad:</b></label>
+												<input type="number" id="po_cantidadProducto" class="w3-input w3-border w3-round" value="1" min="1">
+											</div>
+										</div>
+										<button id="btnAgregarItemPO" class="w3-button w3-teal w3-right w3-round w3-margin-top" disabled onclick="AgregarItemAOrden()"><i class="fa fa-plus"></i> Añadir Ítem</button>
+										<div class="w3-clear"></div>
+									</div>
+
+									<h5 class="w3-text-teal"><b>Detalle de la Orden:</b></h5>
+									<div class="w3-responsive">
+										<table class="w3-table-all w3-hoverable w3-white">
+											<thead>
+												<tr class="w3-teal">
+													<th>Pos</th>
+													<th>Ref</th>
+													<th>Producto</th>
+													<th>Cant</th>
+													<th>P. Unit (USD)</th>
+													<th>Total (USD)</th>
+													<th>Acción</th>
+												</tr>
+											</thead>
+											<tbody id="bodyItemsPO">
+											</tbody>
+										</table>
+									</div>
+									<div class="w3-right w3-large w3-margin-top">
+										Total Estimado: <span id="totalMontoPO" class="w3-text-teal"><b>$0.00</b></span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<footer class="w3-container w3-light-grey w3-padding">
+							<button class="w3-button w3-red w3-round" onclick="document.getElementById('modalOrden').style.display='none'">Cancelar</button>
+							<button class="w3-button w3-teal w3-round w3-right" onclick="GuardarOrdenCompra()"><i class="fa fa-check"></i> Emitir Orden de Compra</button>
+						</footer>
+					</div>
+				</div>
+
+				<div id="modalImpresionPO" class="w3-modal">
+					<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:900px;">
+						<header class="w3-container w3-teal w3-hide-print">
+							<span onclick="document.getElementById('modalImpresionPO').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+							<h3><i class="fa fa-print"></i> Purchase Order Preview (English)</h3>
+						</header>
+
+						<div class="w3-padding-24 w3-white" id="areaImpresionPO" style="padding: 30px; font-family: Arial, sans-serif; color: #333;">
+							<table style="width: 100%; border-bottom: 3px solid #008080; padding-bottom: 12px;">
+								<tr>
+									<td>
+										<h2 style="color: #008080; margin: 0; font-weight: bold;">TECNOPTIX S.A.S.</h2>
+										<small>International Purchasing Department</small>
+									</td>
+									<td style="text-align: right;">
+										<h3 style="margin: 0; color: #444; font-weight: bold;">PURCHASE ORDER</h3>
+										<b>PO #: </b><span id="print_po_number">PO-2026-001</span><br>
+										<b>Date: </b><span id="print_po_date">2026-07-24</span>
+									</td>
+								</tr>
+							</table>
+
+							<table style="width: 100%; margin-top: 20px; font-size: 13px;">
+								<tr>
+									<td style="width: 50%; vertical-align: top; padding-right: 10px;">
+										<h4 style="color: #008080; margin-bottom: 6px; border-bottom: 1px solid #ddd;">VENDOR / SUPPLIER:</h4>
+										<div id="print_po_vendor_info"></div>
+									</td>
+									<td style="width: 50%; vertical-align: top; padding-left: 10px;">
+										<h4 style="color: #008080; margin-bottom: 6px; border-bottom: 1px solid #ddd;">BANKING DETAILS FOR PAYMENT:</h4>
+										<div id="print_po_bank_info"></div>
+									</td>
+								</tr>
+							</table>
+
+							<div style="margin-top: 20px; background: #f4f6f6; padding: 10px; border-left: 4px solid #008080; font-size: 13px;">
+								<b>Price List Reference: </b><span id="print_po_pricelist_ref"></span> &nbsp;|&nbsp; 
+								<b>Freight Status: </b><span id="print_po_freight_status" style="font-weight:bold; color:#008080;"></span>
+							</div>
+
+							<table style="width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px;" border="1" borderColor="#ddd" cellPadding="8">
+								<thead>
+									<tr style="background-color: #008080; color: white;">
+										<th style="width: 5%;">Item</th>
+										<th style="width: 20%;">Reference SKU</th>
+										<th style="width: 40%;">Product Description / Features</th>
+										<th style="width: 10%;">Qty</th>
+										<th style="width: 12.5%;">Unit Price</th>
+										<th style="width: 12.5%;">Total Amount</th>
+									</tr>
+								</thead>
+								<tbody id="print_po_items_body">
+								</tbody>
+								<tfoot>
+									<tr style="background-color: #f9f9f9;">
+										<td colspan="5" style="text-align: right; font-weight: bold; font-size: 14px;">TOTAL ORDER AMOUNT (USD):</td>
+										<td id="print_po_total_amount" style="font-weight: bold; text-align: right; font-size: 14px; color: #008080;">$0.00</td>
+									</tr>
+								</tfoot>
+							</table>
+
+							<div style="margin-top: 25px; font-size: 12px; color: #555;">
+								<b>Notes / Delivery Instructions:</b>
+								<p id="print_po_notes" style="margin: 4px 0 0 0;"></p>
+							</div>
+
+							<div style="margin-top: 50px; font-size: 13px;">
+								<table style="width:100%;">
+									<tr>
+										<td style="width: 50%;">
+											<br><br>
+											________________________________________<br>
+											<b>Authorized Purchasing Officer</b><br>
+											Tecnoptix S.A.S.
+										</td>
+										<td style="width: 50%; text-align: right;">
+											<br><br>
+											________________________________________<br>
+											<b>Supplier Confirmation & Stamp</b>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+
+						<footer class="w3-container w3-light-grey w3-padding w3-hide-print">
+							<button class="w3-button w3-red w3-round" onclick="document.getElementById('modalImpresionPO').style.display='none'">Close</button>
+							<button class="w3-button w3-teal w3-round w3-right" onclick="window.print()"><i class="fa fa-print"></i> Print / Save as PDF</button>
+						</footer>
+					</div>
+				</div>
+
+				<div id="modalGestionUsuario" class="w3-modal">
+					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:500px">
+						<header class="w3-container w3-teal">
+							<span onclick="document.getElementById('modalGestionUsuario').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+							<h3 id="tituloModalUsuario">Gestión de Usuario</h3>
+						</header>
+						<form class="w3-container w3-padding-16" onsubmit="event.preventDefault(); GuardarUsuario();">
+							<label class="w3-text-teal"><b>Nombre Usuario (Login):</b></label>
+							<input id="u_usuario" class="w3-input w3-border w3-round w3-margin-bottom" type="text" required placeholder="Ej: mlopez">
+
+							<label class="w3-text-teal"><b>Contraseña:</b></label>
+							<input id="u_clave" class="w3-input w3-border w3-round w3-margin-bottom" type="text" required placeholder="Clave de acceso">
+
+							<label class="w3-text-teal"><b>Nombre Completo:</b></label>
+							<input id="u_nombre" class="w3-input w3-border w3-round w3-margin-bottom" type="text" required placeholder="Ej: María López">
+
+							<label class="w3-text-teal"><b>Rol / Nivel de Acceso:</b></label>
+							<select id="u_rol" class="w3-select w3-border w3-round w3-margin-bottom">
+								<option value="Administrador">Administrador (Acceso total)</option>
+								<option value="Operativo">Operativo (Contactos, Proveedores y Órdenes)</option>
+								<option value="Consulta">Consulta (Solo Lectura)</option>
+							</select>
+
+							<label class="w3-text-teal"><b>Estado:</b></label>
+							<select id="u_estado" class="w3-select w3-border w3-round w3-margin-bottom">
+								<option value="Activo">Activo</option>
+								<option value="Inactivo">Inactivo</option>
+							</select>
+
+							<div class="w3-row-padding w3-margin-top">
+								<div class="w3-half">
+									<button type="button" onclick="document.getElementById('modalGestionUsuario').style.display='none'" class="w3-button w3-block w3-red w3-round">Cancelar</button>
+								</div>
+								<div class="w3-half">
+									<button type="submit" class="w3-button w3-block w3-teal w3-round">Guardar Usuario</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+			</main>
+
+			<!-- Footer -->
+			<footer class="w3-container w3-theme-d5">
+				<div class="w3-row-padding">
+					<div class="w3-third">
+						<p class="w3-small">©Tecnoptix 2026 - FollowApp Sistema de Gestión</p>
+					</div>
+					<div class="w3-third w3-center">
+						<p class="w3-small">Soporte: <a href="mailto:desarrollo@tecnoptix.com" class="w3-text-white">desarrollo@tecnoptix.com</a></p>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+		<script type="text/javascript">
+			const appFollowApp = 'https://script.google.com/macros/s/AKfycbxpiAuw_K8GgqkL7aNJyEO2feUfKT4ArMuARtHLwB_g4md18i1ucEwKt8g6khCKE2mRKw/exec';
+
+			// Priorities
+			const prioridades = ["Baja", "Media", "Alta", "Máxima"];
+
+			// Application Data Memory Cache
+			var contactos = [], empresas = [], datosContacto = [], seguimiento = [], tareas = [];
+			var proveedores = [], listasPrecios = [], productosLista = [], ordenesCompra = [], detalleOrdenes = [], usuarios = [];
+			var proformas = [], detalleProformas = [], productosVentas = [], listasPreciosVentas = [], preciosProductosVentas = [];
+			
+			var itemsPOActual = [];
+			var itemsProformaActual = [];
+			var usuarioSesion = null;
+
+			// Action Constants
+			const CARGAR_INFO = 0;
+			const ESCRIBIR_REGISTRO = 1;
+			const ESCRIBE_CONTACTO = 2;
+			const GUARDAR_ORDEN_COMPLETA = 3;
+			const LOGIN_USUARIO = 4;
+			const GUARDAR_USUARIO = 5;
+
+			// Windows / Modals State Registers
+			var ventanaEmpresa = {};
+			var ventanaContacto = {};
+			var ventanaInicio = {};
+			var ventanaProveedor = {};
+			var ventanaOrden = {};
+			var ventanaUsuario = {};
+			var ventanaProforma = {};
+			var ventanaProductoVenta = {};
+
+			function getVal(obj, ...possibleKeys) {
+				if (!obj || typeof obj !== 'object') return "";
+				for (let key of possibleKeys) {
+					if (obj[key] !== undefined && obj[key] !== null) return String(obj[key]);
+				}
+				for (let key of possibleKeys) {
+					let cleanKey = String(key).toLowerCase().replace(/\s+/g, "");
+					for (let k in obj) {
+						if (String(k).toLowerCase().replace(/\s+/g, "") === cleanKey) {
+							if (obj[k] !== undefined && obj[k] !== null) return String(obj[k]);
+						}
+					}
+				}
+				return "";
+			}
+
+			function showToast(mensaje, tipo = 'info') {
+				let container = document.getElementById('toastContainer');
+				if (!container) return;
+				let toast = document.createElement('div');
+				toast.className = `toast-message toast-${tipo}`;
+				toast.innerHTML = `<span>${mensaje}</span> <span style="cursor:pointer;margin-left:10px;" onclick="this.parentElement.remove()">✖</span>`;
+				container.appendChild(toast);
+				setTimeout(() => {
+					if (toast.parentElement) toast.remove();
+				}, 4000);
+			}
+
+			function showLoader(show, mensaje) {
+				let loader = document.getElementById('loader');
+				if (loader) loader.style.display = show ? 'flex' : 'none';
+				let txt = document.getElementById("textoLoader");
+				if (txt) txt.innerHTML = mensaje || "Procesando...";
+			}
+
+			function FechaEnInput(fecha) {
+				if (!fecha) return "";
+				var d = new Date(fecha);
+				if (isNaN(d.getTime())) return String(fecha).slice(0, 10);
+				var mes = '' + (d.getMonth() + 1);
+				var dia = '' + d.getDate();
+				var anio = d.getFullYear();
+				if (mes.length < 2) mes = '0' + mes;
+				if (dia.length < 2) dia = '0' + dia;
+				return [anio, mes, dia].join('-');
+			}
+
+			function AbrirSeccion(seccionId, botonId) {
+				let secciones = document.getElementsByClassName("seccion");
+				for (let i = 0; i < secciones.length; i++) {
+					secciones[i].style.display = "none";
+				}
+
+				let botones = document.getElementsByClassName("navegacion");
+				for (let i = 0; i < botones.length; i++) {
+					botones[i].classList.remove("w3-theme-d1", "w3-teal");
+				}
+
+				let sec = document.getElementById(seccionId);
+				if (sec) sec.style.display = "block";
+
+				let btn = document.getElementById(botonId);
+				if (btn) btn.classList.add("w3-theme-d1", "w3-teal");
+			}
+
+			function controlarBotonBorrado(inputElement, botonId) {
+				let btn = document.getElementById(botonId);
+				if (btn) {
+					btn.style.display = inputElement.value.trim().length > 0 ? "block" : "none";
+				}
+			}
+
+			function limpiarCampo(inputId, botonId) {
+				let input = document.getElementById(inputId);
+				let btn = document.getElementById(botonId);
+				if (input) {
+					input.value = "";
+					input.focus();
+				}
+				if (btn) btn.style.display = "none";
+
+				if (inputId.includes("Empresa")) ListarEmpresas();
+				else if (inputId.includes("Contacto")) ListarContactos();
+				else if (inputId.includes("Proveedor")) ListarProveedores();
+				else if (inputId.includes("Orden")) ListarOrdenes();
+				else if (inputId.includes("Proforma")) ListarProformas();
+			}
+
+			function IniciarSesion() {
+				let userVal = document.getElementById("login_usuario").value;
+				let passVal = document.getElementById("login_clave").value;
+
+				if (!userVal || !passVal) {
+					showToast("Ingrese usuario y contraseña", "error");
+					return;
+				}
+
+				showLoader(true, "Verificando credenciales...");
+				fetch(appFollowApp, {
+					method: 'POST',
+					body: JSON.stringify({ accion: LOGIN_USUARIO, usuario: userVal, clave: passVal })
+				})
+				.then(res => res.text())
+				.then(text => {
+					showLoader(false);
+					try {
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							usuarioSesion = info.usuario;
+							sessionStorage.setItem("followapp_session", JSON.stringify(usuarioSesion));
+							AplicarSesion();
+							CargarTodo();
+							showToast(`Bienvenido ${usuarioSesion.nombre}`, "success");
+						} else {
+							showToast(info.message || "Credenciales incorrectas", "error");
+						}
+					} catch (e) {
+						showToast("Error de respuesta del servidor", "error");
+					}
+				})
+				.catch(err => {
+					showLoader(false);
+					showToast("Error de conexión al servidor", "error");
+				});
+			}
+
+			function CerrarSesion() {
+				usuarioSesion = null;
+				sessionStorage.removeItem("followapp_session");
+				AplicarSesion();
+				showToast("Sesión cerrada correctamente", "info");
+			}
+
+			function AplicarSesion() {
+				if (usuarioSesion) {
+					document.getElementById("modalLogin").style.display = "none";
+					document.getElementById("badgeUsuario").style.display = "block";
+					document.getElementById("lblNombreUsuario").innerText = usuarioSesion.nombre || usuarioSesion.usuario;
+					document.getElementById("lblRolUsuario").innerText = usuarioSesion.rol || "Usuario";
+
+					let btnU = document.getElementById("busuarios");
+					if (btnU) {
+						btnU.style.display = (usuarioSesion.rol === "Administrador") ? "inline-block" : "none";
+					}
+					AplicarPermisosUI();
+				} else {
+					document.getElementById("modalLogin").style.display = "flex";
+					document.getElementById("badgeUsuario").style.display = "none";
+				}
+			}
+
+			function AplicarPermisosUI() {
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+				let btnsCrear = ["btnNuevaEmpresa", "btnNuevoContacto", "btnNuevoProveedor", "btnNuevaOrden", "btnNuevaProforma", "btnNuevoProductoVenta"];
+				
+				btnsCrear.forEach(id => {
+					let el = document.getElementById(id);
+					if (el) el.style.display = esConsulta ? "none" : "inline-block";
+				});
+			}
+
+			function AtenderTarea(ind) {
+				ventanaInicio.ind = ind;
+				let tarea = Array.isArray(tareas) ? tareas.find(t => Number(getVal(t, 'ind')) === Number(ind)) : null;
+				if (!tarea) return;
+				let indContacto = Number(getVal(tarea, 'indContacto'));
+				let contacto = Array.isArray(contactos) ? contactos.find(c => Number(getVal(c, 'ind')) === indContacto) : null;
+				
+				document.getElementById("i_verContacto").onclick = () => VerContacto(indContacto);
+				if (contacto) {
+					document.getElementById("i_nombre").innerHTML = getVal(contacto, 'nombre');
+					document.getElementById("i_apellido").innerHTML = getVal(contacto, 'apellido');
+					document.getElementById("i_cargo").innerHTML = getVal(contacto, 'cargo');
+					let emp = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === Number(getVal(contacto, 'indEmpresa'))) : null;
+					document.getElementById("i_empresa").innerHTML = emp ? getVal(emp, 'nombre') : "";
+				}
+				
+				let desc = document.getElementById("i_descripcion");
+				let est = document.getElementById("i_estadoTarea");
+				let fec = document.getElementById("i_fechaTarea");
+				let pri = document.getElementById("i_prioridadTarea");
+				let btnAct = document.getElementById("actualizarTarea");
+
+				desc.value = getVal(tarea, 'descripcion');
+				est.value = getVal(tarea, 'estado');
+				fec.value = FechaEnInput(getVal(tarea, 'fechaEjecucion'));
+				pri.value = getVal(tarea, 'prioridad');
+
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+				desc.disabled = esConsulta;
+				est.disabled = esConsulta;
+				fec.disabled = esConsulta;
+				pri.disabled = esConsulta;
+				if (btnAct) btnAct.style.display = esConsulta ? "none" : "block";
+
+				let tabla = document.getElementById("i_listaDC");
+				if (tabla) {
+					tabla.innerHTML = "";
+					for (let i = 1; i < datosContacto.length; i++) {
+						if (Number(getVal(datosContacto[i], 'indContacto')) === indContacto) {
+							let fila = document.createElement("tr");
+							let celda1 = document.createElement("td");
+							celda1.style.wordBreak = "break-word";
+							celda1.innerHTML = getVal(datosContacto[i], 'tipoDato');
+
+							let celda2 = document.createElement("td");
+							celda2.style.wordBreak = "break-all";
+							celda2.style.overflowWrap = "anywhere";
+							celda2.style.maxWidth = "0";
+							celda2.innerHTML = getVal(datosContacto[i], 'dato');
+
+							fila.appendChild(celda1);
+							fila.appendChild(celda2);
+							tabla.appendChild(fila);
+						}
+					}
+				}
+				document.getElementById("modalInicio").style.display = "block";
+			}
+
+			function FiltroInicioPrioridad(tarea) {
+				let maxima = document.getElementById("p_maxima").checked;
+				let alta = document.getElementById("p_alta").checked;
+				let media = document.getElementById("p_media").checked;
+				let baja = document.getElementById("p_baja").checked;
+				let prio = Number(getVal(tarea, 'prioridad'));
+				if (maxima && prio === 3) return true;
+				if (alta && prio === 2) return true;
+				if (media && prio === 1) return true;
+				if (baja && prio === 0) return true;
+				return false;
+			}
+
+			function FiltroInicioEstado(tarea) {
+				let est = getVal(tarea, 'estado');
+				if (document.getElementById("e_noIniciada").checked && est === "No iniciada") return true;
+				if (document.getElementById("e_iniciada").checked && est === "Iniciada") return true;
+				if (document.getElementById("e_terminada").checked && est === "Terminada") return true;
+				if (document.getElementById("e_suspendida").checked && est === "Suspendida") return true;
+				if (document.getElementById("e_cancelada").checked && est === "Cancelada") return true;
+				return false;
+			}
+
+			function FiltroInicioUrgencia(tarea) {
+				let filtro = document.getElementById("filtroUrgencia").value;
+				let fechaEjecucion = FechaEnInput(getVal(tarea, 'fechaEjecucion'));
+				let dias = DiasRestantes(fechaEjecucion);
+				if (filtro === "unDia" && dias <= 1) return true;
+				if (filtro === "unaSemana" && dias <= 8) return true;
+				if (filtro === "unaQuincena" && dias <= 15) return true;
+				if (filtro === "unMes" && dias <= 30) return true;
+				if (filtro === "cualquierMomento") return true;
+				return false;
+			}
+
+			function calcularUrgencia(fechaStr) {
+				if (!fechaStr) return 0;
+				let dias = DiasRestantes(fechaStr);
+				if (dias <= 0) return 100;
+				if (dias >= 30) return 5;
+				return Math.round(100 - ((dias / 30) * 95));
+			}
+
+			function DiasRestantes(fechaStr) {
+				if (!fechaStr) return 999;
+				let partes = fechaStr.split('-');
+				if (partes.length !== 3) return 999;
+				let fechaTarea = new Date(partes[0], partes[1] - 1, partes[2]);
+				let hoy = new Date();
+				hoy.setHours(0, 0, 0, 0);
+				let diffMs = fechaTarea.getTime() - hoy.getTime();
+				return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+			}
+
+			function renderizarInterfaz() {
+				const canvas = document.getElementById('canvasTareas');
+				const lista = document.getElementById('i_listaTareas');
+				if (!canvas || !lista) return;
+				canvas.innerHTML = "";
+				lista.innerHTML = "";
+
+				if (!Array.isArray(tareas)) return;
+
+				for (let i = 1; i < tareas.length; i++) {
+					let tarea = tareas[i];
+					let ind = Number(getVal(tarea, 'ind'));
+					if (ind !== 0 && FiltroInicioPrioridad(tarea) && FiltroInicioEstado(tarea) && FiltroInicioUrgencia(tarea)) {
+						let prio = parseInt(getVal(tarea, 'prioridad'));
+						if (isNaN(prio) || prio < 0) prio = 0;
+						if (prio > 3) prio = 3;
+
+						let fechaEjec = FechaEnInput(getVal(tarea, 'fechaEjecucion'));
+						let urgencia = calcularUrgencia(fechaEjec);
+						let diasRest = DiasRestantes(fechaEjec);
+						let textoDias = diasRest < 0 ? `Vencida hace ${Math.abs(diasRest)} días` : (diasRest === 0 ? "Vence Hoy" : `Quedan ${diasRest} días`);
+
+						let posX = 5 + (urgencia * 0.85);
+						let posY = 8 + (prio * 26);
+
+						const punto = document.createElement("div");
+						punto.className = "w3-circle w3-card-2";
+						punto.style.position = "absolute";
+						punto.style.width = "18px";
+						punto.style.height = "18px";
+						punto.style.left = `${posX}%`;
+						punto.style.bottom = `${posY}%`;
+						punto.style.transform = "translate(-50%, 50%)";
+						punto.style.cursor = "pointer";
+						punto.style.zIndex = "10";
+						punto.style.border = "2px solid #ffffff";
+						
+						const colores = ["w3-blue", "w3-green", "w3-orange", "w3-red"];
+						punto.classList.add(colores[prio] || "w3-grey");
+						
+						punto.title = `[${prioridades[prio]}] ${getVal(tarea, 'descripcion')} (${textoDias})`;
+						punto.onclick = () => AtenderTarea(ind);
+						canvas.appendChild(punto);
+
+						const item = document.createElement("div");
+						item.className = "w3-container w3-border-bottom w3-padding-small w3-hover-light-grey";
+						item.innerHTML = `
+							<div class="w3-row w3-small">
+								<div class="w3-col s2"><span class="w3-badge ${colores[prio]}">${prioridades[prio]}</span></div>
+								<div class="w3-col s7">
+									<b>${getVal(tarea, 'descripcion')}</b><br>
+									<small class="w3-text-grey">Estado: ${getVal(tarea, 'estado')} | Urgencia: ${urgencia}% (${textoDias})</small>
+								</div>
+								<div class="w3-col s3 w3-right-align"><button class="w3-button w3-tiny w3-round w3-teal" onclick="AtenderTarea(${ind});">Atender</button></div>
+							</div>`;
+						lista.appendChild(item);
+					}
+				}
+			}
+
+			function FiltraNombreEmpresa(emp) {
+				let f = document.getElementById("filtroNombreEmpresa");
+				if (!f || !f.value) return true;
+				return getVal(emp, 'nombre').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraCiudadEmpresa(emp) {
+				let f = document.getElementById("filtroCiudadEmpresa");
+				if (!f || !f.value) return true;
+				return getVal(emp, 'ciudad').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraDepartamentoEmpresa(emp) {
+				let f = document.getElementById("filtroDepartamentoEmpresa");
+				if (!f || !f.value) return true;
+				return getVal(emp, 'departamento').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraPaisEmpresa(emp) {
+				let f = document.getElementById("filtroPaisEmpresa");
+				if (!f || !f.value) return true;
+				return getVal(emp, 'pais').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraIdentificacionEmpresa(emp) {
+				let f = document.getElementById("filtroIdentificacionEmpresa");
+				if (!f || !f.value) return true;
+				return getVal(emp, 'id').toLowerCase().includes(f.value.toLowerCase());
+			}
+
+			function ListarEmpresas() {
+				let tabla = document.getElementById("bodyEmpresas");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+
+				if (!Array.isArray(empresas) || empresas.length <= 1) return;
+
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+				let contador = 0;
+				for (let i = 1; i < empresas.length; i++) {
+					let emp = empresas[i];
+					if (emp && FiltraNombreEmpresa(emp) && FiltraCiudadEmpresa(emp) && FiltraDepartamentoEmpresa(emp) && FiltraPaisEmpresa(emp) && FiltraIdentificacionEmpresa(emp)) {
+						contador++;
+						let ind = Number(getVal(emp, 'ind'));
+						let fila = document.createElement("tr");
+
+						let c1 = document.createElement("td"); c1.innerHTML = getVal(emp, 'nombre'); fila.appendChild(c1);
+						let c2 = document.createElement("td"); c2.innerHTML = getVal(emp, 'ciudad'); fila.appendChild(c2);
+						let c3 = document.createElement("td"); c3.innerHTML = getVal(emp, 'departamento'); fila.appendChild(c3);
+						let c4 = document.createElement("td"); c4.innerHTML = getVal(emp, 'pais'); fila.appendChild(c4);
+						let c5 = document.createElement("td"); c5.innerHTML = getVal(emp, 'id'); fila.appendChild(c5);
+
+						let c6 = document.createElement("td"); c6.className = "w3-center";
+						let btn = document.createElement("button");
+						btn.innerHTML = esConsulta ? "Ver" : "Editar";
+						btn.className = esConsulta ? "w3-button w3-blue w3-tiny" : "w3-button w3-teal w3-tiny";
+						btn.onclick = () => EditarEmpresa(ind);
+						c6.appendChild(btn);
+						fila.appendChild(c6);
+
+						tabla.appendChild(fila);
+					}
+				}
+
+				let filtroIcon = document.getElementById("filtroEmpresas");
+				let agregarBtn = document.getElementById("agregarEmpresa");
+				if (filtroIcon && agregarBtn) {
+					filtroIcon.style.display = contador > 0 ? "inline-block" : "none";
+					agregarBtn.style.display = (contador === 0 && !esConsulta) ? "inline-block" : "none";
+				}
+			}
+
+			function AgregarEmpresa() {
+				EditarEmpresa(-1);
+				let fNom = document.getElementById("filtroNombreEmpresa");
+				if (fNom && fNom.value) document.getElementById("e_nombre").value = fNom.value;
+				let fCiu = document.getElementById("filtroCiudadEmpresa");
+				if (fCiu && fCiu.value) document.getElementById("e_ciudad").value = fCiu.value;
+				let fDep = document.getElementById("filtroDepartamentoEmpresa");
+				if (fDep && fDep.value) document.getElementById("e_departamento").value = fDep.value;
+				let fPai = document.getElementById("filtroPaisEmpresa");
+				if (fPai && fPai.value) document.getElementById("e_pais").value = fPai.value;
+				let fId = document.getElementById("filtroIdentificacionEmpresa");
+				if (fId && fId.value) document.getElementById("e_identificacion").value = fId.value;
+			}
+
+			function EditarEmpresa(ind) {
+				CerrarContactos();
+				ventanaEmpresa.ind = ind;
+				let controles = document.getElementsByClassName("modalEmpresa");
+				let boton = document.getElementById("guardarEmpresa");
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+
+				if (ind !== -1) {
+					let emp = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === Number(ind)) : null;
+					if (emp) {
+						document.getElementById("e_nombre").value = getVal(emp, 'nombre');
+						document.getElementById("e_descripcion").value = getVal(emp, 'descripcion');
+						document.getElementById("e_pais").value = getVal(emp, 'pais');
+						document.getElementById("e_departamento").value = getVal(emp, 'departamento');
+						document.getElementById("e_ciudad").value = getVal(emp, 'ciudad');
+						document.getElementById("e_direccion").value = getVal(emp, 'direccion');
+						document.getElementById("e_tipoID").value = getVal(emp, 'tipoID');
+						document.getElementById("e_identificacion").value = getVal(emp, 'id');
+					}
+					for (let i = 0; i < controles.length; i++) controles[i].disabled = true;
+					if (boton) {
+						boton.style.display = esConsulta ? "none" : "block";
+						boton.innerHTML = "Editar";
+						boton.onclick = () => HabilitarEmpresa(ind);
+					}
+					ListarContactosEmpresa(ind);
+				} else {
+					if (esConsulta) return;
+					for (let i = 0; i < controles.length; i++) {
+						controles[i].value = "";
+						controles[i].disabled = false;
+					}
+					if (boton) {
+						boton.style.display = "block";
+						boton.innerHTML = "Guardar";
+						boton.onclick = () => GuardarEmpresa(-1);
+					}
+				}
+				document.getElementById("modalEmpresa").style.display = "block";
+			}
+
+			function HabilitarEmpresa(ind) {
+				let controles = document.getElementsByClassName("modalEmpresa");
+				for (let i = 0; i < controles.length; i++) controles[i].disabled = false;
+				let boton = document.getElementById("guardarEmpresa");
+				boton.innerHTML = "Actualizar";
+				boton.onclick = () => GuardarEmpresa(ind);
+			}
+
+			function AbrirContactos() {
+				document.getElementById('panelContactos').style.width = "500px";
+				document.getElementById("cancelarEmpresa").disabled = true;
+				document.getElementById("guardarEmpresa").disabled = true;
+			}
+
+			function CerrarContactos() {
+				document.getElementById('panelContactos').style.width = "0";
+				document.getElementById("cancelarEmpresa").disabled = false;
+				document.getElementById("guardarEmpresa").disabled = false;
+			}
+
+			function ListarContactosEmpresa(indEmpresa) {
+				let tabla = document.getElementById("e_listaC");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+				if (!Array.isArray(contactos)) return;
+
+				for (let i = 1; i < contactos.length; i++) {
+					let c = contactos[i];
+					if (Number(getVal(c, 'indEmpresa')) === Number(indEmpresa)) {
+						let indC = Number(getVal(c, 'ind'));
+						let fila = document.createElement("tr");
+
+						let c1 = document.createElement("td"); c1.innerHTML = getVal(c, 'nombre'); fila.appendChild(c1);
+						let c2 = document.createElement("td"); c2.innerHTML = getVal(c, 'apellido'); fila.appendChild(c2);
+						let c3 = document.createElement("td"); c3.innerHTML = getVal(c, 'cargo'); fila.appendChild(c3);
+
+						let c4 = document.createElement("td"); c4.className = "w3-center";
+						let btn = document.createElement("button");
+						btn.innerHTML = "Ver";
+						btn.className = "w3-button w3-teal w3-tiny";
+						btn.onclick = () => VerContacto(indC);
+						c4.appendChild(btn);
+						fila.appendChild(c4);
+
+						tabla.appendChild(fila);
+					}
+				}
+			}
+
+			function VerContacto(ind) {
+				EditarContacto(ind);
+				if (ind === -1) {
+					document.getElementById("c_empresa").value = ventanaEmpresa.ind;
+				}
+			}
+
+			function FiltraNombreContacto(c) {
+				let f = document.getElementById("filtroNombreContacto");
+				if (!f || !f.value) return true;
+				return getVal(c, 'nombre').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraApellidoContacto(c) {
+				let f = document.getElementById("filtroApellidoContacto");
+				if (!f || !f.value) return true;
+				return getVal(c, 'apellido').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraCargoContacto(c) {
+				let f = document.getElementById("filtroCargoContacto");
+				if (!f || !f.value) return true;
+				return getVal(c, 'cargo').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraEmpresaContacto(c) {
+				let f = document.getElementById("filtroEmpresaContacto");
+				if (!f || !f.value) return true;
+				let indE = Number(getVal(c, 'indEmpresa'));
+				let emp = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === indE) : null;
+				let nombreEmp = emp ? getVal(emp, 'nombre') : "";
+				return nombreEmp.toLowerCase().includes(f.value.toLowerCase());
+			}
+
+			function ListarContactos() {
+				let tabla = document.getElementById("bodyContactos");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+
+				if (!Array.isArray(contactos) || contactos.length <= 1) return;
+
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+				let contador = 0;
+				for (let i = 1; i < contactos.length; i++) {
+					let c = contactos[i];
+					if (c && FiltraNombreContacto(c) && FiltraApellidoContacto(c) && FiltraCargoContacto(c) && FiltraEmpresaContacto(c)) {
+						contador++;
+						let ind = Number(getVal(c, 'ind'));
+						let indE = Number(getVal(c, 'indEmpresa'));
+						let emp = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === indE) : null;
+						let nombreEmp = emp ? getVal(emp, 'nombre') : "N/A";
+
+						let fila = document.createElement("tr");
+						let c1 = document.createElement("td"); c1.innerHTML = getVal(c, 'nombre'); fila.appendChild(c1);
+						let c2 = document.createElement("td"); c2.innerHTML = getVal(c, 'apellido'); fila.appendChild(c2);
+						let c3 = document.createElement("td"); c3.innerHTML = getVal(c, 'cargo'); fila.appendChild(c3);
+						let c4 = document.createElement("td"); c4.innerHTML = nombreEmp; fila.appendChild(c4);
+
+						let c5 = document.createElement("td"); c5.className = "w3-center";
+						let btn = document.createElement("button");
+						btn.innerHTML = esConsulta ? "Ver" : "Editar";
+						btn.className = esConsulta ? "w3-button w3-blue w3-tiny" : "w3-button w3-teal w3-tiny";
+						btn.onclick = () => EditarContacto(ind);
+						c5.appendChild(btn);
+						fila.appendChild(c5);
+
+						tabla.appendChild(fila);
+					}
+				}
+
+				let filtroIcon = document.getElementById("filtroContactos");
+				let agregarBtn = document.getElementById("agregarContacto");
+				if (filtroIcon && agregarBtn) {
+					filtroIcon.style.display = contador > 0 ? "inline-block" : "none";
+					agregarBtn.style.display = (contador === 0 && !esConsulta) ? "inline-block" : "none";
+				}
+			}
+
+			function AgregarContacto() {
+				EditarContacto(-1);
+				let fNom = document.getElementById("filtroNombreContacto");
+				if (fNom && fNom.value) document.getElementById("c_nombre").value = fNom.value;
+				let fApe = document.getElementById("filtroApellidoContacto");
+				if (fApe && fApe.value) document.getElementById("c_apellido").value = fApe.value;
+				let fCar = document.getElementById("filtroCargoContacto");
+				if (fCar && fCar.value) document.getElementById("c_cargo").value = fCar.value;
+			}
+
+			function EditarContacto(ind) {
+				ventanaContacto.ind = ind;
+				CargarEmpresas(document.getElementById("c_empresa"));
+				CerrarPanel();
+
+				let controles = document.getElementsByClassName("modalContacto");
+				let controlesPanel = document.getElementsByClassName("c_controlPanel");
+				let boton = document.getElementById("guardarContacto");
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+
+				LimpiaDatosContacto();
+				ListarDatosContacto(ind);
+				LimpiaSeguimiento();
+				ListarSeguimiento(ind);
+				LimpiaTareas();
+				ListarTareas(ind);
+
+				document.getElementById("c_esEmpresa").checked = false;
+
+				if (ind !== -1) {
+					let c = Array.isArray(contactos) ? contactos.find(item => Number(getVal(item, 'ind')) === Number(ind)) : null;
+					if (c) {
+						document.getElementById("c_nombre").value = getVal(c, 'nombre');
+						document.getElementById("c_apellido").value = getVal(c, 'apellido');
+						document.getElementById("c_cargo").value = getVal(c, 'cargo');
+						document.getElementById("c_empresa").value = getVal(c, 'indEmpresa');
+					}
+					for (let i = 0; i < controles.length; i++) controles[i].disabled = true;
+					for (let i = 0; i < controlesPanel.length; i++) controlesPanel[i].disabled = false;
+					if (boton) {
+						boton.style.display = esConsulta ? "none" : "block";
+						boton.innerHTML = "Editar";
+						boton.onclick = () => HabilitarContacto(ind);
+					}
+				} else {
+					if (esConsulta) return;
+					for (let i = 0; i < controles.length; i++) {
+						controles[i].value = "";
+						controles[i].disabled = false;
+					}
+					for (let i = 0; i < controlesPanel.length; i++) controlesPanel[i].disabled = true;
+					document.getElementById("c_empresa").value = -1;
+					if (boton) {
+						boton.style.display = "block";
+						boton.innerHTML = "Guardar";
+						boton.onclick = () => GuardarContacto(-1);
+					}
+				}
+				document.getElementById("modalContacto").style.display = "block";
+			}
+
+			function HabilitarContacto(ind) {
+				let controles = document.getElementsByClassName("modalContacto");
+				for (let i = 0; i < controles.length; i++) controles[i].disabled = false;
+				let controlesPanel = document.getElementsByClassName("c_controlPanel");
+				for (let i = 0; i < controlesPanel.length; i++) controlesPanel[i].disabled = true;
+				let boton = document.getElementById("guardarContacto");
+				boton.innerHTML = "Actualizar";
+				boton.onclick = () => GuardarContacto(ind);
+			}
+
+			function EsEmpresa() {
+				let selector = document.getElementById("c_empresa");
+				if (document.getElementById("c_esEmpresa").checked) {
+					selector.disabled = true;
+					selector.value = "";
+				} else {
+					selector.disabled = false;
+					selector.value = -1;
+				}
+			}
+
+			function CargarEmpresas(selector) {
+				if (!selector) return;
+				selector.innerHTML = "<option value='-1'>Seleccione la empresa</option>";
+				if (!Array.isArray(empresas)) return;
+				for (let i = 1; i < empresas.length; i++) {
+					let ind = Number(getVal(empresas[i], 'ind'));
+					let nom = getVal(empresas[i], 'nombre');
+					selector.innerHTML += `<option value="${ind}">${nom}</option>`;
+				}
+			}
+
+			function AbrirPanel(tipo) {
+				const panel = document.getElementById('panelLateral');
+				const titulo = document.getElementById('tituloPanel');
+				const datosPorTipo = {
+					'datos': { titulo: 'Datos de Contacto', html: 'c_panelDatos' },
+					'seguimiento': { titulo: 'Historial de Seguimiento', html: 'c_panelSeguimiento' },
+					'tareas': { titulo: 'Tareas Pendientes', html: 'c_panelTareas' }
+				};
+				titulo.innerText = datosPorTipo[tipo].titulo;
+				let paneles = document.getElementsByClassName("c_panelLateral");
+				for (let i = 0; i < paneles.length; i++) paneles[i].style.display = "none";
+				document.getElementById(datosPorTipo[tipo].html).style.display = "block";
+				document.getElementById("c_botonCancelar").disabled = true;
+				document.getElementById("guardarContacto").disabled = true;
+				panel.style.width = "500px";
+			}
+
+			function CerrarPanel() {
+				document.getElementById('panelLateral').style.width = "0";
+				document.getElementById("c_botonCancelar").disabled = false;
+				document.getElementById("guardarContacto").disabled = false;
+			}
+
+			function ListarTiposDato() {
+				let lista = document.getElementById("listaTiposDato");
+				if (!lista || !Array.isArray(datosContacto)) return;
+				lista.innerHTML = "";
+				const tiposUnicos = [...new Set(datosContacto.map(d => getVal(d, 'tipoDato')))];
+				tiposUnicos.forEach(tipo => {
+					if (tipo) {
+						const opcion = document.createElement("option");
+						opcion.value = tipo;
+						lista.appendChild(opcion);
+					}
+				});
+			}
+
+			function ListarDatosContacto(indContacto) {
+				let tabla = document.getElementById("c_listaDC");
+				if (!tabla || !Array.isArray(datosContacto)) return;
+				tabla.innerHTML = "";
+				for (let i = 1; i < datosContacto.length; i++) {
+					let d = datosContacto[i];
+					if (Number(getVal(d, 'indContacto')) === Number(indContacto)) {
+						let indD = Number(getVal(d, 'ind'));
+						let fila = `<tr>
+							<td id="tipoDato${indD}">${getVal(d, 'tipoDato')}</td>
+							<td id="dato${indD}">${getVal(d, 'dato')}</td>
+							<td id="bDatosContacto${indD}" class="w3-center">
+								<button class="w3-button w3-teal w3-tiny datoContacto" onclick="EditarDatoContacto(${indD})">Editar</button>
+							</td>
+						</tr>`;
+						tabla.innerHTML += fila;
+					}
+				}
+			}
+
+			function EditarDatoContacto(ind) {
+				let celdaTipo = document.getElementById("tipoDato" + ind);
+				let celdaDato = document.getElementById("dato" + ind);
+				let celdaBoton = document.getElementById("bDatosContacto" + ind);
+				if (!celdaTipo || !celdaDato || !celdaBoton) return;
+
+				let valTipo = celdaTipo.innerText;
+				let valDato = celdaDato.innerText;
+
+				celdaTipo.innerHTML = `<input type="text" id="editaTipoDato" class="w3-input w3-border" value="${valTipo}">`;
+				celdaDato.innerHTML = `<input type="text" id="editaDato" class="w3-input w3-border" value="${valDato}">`;
+				celdaBoton.innerHTML = `
+					<button class="w3-button w3-green w3-tiny" onclick="GuardarDatoContacto(${ind})">✓</button>
+					<button class="w3-button w3-red w3-tiny" onclick="ListarDatosContacto(${ventanaContacto.ind})">✕</button>`;
+			}
+
+			function LimpiaDatosContacto() {
+				document.getElementById("nuevoTipoDato").value = "";
+				document.getElementById("nuevoDato").value = "";
+				document.getElementById("botonAgregrarDatoContacto").disabled = true;
+			}
+
+			function ValidarDatoContacto(ind = -1) {
+				if (ind === -1) {
+					let t = document.getElementById("nuevoTipoDato").value;
+					let d = document.getElementById("nuevoDato").value;
+					document.getElementById("botonAgregrarDatoContacto").disabled = !(t !== "" && d !== "");
+				}
+			}
+
+			function ListarSeguimiento(indContacto) {
+				let panel = document.getElementById("listaRegistrosSeguimiento");
+				if (!panel || !Array.isArray(seguimiento)) return;
+				panel.innerHTML = "";
+				for (let i = seguimiento.length - 1; i >= 1; i--) {
+					let s = seguimiento[i];
+					if (Number(getVal(s, 'indContacto')) === Number(indContacto)) {
+						let indS = Number(getVal(s, 'ind'));
+						let fechaStr = String(getVal(s, 'fecha')).slice(0, 10);
+						let item = `<div class="panel-item-card" id="celdaSeguimiento${indS}">
+							<div class="w3-row">
+								<div class="w3-col s9" style="word-break: break-word;">
+									<span class="w3-tag w3-teal w3-round w3-tiny">${fechaStr}</span>
+									<p style="margin: 6px 0 0 0; white-space: pre-wrap;">${getVal(s, 'registro')}</p>
+								</div>
+								<div class="w3-col s3 w3-right-align">
+									<button class="w3-button w3-teal w3-tiny w3-round" onclick="EditarSeguimiento(${i})">Editar</button>
+								</div>
+							</div>
+						</div>`;
+						panel.innerHTML += item;
+					}
+				}
+			}
+
+			function EditarSeguimiento(i) {
+				let s = seguimiento[i];
+				let indS = Number(getVal(s, 'ind'));
+				let celda = document.getElementById("celdaSeguimiento" + indS);
+				if (!celda) return;
+				celda.innerHTML = `
+					<div class="w3-row-padding" style="margin: 0 -8px;">
+						<div class="w3-col s12 w3-margin-bottom">
+							<textarea id="actualizacionSeguimiento" class="w3-input w3-border w3-round" rows="3" style="width:100%; box-sizing:border-box;">${getVal(s, 'registro')}</textarea>
+						</div>
+						<div class="w3-col s12 w3-right-align">
+							<button class="w3-button w3-green w3-tiny w3-round" onclick="GuardarSeguimiento(${i})">✓ Guardar</button>
+							<button class="w3-button w3-red w3-tiny w3-round" onclick="ListarSeguimiento(${ventanaContacto.ind})">✕ Cancelar</button>
+						</div>
+					</div>`;
+			}
+
+			function LimpiaSeguimiento() {
+				document.getElementById("fechaRegistroSeguimiento").value = "";
+				document.getElementById("registroSeguimiento").value = "";
+				document.getElementById("botonGuardarSeguimiento").disabled = true;
+			}
+
+			function ValidarSeguimiento() {
+				let f = document.getElementById("fechaRegistroSeguimiento").value;
+				let r = document.getElementById("registroSeguimiento").value;
+				document.getElementById("botonGuardarSeguimiento").disabled = !(f !== "" && r !== "");
+			}
+
+			function ListarTareas(indContacto) {
+				let panel = document.getElementById("listaTareas");
+				if (!panel || !Array.isArray(tareas)) return;
+				panel.innerHTML = "";
+				const badgeColors = ["w3-blue", "w3-green", "w3-orange", "w3-red"];
+				for (let i = tareas.length - 1; i >= 1; i--) {
+					let t = tareas[i];
+					if (Number(getVal(t, 'indContacto')) === Number(indContacto)) {
+						let indT = Number(getVal(t, 'ind'));
+						let fechaStr = String(getVal(t, 'fechaEjecucion')).slice(0, 10);
+						let prioNum = Number(getVal(t, 'prioridad')) || 0;
+						let prioStr = prioridades[prioNum] || "Baja";
+						let color = badgeColors[prioNum] || "w3-grey";
+
+						let item = `<div class="panel-item-card" id="filaTarea${indT}">
+							<div class="w3-row">
+								<div class="w3-col s9" style="word-break: break-word;">
+									<span class="w3-badge ${color} w3-tiny">${prioStr}</span>
+									<span class="w3-text-grey w3-tiny w3-margin-left"><i class="fa fa-calendar"></i> ${fechaStr}</span>
+									<p style="margin: 4px 0; font-weight: bold; white-space: pre-wrap;">${getVal(t, 'descripcion')}</p>
+									<small class="w3-text-teal">Estado: ${getVal(t, 'estado')}</small>
+								</div>
+								<div class="w3-col s3 w3-right-align">
+									<button class="w3-button w3-teal w3-tiny w3-round" onclick="EditarTarea(${i})">Editar</button>
+								</div>
+							</div>
+						</div>`;
+						panel.innerHTML += item;
+					}
+				}
+			}
+
+			function EditarTarea(i) {
+				let t = tareas[i];
+				let indT = Number(getVal(t, 'ind'));
+				let fila = document.getElementById("filaTarea" + indT);
+				if (!fila) return;
+				fila.innerHTML = `
+					<div class="w3-row-padding" style="margin: 0 -8px;">
+						<div class="w3-col s12 w3-margin-bottom">
+							<label class="w3-tiny w3-text-teal"><b>Descripción:</b></label>
+							<textarea id="e_descripcionTarea" class="w3-input w3-border w3-round" rows="2" style="width:100%; box-sizing:border-box;">${getVal(t, 'descripcion')}</textarea>
+						</div>
+						<div class="w3-col s6 w3-margin-bottom">
+							<label class="w3-tiny w3-text-teal"><b>Estado:</b></label>
+							<select id="e_estadoTarea" class="w3-select w3-border w3-round">
+								<option value="No iniciada">No iniciada</option>
+								<option value="Iniciada">Iniciada</option>
+								<option value="Terminada">Terminada</option>
+								<option value="Suspendida">Suspendida</option>
+								<option value="Cancelada">Cancelada</option>
+							</select>
+						</div>
+						<div class="w3-col s6 w3-margin-bottom">
+							<label class="w3-tiny w3-text-teal"><b>Prioridad:</b></label>
+							<select id="e_prioridadTarea" class="w3-select w3-border w3-round">
+								<option value="0">Baja</option>
+								<option value="1">Media</option>
+								<option value="2">Alta</option>
+								<option value="3">Máxima</option>
+							</select>
+						</div>
+						<div class="w3-col s12 w3-margin-bottom">
+							<label class="w3-tiny w3-text-teal"><b>Fecha:</b></label>
+							<input type="date" id="e_fechaTarea" class="w3-input w3-border w3-round" value="${FechaEnInput(getVal(t, 'fechaEjecucion'))}">
+						</div>
+						<div class="w3-col s12 w3-right-align">
+							<button class="w3-button w3-green w3-tiny w3-round" onclick="GuardarTarea(${i})">✓ Guardar</button>
+							<button class="w3-button w3-red w3-tiny w3-round" onclick="ListarTareas(${ventanaContacto.ind})">✕ Cancelar</button>
+						</div>
+					</div>`;
+				document.getElementById("e_estadoTarea").value = getVal(t, 'estado');
+				document.getElementById("e_prioridadTarea").value = getVal(t, 'prioridad');
+			}
+
+			function LimpiaTareas() {
+				document.getElementById("descripcionTarea").value = "";
+				document.getElementById("estadoTarea").value = "";
+				document.getElementById("fechaTarea").value = "";
+				document.getElementById("prioridadTarea").value = "";
+				document.getElementById("botonGuardarTarea").disabled = true;
+			}
+
+			function ValidarTarea() {
+				let d = document.getElementById("descripcionTarea").value;
+				let e = document.getElementById("estadoTarea").value;
+				let f = document.getElementById("fechaTarea").value;
+				let p = document.getElementById("prioridadTarea").value;
+				document.getElementById("botonGuardarTarea").disabled = !(d !== "" && e !== "" && f !== "" && p !== "");
+			}
+
+			function ListarProformas() {
+				let tabla = document.getElementById("bodyProformas");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+
+				if (!Array.isArray(proformas) || proformas.length <= 1) return;
+
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+				let contador = 0;
+
+				for (let i = 1; i < proformas.length; i++) {
+					let pf = proformas[i];
+					if (!pf) continue;
+
+					let ind = Number(getVal(pf, 'ind', 'Ind'));
+					if (ind === 0) continue;
+
+					let numPf = getVal(pf, 'numProforma', 'numproforma', '# Proforma', 'consecutivoProforma');
+					let fecha = getVal(pf, 'fecha', 'Fecha');
+					let moneda = getVal(pf, 'moneda', 'Moneda operación', 'Moneda');
+					let totalVal = Number(getVal(pf, 'total', 'Total')).toFixed(2);
+					let estado = getVal(pf, 'estado', 'Estado') || 'Emitida';
+
+					let idEmp = Number(getVal(pf, 'idProspecto', 'idempresa', 'IndEmpresa'));
+					let empObj = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === idEmp) : null;
+					let nombreEmp = empObj ? getVal(empObj, 'nombre') : "Cliente N/A";
+
+					let fConsec = document.getElementById("filtroConsecutivoProforma")?.value || "";
+					let fCliente = document.getElementById("filtroClienteProforma")?.value || "";
+					let fFecha = document.getElementById("filtroFechaProforma")?.value || "";
+					let fMoneda = document.getElementById("filtroMonedaProforma")?.value || "";
+					let fEstado = document.getElementById("filtroEstadoProforma")?.value || "";
+					let fTotal = document.getElementById("filtroTotalProforma")?.value || "";
+
+					if (fConsec && !numPf.toLowerCase().includes(fConsec.toLowerCase())) continue;
+					if (fCliente && !nombreEmp.toLowerCase().includes(fCliente.toLowerCase())) continue;
+					if (fFecha && !fecha.includes(fFecha)) continue;
+					if (fMoneda && moneda !== fMoneda) continue;
+					if (fEstado && estado !== fEstado) continue;
+					if (fTotal && !totalVal.includes(fTotal)) continue;
+
+					contador++;
+
+					let fila = document.createElement("tr");
+					fila.innerHTML = `
+						<td><b>${numPf}</b></td>
+						<td>${nombreEmp}</td>
+						<td>${String(fecha).slice(0, 10)}</td>
+						<td><span class="w3-tag w3-teal w3-round w3-tiny">${moneda}</span></td>
+						<td><span class="w3-tag w3-round w3-tiny ${estado === 'Aceptada' || estado === 'Facturada' ? 'w3-green' : (estado === 'Vencida' ? 'w3-red' : 'w3-blue')}">${estado}</span></td>
+						<td><b>$${totalVal}</b></td>
+						<td class="w3-center">
+							<button class="w3-button w3-teal w3-tiny" onclick="EditarProforma(${ind})">${esConsulta ? 'Ver' : 'Editar'}</button>
+							<button class="w3-button w3-teal w3-tiny w3-margin-left" onclick="ImprimirProforma(${ind})"><i class="fa fa-print"></i> PDF / Vista Previa</button>
+						</td>
+					`;
+					tabla.appendChild(fila);
+				}
+			}
+
+			function EditarProforma(ind) {
+				ventanaProforma.ind = ind;
+				itemsProformaActual = [];
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+
+				CargarEmpresasProforma();
+				CargarListasPreciosVentaProforma();
+
+				if (ind !== -1) {
+					let pf = Array.isArray(proformas) ? proformas.find(item => Number(getVal(item, 'ind', 'Ind')) === Number(ind)) : null;
+					if (pf) {
+						document.getElementById("pf_consecutivo").value = getVal(pf, 'numProforma', '# Proforma');
+						document.getElementById("pf_fecha").value = FechaEnInput(getVal(pf, 'fecha', 'Fecha'));
+						document.getElementById("pf_empresa").value = getVal(pf, 'idProspecto', 'idempresa', 'IndEmpresa');
+						
+						CargarContactosProformaEmpresa();
+						document.getElementById("pf_contacto").value = getVal(pf, 'idContacto', 'IndPersona') || -1;
+
+						document.getElementById("pf_moneda").value = getVal(pf, 'moneda', 'Moneda operación') || "USD";
+						document.getElementById("pf_copUsd").value = getVal(pf, 'copUsd', 'COP/USD') || 4000;
+						document.getElementById("pf_vigencia").value = getVal(pf, 'vigencia', 'Vigencia') || 30;
+						document.getElementById("pf_estado").value = getVal(pf, 'estado', 'Estado') || "Emitida";
+						document.getElementById("pf_razonDescuento").value = getVal(pf, 'razonDescuento', 'Razón Descuento');
+						document.getElementById("pf_montoDescuento").value = getVal(pf, 'montoDescuento', 'Monto específico Descuento') || 0;
+						
+						let pctIva = parseFloat(getVal(pf, 'iva', 'Porcentaje IVA')) || 0.19;
+						document.getElementById("pf_porcentajeIva").value = pctIva <= 1 ? (pctIva * 100) : pctIva;
+
+						let pctRet = parseFloat(getVal(pf, 'retefuente', 'Porcentaje Retefuente')) || 0;
+						document.getElementById("pf_porcentajeRetefuente").value = pctRet <= 1 ? (pctRet * 100) : pctRet;
+
+						document.getElementById("pf_observaciones").value = getVal(pf, 'observaciones', 'Observaciones');
+
+						if (Array.isArray(detalleProformas)) {
+							for (let i = 0; i < detalleProformas.length; i++) {
+								let d = detalleProformas[i];
+								if (!d) continue;
+								if (Number(getVal(d, 'ind', 'Ind')) === 0) continue;
+								if (Number(getVal(d, 'indProforma', 'IndProforma')) === Number(ind)) {
+									itemsProformaActual.push({
+										indProducto: Number(getVal(d, 'indProducto', 'IndProducto')),
+										indLista: Number(getVal(d, 'indLista', 'IndLista')),
+										codigoRef: getVal(d, 'codigoRef', 'CodigoRef'),
+										nombreProd: getVal(d, 'nombreProd', 'NombreProducto'),
+										cantidad: Number(getVal(d, 'cantidad', 'Cantidad')),
+										precioUnitario: Number(getVal(d, 'precioUnitario', 'PrecioUnitario')),
+										valorTotal: Number(getVal(d, 'valorTotal', 'ValorTotal'))
+									});
+								}
+							}
+						}
+					}
+				} else {
+					if (esConsulta) return;
+					document.getElementById("pf_consecutivo").value = "PROF-" + new Date().getFullYear() + "-" + (proformas.length);
+					document.getElementById("pf_fecha").value = FechaEnInput(new Date());
+					document.getElementById("pf_moneda").value = "USD";
+					document.getElementById("pf_copUsd").value = 4000;
+					document.getElementById("pf_vigencia").value = 30;
+					document.getElementById("pf_estado").value = "Emitida";
+					document.getElementById("pf_razonDescuento").value = "";
+					document.getElementById("pf_montoDescuento").value = 0;
+					document.getElementById("pf_porcentajeIva").value = 19;
+					document.getElementById("pf_porcentajeRetefuente").value = 0;
+					document.getElementById("pf_observaciones").value = "";
+				}
+
+				AlCambiarMonedaOListaProforma();
+				RenderizarItemsProforma();
+				document.getElementById("modalProforma").style.display = "block";
+			}
+
+			function CargarEmpresasProforma() {
+				let sel = document.getElementById("pf_empresa");
+				if (!sel) return;
+				sel.innerHTML = "<option value='-1'>-- Seleccionar Cliente / Empresa --</option>";
+				if (Array.isArray(empresas)) {
+					for (let i = 1; i < empresas.length; i++) {
+						let indE = Number(getVal(empresas[i], 'ind'));
+						sel.innerHTML += `<option value="${indE}">${getVal(empresas[i], 'nombre')}</option>`;
+					}
+				}
+			}
+
+			function CargarContactosProformaEmpresa() {
+				let idEmp = Number(document.getElementById("pf_empresa").value);
+				let selC = document.getElementById("pf_contacto");
+				if (!selC) return;
+				selC.innerHTML = "<option value='-1'>-- Seleccionar Contacto --</option>";
+
+				if (idEmp > 0 && Array.isArray(contactos)) {
+					for (let i = 1; i < contactos.length; i++) {
+						let c = contactos[i];
+						if (Number(getVal(c, 'indEmpresa')) === idEmp) {
+							let indC = Number(getVal(c, 'ind'));
+							selC.innerHTML += `<option value="${indC}">${getVal(c, 'nombre')} ${getVal(c, 'apellido')}</option>`;
+						}
+					}
+				}
+			}
+
+			function CargarListasPreciosVentaProforma() {
+				let sel = document.getElementById("pf_listaPrecios");
+				if (!sel) return;
+				sel.innerHTML = "<option value=''>-- Seleccionar Lista Base --</option>";
+				if (Array.isArray(listasPreciosVentas)) {
+					for (let i = 1; i < listasPreciosVentas.length; i++) {
+						let lp = listasPreciosVentas[i];
+						if (!lp) continue;
+						let cod = getVal(lp, 'codigoLista', 'CodigoLista');
+						let nom = getVal(lp, 'nombre', 'Nombre');
+						let mon = getVal(lp, 'moneda', 'Moneda');
+						let baseCod = cod.split('/')[0];
+						sel.innerHTML += `<option value="${baseCod}">${nom || cod} (${mon})</option>`;
+					}
+				}
+			}
+
+			function AlCambiarMonedaOListaProforma() {
+				let selProd = document.getElementById("pf_selectorProducto");
+				if (!selProd) return;
+
+				selProd.innerHTML = "<option value=''>-- Seleccionar Producto del Catálogo --</option>";
+				if (Array.isArray(productosVentas)) {
+					for (let i = 1; i < productosVentas.length; i++) {
+						let p = productosVentas[i];
+						if (!p) continue;
+						let indP = Number(getVal(p, 'indProducto', 'ind', 'Ind'));
+						if (indP === 0) continue;
+
+						let ref = getVal(p, 'codigoRef', 'Referencia');
+						let nom = getVal(p, 'nombre', 'NombreProducto');
+						selProd.innerHTML += `<option value="${indP}">[${ref}] ${nom}</option>`;
+					}
+				}
+			}
+
+			function CambiarTipoItemProforma() {
+				let tipo = document.getElementById("pf_tipoItem").value;
+				document.getElementById("wrapperProdCat").style.display = tipo === 'CATALOGO' ? 'block' : 'none';
+				document.getElementById("wrapperInl").style.display = tipo === 'INL' ? 'flex' : 'none';
+
+				if (tipo === 'INL') {
+					document.getElementById("pf_precioItem").value = "0.00";
+					document.getElementById("pf_precioItem").readOnly = false;
+				} else {
+					AlSeleccionarProductoProforma();
+				}
+			}
+
+			function AlSeleccionarProductoProforma() {
+				let indP = Number(document.getElementById("pf_selectorProducto").value);
+				if (!indP) return;
+
+				let mon = document.getElementById("pf_moneda").value;
+				let listaBase = document.getElementById("pf_listaPrecios").value;
+				let targetCodLista = `${listaBase}/${mon}`.toLowerCase();
+
+				let lpObj = Array.isArray(listasPreciosVentas) ? listasPreciosVentas.find(l => getVal(l, 'codigoLista', 'CodigoLista').toLowerCase() === targetCodLista) : null;
+				let precioEncontrado = 0;
+
+				if (lpObj) {
+					let indLP = Number(getVal(lpObj, 'indLista', 'ind', 'Ind'));
+					let prObj = Array.isArray(preciosProductosVentas) ? preciosProductosVentas.find(pr => Number(getVal(pr, 'indLista')) === indLP && Number(getVal(pr, 'indProducto')) === indP) : null;
+					if (prObj) precioEncontrado = Number(getVal(prObj, 'precio', 'PrecioVenta')) || 0;
+				}
+
+				document.getElementById("pf_precioItem").value = precioEncontrado.toFixed(2);
+				RecalcularItemTemporalProforma();
+			}
+
+			function RecalcularItemTemporalProforma() {
+				let cant = parseFloat(document.getElementById("pf_cantidadItem").value) || 1;
+				let pu = parseFloat(document.getElementById("pf_precioItem").value) || 0;
+				let mon = document.getElementById("pf_moneda").value;
+				let total = cant * pu;
+				document.getElementById("pf_totalItemPreview").value = `${mon} $${total.toFixed(2)}`;
+			}
+
+			function AgregarItemAProforma() {
+				let tipo = document.getElementById("pf_tipoItem").value;
+				let cant = parseFloat(document.getElementById("pf_cantidadItem").value) || 1;
+				let pu = parseFloat(document.getElementById("pf_precioItem").value) || 0;
+
+				let itemObj = {
+					indProducto: 0,
+					indLista: 0,
+					codigoRef: 'INL',
+					nombreProd: '',
+					cantidad: cant,
+					precioUnitario: pu,
+					valorTotal: cant * pu
+				};
+
+				if (tipo === 'INL') {
+					let nomInl = document.getElementById("pf_inlNombre").value.trim();
+					let descInl = document.getElementById("pf_inlDescripcion").value.trim();
+					if (!nomInl) {
+						showToast("Ingrese el nombre del Ítem No Listado", "error");
+						return;
+					}
+					itemObj.nombreProd = nomInl + (descInl ? ` (${descInl})` : '');
+				} else {
+					let indP = Number(document.getElementById("pf_selectorProducto").value);
+					if (!indP) {
+						showToast("Seleccione un producto del catálogo", "error");
+						return;
+					}
+					let pObj = Array.isArray(productosVentas) ? productosVentas.find(p => Number(getVal(p, 'indProducto', 'ind', 'Ind')) === indP) : null;
+					itemObj.indProducto = indP;
+					itemObj.codigoRef = pObj ? getVal(pObj, 'codigoRef', 'Referencia') : 'CAT';
+					itemObj.nombreProd = pObj ? getVal(pObj, 'nombre', 'NombreProducto') : 'Producto Catálogo';
+				}
+
+				itemsProformaActual.push(itemObj);
+				RenderizarItemsProforma();
+			}
+
+			function RenderizarItemsProforma() {
+				let tabla = document.getElementById("bodyItemsProforma");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+
+				itemsProformaActual.forEach((item, index) => {
+					let fila = `<tr>
+						<td>${index + 1}</td>
+						<td><b>${item.codigoRef}</b></td>
+						<td>${item.nombreProd}</td>
+						<td>${item.cantidad}</td>
+						<td>$${item.precioUnitario.toFixed(2)}</td>
+						<td><b>$${item.valorTotal.toFixed(2)}</b></td>
+						<td class="w3-center"><button class="w3-button w3-red w3-tiny" onclick="EliminarItemProforma(${index})">✕</button></td>
+					</tr>`;
+					tabla.innerHTML += fila;
+				});
+
+				CalcularTotalesProforma();
+			}
+
+			function EliminarItemProforma(index) {
+				itemsProformaActual.splice(index, 1);
+				RenderizarItemsProforma();
+			}
+
+			function CalcularTotalesProforma() {
+				let subtotal1 = itemsProformaActual.reduce((acc, i) => acc + i.valorTotal, 0);
+				let descMonto = parseFloat(document.getElementById("pf_montoDescuento").value) || 0;
+				let pctIva = (parseFloat(document.getElementById("pf_porcentajeIva").value) || 0) / 100;
+				let mon = document.getElementById("pf_moneda").value;
+
+				let subtotalNeto = Math.max(0, subtotal1 - descMonto);
+				let montoIva = subtotalNeto * pctIva;
+				let totalFinal = subtotalNeto + montoIva;
+
+				document.getElementById("lblSubtotalProforma").innerHTML = `${mon} $${subtotal1.toFixed(2)}`;
+				document.getElementById("lblDescuentoProforma").innerHTML = `${mon} $${descMonto.toFixed(2)}`;
+				document.getElementById("lblIvaProforma").innerHTML = `${mon} $${montoIva.toFixed(2)}`;
+				document.getElementById("lblTotalProforma").innerHTML = `<b>${mon} $${totalFinal.toFixed(2)}</b>`;
+			}
+
+			function GuardarProforma() {
+				let numPf = document.getElementById("pf_consecutivo").value.trim();
+				let fecha = document.getElementById("pf_fecha").value;
+				let idEmp = document.getElementById("pf_empresa").value;
+				let idCont = document.getElementById("pf_contacto").value;
+
+				if (!numPf || !fecha || idEmp == -1 || itemsProformaActual.length === 0) {
+					showToast("Complete los datos requeridos y agregue al menos un ítem.", "error");
+					return;
+				}
+
+				let subtotal1 = itemsProformaActual.reduce((acc, i) => acc + i.valorTotal, 0);
+				let descMonto = parseFloat(document.getElementById("pf_montoDescuento").value) || 0;
+				let pctIva = (parseFloat(document.getElementById("pf_porcentajeIva").value) || 0) / 100;
+				let pctRet = (parseFloat(document.getElementById("pf_porcentajeRetefuente").value) || 0) / 100;
+				let subtotalNeto = Math.max(0, subtotal1 - descMonto);
+				let montoIva = subtotalNeto * pctIva;
+				let totalFinal = subtotalNeto + montoIva;
+
+				let indPf = ventanaProforma.ind;
+				let vectorPf = [
+					indPf,
+					numPf,
+					fecha,
+					idEmp,
+					idCont,
+					document.getElementById("pf_moneda").value,
+					parseFloat(document.getElementById("pf_copUsd").value) || 4000,
+					4300,
+					document.getElementById("pf_vigencia").value,
+					document.getElementById("pf_razonDescuento").value,
+					descMonto,
+					pctRet,
+					pctIva,
+					subtotal1,
+					montoIva,
+					totalFinal,
+					document.getElementById("pf_estado").value,
+					usuarioSesion ? usuarioSesion.nombre : 'Usuario App',
+					document.getElementById("pf_observaciones").value
+				];
+
+				showLoader(true, "Guardando Proforma en Google Sheets...");
+				let datos = {
+					accion: GUARDAR_ORDEN_COMPLETA,
+					hoja: "Proformas",
+					pos: indPf,
+					proforma: vectorPf,
+					detalles: itemsProformaActual
+				};
+
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						document.getElementById("modalProforma").style.display = "none";
+						showToast("Proforma registrada con éxito", "success");
+						CargarTodo();
+					})
+					.catch(err => {
+						showLoader(false);
+						showToast("Error de conexión al servidor", "error");
+					});
+			}
+
+			function ImprimirProforma(indPf) {
+				let pf = Array.isArray(proformas) ? proformas.find(item => Number(getVal(item, 'ind', 'Ind')) === Number(indPf)) : null;
+				if (!pf) return;
+
+				let idEmp = Number(getVal(pf, 'idProspecto', 'idempresa', 'IndEmpresa'));
+				let empObj = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === idEmp) : null;
+				let mon = getVal(pf, 'moneda', 'Moneda operación') || 'USD';
+
+				document.getElementById("print_pf_number").innerText = getVal(pf, 'numProforma', '# Proforma');
+				document.getElementById("print_pf_date").innerText = String(getVal(pf, 'fecha', 'Fecha')).slice(0, 10);
+
+				let clientInfo = empObj ? `<b>${getVal(empObj, 'nombre')}</b><br>
+					NIT/ID: ${getVal(empObj, 'id')}<br>
+					Ciudad: ${getVal(empObj, 'ciudad')}, ${getVal(empObj, 'departamento')}<br>
+					Dirección: ${getVal(empObj, 'direccion')}` : "Cliente N/A";
+				document.getElementById("print_pf_client_info").innerHTML = clientInfo;
+
+				let termsInfo = `<b>Moneda:</b> ${mon}<br>
+					<b>Vigencia:</b> ${getVal(pf, 'vigencia', 'Vigencia')} Días<br>
+					<b>Estado:</b> ${getVal(pf, 'estado', 'Estado')}<br>
+					<b>Responsable:</b> ${getVal(pf, 'responsable', 'Responsable')}`;
+				document.getElementById("print_pf_terms_info").innerHTML = termsInfo;
+
+				let tabla = document.getElementById("print_pf_items_body");
+				tabla.innerHTML = "";
+				let subtotalAcc = 0;
+				let posCount = 1;
+
+				if (Array.isArray(detalleProformas)) {
+					for (let i = 0; i < detalleProformas.length; i++) {
+						let d = detalleProformas[i];
+						if (!d) continue;
+						if (Number(getVal(d, 'ind', 'Ind')) === 0) continue;
+						if (Number(getVal(d, 'indProforma', 'IndProforma')) === Number(indPf)) {
+							let pu = Number(getVal(d, 'precioUnitario', 'PrecioUnitario'));
+							let vt = Number(getVal(d, 'valorTotal', 'ValorTotal'));
+							subtotalAcc += vt;
+
+							let fila = `<tr>
+								<td style="text-align:center;">${posCount++}</td>
+								<td>${getVal(d, 'codigoRef', 'CodigoRef')}</td>
+								<td>${getVal(d, 'nombreProd', 'NombreProducto')}</td>
+								<td style="text-align:center;">${getVal(d, 'cantidad', 'Cantidad')}</td>
+								<td style="text-align:right;">${mon} $${pu.toFixed(2)}</td>
+								<td style="text-align:right;">${mon} $${vt.toFixed(2)}</td>
+							</tr>`;
+							tabla.innerHTML += fila;
+						}
+					}
+				}
+
+				let mIva = Number(getVal(pf, 'totalIVA', 'IVA')) || 0;
+				let mTotal = Number(getVal(pf, 'total', 'Total')) || subtotalAcc;
+
+				document.getElementById("print_pf_subtotal_amount").innerText = `${mon} $${subtotalAcc.toFixed(2)}`;
+				document.getElementById("print_pf_iva_amount").innerText = `${mon} $${mIva.toFixed(2)}`;
+				document.getElementById("print_pf_total_amount").innerText = `${mon} $${mTotal.toFixed(2)}`;
+				document.getElementById("print_pf_notes").innerText = getVal(pf, 'observaciones', 'Observaciones') || "Sin observaciones adicionales.";
+
+				document.getElementById("modalImpresionProforma").style.display = "block";
+			}
+
+			function ListarProductosVentas() {
+				let tabla = document.getElementById("bodyProductosVentas");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+
+				if (!Array.isArray(productosVentas) || productosVentas.length <= 1) return;
+
+				for (let i = 1; i < productosVentas.length; i++) {
+					let p = productosVentas[i];
+					if (!p) continue;
+					let ind = Number(getVal(p, 'indProducto', 'ind', 'Ind'));
+					if (ind === 0) continue;
+
+					let fila = `<tr>
+						<td><b>${getVal(p, 'codigoRef', 'Referencia')}</b></td>
+						<td>${getVal(p, 'nombre', 'NombreProducto')}</td>
+						<td><span class="w3-badge w3-green w3-tiny">${getVal(p, 'estado', 'Estado') || 'Activo'}</span></td>
+						<td class="w3-center"><button class="w3-button w3-teal w3-tiny" onclick="EditarProductoVenta(${ind})">Editar</button></td>
+					</tr>`;
+					tabla.innerHTML += fila;
+				}
+			}
+
+			function EditarProductoVenta(ind) {
+				ventanaProductoVenta.ind = ind;
+				if (ind !== -1) {
+					let p = Array.isArray(productosVentas) ? productosVentas.find(item => Number(getVal(item, 'indProducto', 'ind', 'Ind')) === Number(ind)) : null;
+					if (p) {
+						document.getElementById("pv_codigoRef").value = getVal(p, 'codigoRef', 'Referencia');
+						document.getElementById("pv_nombre").value = getVal(p, 'nombre', 'NombreProducto');
+						document.getElementById("pv_descripcion").value = getVal(p, 'descripcion', 'Descripcion');
+						document.getElementById("pv_estado").value = getVal(p, 'estado', 'Estado') || 'Activo';
+					}
+				} else {
+					document.getElementById("pv_codigoRef").value = "";
+					document.getElementById("pv_nombre").value = "";
+					document.getElementById("pv_descripcion").value = "";
+					document.getElementById("pv_estado").value = "Activo";
+				}
+				document.getElementById("modalProductoVenta").style.display = "block";
+			}
+
+			function GuardarProductoVenta() {
+				let cod = document.getElementById("pv_codigoRef").value.trim();
+				let nom = document.getElementById("pv_nombre").value.trim();
+
+				if (!cod || !nom) {
+					showToast("Ingrese el código y el nombre del producto", "error");
+					return;
+				}
+
+				let ind = ventanaProductoVenta.ind;
+				showLoader(true, "Guardando producto...");
+
+				let vector = [ind, cod, nom, document.getElementById("pv_descripcion").value, document.getElementById("pv_estado").value];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "FA_ProductosVentas", pos: ind, vector: vector };
+
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						document.getElementById("modalProductoVenta").style.display = "none";
+						showToast("Producto de venta guardado", "success");
+						CargarTodo();
+					})
+					.catch(err => {
+						showLoader(false);
+						showToast("Error de conexión al servidor", "error");
+					});
+			}
+
+			function ListarListasPreciosVentas() {
+				let tabla = document.getElementById("bodyListasPreciosVentas");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+
+				if (!Array.isArray(listasPreciosVentas) || listasPreciosVentas.length <= 1) return;
+
+				for (let i = 1; i < listasPreciosVentas.length; i++) {
+					let lp = listasPreciosVentas[i];
+					if (!lp) continue;
+					let ind = Number(getVal(lp, 'indLista', 'ind', 'Ind'));
+					if (ind === 0) continue;
+
+					let fila = `<tr>
+						<td><b>${getVal(lp, 'codigoLista', 'CodigoLista')}</b></td>
+						<td>${getVal(lp, 'nombre', 'Nombre')}</td>
+						<td><span class="w3-tag w3-teal w3-round w3-tiny">${getVal(lp, 'moneda', 'Moneda')}</span></td>
+						<td><span class="w3-badge w3-green w3-tiny">${getVal(lp, 'estado', 'Estado') || 'Activa'}</span></td>
+					</tr>`;
+					tabla.innerHTML += fila;
+				}
+			}
+
+			function FiltraNombreProveedor(p) {
+				let f = document.getElementById("filtroNombreProveedor");
+				if (!f || !f.value) return true;
+				return getVal(p, 'nombre').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraContactoProveedor(p) {
+				let f = document.getElementById("filtroContactoProveedor");
+				if (!f || !f.value) return true;
+				return getVal(p, 'personaContacto', 'contacto').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraCorreoProveedor(p) {
+				let f = document.getElementById("filtroCorreoProveedor");
+				if (!f || !f.value) return true;
+				return getVal(p, 'correo', 'email').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraWhatsAppProveedor(p) {
+				let f = document.getElementById("filtroWhatsAppProveedor");
+				if (!f || !f.value) return true;
+				return getVal(p, 'whatsApp', 'whatsapp', 'telefono').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraBancoProveedor(p) {
+				let f = document.getElementById("filtroBancoProveedor");
+				if (!f || !f.value) return true;
+				return getVal(p, 'banco').toLowerCase().includes(f.value.toLowerCase());
+			}
+
+			function ListarProveedores() {
+				let tabla = document.getElementById("bodyProveedores");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+
+				if (!Array.isArray(proveedores) || proveedores.length <= 1) return;
+
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+				let contador = 0;
+				for (let i = 1; i < proveedores.length; i++) {
+					let p = proveedores[i];
+					if (p && FiltraNombreProveedor(p) && FiltraContactoProveedor(p) && FiltraCorreoProveedor(p) && FiltraWhatsAppProveedor(p) && FiltraBancoProveedor(p)) {
+						contador++;
+						let ind = Number(getVal(p, 'ind'));
+
+						let fila = document.createElement("tr");
+
+						let c1 = document.createElement("td"); c1.innerHTML = getVal(p, 'nombre'); fila.appendChild(c1);
+						let c2 = document.createElement("td"); c2.innerHTML = getVal(p, 'personaContacto', 'contacto'); fila.appendChild(c2);
+						let c3 = document.createElement("td"); c3.innerHTML = getVal(p, 'correo', 'email'); fila.appendChild(c3);
+						let c4 = document.createElement("td"); c4.innerHTML = getVal(p, 'whatsApp', 'whatsapp'); fila.appendChild(c4);
+						let c5 = document.createElement("td"); c5.innerHTML = getVal(p, 'banco'); fila.appendChild(c5);
+
+						let c6 = document.createElement("td"); c6.className = "w3-center";
+						
+						let btnEdit = document.createElement("button");
+						btnEdit.innerHTML = esConsulta ? "Ver" : "Editar";
+						btnEdit.className = esConsulta ? "w3-button w3-blue w3-tiny" : "w3-button w3-teal w3-tiny";
+						btnEdit.onclick = function() { EditarProveedor(ind); };
+						c6.appendChild(btnEdit);
+
+						let btnListas = document.createElement("button");
+						btnListas.innerHTML = "Listas de Precios";
+						btnListas.className = "w3-button w3-teal w3-tiny w3-margin-left";
+						btnListas.onclick = function() { GestionarListasProveedor(ind); };
+						c6.appendChild(btnListas);
+
+						fila.appendChild(c6);
+						tabla.appendChild(fila);
+					}
+				}
+
+				let filtroIcon = document.getElementById("filtroProveedores");
+				let agregarBtn = document.getElementById("agregarProveedor");
+				if (filtroIcon && agregarBtn) {
+					filtroIcon.style.display = contador > 0 ? "inline-block" : "none";
+					agregarBtn.style.display = (contador === 0 && !esConsulta) ? "inline-block" : "none";
+				}
+			}
+
+			function AgregarProveedor() {
+				EditarProveedor(-1);
+				let fNom = document.getElementById("filtroNombreProveedor");
+				if (fNom && fNom.value) document.getElementById("p_nombre").value = fNom.value;
+				let fCon = document.getElementById("filtroContactoProveedor");
+				if (fCon && fCon.value) document.getElementById("p_personaContacto").value = fCon.value;
+				let fCor = document.getElementById("filtroCorreoProveedor");
+				if (fCor && fCor.value) document.getElementById("p_correo").value = fCor.value;
+			}
+
+			function EditarProveedor(ind) {
+				ventanaProveedor.ind = ind;
+				let controles = document.getElementsByClassName("modalProveedor");
+				let boton = document.getElementById("guardarProveedor");
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+
+				if (ind !== -1) {
+					let p = Array.isArray(proveedores) ? proveedores.find(item => Number(getVal(item, 'ind')) === Number(ind)) : null;
+					if (p) {
+						document.getElementById("p_nombre").value = getVal(p, 'nombre');
+						document.getElementById("p_direccion").value = getVal(p, 'direccion');
+						document.getElementById("p_personaContacto").value = getVal(p, 'personaContacto', 'contacto');
+						document.getElementById("p_correo").value = getVal(p, 'correo', 'email');
+						document.getElementById("p_whatsApp").value = getVal(p, 'whatsApp', 'whatsapp');
+						document.getElementById("p_cuentaPago").value = getVal(p, 'cuentaPago');
+						document.getElementById("p_banco").value = getVal(p, 'banco');
+						document.getElementById("p_swift").value = getVal(p, 'swift');
+						document.getElementById("p_direccionBanco").value = getVal(p, 'direccionBanco');
+					}
+					for (let i = 0; i < controles.length; i++) controles[i].disabled = true;
+					if (boton) {
+						boton.style.display = esConsulta ? "none" : "block";
+						boton.innerHTML = "Editar";
+						boton.onclick = () => HabilitarProveedor(ind);
+					}
+				} else {
+					if (esConsulta) return;
+					for (let i = 0; i < controles.length; i++) {
+						controles[i].value = "";
+						controles[i].disabled = false;
+					}
+					if (boton) {
+						boton.style.display = "block";
+						boton.innerHTML = "Guardar";
+						boton.onclick = () => GuardarProveedor(-1);
+					}
+				}
+				document.getElementById("modalProveedor").style.display = "block";
+			}
+
+			function HabilitarProveedor(ind) {
+				let controles = document.getElementsByClassName("modalProveedor");
+				for (let i = 0; i < controles.length; i++) controles[i].disabled = false;
+				let boton = document.getElementById("guardarProveedor");
+				boton.innerHTML = "Actualizar";
+				boton.onclick = () => GuardarProveedor(ind);
+			}
+
+			function AbrirListasPrecios() {
+				if (ventanaProveedor.ind && ventanaProveedor.ind !== -1) {
+					GestionarListasProveedor(ventanaProveedor.ind);
+				} else {
+					showToast("Seleccione o guarde un proveedor primero.", "error");
+				}
+			}
+
+			function GestionarListasProveedor(indProveedor) {
+				ventanaProveedor.ind = indProveedor;
+				let p = Array.isArray(proveedores) ? proveedores.find(item => Number(getVal(item, 'ind')) === Number(indProveedor)) : null;
+				let nomP = p ? getVal(p, 'nombre') : "";
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+				
+				document.getElementById("tituloModalListasPrecios").innerHTML = `<i class="fa fa-list-alt"></i> Listas de Precios y Productos - ${nomP}`;
+				document.getElementById("modalListasPrecios").style.display = "block";
+				
+				document.getElementById("lp_fecha").value = FechaEnInput(new Date());
+				document.getElementById("lp_nombre").value = "";
+
+				let boxCrearLista = document.querySelector("#modalListasPrecios .w3-card:nth-child(1)");
+				if (boxCrearLista) boxCrearLista.style.display = esConsulta ? "none" : "block";
+				
+				CargarSelectorListasProveedor();
+			}
+
+			function CargarSelectorListasProveedor() {
+				let selector = document.getElementById("lp_selectorLista");
+				if (!selector) return;
+				selector.innerHTML = "<option value=''>-- Seleccionar Lista --</option>";
+				
+				let indP = Number(ventanaProveedor.ind);
+				if (Array.isArray(listasPrecios)) {
+					for (let i = 1; i < listasPrecios.length; i++) {
+						let lp = listasPrecios[i];
+						if (!lp) continue;
+						if (Number(getVal(lp, 'ind')) === 0) continue;
+						
+						if (Number(getVal(lp, 'indProveedor', 'indproveedor')) === indP) {
+							let indLP = Number(getVal(lp, 'ind'));
+							let nomLP = getVal(lp, 'nombreLista', 'nombrelista', 'consecutivoLista');
+							selector.innerHTML += `<option value="${indLP}">${nomLP}</option>`;
+						}
+					}
+				}
+				CargarProductosDeLista();
+			}
+
+			function GuardarListaPrecios() {
+				let nom = document.getElementById("lp_nombre").value;
+				let fec = document.getElementById("lp_fecha").value;
+				let indP = ventanaProveedor.ind;
+
+				if (!nom || !fec || indP === -1) {
+					showToast("Complete el nombre y la fecha de la lista", "error");
+					return;
+				}
+
+				let consec = new Date().getFullYear() + "-LP-" + (listasPrecios.length);
+				let vector = [-1, indP, consec, nom, fec];
+
+				showLoader(true, "Guardando Lista de Precios...");
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "ListasPrecios", pos: -1, vector: vector };
+
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						try {
+							let info = JSON.parse(text);
+							if (info.status === "OK") {
+								listasPrecios = Array.isArray(info.matriz) ? info.matriz : [];
+								document.getElementById("lp_nombre").value = "";
+								showToast("Lista de Precios guardada", "success");
+								
+								CargarSelectorListasProveedor();
+								let nuevoInd = Number(info.ind);
+								if (nuevoInd > 0) {
+									document.getElementById("lp_selectorLista").value = nuevoInd;
+									CargarProductosDeLista();
+								}
+							}
+						} catch (e) {
+							showToast("Error al procesar respuesta de lista de precios", "error");
+						}
+					})
+					.catch(err => {
+						showLoader(false);
+						showToast("Error de conexión al servidor", "error");
+					});
+			}
+
+			function CargarProductosDeLista() {
+				let idLP = document.getElementById("lp_selectorLista").value;
+				let box = document.getElementById("boxAgregarProducto");
+				let tabla = document.getElementById("bodyProductosLista");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+
+				if (!idLP) {
+					if (box) box.style.display = "none";
+					return;
+				}
+
+				if (box) box.style.display = esConsulta ? "none" : "block";
+
+				if (Array.isArray(productosLista)) {
+					for (let i = 1; i < productosLista.length; i++) {
+						let pr = productosLista[i];
+						if (!pr) continue;
+						
+						let indP = Number(getVal(pr, 'ind', 'Ind'));
+						if (indP === 0) continue;
+
+						let parentLP = Number(getVal(pr, 'indListaPrecios', 'indlistaprecios', 'IndListaPrecios', 'indLista'));
+						
+						if (parentLP === Number(idLP)) {
+							let fila = document.createElement("tr");
+
+							let c1 = document.createElement("td"); c1.innerHTML = `<b>${getVal(pr, 'referencia', 'Referencia')}</b>`; fila.appendChild(c1);
+							let c2 = document.createElement("td"); c2.innerHTML = getVal(pr, 'nombreProducto', 'nombreproducto', 'NombreProducto', 'nombre'); fila.appendChild(c2);
+							let c3 = document.createElement("td"); c3.innerHTML = getVal(pr, 'descripcion', 'Descripcion'); fila.appendChild(c3);
+							
+							let precioVal = Number(getVal(pr, 'precioProveedor', 'precioproveedor', 'PrecioProveedor', 'precio'));
+							let c4 = document.createElement("td"); c4.innerHTML = `$${precioVal.toFixed(2)}`; fila.appendChild(c4);
+
+							tabla.appendChild(fila);
+						}
+					}
+				}
+			}
+
+			function AgregarProductoLista() {
+				let idLP = document.getElementById("lp_selectorLista").value;
+				let ref = document.getElementById("pr_referencia").value;
+				let nom = document.getElementById("pr_nombre").value;
+				let pre = document.getElementById("pr_precio").value;
+				let desc = document.getElementById("pr_descripcion").value;
+
+				if (!idLP || !ref || !nom || !pre) {
+					showToast("Complete los campos obligatorios del producto", "error");
+					return;
+				}
+
+				let vector = [-1, idLP, ref, nom, desc, parseFloat(pre)];
+				showLoader(true, "Registrando Producto...");
+
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "ProductosLista", pos: -1, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						try {
+							let info = JSON.parse(text);
+							if (info.status === "OK") {
+								productosLista = Array.isArray(info.matriz) ? info.matriz : [];
+								document.getElementById("pr_referencia").value = "";
+								document.getElementById("pr_nombre").value = "";
+								document.getElementById("pr_precio").value = "";
+								document.getElementById("pr_descripcion").value = "";
+								showToast("Producto agregado a la lista", "success");
+								CargarProductosDeLista();
+							}
+						} catch (e) {
+							showToast("Error de servidor al guardar producto", "error");
+						}
+					})
+					.catch(err => {
+						showLoader(false);
+						showToast("Error de conexión al servidor", "error");
+					});
+			}
+
+			function FiltraConsecutivoOrden(o) {
+				let f = document.getElementById("filtroConsecutivoOrden");
+				if (!f || !f.value) return true;
+				return getVal(o, 'consecutivoOrden', 'consecutivo').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraProveedorOrden(o) {
+				let f = document.getElementById("filtroProveedorOrden");
+				if (!f || !f.value) return true;
+				let indP = Number(getVal(o, 'indProveedor'));
+				let p = Array.isArray(proveedores) ? proveedores.find(item => Number(getVal(item, 'ind')) === indP) : null;
+				let nomP = p ? getVal(p, 'nombre') : "";
+				return nomP.toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraFechaOrden(o) {
+				let f = document.getElementById("filtroFechaOrden");
+				if (!f || !f.value) return true;
+				return getVal(o, 'fechaOrden', 'fecha').toLowerCase().includes(f.value.toLowerCase());
+			}
+			function FiltraFleteOrden(o) {
+				let f = document.getElementById("filtroFleteOrden");
+				if (!f || !f.value) return true;
+				return getVal(o, 'incluyeFlete').toLowerCase() === f.value.toLowerCase();
+			}
+			function FiltraValorOrden(o) {
+				let f = document.getElementById("filtroValorOrden");
+				if (!f || !f.value) return true;
+				return getVal(o, 'valorTotal', 'valor').toLowerCase().includes(f.value.toLowerCase());
+			}
+
+			function ListarOrdenes() {
+				let tabla = document.getElementById("bodyOrdenes");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+
+				if (!Array.isArray(ordenesCompra) || ordenesCompra.length <= 1) return;
+
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+				let contador = 0;
+				for (let i = 1; i < ordenesCompra.length; i++) {
+					let o = ordenesCompra[i];
+					if (o && FiltraConsecutivoOrden(o) && FiltraProveedorOrden(o) && FiltraFechaOrden(o) && FiltraFleteOrden(o) && FiltraValorOrden(o)) {
+						contador++;
+						let ind = Number(getVal(o, 'ind'));
+						let indP = Number(getVal(o, 'indProveedor'));
+						let p = Array.isArray(proveedores) ? proveedores.find(item => Number(getVal(item, 'ind')) === indP) : null;
+						let nomP = p ? getVal(p, 'nombre') : "N/A";
+						let val = Number(getVal(o, 'valorTotal')).toFixed(2);
+
+						let fila = document.createElement("tr");
+
+						let c1 = document.createElement("td"); c1.innerHTML = getVal(o, 'consecutivoOrden'); fila.appendChild(c1);
+						let c2 = document.createElement("td"); c2.innerHTML = nomP; fila.appendChild(c2);
+						let c3 = document.createElement("td"); c3.innerHTML = getVal(o, 'fechaOrden'); fila.appendChild(c3);
+						let c4 = document.createElement("td"); c4.innerHTML = getVal(o, 'incluyeFlete'); fila.appendChild(c4);
+						let c5 = document.createElement("td"); c5.innerHTML = "$" + val; fila.appendChild(c5);
+
+						let c6 = document.createElement("td"); c6.className = "w3-center";
+						
+						let btnEdit = document.createElement("button");
+						btnEdit.innerHTML = esConsulta ? "Ver" : "Editar";
+						btnEdit.className = esConsulta ? "w3-button w3-blue w3-tiny" : "w3-button w3-teal w3-tiny";
+						btnEdit.onclick = () => EditarOrden(ind);
+						c6.appendChild(btnEdit);
+
+						let btnPrint = document.createElement("button");
+						btnPrint.innerHTML = "Imprimir PO";
+						btnPrint.className = "w3-button w3-teal w3-tiny w3-margin-left";
+						btnPrint.onclick = () => ImprimirOrden(ind);
+						c6.appendChild(btnPrint);
+
+						fila.appendChild(c6);
+						tabla.appendChild(fila);
+					}
+				}
+
+				let filtroIcon = document.getElementById("filtroOrdenes");
+				let agregarBtn = document.getElementById("agregarOrden");
+				if (filtroIcon && agregarBtn) {
+					filtroIcon.style.display = contador > 0 ? "inline-block" : "none";
+					agregarBtn.style.display = (contador === 0 && !esConsulta) ? "inline-block" : "none";
+				}
+			}
+
+			function AgregarOrden() {
+				EditarOrden(-1);
+			}
+
+			function CargarListasProveedor() {
+				let idP = document.getElementById("po_proveedor").value;
+				let selLP = document.getElementById("po_listaPrecios");
+				selLP.innerHTML = "<option value=''>-- Seleccionar Lista --</option>";
+				document.getElementById("po_selectorProducto").innerHTML = "";
+				document.getElementById("po_selectorProducto").disabled = true;
+				document.getElementById("btnAgregarItemPO").disabled = true;
+
+				if (!idP) return;
+
+				if (Array.isArray(listasPrecios)) {
+					for (let i = 1; i < listasPrecios.length; i++) {
+						let lp = listasPrecios[i];
+						if (!lp) continue;
+						if (Number(getVal(lp, 'ind')) === 0) continue;
+
+						if (Number(getVal(lp, 'indProveedor', 'indproveedor')) === Number(idP)) {
+							let indLP = Number(getVal(lp, 'ind'));
+							let nomLP = getVal(lp, 'nombreLista', 'consecutivoLista');
+							selLP.innerHTML += `<option value="${indLP}">${nomLP}</option>`;
+						}
+					}
+				}
+			}
+
+			function HabilitarSelectorProductos() {
+				let idLP = document.getElementById("po_listaPrecios").value;
+				let selPr = document.getElementById("po_selectorProducto");
+				let btnAg = document.getElementById("btnAgregarItemPO");
+
+				selPr.innerHTML = "<option value=''>-- Seleccionar Producto --</option>";
+
+				if (!idLP) {
+					selPr.disabled = true;
+					btnAg.disabled = true;
+					return;
+				}
+
+				let count = 0;
+				if (Array.isArray(productosLista)) {
+					for (let i = 1; i < productosLista.length; i++) {
+						let pr = productosLista[i];
+						if (!pr) continue;
+						if (Number(getVal(pr, 'ind')) === 0) continue;
+
+						if (Number(getVal(pr, 'indListaPrecios', 'indlistaprecios', 'indLista')) === Number(idLP)) {
+							count++;
+							let ref = getVal(pr, 'referencia');
+							let nom = getVal(pr, 'nombreProducto');
+							let pre = Number(getVal(pr, 'precioProveedor')).toFixed(2);
+							let jsonStr = JSON.stringify({ referencia: ref, nombreProducto: nom, precioUnitario: Number(pre) });
+							selPr.innerHTML += `<option value='${jsonStr}'>[${ref}] ${nom} - $${pre}</option>`;
+						}
+					}
+				}
+
+				selPr.disabled = (count === 0);
+				btnAg.disabled = (count === 0);
+			}
+
+			function AgregarItemAOrden() {
+				let selPr = document.getElementById("po_selectorProducto").value;
+				let cant = parseInt(document.getElementById("po_cantidadProducto").value);
+
+				if (!selPr || isNaN(cant) || cant <= 0) {
+					showToast("Seleccione un producto y una cantidad válida", "error");
+					return;
+				}
+
+				let itemObj = JSON.parse(selPr);
+				itemObj.cantidad = cant;
+				itemObj.valorTotal = itemObj.precioUnitario * cant;
+
+				itemsPOActual.push(itemObj);
+				RenderizarItemsPO();
+			}
+
+			function EditarOrden(ind) {
+				ventanaOrden.ind = ind;
+				itemsPOActual = [];
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+
+				let selProv = document.getElementById("po_proveedor");
+				selProv.innerHTML = "<option value=''>-- Seleccionar Proveedor --</option>";
+				if (Array.isArray(proveedores) && proveedores.length > 1) {
+					for (let i = 1; i < proveedores.length; i++) {
+						let p = proveedores[i];
+						if (!p) continue;
+						let indP = Number(getVal(p, 'ind'));
+						selProv.innerHTML += `<option value="${indP}">${getVal(p, 'nombre')}</option>`;
+					}
+				}
+
+				let btnEmitir = document.querySelector("#modalOrden footer .w3-button.w3-teal");
+				let boxAgregarItem = document.querySelector("#modalOrden .w3-col.m7 .w3-card");
+
+				if (ind !== -1) {
+					let o = Array.isArray(ordenesCompra) ? ordenesCompra.find(item => Number(getVal(item, 'ind')) === Number(ind)) : null;
+					if (o) {
+						selProv.value = getVal(o, 'indProveedor');
+						CargarListasProveedor();
+
+						let selLP = document.getElementById("po_listaPrecios");
+						selLP.value = getVal(o, 'indListaPrecios');
+						HabilitarSelectorProductos();
+
+						document.getElementById("po_consecutivo").value = getVal(o, 'consecutivoOrden');
+						document.getElementById("po_fecha").value = FechaEnInput(getVal(o, 'fechaOrden'));
+						document.getElementById("po_incluyeFlete").checked = getVal(o, 'incluyeFlete') === "SI";
+						document.getElementById("po_observaciones").value = getVal(o, 'observaciones');
+
+						if (Array.isArray(detalleOrdenes)) {
+							for (let i = 0; i < detalleOrdenes.length; i++) {
+								let d = detalleOrdenes[i];
+								if (!d) continue;
+								if (Number(getVal(d, 'ind', 'Ind')) === 0) continue;
+								if (Number(getVal(d, 'indOrdenCompra', 'indordencompra', 'IndOrdenCompra', 'indOrden')) === Number(ind)) {
+									itemsPOActual.push({
+										referencia: getVal(d, 'referencia'),
+										nombreProducto: getVal(d, 'nombreProducto'),
+										cantidad: Number(getVal(d, 'cantidad')),
+										precioUnitario: Number(getVal(d, 'precioUnitario')),
+										valorTotal: Number(getVal(d, 'valorTotal'))
+									});
+								}
+							}
+						}
+					}
+				} else {
+					if (esConsulta) return;
+					document.getElementById("po_listaPrecios").innerHTML = "<option value=''>-- Seleccionar Lista --</option>";
+					document.getElementById("po_selectorProducto").innerHTML = "";
+					document.getElementById("po_selectorProducto").disabled = true;
+					document.getElementById("btnAgregarItemPO").disabled = true;
+					document.getElementById("po_consecutivo").value = "PO-" + new Date().getFullYear() + "-" + (ordenesCompra.length);
+					document.getElementById("po_fecha").value = FechaEnInput(new Date());
+					document.getElementById("po_incluyeFlete").checked = false;
+					document.getElementById("po_observaciones").value = "";
+				}
+
+				selProv.disabled = esConsulta;
+				document.getElementById("po_listaPrecios").disabled = esConsulta;
+				document.getElementById("po_consecutivo").disabled = esConsulta;
+				document.getElementById("po_fecha").disabled = esConsulta;
+				document.getElementById("po_incluyeFlete").disabled = esConsulta;
+				document.getElementById("po_observaciones").disabled = esConsulta;
+
+				if (btnEmitir) btnEmitir.style.display = esConsulta ? "none" : "inline-block";
+				if (boxAgregarItem) boxAgregarItem.style.display = esConsulta ? "none" : "block";
+
+				RenderizarItemsPO();
+				document.getElementById("modalOrden").style.display = "block";
+			}
+
+			function RenderizarItemsPO() {
+				let tabla = document.getElementById("bodyItemsPO");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+				let sumaTotal = 0;
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+
+				itemsPOActual.forEach((item, index) => {
+					sumaTotal += item.valorTotal;
+					let accionBtn = esConsulta ? "-" : `<button class="w3-button w3-red w3-tiny" onclick="EliminarItemPO(${index})">✕</button>`;
+					let fila = `<tr>
+						<td>${index + 1}</td>
+						<td>${item.referencia}</td>
+						<td>${item.nombreProducto}</td>
+						<td>${item.cantidad}</td>
+						<td>$${item.precioUnitario.toFixed(2)}</td>
+						<td>$${item.valorTotal.toFixed(2)}</td>
+						<td class="w3-center">${accionBtn}</td>
+					</tr>`;
+					tabla.innerHTML += fila;
+				});
+
+				document.getElementById("totalMontoPO").innerHTML = `<b>$${sumaTotal.toFixed(2)}</b>`;
+			}
+
+			function EliminarItemPO(index) {
+				itemsPOActual.splice(index, 1);
+				RenderizarItemsPO();
+			}
+
+			function GuardarOrdenCompra() {
+				let idProv = document.getElementById("po_proveedor").value;
+				let idLP = document.getElementById("po_listaPrecios").value;
+				let consec = document.getElementById("po_consecutivo").value;
+				let fecha = document.getElementById("po_fecha").value;
+				let flete = document.getElementById("po_incluyeFlete").checked ? "SI" : "NO";
+				let obs = document.getElementById("po_observaciones").value;
+
+				if (!idProv || !idLP || !consec || !fecha || itemsPOActual.length === 0) {
+					showToast("Complete todos los campos obligatorios y agregue al menos un producto.", "error");
+					return;
+				}
+
+				let sumaTotal = itemsPOActual.reduce((acc, item) => acc + item.valorTotal, 0);
+				let indOrden = ventanaOrden.ind;
+				let vectorOrden = [indOrden, idProv, idLP, consec, fecha, flete, obs, sumaTotal];
+
+				showLoader(true, indOrden !== -1 ? "Actualizando Orden de Compra..." : "Guardando Orden de Compra...");
+				let datos = {
+					accion: GUARDAR_ORDEN_COMPLETA,
+					pos: indOrden,
+					orden: vectorOrden,
+					detalles: itemsPOActual
+				};
+
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						try {
+							let info = JSON.parse(text);
+							if (info.status === "OK") {
+								ordenesCompra = Array.isArray(info.ordenesCompra) ? info.ordenesCompra : [];
+								detalleOrdenes = Array.isArray(info.detalleOrdenes) ? info.detalleOrdenes : [];
+								document.getElementById("modalOrden").style.display = "none";
+								showToast("Orden de compra guardada con éxito", "success");
+								ListarOrdenes();
+								ImprimirOrden(info.indOrden);
+							} else {
+								showToast("Error al guardar la orden: " + (info.message || info.status), "error");
+							}
+						} catch (e) {
+							showToast("Respuesta del servidor no válida al guardar la orden.", "error");
+						}
+					})
+					.catch(err => {
+						showLoader(false);
+						showToast("Error de conexión al servidor: " + err, "error");
+					});
+			}
+
+			function ImprimirOrden(indOrden) {
+				let o = Array.isArray(ordenesCompra) ? ordenesCompra.find(item => Number(getVal(item, 'ind')) === Number(indOrden)) : null;
+				if (!o) return;
+
+				let p = Array.isArray(proveedores) ? proveedores.find(item => Number(getVal(item, 'ind')) === Number(getVal(o, 'indProveedor'))) : null;
+				let lp = Array.isArray(listasPrecios) ? listasPrecios.find(item => Number(getVal(item, 'ind')) === Number(getVal(o, 'indListaPrecios'))) : null;
+
+				document.getElementById("print_po_number").innerText = getVal(o, 'consecutivoOrden');
+				document.getElementById("print_po_date").innerText = getVal(o, 'fechaOrden');
+
+				let vInfo = p ? `<b>${getVal(p, 'nombre')}</b><br>
+					Attn: ${getVal(p, 'personaContacto', 'contacto')}<br>
+					Email: ${getVal(p, 'correo', 'email')}<br>
+					Phone/WhatsApp: ${getVal(p, 'whatsApp', 'whatsapp')}<br>
+					Address: ${getVal(p, 'direccion')}` : "N/A";
+				document.getElementById("print_po_vendor_info").innerHTML = vInfo;
+
+				let bInfo = p ? `Bank: ${getVal(p, 'banco')}<br>
+					Account #: ${getVal(p, 'cuentaPago')}<br>
+					SWIFT/BIC: ${getVal(p, 'swift')}<br>
+					Bank Address: ${getVal(p, 'direccionBanco')}` : "N/A";
+				document.getElementById("print_po_bank_info").innerHTML = bInfo;
+
+				document.getElementById("print_po_pricelist_ref").innerText = lp ? (getVal(lp, 'nombreLista') || getVal(lp, 'consecutivoLista')) : "N/A";
+				document.getElementById("print_po_freight_status").innerText = getVal(o, 'incluyeFlete') === "SI" ? "INCLUDES FREIGHT" : "EXCLUDES FREIGHT (EXW / FOB)";
+
+				let tabla = document.getElementById("print_po_items_body");
+				tabla.innerHTML = "";
+				let posCount = 1;
+				let sumaTotal = 0;
+
+				if (Array.isArray(detalleOrdenes)) {
+					for (let i = 0; i < detalleOrdenes.length; i++) {
+						let d = detalleOrdenes[i];
+						if (!d) continue;
+						if (Number(getVal(d, 'ind', 'Ind')) === 0) continue;
+						if (Number(getVal(d, 'indOrdenCompra', 'indordencompra', 'IndOrdenCompra', 'indOrden')) === Number(indOrden)) {
+							let cant = Number(getVal(d, 'cantidad'));
+							let pu = Number(getVal(d, 'precioUnitario'));
+							let vt = Number(getVal(d, 'valorTotal'));
+							sumaTotal += vt;
+
+							let fila = `<tr>
+								<td style="text-align:center;">${posCount++}</td>
+								<td>${getVal(d, 'referencia')}</td>
+								<td>${getVal(d, 'nombreProducto')}</td>
+								<td style="text-align:center;">${cant}</td>
+								<td style="text-align:right;">$${pu.toFixed(2)}</td>
+								<td style="text-align:right;">$${vt.toFixed(2)}</td>
+							</tr>`;
+							tabla.innerHTML += fila;
+						}
+					}
+				}
+
+				document.getElementById("print_po_total_amount").innerText = `$${sumaTotal.toFixed(2)}`;
+				document.getElementById("print_po_notes").innerText = getVal(o, 'observaciones') || "N/A";
+
+				document.getElementById("modalImpresionPO").style.display = "block";
+			}
+
+			function ListarUsuarios() {
+				let tabla = document.getElementById("bodyUsuarios");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+
+				if (!Array.isArray(usuarios) || usuarios.length <= 1) return;
+
+				for (let i = 1; i < usuarios.length; i++) {
+					let u = usuarios[i];
+					if (!u) continue;
+					let ind = Number(getVal(u, 'ind'));
+					if (ind === 0) continue;
+
+					let fila = document.createElement("tr");
+
+					let c1 = document.createElement("td"); c1.innerHTML = `<b>${getVal(u, 'usuario')}</b>`; fila.appendChild(c1);
+					let c2 = document.createElement("td"); c2.innerHTML = getVal(u, 'nombre'); fila.appendChild(c2);
+					let c3 = document.createElement("td"); c3.innerHTML = `<span class="w3-tag w3-teal w3-round">${getVal(u, 'rol')}</span>`; fila.appendChild(c3);
+					
+					let est = getVal(u, 'estado') || "Activo";
+					let c4 = document.createElement("td"); 
+					c4.innerHTML = `<span class="w3-badge ${est === 'Activo' ? 'w3-green' : 'w3-red'}">${est}</span>`; 
+					fila.appendChild(c4);
+
+					let c5 = document.createElement("td"); c5.className = "w3-center";
+					let btn = document.createElement("button");
+					btn.innerHTML = "Editar";
+					btn.className = "w3-button w3-teal w3-tiny";
+					btn.onclick = () => EditarUsuario(ind);
+					c5.appendChild(btn);
+					fila.appendChild(c5);
+
+					tabla.appendChild(fila);
+				}
+			}
+
+			function EditarUsuario(ind) {
+				ventanaUsuario.ind = ind;
+				if (ind !== -1) {
+					let u = Array.isArray(usuarios) ? usuarios.find(item => Number(getVal(item, 'ind')) === Number(ind)) : null;
+					if (u) {
+						document.getElementById("u_usuario").value = getVal(u, 'usuario');
+						document.getElementById("u_clave").value = getVal(u, 'clave');
+						document.getElementById("u_nombre").value = getVal(u, 'nombre');
+						document.getElementById("u_rol").value = getVal(u, 'rol');
+						document.getElementById("u_estado").value = getVal(u, 'estado') || "Activo";
+					}
+					document.getElementById("tituloModalUsuario").innerText = "Editar Usuario";
+				} else {
+					document.getElementById("u_usuario").value = "";
+					document.getElementById("u_clave").value = "";
+					document.getElementById("u_nombre").value = "";
+					document.getElementById("u_rol").value = "Operativo";
+					document.getElementById("u_estado").value = "Activo";
+					document.getElementById("tituloModalUsuario").innerText = "Nuevo Usuario";
+				}
+				document.getElementById("modalGestionUsuario").style.display = "block";
+			}
+
+			function GuardarUsuario() {
+				let uUser = document.getElementById("u_usuario").value;
+				let uPass = document.getElementById("u_clave").value;
+				let uNom = document.getElementById("u_nombre").value;
+
+				if (!uUser || !uPass || !uNom) {
+					showToast("Complete los campos obligatorios del usuario", "error");
+					return;
+				}
+
+				let ind = ventanaUsuario.ind;
+				showLoader(true, ind !== -1 ? "Actualizando usuario..." : "Creando usuario...");
+
+				let vector = [ind, uUser, uPass, uNom, document.getElementById("u_rol").value, document.getElementById("u_estado").value];
+				let datos = { accion: GUARDAR_USUARIO, pos: ind, vector: vector };
+
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						try {
+							let info = JSON.parse(text);
+							if (info.status === "OK") {
+								usuarios = Array.isArray(info.matriz) ? info.matriz : [];
+								document.getElementById("modalGestionUsuario").style.display = "none";
+								showToast("Usuario guardado con éxito", "success");
+								ListarUsuarios();
+							} else {
+								showToast("Error al guardar usuario", "error");
+							}
+						} catch (e) {
+							showToast("Respuesta del servidor no válida", "error");
+						}
+					})
+					.catch(err => {
+						showLoader(false);
+						showToast("Error de conexión al servidor", "error");
+					});
+			}
+
+			function RegistrosCargados(valor) {
+				showLoader(false);
+				try {
+					let info = JSON.parse(valor);
+					if (info.status === "OK") {
+						contactos = Array.isArray(info.contactos) ? info.contactos : [];
+						empresas = Array.isArray(info.empresas) ? info.empresas : [];
+						seguimiento = Array.isArray(info.seguimiento) ? info.seguimiento : [];
+						tareas = Array.isArray(info.tareas) ? info.tareas : [];
+						datosContacto = Array.isArray(info.datosContacto) ? info.datosContacto : [];
+						proveedores = Array.isArray(info.proveedores) ? info.proveedores : [];
+						listasPrecios = Array.isArray(info.listasPrecios) ? info.listasPrecios : [];
+						productosLista = Array.isArray(info.productosLista) ? info.productosLista : [];
+						ordenesCompra = Array.isArray(info.ordenesCompra) ? info.ordenesCompra : [];
+						detalleOrdenes = Array.isArray(info.detalleOrdenes) ? info.detalleOrdenes : [];
+						usuarios = Array.isArray(info.usuarios) ? info.usuarios : [];
+
+						// Tablas de Cotizaciones y Catálogo
+						proformas = Array.isArray(info.proformas) ? info.proformas : [];
+						detalleProformas = Array.isArray(info.detalleProformas) ? info.detalleProformas : [];
+						productosVentas = Array.isArray(info.productosVentas) ? info.productosVentas : [];
+						listasPreciosVentas = Array.isArray(info.listasPreciosVentas) ? info.listasPreciosVentas : [];
+						preciosProductosVentas = Array.isArray(info.preciosProductosVentas) ? info.preciosProductosVentas : [];
+
+						ListarEmpresas();
+						ListarContactos();
+						ListarProveedores();
+						ListarOrdenes();
+						ListarUsuarios();
+						ListarProformas();
+						ListarProductosVentas();
+						ListarListasPreciosVentas();
+						ListarTiposDato();
+						renderizarInterfaz();
+						AbrirSeccion("inicio", "binicio");
+					}
+				} catch (e) {
+					showToast("Error al cargar registros desde Google: " + e.message, "error");
+				}
+			}
+
+			function CargarTodo() {
+				showLoader(true, "Conectando con Google...");
+				fetch(appFollowApp, {
+					method: 'POST',
+					body: JSON.stringify({ accion: CARGAR_INFO })
+				})
+				.then(res => res.text())
+				.then(text => RegistrosCargados(text))
+				.catch(err => {
+					showLoader(false);
+					showToast("Error de conexión al servidor: " + err, "error");
+				});
+			}
+
+			function GuardarEmpresa(ind) {
+				showLoader(true, ind !== -1 ? "Actualizando Empresa..." : "Registrando Empresa...");
+				let vector = [
+					ind,
+					document.getElementById("e_nombre").value,
+					document.getElementById("e_descripcion").value,
+					document.getElementById("e_ciudad").value,
+					document.getElementById("e_departamento").value,
+					document.getElementById("e_pais").value,
+					document.getElementById("e_direccion").value,
+					document.getElementById("e_tipoID").value,
+					document.getElementById("e_identificacion").value
+				];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Empresas", pos: ind, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => RespuestaGuardarEmpresa(text));
+			}
+
+			function RespuestaGuardarEmpresa(valor) {
+				showLoader(false);
+				try {
+					let info = JSON.parse(valor);
+					if (info.status === "OK") {
+						empresas = Array.isArray(info.matriz) ? info.matriz : [];
+						ListarEmpresas();
+						showToast("Empresa guardada correctamente", "success");
+						EditarEmpresa(Number(info.ind));
+					}
+				} catch (e) {
+					showToast("Error al guardar empresa: " + e.message, "error");
+				}
+			}
+
+			function GuardarContacto(ind) {
+				showLoader(true, ind !== -1 ? "Actualizando Contacto..." : "Registrando Contacto...");
+				let esEmpresa = document.getElementById("c_esEmpresa").checked;
+				let indEmpresa = esEmpresa ? -1 : document.getElementById("c_empresa").value;
+				let vector = [
+					ind,
+					document.getElementById("c_nombre").value,
+					document.getElementById("c_apellido").value,
+					document.getElementById("c_cargo").value,
+					indEmpresa
+				];
+				let datos = { accion: ESCRIBE_CONTACTO, contacto: vector, pos: ind };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => RespuestaGuardarContacto(text));
+			}
+
+			function RespuestaGuardarContacto(valor) {
+				showLoader(false);
+				try {
+					let info = JSON.parse(valor);
+					if (info.status === "OK") {
+						empresas = Array.isArray(info.empresas) ? info.empresas : [];
+						contactos = Array.isArray(info.contactos) ? info.contactos : [];
+						ListarEmpresas();
+						ListarContactos();
+						showToast("Contacto guardado correctamente", "success");
+						EditarContacto(Number(info.ind));
+					}
+				} catch (e) {
+					showToast("Error al guardar contacto: " + e.message, "error");
+				}
+			}
+
+			function GuardarProveedor(ind) {
+				showLoader(true, ind !== -1 ? "Actualizando Proveedor..." : "Registrando Proveedor...");
+				let vector = [
+					ind,
+					document.getElementById("p_nombre").value,
+					document.getElementById("p_direccion").value,
+					document.getElementById("p_personaContacto").value,
+					document.getElementById("p_correo").value,
+					document.getElementById("p_whatsApp").value,
+					document.getElementById("p_cuentaPago").value,
+					document.getElementById("p_banco").value,
+					document.getElementById("p_swift").value,
+					document.getElementById("p_direccionBanco").value
+				];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Proveedores", pos: ind, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => RespuestaGuardarProveedor(text));
+			}
+
+			function RespuestaGuardarProveedor(valor) {
+				showLoader(false);
+				try {
+					let info = JSON.parse(valor);
+					if (info.status === "OK") {
+						proveedores = Array.isArray(info.matriz) ? info.matriz : [];
+						ListarProveedores();
+						showToast("Proveedor guardado correctamente", "success");
+						EditarProveedor(Number(info.ind));
+					}
+				} catch (e) {
+					showToast("Error al guardar proveedor: " + e.message, "error");
+				}
+			}
+
+			function AgregarDatoContacto() {
+				showLoader(true, "Agregando Dato...");
+				let vector = [-1, ventanaContacto.ind, document.getElementById("nuevoTipoDato").value, document.getElementById("nuevoDato").value];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "DatosContacto", pos: -1, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							datosContacto = Array.isArray(info.matriz) ? info.matriz : [];
+							LimpiaDatosContacto();
+							ListarDatosContacto(ventanaContacto.ind);
+						}
+					});
+			}
+
+			function GuardarDatoContacto(ind) {
+				showLoader(true, "Actualizando Dato...");
+				let vector = [ind, ventanaContacto.ind, document.getElementById("editaTipoDato").value, document.getElementById("editaDato").value];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "DatosContacto", pos: ind, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							datosContacto = Array.isArray(info.matriz) ? info.matriz : [];
+							ListarDatosContacto(ventanaContacto.ind);
+						}
+					});
+			}
+
+			function GuardarSeguimiento(i) {
+				showLoader(true, i === -1 ? "Guardando Registro..." : "Actualizando Registro...");
+				let pos = i === -1 ? -1 : getVal(seguimiento[i], 'ind');
+				let fecha = i === -1 ? document.getElementById("fechaRegistroSeguimiento").value : getVal(seguimiento[i], 'fecha');
+				let reg = i === -1 ? document.getElementById("registroSeguimiento").value : document.getElementById("actualizacionSeguimiento").value;
+
+				let vector = [pos, ventanaContacto.ind, fecha, reg];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Seguimiento", pos: pos, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							seguimiento = Array.isArray(info.matriz) ? info.matriz : [];
+							LimpiaSeguimiento();
+							ListarSeguimiento(ventanaContacto.ind);
+						}
+					});
+			}
+
+			function GuardarTarea(i) {
+				showLoader(true, i === -1 ? "Guardando Tarea..." : "Actualizando Tarea...");
+				let pos = i === -1 ? -1 : getVal(tareas[i], 'ind');
+				let f = i === -1 ? document.getElementById("fechaTarea").value : document.getElementById("e_fechaTarea").value;
+				let d = i === -1 ? document.getElementById("descripcionTarea").value : document.getElementById("e_descripcionTarea").value;
+				let e = i === -1 ? document.getElementById("estadoTarea").value : document.getElementById("e_estadoTarea").value;
+				let p = i === -1 ? document.getElementById("prioridadTarea").value : document.getElementById("e_prioridadTarea").value;
+
+				let vector = [pos, ventanaContacto.ind, f, d, e, p];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Tareas", pos: pos, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							tareas = Array.isArray(info.matriz) ? info.matriz : [];
+							LimpiaTareas();
+							ListarTareas(ventanaContacto.ind);
+							renderizarInterfaz();
+						}
+					});
+			}
+
+			function ActualizarTarea() {
+				showLoader(true, "Actualizando Tarea...");
+				let ind = ventanaInicio.ind;
+				let t = Array.isArray(tareas) ? tareas.find(item => Number(getVal(item, 'ind')) === Number(ind)) : null;
+				let indC = t ? getVal(t, 'indContacto') : -1;
+
+				let vector = [
+					ind,
+					indC,
+					document.getElementById("i_fechaTarea").value,
+					document.getElementById("i_descripcion").value,
+					document.getElementById("i_estadoTarea").value,
+					document.getElementById("i_prioridadTarea").value
+				];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Tareas", pos: ind, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							tareas = Array.isArray(info.matriz) ? info.matriz : [];
+							renderizarInterfaz();
+							document.getElementById("modalInicio").style.display = "none";
+						}
+					});
+			}
+
+			function AlInicio() {
+				let saved = sessionStorage.getItem("followapp_session");
+				if (saved) {
+					try {
+						usuarioSesion = JSON.parse(saved);
+					} catch(e) { usuarioSesion = null; }
+				}
+
+				if (usuarioSesion) {
+					AplicarSesion();
+					CargarTodo();
+				} else {
+					document.getElementById("modalLogin").style.display = "flex";
+					document.getElementById("badgeUsuario").style.display = "none";
+				}
+			}
+
+			window.onload = AlInicio;
+		</script>
+	</body>
+</html>
