@@ -2325,15 +2325,23 @@
 				LimpiaTareas();
 				ListarTareas(ind);
 
-				document.getElementById("c_esEmpresa").checked = false;
-
 				if (ind !== -1) {
-					let c = Array.isArray(contactos) ? contactos.find(item => Number(getVal(item, 'ind')) === Number(ind)) : null;
+					let c = Array.isArray(contactos) ? contactos.find(item => Number(getVal(item, 'ind', 'Ind')) === Number(ind)) : null;
 					if (c) {
-						document.getElementById("c_nombre").value = getVal(c, 'nombre');
-						document.getElementById("c_apellido").value = getVal(c, 'apellido');
-						document.getElementById("c_cargo").value = getVal(c, 'cargo');
-						document.getElementById("c_empresa").value = getVal(c, 'indEmpresa');
+						document.getElementById("c_nombre").value = getVal(c, 'nombre', 'Nombre');
+						document.getElementById("c_apellido").value = getVal(c, 'apellido', 'Apellido');
+						document.getElementById("c_cargo").value = getVal(c, 'cargo', 'Cargo');
+						
+						let indEmp = Number(getVal(c, 'indEmpresa', 'IndEmpresa', 'idempresa'));
+						if (indEmp === -1 || !indEmp) {
+							document.getElementById("c_esEmpresa").checked = (indEmp === -1);
+							document.getElementById("c_empresa").disabled = (indEmp === -1);
+							document.getElementById("c_empresa").value = "-1";
+						} else {
+							document.getElementById("c_esEmpresa").checked = false;
+							document.getElementById("c_empresa").disabled = false;
+							document.getElementById("c_empresa").value = indEmp;
+						}
 					}
 					for (let i = 0; i < controles.length; i++) controles[i].disabled = true;
 					for (let i = 0; i < controlesPanel.length; i++) controlesPanel[i].disabled = false;
@@ -2349,7 +2357,19 @@
 						controles[i].disabled = false;
 					}
 					for (let i = 0; i < controlesPanel.length; i++) controlesPanel[i].disabled = true;
-					document.getElementById("c_empresa").value = -1;
+
+					// Si el modal de Empresa está visible y hay una empresa activa, la seleccionamos automáticamente
+					let modalEmpresaAbierto = (document.getElementById("modalEmpresa") && document.getElementById("modalEmpresa").style.display === "block");
+					if (modalEmpresaAbierto && ventanaEmpresa.ind && Number(ventanaEmpresa.ind) > 0) {
+						document.getElementById("c_esEmpresa").checked = false;
+						document.getElementById("c_empresa").disabled = false;
+						document.getElementById("c_empresa").value = ventanaEmpresa.ind;
+					} else {
+						document.getElementById("c_esEmpresa").checked = false;
+						document.getElementById("c_empresa").disabled = false;
+						document.getElementById("c_empresa").value = "-1";
+					}
+
 					if (boton) {
 						boton.style.display = "block";
 						boton.innerHTML = "Guardar";
@@ -2373,10 +2393,9 @@
 				let selector = document.getElementById("c_empresa");
 				if (document.getElementById("c_esEmpresa").checked) {
 					selector.disabled = true;
-					selector.value = "";
+					selector.value = "-1";
 				} else {
 					selector.disabled = false;
-					selector.value = -1;
 				}
 			}
 
@@ -2385,8 +2404,8 @@
 				selector.innerHTML = "<option value='-1'>Seleccione la empresa</option>";
 				if (!Array.isArray(empresas)) return;
 				for (let i = 1; i < empresas.length; i++) {
-					let ind = Number(getVal(empresas[i], 'ind'));
-					let nom = getVal(empresas[i], 'nombre');
+					let ind = Number(getVal(empresas[i], 'ind', 'Ind'));
+					let nom = getVal(empresas[i], 'nombre', 'Nombre');
 					selector.innerHTML += `<option value="${ind}">${nom}</option>`;
 				}
 			}
@@ -2439,12 +2458,12 @@
 						let fila = `<tr>
 							<td id="tipoDato${indD}">${getVal(d, 'tipoDato')}</td>
 							<td id="dato${indD}">${getVal(d, 'dato')}</td>
-							<td id="bDatosContacto${indD}" class="w3-center">
-								<button class="w3-button w3-teal w3-tiny datoContacto" onclick="EditarDatoContacto(${indD})">Editar</button>
-							</td>
-						</tr>`;
-						tabla.innerHTML += fila;
-					}
+			function VerContacto(ind) {
+				EditarContacto(ind);
+				if (ind === -1 && ventanaEmpresa.ind && Number(ventanaEmpresa.ind) > 0) {
+					document.getElementById("c_esEmpresa").checked = false;
+					document.getElementById("c_empresa").disabled = false;
+					document.getElementById("c_empresa").value = ventanaEmpresa.ind;
 				}
 			}
 
@@ -2482,23 +2501,23 @@
 				let panel = document.getElementById("listaRegistrosSeguimiento");
 				if (!panel || !Array.isArray(seguimiento)) return;
 				panel.innerHTML = "";
-				for (let i = seguimiento.length - 1; i >= 1; i--) {
-					let s = seguimiento[i];
-					if (Number(getVal(s, 'indContacto')) === Number(indContacto)) {
-						let indS = Number(getVal(s, 'ind'));
-						let fechaStr = String(getVal(s, 'fecha')).slice(0, 10);
-						let item = `<div class="panel-item-card" id="celdaSeguimiento${indS}">
-							<div class="w3-row">
-								<div class="w3-col s9" style="word-break: break-word;">
-									<span class="w3-tag w3-teal w3-round w3-tiny">${fechaStr}</span>
-									<p style="margin: 6px 0 0 0; white-space: pre-wrap;">${getVal(s, 'registro')}</p>
-								</div>
-								<div class="w3-col s3 w3-right-align">
-									<button class="w3-button w3-teal w3-tiny w3-round" onclick="EditarSeguimiento(${i})">Editar</button>
-								</div>
-							</div>
-						</div>`;
-						panel.innerHTML += item;
+			function ListarDatosContacto(indContacto) {
+				let tabla = document.getElementById("c_listaDC");
+				if (!tabla || !Array.isArray(datosContacto)) return;
+				tabla.innerHTML = "";
+				if (Number(indContacto) <= 0) return;
+				for (let i = 1; i < datosContacto.length; i++) {
+					let d = datosContacto[i];
+					if (Number(getVal(d, 'indContacto', 'IndContacto')) === Number(indContacto)) {
+						let indD = Number(getVal(d, 'ind', 'Ind'));
+						let fila = `<tr>
+							<td id="tipoDato${indD}">${getVal(d, 'tipoDato', 'TipoDato')}</td>
+							<td id="dato${indD}">${getVal(d, 'dato', 'Dato')}</td>
+							<td id="bDatosContacto${indD}" class="w3-center">
+								<button class="w3-button w3-teal w3-tiny datoContacto" onclick="EditarDatoContacto(${indD})">Editar</button>
+							</td>
+						</tr>`;
+						tabla.innerHTML += fila;
 					}
 				}
 			}
@@ -2538,24 +2557,24 @@
 				panel.innerHTML = "";
 				const badgeColors = ["w3-blue", "w3-green", "w3-orange", "w3-red"];
 				for (let i = tareas.length - 1; i >= 1; i--) {
-					let t = tareas[i];
-					if (Number(getVal(t, 'indContacto')) === Number(indContacto)) {
-						let indT = Number(getVal(t, 'ind'));
-						let fechaStr = String(getVal(t, 'fechaEjecucion')).slice(0, 10);
-						let prioNum = Number(getVal(t, 'prioridad')) || 0;
-						let prioStr = prioridades[prioNum] || "Baja";
-						let color = badgeColors[prioNum] || "w3-grey";
-
-						let item = `<div class="panel-item-card" id="filaTarea${indT}">
+			function ListarSeguimiento(indContacto) {
+				let panel = document.getElementById("listaRegistrosSeguimiento");
+				if (!panel || !Array.isArray(seguimiento)) return;
+				panel.innerHTML = "";
+				if (Number(indContacto) <= 0) return;
+				for (let i = seguimiento.length - 1; i >= 1; i--) {
+					let s = seguimiento[i];
+					if (Number(getVal(s, 'indContacto', 'IndContacto')) === Number(indContacto)) {
+						let indS = Number(getVal(s, 'ind', 'Ind'));
+						let fechaStr = String(getVal(s, 'fecha', 'Fecha')).slice(0, 10);
+						let item = `<div class="panel-item-card" id="celdaSeguimiento${indS}">
 							<div class="w3-row">
 								<div class="w3-col s9" style="word-break: break-word;">
-									<span class="w3-badge ${color} w3-tiny">${prioStr}</span>
-									<span class="w3-text-grey w3-tiny w3-margin-left"><i class="fa fa-calendar"></i> ${fechaStr}</span>
-									<p style="margin: 4px 0; font-weight: bold; white-space: pre-wrap;">${getVal(t, 'descripcion')}</p>
-									<small class="w3-text-teal">Estado: ${getVal(t, 'estado')}</small>
+									<span class="w3-tag w3-teal w3-round w3-tiny">${fechaStr}</span>
+									<p style="margin: 6px 0 0 0; white-space: pre-wrap;">${getVal(s, 'registro', 'Registro')}</p>
 								</div>
 								<div class="w3-col s3 w3-right-align">
-									<button class="w3-button w3-teal w3-tiny w3-round" onclick="EditarTarea(${i})">Editar</button>
+									<button class="w3-button w3-teal w3-tiny w3-round" onclick="EditarSeguimiento(${i})">Editar</button>
 								</div>
 							</div>
 						</div>`;
@@ -2734,35 +2753,35 @@
 								}
 							}
 						}
-					}
-				} else {
-					if (esConsulta) return;
-					document.getElementById("pf_consecutivo").value = "PROF-" + new Date().getFullYear() + "-" + (proformas.length);
-					document.getElementById("pf_fecha").value = FechaEnInput(new Date());
-					document.getElementById("pf_moneda").value = "USD";
-					document.getElementById("pf_copUsd").value = 4000;
-					document.getElementById("pf_vigencia").value = 30;
-					document.getElementById("pf_estado").value = "Emitida";
-					document.getElementById("pf_razonDescuento").value = "";
-					document.getElementById("pf_montoDescuento").value = 0;
-					document.getElementById("pf_porcentajeIva").value = 19;
-					document.getElementById("pf_porcentajeRetefuente").value = 0;
-					document.getElementById("pf_observaciones").value = "";
-				}
+			function ListarTareas(indContacto) {
+				let panel = document.getElementById("listaTareas");
+				if (!panel || !Array.isArray(tareas)) return;
+				panel.innerHTML = "";
+				if (Number(indContacto) <= 0) return;
+				const badgeColors = ["w3-blue", "w3-green", "w3-orange", "w3-red"];
+				for (let i = tareas.length - 1; i >= 1; i--) {
+					let t = tareas[i];
+					if (Number(getVal(t, 'indContacto', 'IndContacto')) === Number(indContacto)) {
+						let indT = Number(getVal(t, 'ind', 'Ind'));
+						let fechaStr = String(getVal(t, 'fechaEjecucion', 'FechaEjecucion')).slice(0, 10);
+						let prioNum = Number(getVal(t, 'prioridad', 'Prioridad')) || 0;
+						let prioStr = prioridades[prioNum] || "Baja";
+						let color = badgeColors[prioNum] || "w3-grey";
 
-				AlCambiarMonedaOListaProforma();
-				RenderizarItemsProforma();
-				document.getElementById("modalProforma").style.display = "block";
-			}
-
-			function CargarEmpresasProforma() {
-				let sel = document.getElementById("pf_empresa");
-				if (!sel) return;
-				sel.innerHTML = "<option value='-1'>-- Seleccionar Cliente / Empresa --</option>";
-				if (Array.isArray(empresas)) {
-					for (let i = 1; i < empresas.length; i++) {
-						let indE = Number(getVal(empresas[i], 'ind'));
-						sel.innerHTML += `<option value="${indE}">${getVal(empresas[i], 'nombre')}</option>`;
+						let item = `<div class="panel-item-card" id="filaTarea${indT}">
+							<div class="w3-row">
+								<div class="w3-col s9" style="word-break: break-word;">
+									<span class="w3-badge ${color} w3-tiny">${prioStr}</span>
+									<span class="w3-text-grey w3-tiny w3-margin-left"><i class="fa fa-calendar"></i> ${fechaStr}</span>
+									<p style="margin: 4px 0; font-weight: bold; white-space: pre-wrap;">${getVal(t, 'descripcion', 'Descripcion')}</p>
+									<small class="w3-text-teal">Estado: ${getVal(t, 'estado', 'Estado')}</small>
+								</div>
+								<div class="w3-col s3 w3-right-align">
+									<button class="w3-button w3-teal w3-tiny w3-round" onclick="EditarTarea(${i})">Editar</button>
+								</div>
+							</div>
+						</div>`;
+						panel.innerHTML += item;
 					}
 				}
 			}
@@ -4066,10 +4085,13 @@
 				try {
 					let info = JSON.parse(valor);
 					if (info.status === "OK") {
-						empresas = Array.isArray(info.empresas) ? info.empresas : [];
-						contactos = Array.isArray(info.contactos) ? info.contactos : [];
+						empresas = Array.isArray(info.empresas) ? info.empresas : empresas;
+						contactos = Array.isArray(info.contactos) ? info.contactos : contactos;
 						ListarEmpresas();
 						ListarContactos();
+						if (ventanaEmpresa.ind && Number(ventanaEmpresa.ind) > 0) {
+							ListarContactosEmpresa(ventanaEmpresa.ind);
+						}
 						showToast("Contacto guardado correctamente", "success");
 						EditarContacto(Number(info.ind));
 					}
