@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>FollowApp - Sistema de Gestión y Cotizaciones</title>
+		<title>FollowApp - Sistema de Gestión y Cotizaciones - Ver 1.0/title>
 		
 		<!-- External Stylesheets (W3.CSS, Theme Teal, FontAwesome) -->
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -127,12 +127,14 @@
 			@media print {
 				@page {
 					size: letter;
-					margin: 10mm;
+					margin: 12mm;
 				}
 				body {
 					background: #fff !important;
 					margin: 0 !important;
 					padding: 0 !important;
+					-webkit-print-color-adjust: exact !important;
+					print-color-adjust: exact !important;
 				}
 				body * { visibility: hidden; }
 				#modalImpresionPO, #modalImpresionPO *,
@@ -159,6 +161,22 @@
 					border-radius: 0 !important;
 				}
 				.w3-hide-print { display: none !important; }
+
+				/* Repetir encabezado de tabla en cada página y evitar cortes en filas */
+				thead {
+					display: table-header-group;
+				}
+				tfoot {
+					display: table-footer-group;
+				}
+				tr {
+					page-break-inside: avoid !important;
+					break-inside: avoid !important;
+				}
+				.print-prevent-break {
+					page-break-inside: avoid !important;
+					break-inside: avoid !important;
+				}
 			}
 		</style>
 	</head>
@@ -1187,7 +1205,7 @@
 						</header>
 
 						<div class="w3-padding-24 w3-white" id="areaImpresionProforma" style="padding: 30px; font-family: Arial, sans-serif; color: #333;">
-							<table style="width: 100%; border-bottom: 3px solid #008080; padding-bottom: 12px;">
+							<table style="width: 100%; border-bottom: 3px solid #008080; padding-bottom: 12px;" class="print-prevent-break">
 								<tr>
 									<td>
 										<h2 style="color: #008080; margin: 0; font-weight: bold;">TECNOPTIX S.A.S.</h2>
@@ -1195,13 +1213,13 @@
 									</td>
 									<td style="text-align: right;">
 										<h3 style="margin: 0; color: #444; font-weight: bold;">COTIZACIÓN / PROFORMA</h3>
-										<b>Proforma #: </b><span id="print_pf_number">PROF-2026-001</span><br>
+										<b>Proforma #: </b><span id="print_pf_number">2026-001</span><br>
 										<b>Fecha: </b><span id="print_pf_date">2026-09-30</span>
 									</td>
 								</tr>
 							</table>
 
-							<table style="width: 100%; margin-top: 20px; font-size: 13px;">
+							<table style="width: 100%; margin-top: 20px; font-size: 13px;" class="print-prevent-break">
 								<tr>
 									<td style="width: 50%; vertical-align: top; padding-right: 10px;">
 										<h4 style="color: #008080; margin-bottom: 6px; border-bottom: 1px solid #ddd;">CLIENTE / EMPRESA:</h4>
@@ -1243,12 +1261,12 @@
 								</tfoot>
 							</table>
 
-							<div style="margin-top: 20px; font-size: 12px; color: #555;">
+							<div style="margin-top: 20px; font-size: 12px; color: #555;" class="print-prevent-break">
 								<b>Observaciones & Instrucciones de Pago:</b>
 								<p id="print_pf_notes" style="margin: 4px 0 0 0; white-space: pre-wrap;"></p>
 							</div>
 
-							<div style="margin-top: 40px; font-size: 13px;">
+							<div style="margin-top: 40px; font-size: 13px;" class="print-prevent-break">
 								<table style="width:100%;">
 									<tr>
 										<td style="width: 50%;">
@@ -2474,6 +2492,17 @@
 				}
 
 				RenderizarItemsProforma();
+
+				// Reiniciar campos para agregar el siguiente ítem
+				document.getElementById("pf_tipoItem").value = "CATALOGO";
+				CambiarTipoItemProforma();
+				let selProd = document.getElementById("pf_selectorProducto");
+				if (selProd) selProd.selectedIndex = 0;
+				document.getElementById("pf_inlNombre").value = "";
+				document.getElementById("pf_inlDescripcion").value = "";
+				document.getElementById("pf_cantidadItem").value = "1";
+				document.getElementById("pf_precioItem").value = "0.00";
+				RecalcularItemTemporalProforma();
 			}
 
 			function EditarProforma(ind) {
@@ -2487,26 +2516,47 @@
 				if (ind !== -1) {
 					let pf = Array.isArray(proformas) ? proformas.find(item => Number(getVal(item, 'ind', 'Ind')) === Number(ind)) : null;
 					if (pf) {
-						document.getElementById("pf_consecutivo").value = getVal(pf, 'numProforma', '# Proforma');
+						document.getElementById("pf_consecutivo").value = getVal(pf, 'numProforma', 'NumProforma', '# Proforma', 'numproforma', 'consecutivoProforma');
 						document.getElementById("pf_fecha").value = FechaEnInput(getVal(pf, 'fecha', 'Fecha'));
 						document.getElementById("pf_empresa").value = getVal(pf, 'idProspecto', 'idempresa', 'IndEmpresa');
 						
 						CargarContactosProformaEmpresa();
 						document.getElementById("pf_contacto").value = getVal(pf, 'idContacto', 'IndPersona') || -1;
 
-						document.getElementById("pf_moneda").value = getVal(pf, 'moneda', 'Moneda') || "USD";
-						document.getElementById("pf_copUsd").value = getVal(pf, 'copUsd', 'COP/USD') || 4000;
+						document.getElementById("pf_moneda").value = getVal(pf, 'moneda', 'Moneda', 'Moneda operación') || "USD";
+						document.getElementById("pf_copUsd").value = getVal(pf, 'copUsd', 'COP/USD', 'COPUSD') || 4000;
 						document.getElementById("pf_vigencia").value = getVal(pf, 'vigencia', 'Vigencia') || 30;
 						document.getElementById("pf_estado").value = getVal(pf, 'estado', 'Estado') || "Emitida";
-						document.getElementById("pf_razonDescuento").value = getVal(pf, 'razonDescuento', 'Razón Descuento');
-						document.getElementById("pf_montoDescuento").value = getVal(pf, 'montoDescuento', 'Monto Descuento') || 0;
+						document.getElementById("pf_razonDescuento").value = getVal(pf, 'razonDescuento', 'Razón Descuento', 'RazonDescuento');
+						document.getElementById("pf_montoDescuento").value = getVal(pf, 'montoDescuento', 'Monto Descuento', 'MontoDescuento') || 0;
 						
-						let pctIva = parseFloat(getVal(pf, 'iva', 'IVA')) || 0.19;
-						document.getElementById("pf_porcentajeIva").value = pctIva <= 1 ? (pctIva * 100) : pctIva;
+						// Recuperación consistente del IVA
+						let rawIva = getVal(pf, 'iva', 'IVA', 'Porcentaje IVA');
+						if (rawIva !== "" && rawIva !== null && rawIva !== undefined) {
+							let valIva = parseFloat(rawIva);
+							if (!isNaN(valIva)) {
+								document.getElementById("pf_porcentajeIva").value = (valIva <= 1 && valIva > 0) ? Math.round(valIva * 100) : valIva;
+							} else {
+								document.getElementById("pf_porcentajeIva").value = 19;
+							}
+						} else {
+							document.getElementById("pf_porcentajeIva").value = 19;
+						}
 
-						let pctRet = parseFloat(getVal(pf, 'retefuente', 'Retefuente')) || 0;
-						document.getElementById("pf_porcentajeRetefuente").value = pctRet <= 1 ? (pctRet * 100) : pctRet;
+						// Recuperación consistente del porcentaje de Retefuente
+						let rawRet = getVal(pf, 'retefuente', 'Retefuente', 'Porcentaje Retefuente');
+						if (rawRet !== "" && rawRet !== null && rawRet !== undefined) {
+							let valRet = parseFloat(rawRet);
+							if (!isNaN(valRet)) {
+								document.getElementById("pf_porcentajeRetefuente").value = (valRet <= 1 && valRet > 0) ? (valRet * 100) : valRet;
+							} else {
+								document.getElementById("pf_porcentajeRetefuente").value = 0;
+							}
+						} else {
+							document.getElementById("pf_porcentajeRetefuente").value = 0;
+						}
 
+						// Recuperación consistente de Observaciones
 						document.getElementById("pf_observaciones").value = getVal(pf, 'observaciones', 'Observaciones');
 
 						if (Array.isArray(detalleProformas)) {
@@ -2530,7 +2580,21 @@
 					}
 				} else {
 					if (esConsulta) return;
-					document.getElementById("pf_consecutivo").value = "PROF-" + new Date().getFullYear() + "-" + (proformas.length);
+
+					// Formato del consecutivo: AAAA-00# (Ej: 2026-001)
+					let anioActual = new Date().getFullYear();
+					let countAnio = 1;
+					if (Array.isArray(proformas) && proformas.length > 1) {
+						for (let i = 1; i < proformas.length; i++) {
+							let numP = getVal(proformas[i], 'numProforma', 'NumProforma', '# Proforma');
+							if (numP && String(numP).startsWith(String(anioActual))) {
+								countAnio++;
+							}
+						}
+					}
+					let padNum = String(countAnio).padStart(3, '0');
+					document.getElementById("pf_consecutivo").value = `${anioActual}-${padNum}`;
+
 					document.getElementById("pf_fecha").value = FechaEnInput(new Date());
 					document.getElementById("pf_moneda").value = "USD";
 					document.getElementById("pf_copUsd").value = 4000;
@@ -2685,9 +2749,9 @@
 
 				let idEmp = Number(getVal(pf, 'idProspecto', 'idempresa', 'IndEmpresa'));
 				let empObj = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === idEmp) : null;
-				let mon = getVal(pf, 'moneda', 'Moneda') || 'USD';
+				let mon = getVal(pf, 'moneda', 'Moneda', 'Moneda operación') || 'USD';
 
-				document.getElementById("print_pf_number").innerText = getVal(pf, 'numProforma', '# Proforma');
+				document.getElementById("print_pf_number").innerText = getVal(pf, 'numProforma', 'NumProforma', '# Proforma');
 				document.getElementById("print_pf_date").innerText = String(getVal(pf, 'fecha', 'Fecha')).slice(0, 10);
 
 				let clientInfo = empObj ? `<b>${getVal(empObj, 'nombre')}</b><br>
@@ -2730,7 +2794,7 @@
 					}
 				}
 
-				let mIva = Number(getVal(pf, 'totalIVA', 'IVA')) || 0;
+				let mIva = Number(getVal(pf, 'totalIVA', 'TotalIVA', 'IVA')) || 0;
 				let mTotal = Number(getVal(pf, 'total', 'Total')) || subtotalAcc;
 
 				document.getElementById("print_pf_subtotal_amount").innerText = `${mon} $${subtotalAcc.toFixed(2)}`;
