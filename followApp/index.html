@@ -169,7 +169,7 @@
 		</div>
 
 		<div id="toastContainer"></div>
-
+		<!-- MODAL DE INICIO DE SESION -->
 		<div id="modalLogin" class="w3-modal" style="display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.7); z-index:9990;">
 			<div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-large" style="max-width:420px; width:90%; overflow:hidden;">
 				<div class="w3-container w3-teal w3-center w3-padding-24">
@@ -177,14 +177,14 @@
 					<h3 style="margin:8px 0 0 0;"><b>FollowApp</b></h3>
 					<small>Control de Acceso de Usuarios</small>
 				</div>
-				<form class="w3-container w3-padding-24 w3-white" onsubmit="event.preventDefault(); IniciarSesion();">
+				<form id="formLogin" class="w3-container w3-padding-24 w3-white" onsubmit="event.preventDefault(); IniciarSesion();">
 					<label class="w3-text-teal"><b>Usuario:</b></label>
 					<input id="login_usuario" class="w3-input w3-border w3-round w3-margin-bottom" type="text" placeholder="Ej: admin" required autofocus>
 					
 					<label class="w3-text-teal"><b>Contraseña:</b></label>
 					<input id="login_clave" class="w3-input w3-border w3-round w3-margin-bottom" type="password" placeholder="••••••••" required>
 					
-					<button type="submit" class="w3-button w3-teal w3-block w3-round-large w3-margin-top w3-medium"><i class="fa fa-sign-in"></i> Ingresar al Sistema</button>
+					<button type="submit" id="btnSubmitLogin" onclick="event.preventDefault(); IniciarSesion();" class="w3-button w3-teal w3-block w3-round-large w3-margin-top w3-medium"><i class="fa fa-sign-in"></i> Ingresar al Sistema</button>
 				</form>
 				<div class="w3-container w3-light-grey w3-padding w3-center w3-tiny w3-text-grey">
 					Tecnoptix S.A.S. • Control de Acceso Seguro
@@ -1685,43 +1685,71 @@
 		</div>
 
 		<script type="text/javascript">
-			const appFollowApp = 'https://script.google.com/macros/s/AKfycbxpiAuw_K8GgqkL7aNJyEO2feUfKT4ArMuARtHLwB_g4md18i1ucEwKt8g6khCKE2mRKw/exec';
-
-			// Priorities
-			const prioridades = ["Baja", "Media", "Alta", "Máxima"];
-
-			// Application Data Memory Cache
-			var contactos = [], empresas = [], datosContacto = [], seguimiento = [], tareas = [];
-			var proveedores = [], listasPrecios = [], productosLista = [], ordenesCompra = [], detalleOrdenes = [], usuarios = [];
-			var proformas = [], detalleProformas = [], productosVentas = [], listasPreciosVentas = [], preciosProductosVentas = [];
-			
-			var itemsPOActual = [];
-			var itemsProformaActual = [];
-			var usuarioSesion = null;
-
-			// Action Constants
-			const CARGAR_INFO = 0;
-			const ESCRIBIR_REGISTRO = 1;
-			const ESCRIBE_CONTACTO = 2;
-			const GUARDAR_ORDEN_COMPLETA = 3;
-			const LOGIN_USUARIO = 4;
-			const GUARDAR_USUARIO = 5;
-
-			// Windows / Modals State Registers
-			var ventanaEmpresa = {};
-			var ventanaContacto = {};
-			var ventanaInicio = {};
-			var ventanaProveedor = {};
-			var ventanaOrden = {};
-			var ventanaUsuario = {};
-			var ventanaProforma = {};
-			var ventanaProductoVenta = {};
-
-			function getVal(obj, ...possibleKeys) {
-				if (!obj || typeof obj !== 'object') return "";
-				for (let key of possibleKeys) {
-					if (obj[key] !== undefined && obj[key] !== null) return String(obj[key]);
+			function IniciarSesion() {
+				let userElem = document.getElementById("login_usuario");
+				let passElem = document.getElementById("login_clave");
+				
+				if (!userElem || !passElem) {
+					console.error("Elementos del formulario de login no encontrados.");
+					return;
 				}
+
+				let userVal = userElem.value.trim();
+				let passVal = passElem.value.trim();
+
+				if (!userVal || !passVal) {
+					showToast("Ingrese usuario y contraseña", "error");
+					return;
+				}
+
+				showLoader(true, "Verificando credenciales con el servidor...");
+				
+				fetch(appFollowApp, {
+					method: 'POST',
+					mode: 'cors',
+					redirect: 'follow',
+					headers: {
+						'Content-Type': 'text/plain;charset=utf-8'
+					},
+					body: JSON.stringify({ accion: LOGIN_USUARIO, usuario: userVal, clave: passVal })
+				})
+				.then(res => {
+					if (!res.ok) {
+						throw new Error("Respuesta de red no OK (HTTP " + res.status + ")");
+					}
+					return res.text();
+				})
+				.then(text => {
+					showLoader(false);
+					try {
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							usuarioSesion = info.usuario;
+							sessionStorage.setItem("followapp_session", JSON.stringify(usuarioSesion));
+							AplicarSesion();
+							CargarTodo();
+							showToast(`Bienvenido ${usuarioSesion.nombre || usuarioSesion.usuario}`, "success");
+						} else {
+							showToast(info.message || "Credenciales incorrectas", "error");
+						}
+					} catch (e) {
+						console.error("Error al analizar JSON de respuesta:", text, e);
+						showToast("Error de formato en la respuesta del servidor", "error");
+					}
+				})
+				.catch(err => {
+					showLoader(false);
+					console.error("Error al conectar con Google Apps Script:", err);
+					showToast("Error de conexión al servidor: " + err.message, "error");
+				});
+			}
+
+			function CerrarSesion() {
+				usuarioSesion = null;
+				sessionStorage.removeItem("followapp_session");
+				AplicarSesion();
+				showToast("Sesión cerrada correctamente", "info");
+			}
 				for (let key of possibleKeys) {
 					let cleanKey = String(key).toLowerCase().replace(/\s+/g, "");
 					for (let k in obj) {
