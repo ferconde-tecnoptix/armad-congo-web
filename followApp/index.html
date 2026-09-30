@@ -123,7 +123,7 @@
 				to { opacity: 1; transform: translateY(0); }
 			}
 
-			/* Reglas de impresión en papel/PDF para Órdenes y Proformas */
+			/* Reglas de impresión en papel/PDF */
 			@media print {
 				@page {
 					size: letter;
@@ -169,7 +169,8 @@
 		</div>
 
 		<div id="toastContainer"></div>
-		<!-- MODAL DE INICIO DE SESION -->
+
+		<!-- MODAL DE INICIO DE SESIÓN -->
 		<div id="modalLogin" class="w3-modal" style="display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.7); z-index:9990;">
 			<div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-large" style="max-width:420px; width:90%; overflow:hidden;">
 				<div class="w3-container w3-teal w3-center w3-padding-24">
@@ -184,7 +185,7 @@
 					<label class="w3-text-teal"><b>Contraseña:</b></label>
 					<input id="login_clave" class="w3-input w3-border w3-round w3-margin-bottom" type="password" placeholder="••••••••" required>
 					
-					<button type="submit" id="btnSubmitLogin" onclick="event.preventDefault(); IniciarSesion();" class="w3-button w3-teal w3-block w3-round-large w3-margin-top w3-medium"><i class="fa fa-sign-in"></i> Ingresar al Sistema</button>
+					<button type="submit" id="btnSubmitLogin" class="w3-button w3-teal w3-block w3-round-large w3-margin-top w3-medium"><i class="fa fa-sign-in"></i> Ingresar al Sistema</button>
 				</form>
 				<div class="w3-container w3-light-grey w3-padding w3-center w3-tiny w3-text-grey">
 					Tecnoptix S.A.S. • Control de Acceso Seguro
@@ -496,7 +497,7 @@
 						<div class="w3-row-padding">
 							<div class="w3-half">
 								<div class="w3-card-4 w3-white w3-padding">
-									<h4 class="w3-text-teal"><b>Catálogo de Productos (`FA_ProductosVentas`)</b></h4>
+									<h4 class="w3-text-teal"><b>Catálogo de Productos (`ProductosVentas`)</b></h4>
 									<div class="w3-responsive" style="max-height: 450px; overflow-y: auto;">
 										<table class="w3-table-all w3-hoverable w3-small">
 											<thead>
@@ -516,7 +517,7 @@
 
 							<div class="w3-half">
 								<div class="w3-card-4 w3-white w3-padding">
-									<h4 class="w3-text-teal"><b>Listas de Precios de Venta (`FA_ListasPreciosVentas`)</b></h4>
+									<h4 class="w3-text-teal"><b>Listas de Precios de Venta (`ListasPreciosVentas`)</b></h4>
 									<div class="w3-responsive" style="max-height: 450px; overflow-y: auto;">
 										<table class="w3-table-all w3-hoverable w3-small">
 											<thead>
@@ -1367,83 +1368,6 @@
 					</div>
 				</div>
 
-				<div id="modalListasPrecios" class="w3-modal">
-					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:1100px; height:620px; display: flex; flex-direction: column; overflow: hidden;">
-						<header class="w3-container w3-teal">
-							<span onclick="document.getElementById('modalListasPrecios').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-							<h3 id="tituloModalListasPrecios"><i class="fa fa-list-alt"></i> Listas de Precios y Productos del Proveedor</h3>
-						</header>
-
-						<div class="w3-container w3-padding w3-small" style="flex: 1; overflow-y: auto;">
-							<div class="w3-row-padding">
-								<div class="w3-col m4 s12">
-									<div class="w3-card w3-white w3-padding w3-margin-bottom">
-										<h5 class="w3-text-teal" style="margin-top:0;"><b>1. Crear Nueva Lista de Precios</b></h5>
-										<label><b>Nombre de la Lista:</b></label>
-										<input type="text" id="lp_nombre" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Ej: Catálogo Equipos 2026-A">
-										
-										<label><b>Fecha de Emisión:</b></label>
-										<input type="date" id="lp_fecha" class="w3-input w3-border w3-round w3-margin-bottom">
-										
-										<button class="w3-button w3-teal w3-block w3-round" onclick="GuardarListaPrecios()"><i class="fa fa-plus"></i> Guardar Lista</button>
-									</div>
-
-									<div class="w3-card w3-white w3-padding">
-										<h5 class="w3-text-teal" style="margin-top:0;"><b>2. Seleccionar Lista Activa</b></h5>
-										<select id="lp_selectorLista" class="w3-select w3-border w3-round" onchange="CargarProductosDeLista()">
-										</select>
-									</div>
-								</div>
-
-								<div class="w3-col m8 s12">
-									<div id="boxAgregarProducto" class="w3-card w3-white w3-padding w3-margin-bottom" style="display:none;">
-										<h5 class="w3-text-teal" style="margin-top:0;"><b>3. Registrar Producto en la Lista Seleccionada</b></h5>
-										<div class="w3-row-padding">
-											<div class="w3-col m4 s12">
-												<label><b>Referencia (SKU):</b></label>
-												<input type="text" id="pr_referencia" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Ej: OPT-1002">
-											</div>
-											<div class="w3-col m5 s12">
-												<label><b>Nombre Producto:</b></label>
-												<input type="text" id="pr_nombre" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Ej: Lente Oftálmico HD">
-											</div>
-											<div class="w3-col m3 s12">
-												<label><b>Precio Proveedor (USD):</b></label>
-												<input type="number" id="pr_precio" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="0.00" step="0.01">
-											</div>
-										</div>
-										<label><b>Descripción / Características:</b></label>
-										<textarea id="pr_descripcion" class="w3-input w3-border w3-round w3-margin-bottom" rows="2" placeholder="Detalles técnicos, materiales, dimensiones, etc."></textarea>
-										
-										<button class="w3-button w3-green w3-right w3-round" onclick="AgregarProductoLista()"><i class="fa fa-plus-circle"></i> Agregar Producto a la Lista</button>
-										<div class="w3-clear"></div>
-									</div>
-
-									<h5 class="w3-text-teal"><b>Productos en esta Lista:</b></h5>
-									<div class="w3-responsive">
-										<table class="w3-table-all w3-hoverable w3-white">
-											<thead>
-												<tr class="w3-teal">
-													<th>Referencia</th>
-													<th>Producto</th>
-													<th>Descripción / Características</th>
-													<th>Precio Unit. (USD)</th>
-												</tr>
-											</thead>
-											<tbody id="bodyProductosLista">
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<footer class="w3-container w3-light-grey w3-padding">
-							<button class="w3-button w3-red w3-round w3-right" onclick="document.getElementById('modalListasPrecios').style.display='none'">Cerrar</button>
-						</footer>
-					</div>
-				</div>
-
 				<div id="modalOrden" class="w3-modal">
 					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:1100px; height:620px; display: flex; flex-direction: column; overflow: hidden;">
 						<header class="w3-container w3-teal">
@@ -1536,98 +1460,6 @@
 					</div>
 				</div>
 
-				<div id="modalImpresionPO" class="w3-modal">
-					<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:900px;">
-						<header class="w3-container w3-teal w3-hide-print">
-							<span onclick="document.getElementById('modalImpresionPO').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-							<h3><i class="fa fa-print"></i> Purchase Order Preview (English)</h3>
-						</header>
-
-						<div class="w3-padding-24 w3-white" id="areaImpresionPO" style="padding: 30px; font-family: Arial, sans-serif; color: #333;">
-							<table style="width: 100%; border-bottom: 3px solid #008080; padding-bottom: 12px;">
-								<tr>
-									<td>
-										<h2 style="color: #008080; margin: 0; font-weight: bold;">TECNOPTIX S.A.S.</h2>
-										<small>International Purchasing Department</small>
-									</td>
-									<td style="text-align: right;">
-										<h3 style="margin: 0; color: #444; font-weight: bold;">PURCHASE ORDER</h3>
-										<b>PO #: </b><span id="print_po_number">PO-2026-001</span><br>
-										<b>Date: </b><span id="print_po_date">2026-07-24</span>
-									</td>
-								</tr>
-							</table>
-
-							<table style="width: 100%; margin-top: 20px; font-size: 13px;">
-								<tr>
-									<td style="width: 50%; vertical-align: top; padding-right: 10px;">
-										<h4 style="color: #008080; margin-bottom: 6px; border-bottom: 1px solid #ddd;">VENDOR / SUPPLIER:</h4>
-										<div id="print_po_vendor_info"></div>
-									</td>
-									<td style="width: 50%; vertical-align: top; padding-left: 10px;">
-										<h4 style="color: #008080; margin-bottom: 6px; border-bottom: 1px solid #ddd;">BANKING DETAILS FOR PAYMENT:</h4>
-										<div id="print_po_bank_info"></div>
-									</td>
-								</tr>
-							</table>
-
-							<div style="margin-top: 20px; background: #f4f6f6; padding: 10px; border-left: 4px solid #008080; font-size: 13px;">
-								<b>Price List Reference: </b><span id="print_po_pricelist_ref"></span> &nbsp;|&nbsp; 
-								<b>Freight Status: </b><span id="print_po_freight_status" style="font-weight:bold; color:#008080;"></span>
-							</div>
-
-							<table style="width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px;" border="1" borderColor="#ddd" cellPadding="8">
-								<thead>
-									<tr style="background-color: #008080; color: white;">
-										<th style="width: 5%;">Item</th>
-										<th style="width: 20%;">Reference SKU</th>
-										<th style="width: 40%;">Product Description / Features</th>
-										<th style="width: 10%;">Qty</th>
-										<th style="width: 12.5%;">Unit Price</th>
-										<th style="width: 12.5%;">Total Amount</th>
-									</tr>
-								</thead>
-								<tbody id="print_po_items_body">
-								</tbody>
-								<tfoot>
-									<tr style="background-color: #f9f9f9;">
-										<td colspan="5" style="text-align: right; font-weight: bold; font-size: 14px;">TOTAL ORDER AMOUNT (USD):</td>
-										<td id="print_po_total_amount" style="font-weight: bold; text-align: right; font-size: 14px; color: #008080;">$0.00</td>
-									</tr>
-								</tfoot>
-							</table>
-
-							<div style="margin-top: 25px; font-size: 12px; color: #555;">
-								<b>Notes / Delivery Instructions:</b>
-								<p id="print_po_notes" style="margin: 4px 0 0 0;"></p>
-							</div>
-
-							<div style="margin-top: 50px; font-size: 13px;">
-								<table style="width:100%;">
-									<tr>
-										<td style="width: 50%;">
-											<br><br>
-											________________________________________<br>
-											<b>Authorized Purchasing Officer</b><br>
-											Tecnoptix S.A.S.
-										</td>
-										<td style="width: 50%; text-align: right;">
-											<br><br>
-											________________________________________<br>
-											<b>Supplier Confirmation & Stamp</b>
-										</td>
-									</tr>
-								</table>
-							</div>
-						</div>
-
-						<footer class="w3-container w3-light-grey w3-padding w3-hide-print">
-							<button class="w3-button w3-red w3-round" onclick="document.getElementById('modalImpresionPO').style.display='none'">Close</button>
-							<button class="w3-button w3-teal w3-round w3-right" onclick="window.print()"><i class="fa fa-print"></i> Print / Save as PDF</button>
-						</footer>
-					</div>
-				</div>
-
 				<div id="modalGestionUsuario" class="w3-modal">
 					<div class="w3-modal-content w3-card-4 w3-animate-top" style="max-width:500px">
 						<header class="w3-container w3-teal">
@@ -1671,7 +1503,6 @@
 
 			</main>
 
-			<!-- Footer -->
 			<footer class="w3-container w3-theme-d5">
 				<div class="w3-row-padding">
 					<div class="w3-third">
@@ -1685,81 +1516,34 @@
 		</div>
 
 		<script type="text/javascript">
-			function IniciarSesion() {
-				let userElem = document.getElementById("login_usuario");
-				let passElem = document.getElementById("login_clave");
-				
-				if (!userElem || !passElem) {
-					console.error("Elementos del formulario de login no encontrados.");
-					return;
-				}
+			// URL del desplegable en Google Apps Script
+			const appFollowApp = 'https://script.google.com/macros/s/AKfycbxpiAuw_K8GgqkL7aNJyEO2feUfKT4ArMuARtHLwB_g4md18i1ucEwKt8g6khCKE2mRKw/exec';
 
-				let userVal = userElem.value.trim();
-				let passVal = passElem.value.trim();
+			// Constantes de Acciones del Servidor
+			const CARGAR_INFO = 0;
+			const ESCRIBIR_REGISTRO = 1;
+			const ESCRIBE_CONTACTO = 2;
+			const GUARDAR_ORDEN_COMPLETA = 3;
+			const LOGIN_USUARIO = 4;
+			const GUARDAR_USUARIO = 5;
 
-				if (!userVal || !passVal) {
-					showToast("Ingrese usuario y contraseña", "error");
-					return;
-				}
+			const prioridades = ["Baja", "Media", "Alta", "Máxima"];
 
-				showLoader(true, "Verificando credenciales con el servidor...");
-				
-				fetch(appFollowApp, {
-					method: 'POST',
-					mode: 'cors',
-					redirect: 'follow',
-					headers: {
-						'Content-Type': 'text/plain;charset=utf-8'
-					},
-					body: JSON.stringify({ accion: LOGIN_USUARIO, usuario: userVal, clave: passVal })
-				})
-				.then(res => {
-					if (!res.ok) {
-						throw new Error("Respuesta de red no OK (HTTP " + res.status + ")");
-					}
-					return res.text();
-				})
-				.then(text => {
-					showLoader(false);
-					try {
-						let info = JSON.parse(text);
-						if (info.status === "OK") {
-							usuarioSesion = info.usuario;
-							sessionStorage.setItem("followapp_session", JSON.stringify(usuarioSesion));
-							AplicarSesion();
-							CargarTodo();
-							showToast(`Bienvenido ${usuarioSesion.nombre || usuarioSesion.usuario}`, "success");
-						} else {
-							showToast(info.message || "Credenciales incorrectas", "error");
-						}
-					} catch (e) {
-						console.error("Error al analizar JSON de respuesta:", text, e);
-						showToast("Error de formato en la respuesta del servidor", "error");
-					}
-				})
-				.catch(err => {
-					showLoader(false);
-					console.error("Error al conectar con Google Apps Script:", err);
-					showToast("Error de conexión al servidor: " + err.message, "error");
-				});
-			}
+			var contactos = [], empresas = [], datosContacto = [], seguimiento = [], tareas = [];
+			var proveedores = [], listasPrecios = [], productosLista = [], ordenesCompra = [], detalleOrdenes = [], usuarios = [];
+			var proformas = [], detalleProformas = [], productosVentas = [], listasPreciosVentas = [], preciosProductosVentas = [];
+			var itemsPOActual = [];
+			var itemsProformaActual = [];
+			var usuarioSesion = null;
 
-			function CerrarSesion() {
-				usuarioSesion = null;
-				sessionStorage.removeItem("followapp_session");
-				AplicarSesion();
-				showToast("Sesión cerrada correctamente", "info");
-			}
-				for (let key of possibleKeys) {
-					let cleanKey = String(key).toLowerCase().replace(/\s+/g, "");
-					for (let k in obj) {
-						if (String(k).toLowerCase().replace(/\s+/g, "") === cleanKey) {
-							if (obj[k] !== undefined && obj[k] !== null) return String(obj[k]);
-						}
-					}
-				}
-				return "";
-			}
+			var ventanaEmpresa = {};
+			var ventanaContacto = {};
+			var ventanaInicio = {};
+			var ventanaProveedor = {};
+			var ventanaOrden = {};
+			var ventanaUsuario = {};
+			var ventanaProforma = {};
+			var ventanaProductoVenta = {};
 
 			function showToast(mensaje, tipo = 'info') {
 				let container = document.getElementById('toastContainer');
@@ -1780,6 +1564,22 @@
 				if (txt) txt.innerHTML = mensaje || "Procesando...";
 			}
 
+			function getVal(obj, ...possibleKeys) {
+				if (!obj || typeof obj !== 'object') return "";
+				for (let key of possibleKeys) {
+					if (obj[key] !== undefined && obj[key] !== null) return String(obj[key]);
+				}
+				for (let key of possibleKeys) {
+					let cleanKey = String(key).toLowerCase().replace(/\s+/g, "");
+					for (let k in obj) {
+						if (String(k).toLowerCase().replace(/\s+/g, "") === cleanKey) {
+							if (obj[k] !== undefined && obj[k] !== null) return String(obj[k]);
+						}
+					}
+				}
+				return "";
+			}
+
 			function FechaEnInput(fecha) {
 				if (!fecha) return "";
 				var d = new Date(fecha);
@@ -1793,8 +1593,13 @@
 			}
 
 			function IniciarSesion() {
-				let userVal = document.getElementById("login_usuario").value.trim();
-				let passVal = document.getElementById("login_clave").value.trim();
+				let userElem = document.getElementById("login_usuario");
+				let passElem = document.getElementById("login_clave");
+
+				if (!userElem || !passElem) return;
+
+				let userVal = userElem.value.trim();
+				let passVal = passElem.value.trim();
 
 				if (!userVal || !passVal) {
 					showToast("Ingrese usuario y contraseña", "error");
@@ -1802,20 +1607,16 @@
 				}
 
 				showLoader(true, "Verificando credenciales...");
-				
+
 				fetch(appFollowApp, {
 					method: 'POST',
 					mode: 'cors',
 					redirect: 'follow',
-					headers: {
-						'Content-Type': 'text/plain;charset=utf-8'
-					},
+					headers: { 'Content-Type': 'text/plain;charset=utf-8' },
 					body: JSON.stringify({ accion: LOGIN_USUARIO, usuario: userVal, clave: passVal })
 				})
 				.then(res => {
-					if (!res.ok) {
-						throw new Error("Respuesta de red no OK (HTTP " + res.status + ")");
-					}
+					if (!res.ok) throw new Error("Respuesta HTTP " + res.status);
 					return res.text();
 				})
 				.then(text => {
@@ -1827,21 +1628,22 @@
 							sessionStorage.setItem("followapp_session", JSON.stringify(usuarioSesion));
 							AplicarSesion();
 							CargarTodo();
-							showToast(`Bienvenido ${usuarioSesion.nombre}`, "success");
+							showToast(`Bienvenido ${usuarioSesion.nombre || usuarioSesion.usuario}`, "success");
 						} else {
 							showToast(info.message || "Credenciales incorrectas", "error");
 						}
 					} catch (e) {
-						console.error("Error respuesta servidor:", text);
-						showToast("Error de formato de respuesta del servidor", "error");
+						showToast("Error de respuesta del servidor", "error");
 					}
 				})
 				.catch(err => {
 					showLoader(false);
-					console.error("Error de conexión:", err);
 					showToast("Error de conexión al servidor: " + err.message, "error");
 				});
 			}
+
+			// Alias global para compatibilidad de invocación
+			window.iniciarSesion = IniciarSesion;
 
 			function CerrarSesion() {
 				usuarioSesion = null;
@@ -1878,259 +1680,140 @@
 				});
 			}
 
-			function AtenderTarea(ind) {
-				ventanaInicio.ind = ind;
-				let tarea = Array.isArray(tareas) ? tareas.find(t => Number(getVal(t, 'ind')) === Number(ind)) : null;
-				if (!tarea) return;
-				let indContacto = Number(getVal(tarea, 'indContacto'));
-				let contacto = Array.isArray(contactos) ? contactos.find(c => Number(getVal(c, 'ind')) === indContacto) : null;
-				
-				document.getElementById("i_verContacto").onclick = () => VerContacto(indContacto);
-				if (contacto) {
-					document.getElementById("i_nombre").innerHTML = getVal(contacto, 'nombre');
-					document.getElementById("i_apellido").innerHTML = getVal(contacto, 'apellido');
-					document.getElementById("i_cargo").innerHTML = getVal(contacto, 'cargo');
-					let emp = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === Number(getVal(contacto, 'indEmpresa'))) : null;
-					document.getElementById("i_empresa").innerHTML = emp ? getVal(emp, 'nombre') : "";
+			function AbrirSeccion(seccionId, botonId) {
+				let secciones = document.getElementsByClassName("seccion");
+				for (let i = 0; i < secciones.length; i++) {
+					secciones[i].style.display = "none";
 				}
-				
-				let desc = document.getElementById("i_descripcion");
-				let est = document.getElementById("i_estadoTarea");
-				let fec = document.getElementById("i_fechaTarea");
-				let pri = document.getElementById("i_prioridadTarea");
-				let btnAct = document.getElementById("actualizarTarea");
 
-				desc.value = getVal(tarea, 'descripcion');
-				est.value = getVal(tarea, 'estado');
-				fec.value = FechaEnInput(getVal(tarea, 'fechaEjecucion'));
-				pri.value = getVal(tarea, 'prioridad');
+				let botones = document.getElementsByClassName("navegacion");
+				for (let i = 0; i < botones.length; i++) {
+					botones[i].classList.remove("w3-theme-d1", "w3-teal");
+				}
 
-				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
-				desc.disabled = esConsulta;
-				est.disabled = esConsulta;
-				fec.disabled = esConsulta;
-				pri.disabled = esConsulta;
-				if (btnAct) btnAct.style.display = esConsulta ? "none" : "block";
+				let sec = document.getElementById(seccionId);
+				if (sec) sec.style.display = "block";
 
-				let tabla = document.getElementById("i_listaDC");
-				if (tabla) {
-					tabla.innerHTML = "";
-					for (let i = 1; i < datosContacto.length; i++) {
-						if (Number(getVal(datosContacto[i], 'indContacto')) === indContacto) {
-							let fila = document.createElement("tr");
-							let celda1 = document.createElement("td");
-							celda1.style.wordBreak = "break-word";
-							celda1.innerHTML = getVal(datosContacto[i], 'tipoDato');
+				let btn = document.getElementById(botonId);
+				if (btn) btn.classList.add("w3-theme-d1", "w3-teal");
+			}
 
-							let celda2 = document.createElement("td");
-							celda2.style.wordBreak = "break-all";
-							celda2.style.overflowWrap = "anywhere";
-							celda2.style.maxWidth = "0";
-							celda2.innerHTML = getVal(datosContacto[i], 'dato');
+			function controlarBotonBorrado(inputElement, botonId) {
+				let btn = document.getElementById(botonId);
+				if (btn) {
+					btn.style.display = inputElement.value.trim().length > 0 ? "block" : "none";
+				}
+			}
 
-							fila.appendChild(celda1);
-							fila.appendChild(celda2);
-							tabla.appendChild(fila);
-						}
+			function limpiarCampo(inputId, botonId) {
+				let input = document.getElementById(inputId);
+				let btn = document.getElementById(botonId);
+				if (input) {
+					input.value = "";
+					input.focus();
+				}
+				if (btn) btn.style.display = "none";
+
+				if (inputId.includes("Empresa")) ListarEmpresas();
+				else if (inputId.includes("Contacto")) ListarContactos();
+				else if (inputId.includes("Proveedor")) ListarProveedores();
+				else if (inputId.includes("Orden")) ListarOrdenes();
+				else if (inputId.includes("Proforma")) ListarProformas();
+			}
+
+			function CargarTodo() {
+				showLoader(true, "Cargando datos del servidor...");
+				fetch(appFollowApp, {
+					method: 'POST',
+					mode: 'cors',
+					headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+					body: JSON.stringify({ accion: CARGAR_INFO })
+				})
+				.then(res => res.text())
+				.then(text => RegistrosCargados(text))
+				.catch(err => {
+					showLoader(false);
+					showToast("Error de conexión al servidor: " + err, "error");
+				});
+			}
+
+			function RegistrosCargados(valor) {
+				showLoader(false);
+				try {
+					let info = JSON.parse(valor);
+					if (info.status === "OK") {
+						contactos = Array.isArray(info.contactos) ? info.contactos : [];
+						empresas = Array.isArray(info.empresas) ? info.empresas : [];
+						seguimiento = Array.isArray(info.seguimiento) ? info.seguimiento : [];
+						tareas = Array.isArray(info.tareas) ? info.tareas : [];
+						datosContacto = Array.isArray(info.datosContacto) ? info.datosContacto : [];
+						proveedores = Array.isArray(info.proveedores) ? info.proveedores : [];
+						listasPrecios = Array.isArray(info.listasPrecios) ? info.listasPrecios : [];
+						productosLista = Array.isArray(info.productosLista) ? info.productosLista : [];
+						ordenesCompra = Array.isArray(info.ordenesCompra) ? info.ordenesCompra : [];
+						detalleOrdenes = Array.isArray(info.detalleOrdenes) ? info.detalleOrdenes : [];
+						usuarios = Array.isArray(info.usuarios) ? info.usuarios : [];
+
+						proformas = Array.isArray(info.proformas) ? info.proformas : [];
+						detalleProformas = Array.isArray(info.detalleProformas) ? info.detalleProformas : [];
+						productosVentas = Array.isArray(info.productosVentas) ? info.productosVentas : [];
+						listasPreciosVentas = Array.isArray(info.listasPreciosVentas) ? info.listasPreciosVentas : [];
+						preciosProductosVentas = Array.isArray(info.preciosProductosVentas) ? info.preciosProductosVentas : [];
+
+						ListarEmpresas();
+						ListarContactos();
+						ListarProveedores();
+						ListarOrdenes();
+						ListarUsuarios();
+						ListarProformas();
+						ListarProductosVentas();
+						ListarListasPreciosVentas();
+						ListarTiposDato();
+						renderizarInterfaz();
+						AbrirSeccion("inicio", "binicio");
 					}
-				}
-				document.getElementById("modalInicio").style.display = "block";
-			}
-
-			function FiltroInicioPrioridad(tarea) {
-				let maxima = document.getElementById("p_maxima").checked;
-				let alta = document.getElementById("p_alta").checked;
-				let media = document.getElementById("p_media").checked;
-				let baja = document.getElementById("p_baja").checked;
-				let prio = Number(getVal(tarea, 'prioridad'));
-				if (maxima && prio === 3) return true;
-				if (alta && prio === 2) return true;
-				if (media && prio === 1) return true;
-				if (baja && prio === 0) return true;
-				return false;
-			}
-
-			function FiltroInicioEstado(tarea) {
-				let est = getVal(tarea, 'estado');
-				if (document.getElementById("e_noIniciada").checked && est === "No iniciada") return true;
-				if (document.getElementById("e_iniciada").checked && est === "Iniciada") return true;
-				if (document.getElementById("e_terminada").checked && est === "Terminada") return true;
-				if (document.getElementById("e_suspendida").checked && est === "Suspendida") return true;
-				if (document.getElementById("e_cancelada").checked && est === "Cancelada") return true;
-				return false;
-			}
-
-			function FiltroInicioUrgencia(tarea) {
-				let filtro = document.getElementById("filtroUrgencia").value;
-				let fechaEjecucion = FechaEnInput(getVal(tarea, 'fechaEjecucion'));
-				let dias = DiasRestantes(fechaEjecucion);
-				if (filtro === "unDia" && dias <= 1) return true;
-				if (filtro === "unaSemana" && dias <= 8) return true;
-				if (filtro === "unaQuincena" && dias <= 15) return true;
-				if (filtro === "unMes" && dias <= 30) return true;
-				if (filtro === "cualquierMomento") return true;
-				return false;
-			}
-
-			function calcularUrgencia(fechaStr) {
-				if (!fechaStr) return 0;
-				let dias = DiasRestantes(fechaStr);
-				if (dias <= 0) return 100;
-				if (dias >= 30) return 5;
-				return Math.round(100 - ((dias / 30) * 95));
-			}
-
-			function DiasRestantes(fechaStr) {
-				if (!fechaStr) return 999;
-				let partes = fechaStr.split('-');
-				if (partes.length !== 3) return 999;
-				let fechaTarea = new Date(partes[0], partes[1] - 1, partes[2]);
-				let hoy = new Date();
-				hoy.setHours(0, 0, 0, 0);
-				let diffMs = fechaTarea.getTime() - hoy.getTime();
-				return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-			}
-
-			function renderizarInterfaz() {
-				const canvas = document.getElementById('canvasTareas');
-				const lista = document.getElementById('i_listaTareas');
-				if (!canvas || !lista) return;
-				canvas.innerHTML = "";
-				lista.innerHTML = "";
-
-				if (!Array.isArray(tareas)) return;
-
-				for (let i = 1; i < tareas.length; i++) {
-					let tarea = tareas[i];
-					let ind = Number(getVal(tarea, 'ind'));
-					if (ind !== 0 && FiltroInicioPrioridad(tarea) && FiltroInicioEstado(tarea) && FiltroInicioUrgencia(tarea)) {
-						let prio = parseInt(getVal(tarea, 'prioridad'));
-						if (isNaN(prio) || prio < 0) prio = 0;
-						if (prio > 3) prio = 3;
-
-						let fechaEjec = FechaEnInput(getVal(tarea, 'fechaEjecucion'));
-						let urgencia = calcularUrgencia(fechaEjec);
-						let diasRest = DiasRestantes(fechaEjec);
-						let textoDias = diasRest < 0 ? `Vencida hace ${Math.abs(diasRest)} días` : (diasRest === 0 ? "Vence Hoy" : `Quedan ${diasRest} días`);
-
-						let posX = 5 + (urgencia * 0.85);
-						let posY = 8 + (prio * 26);
-
-						const punto = document.createElement("div");
-						punto.className = "w3-circle w3-card-2";
-						punto.style.position = "absolute";
-						punto.style.width = "18px";
-						punto.style.height = "18px";
-						punto.style.left = `${posX}%`;
-						punto.style.bottom = `${posY}%`;
-						punto.style.transform = "translate(-50%, 50%)";
-						punto.style.cursor = "pointer";
-						punto.style.zIndex = "10";
-						punto.style.border = "2px solid #ffffff";
-						
-						const colores = ["w3-blue", "w3-green", "w3-orange", "w3-red"];
-						punto.classList.add(colores[prio] || "w3-grey");
-						
-						punto.title = `[${prioridades[prio]}] ${getVal(tarea, 'descripcion')} (${textoDias})`;
-						punto.onclick = () => AtenderTarea(ind);
-						canvas.appendChild(punto);
-
-						const item = document.createElement("div");
-						item.className = "w3-container w3-border-bottom w3-padding-small w3-hover-light-grey";
-						item.innerHTML = `
-							<div class="w3-row w3-small">
-								<div class="w3-col s2"><span class="w3-badge ${colores[prio]}">${prioridades[prio]}</span></div>
-								<div class="w3-col s7">
-									<b>${getVal(tarea, 'descripcion')}</b><br>
-									<small class="w3-text-grey">Estado: ${getVal(tarea, 'estado')} | Urgencia: ${urgencia}% (${textoDias})</small>
-								</div>
-								<div class="w3-col s3 w3-right-align"><button class="w3-button w3-tiny w3-round w3-teal" onclick="AtenderTarea(${ind});">Atender</button></div>
-							</div>`;
-						lista.appendChild(item);
-					}
+				} catch (e) {
+					showToast("Error al procesar registros de Google: " + e.message, "error");
 				}
 			}
 
-			function FiltraNombreEmpresa(emp) {
-				let f = document.getElementById("filtroNombreEmpresa");
-				if (!f || !f.value) return true;
-				return getVal(emp, 'nombre').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraCiudadEmpresa(emp) {
-				let f = document.getElementById("filtroCiudadEmpresa");
-				if (!f || !f.value) return true;
-				return getVal(emp, 'ciudad').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraDepartamentoEmpresa(emp) {
-				let f = document.getElementById("filtroDepartamentoEmpresa");
-				if (!f || !f.value) return true;
-				return getVal(emp, 'departamento').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraPaisEmpresa(emp) {
-				let f = document.getElementById("filtroPaisEmpresa");
-				if (!f || !f.value) return true;
-				return getVal(emp, 'pais').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraIdentificacionEmpresa(emp) {
-				let f = document.getElementById("filtroIdentificacionEmpresa");
-				if (!f || !f.value) return true;
-				return getVal(emp, 'id').toLowerCase().includes(f.value.toLowerCase());
+			function CargarEmpresas(selector) {
+				if (!selector) return;
+				selector.innerHTML = "<option value='-1'>Seleccione la empresa</option>";
+				if (!Array.isArray(empresas)) return;
+				for (let i = 1; i < empresas.length; i++) {
+					let ind = Number(getVal(empresas[i], 'ind'));
+					let nom = getVal(empresas[i], 'nombre');
+					selector.innerHTML += `<option value="${ind}">${nom}</option>`;
+				}
 			}
 
 			function ListarEmpresas() {
 				let tabla = document.getElementById("bodyEmpresas");
 				if (!tabla) return;
 				tabla.innerHTML = "";
-
 				if (!Array.isArray(empresas) || empresas.length <= 1) return;
 
 				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
-				let contador = 0;
 				for (let i = 1; i < empresas.length; i++) {
 					let emp = empresas[i];
-					if (emp && FiltraNombreEmpresa(emp) && FiltraCiudadEmpresa(emp) && FiltraDepartamentoEmpresa(emp) && FiltraPaisEmpresa(emp) && FiltraIdentificacionEmpresa(emp)) {
-						contador++;
-						let ind = Number(getVal(emp, 'ind'));
-						let fila = document.createElement("tr");
+					if (!emp) continue;
+					let ind = Number(getVal(emp, 'ind'));
+					if (ind === 0) continue;
 
-						let c1 = document.createElement("td"); c1.innerHTML = getVal(emp, 'nombre'); fila.appendChild(c1);
-						let c2 = document.createElement("td"); c2.innerHTML = getVal(emp, 'ciudad'); fila.appendChild(c2);
-						let c3 = document.createElement("td"); c3.innerHTML = getVal(emp, 'departamento'); fila.appendChild(c3);
-						let c4 = document.createElement("td"); c4.innerHTML = getVal(emp, 'pais'); fila.appendChild(c4);
-						let c5 = document.createElement("td"); c5.innerHTML = getVal(emp, 'id'); fila.appendChild(c5);
-
-						let c6 = document.createElement("td"); c6.className = "w3-center";
-						let btn = document.createElement("button");
-						btn.innerHTML = esConsulta ? "Ver" : "Editar";
-						btn.className = esConsulta ? "w3-button w3-blue w3-tiny" : "w3-button w3-teal w3-tiny";
-						btn.onclick = () => EditarEmpresa(ind);
-						c6.appendChild(btn);
-						fila.appendChild(c6);
-
-						tabla.appendChild(fila);
-					}
+					let fila = document.createElement("tr");
+					fila.innerHTML = `
+						<td>${getVal(emp, 'nombre')}</td>
+						<td>${getVal(emp, 'ciudad')}</td>
+						<td>${getVal(emp, 'departamento')}</td>
+						<td>${getVal(emp, 'pais')}</td>
+						<td>${getVal(emp, 'id')}</td>
+						<td class="w3-center">
+							<button class="${esConsulta ? 'w3-button w3-blue w3-tiny' : 'w3-button w3-teal w3-tiny'}" onclick="EditarEmpresa(${ind})">${esConsulta ? 'Ver' : 'Editar'}</button>
+						</td>
+					`;
+					tabla.appendChild(fila);
 				}
-
-				let filtroIcon = document.getElementById("filtroEmpresas");
-				let agregarBtn = document.getElementById("agregarEmpresa");
-				if (filtroIcon && agregarBtn) {
-					filtroIcon.style.display = contador > 0 ? "inline-block" : "none";
-					agregarBtn.style.display = (contador === 0 && !esConsulta) ? "inline-block" : "none";
-				}
-			}
-
-			function AgregarEmpresa() {
-				EditarEmpresa(-1);
-				let fNom = document.getElementById("filtroNombreEmpresa");
-				if (fNom && fNom.value) document.getElementById("e_nombre").value = fNom.value;
-				let fCiu = document.getElementById("filtroCiudadEmpresa");
-				if (fCiu && fCiu.value) document.getElementById("e_ciudad").value = fCiu.value;
-				let fDep = document.getElementById("filtroDepartamentoEmpresa");
-				if (fDep && fDep.value) document.getElementById("e_departamento").value = fDep.value;
-				let fPai = document.getElementById("filtroPaisEmpresa");
-				if (fPai && fPai.value) document.getElementById("e_pais").value = fPai.value;
-				let fId = document.getElementById("filtroIdentificacionEmpresa");
-				if (fId && fId.value) document.getElementById("e_identificacion").value = fId.value;
 			}
 
 			function EditarEmpresa(ind) {
@@ -2182,130 +1865,63 @@
 				boton.onclick = () => GuardarEmpresa(ind);
 			}
 
-			function AbrirContactos() {
-				document.getElementById('panelContactos').style.width = "500px";
-				document.getElementById("cancelarEmpresa").disabled = true;
-				document.getElementById("guardarEmpresa").disabled = true;
-			}
-
-			function CerrarContactos() {
-				document.getElementById('panelContactos').style.width = "0";
-				document.getElementById("cancelarEmpresa").disabled = false;
-				document.getElementById("guardarEmpresa").disabled = false;
-			}
-
-			function ListarContactosEmpresa(indEmpresa) {
-				let tabla = document.getElementById("e_listaC");
-				if (!tabla) return;
-				tabla.innerHTML = "";
-				if (!Array.isArray(contactos)) return;
-
-				for (let i = 1; i < contactos.length; i++) {
-					let c = contactos[i];
-					if (Number(getVal(c, 'indEmpresa')) === Number(indEmpresa)) {
-						let indC = Number(getVal(c, 'ind'));
-						let fila = document.createElement("tr");
-
-						let c1 = document.createElement("td"); c1.innerHTML = getVal(c, 'nombre'); fila.appendChild(c1);
-						let c2 = document.createElement("td"); c2.innerHTML = getVal(c, 'apellido'); fila.appendChild(c2);
-						let c3 = document.createElement("td"); c3.innerHTML = getVal(c, 'cargo'); fila.appendChild(c3);
-
-						let c4 = document.createElement("td"); c4.className = "w3-center";
-						let btn = document.createElement("button");
-						btn.innerHTML = "Ver";
-						btn.className = "w3-button w3-teal w3-tiny";
-						btn.onclick = () => VerContacto(indC);
-						c4.appendChild(btn);
-						fila.appendChild(c4);
-
-						tabla.appendChild(fila);
-					}
-				}
-			}
-
-			function VerContacto(ind) {
-				EditarContacto(ind);
-				if (ind === -1) {
-					document.getElementById("c_empresa").value = ventanaEmpresa.ind;
-				}
-			}
-
-			function FiltraNombreContacto(c) {
-				let f = document.getElementById("filtroNombreContacto");
-				if (!f || !f.value) return true;
-				return getVal(c, 'nombre').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraApellidoContacto(c) {
-				let f = document.getElementById("filtroApellidoContacto");
-				if (!f || !f.value) return true;
-				return getVal(c, 'apellido').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraCargoContacto(c) {
-				let f = document.getElementById("filtroCargoContacto");
-				if (!f || !f.value) return true;
-				return getVal(c, 'cargo').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraEmpresaContacto(c) {
-				let f = document.getElementById("filtroEmpresaContacto");
-				if (!f || !f.value) return true;
-				let indE = Number(getVal(c, 'indEmpresa'));
-				let emp = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === indE) : null;
-				let nombreEmp = emp ? getVal(emp, 'nombre') : "";
-				return nombreEmp.toLowerCase().includes(f.value.toLowerCase());
+			function GuardarEmpresa(ind) {
+				showLoader(true, ind !== -1 ? "Actualizando Empresa..." : "Registrando Empresa...");
+				let vector = [
+					ind,
+					document.getElementById("e_nombre").value,
+					document.getElementById("e_descripcion").value,
+					document.getElementById("e_ciudad").value,
+					document.getElementById("e_departamento").value,
+					document.getElementById("e_pais").value,
+					document.getElementById("e_direccion").value,
+					document.getElementById("e_tipoID").value,
+					document.getElementById("e_identificacion").value
+				];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Empresas", pos: ind, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							empresas = Array.isArray(info.matriz) ? info.matriz : [];
+							ListarEmpresas();
+							showToast("Empresa guardada con éxito", "success");
+							document.getElementById("modalEmpresa").style.display = "none";
+						}
+					});
 			}
 
 			function ListarContactos() {
 				let tabla = document.getElementById("bodyContactos");
 				if (!tabla) return;
 				tabla.innerHTML = "";
-
 				if (!Array.isArray(contactos) || contactos.length <= 1) return;
 
 				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
-				let contador = 0;
 				for (let i = 1; i < contactos.length; i++) {
 					let c = contactos[i];
-					if (c && FiltraNombreContacto(c) && FiltraApellidoContacto(c) && FiltraCargoContacto(c) && FiltraEmpresaContacto(c)) {
-						contador++;
-						let ind = Number(getVal(c, 'ind'));
-						let indE = Number(getVal(c, 'indEmpresa'));
-						let emp = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === indE) : null;
-						let nombreEmp = emp ? getVal(emp, 'nombre') : "N/A";
+					if (!c) continue;
+					let ind = Number(getVal(c, 'ind'));
+					if (ind === 0) continue;
 
-						let fila = document.createElement("tr");
-						let c1 = document.createElement("td"); c1.innerHTML = getVal(c, 'nombre'); fila.appendChild(c1);
-						let c2 = document.createElement("td"); c2.innerHTML = getVal(c, 'apellido'); fila.appendChild(c2);
-						let c3 = document.createElement("td"); c3.innerHTML = getVal(c, 'cargo'); fila.appendChild(c3);
-						let c4 = document.createElement("td"); c4.innerHTML = nombreEmp; fila.appendChild(c4);
+					let indE = Number(getVal(c, 'indEmpresa'));
+					let emp = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === indE) : null;
+					let nombreEmp = emp ? getVal(emp, 'nombre') : "N/A";
 
-						let c5 = document.createElement("td"); c5.className = "w3-center";
-						let btn = document.createElement("button");
-						btn.innerHTML = esConsulta ? "Ver" : "Editar";
-						btn.className = esConsulta ? "w3-button w3-blue w3-tiny" : "w3-button w3-teal w3-tiny";
-						btn.onclick = () => EditarContacto(ind);
-						c5.appendChild(btn);
-						fila.appendChild(c5);
-
-						tabla.appendChild(fila);
-					}
+					let fila = document.createElement("tr");
+					fila.innerHTML = `
+						<td>${getVal(c, 'nombre')}</td>
+						<td>${getVal(c, 'apellido')}</td>
+						<td>${getVal(c, 'cargo')}</td>
+						<td>${nombreEmp}</td>
+						<td class="w3-center">
+							<button class="${esConsulta ? 'w3-button w3-blue w3-tiny' : 'w3-button w3-teal w3-tiny'}" onclick="EditarContacto(${ind})">${esConsulta ? 'Ver' : 'Editar'}</button>
+						</td>
+					`;
+					tabla.appendChild(fila);
 				}
-
-				let filtroIcon = document.getElementById("filtroContactos");
-				let agregarBtn = document.getElementById("agregarContacto");
-				if (filtroIcon && agregarBtn) {
-					filtroIcon.style.display = contador > 0 ? "inline-block" : "none";
-					agregarBtn.style.display = (contador === 0 && !esConsulta) ? "inline-block" : "none";
-				}
-			}
-
-			function AgregarContacto() {
-				EditarContacto(-1);
-				let fNom = document.getElementById("filtroNombreContacto");
-				if (fNom && fNom.value) document.getElementById("c_nombre").value = fNom.value;
-				let fApe = document.getElementById("filtroApellidoContacto");
-				if (fApe && fApe.value) document.getElementById("c_apellido").value = fApe.value;
-				let fCar = document.getElementById("filtroCargoContacto");
-				if (fCar && fCar.value) document.getElementById("c_cargo").value = fCar.value;
 			}
 
 			function EditarContacto(ind) {
@@ -2325,23 +1941,15 @@
 				LimpiaTareas();
 				ListarTareas(ind);
 
+				document.getElementById("c_esEmpresa").checked = false;
+
 				if (ind !== -1) {
-					let c = Array.isArray(contactos) ? contactos.find(item => Number(getVal(item, 'ind', 'Ind')) === Number(ind)) : null;
+					let c = Array.isArray(contactos) ? contactos.find(item => Number(getVal(item, 'ind')) === Number(ind)) : null;
 					if (c) {
-						document.getElementById("c_nombre").value = getVal(c, 'nombre', 'Nombre');
-						document.getElementById("c_apellido").value = getVal(c, 'apellido', 'Apellido');
-						document.getElementById("c_cargo").value = getVal(c, 'cargo', 'Cargo');
-						
-						let indEmp = Number(getVal(c, 'indEmpresa', 'IndEmpresa', 'idempresa'));
-						if (indEmp === -1 || !indEmp) {
-							document.getElementById("c_esEmpresa").checked = (indEmp === -1);
-							document.getElementById("c_empresa").disabled = (indEmp === -1);
-							document.getElementById("c_empresa").value = "-1";
-						} else {
-							document.getElementById("c_esEmpresa").checked = false;
-							document.getElementById("c_empresa").disabled = false;
-							document.getElementById("c_empresa").value = indEmp;
-						}
+						document.getElementById("c_nombre").value = getVal(c, 'nombre');
+						document.getElementById("c_apellido").value = getVal(c, 'apellido');
+						document.getElementById("c_cargo").value = getVal(c, 'cargo');
+						document.getElementById("c_empresa").value = getVal(c, 'indEmpresa');
 					}
 					for (let i = 0; i < controles.length; i++) controles[i].disabled = true;
 					for (let i = 0; i < controlesPanel.length; i++) controlesPanel[i].disabled = false;
@@ -2357,17 +1965,12 @@
 						controles[i].disabled = false;
 					}
 					for (let i = 0; i < controlesPanel.length; i++) controlesPanel[i].disabled = true;
-
-					// Si el modal de Empresa está visible y hay una empresa activa, la seleccionamos automáticamente
-					let modalEmpresaAbierto = (document.getElementById("modalEmpresa") && document.getElementById("modalEmpresa").style.display === "block");
-					if (modalEmpresaAbierto && ventanaEmpresa.ind && Number(ventanaEmpresa.ind) > 0) {
-						document.getElementById("c_esEmpresa").checked = false;
-						document.getElementById("c_empresa").disabled = false;
+					
+					// Preselección si viene desde Empresa modal
+					if (ventanaEmpresa.ind && ventanaEmpresa.ind !== -1) {
 						document.getElementById("c_empresa").value = ventanaEmpresa.ind;
 					} else {
-						document.getElementById("c_esEmpresa").checked = false;
-						document.getElementById("c_empresa").disabled = false;
-						document.getElementById("c_empresa").value = "-1";
+						document.getElementById("c_empresa").value = -1;
 					}
 
 					if (boton) {
@@ -2396,17 +1999,75 @@
 					selector.value = "-1";
 				} else {
 					selector.disabled = false;
+					selector.value = ventanaEmpresa.ind || -1;
 				}
 			}
 
-			function CargarEmpresas(selector) {
-				if (!selector) return;
-				selector.innerHTML = "<option value='-1'>Seleccione la empresa</option>";
-				if (!Array.isArray(empresas)) return;
-				for (let i = 1; i < empresas.length; i++) {
-					let ind = Number(getVal(empresas[i], 'ind', 'Ind'));
-					let nom = getVal(empresas[i], 'nombre', 'Nombre');
-					selector.innerHTML += `<option value="${ind}">${nom}</option>`;
+			function GuardarContacto(ind) {
+				showLoader(true, ind !== -1 ? "Actualizando Contacto..." : "Registrando Contacto...");
+				let esEmpresa = document.getElementById("c_esEmpresa").checked;
+				let indEmpresa = esEmpresa ? -1 : document.getElementById("c_empresa").value;
+				let vector = [
+					ind,
+					document.getElementById("c_nombre").value,
+					document.getElementById("c_apellido").value,
+					document.getElementById("c_cargo").value,
+					indEmpresa
+				];
+				let datos = { accion: ESCRIBE_CONTACTO, contacto: vector, pos: ind };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							contactos = Array.isArray(info.contactos) ? info.contactos : [];
+							empresas = Array.isArray(info.empresas) ? info.empresas : [];
+							ListarContactos();
+							showToast("Contacto guardado correctamente", "success");
+							document.getElementById("modalContacto").style.display = "none";
+						}
+					});
+			}
+
+			function AbrirContactos() {
+				document.getElementById('panelContactos').style.width = "500px";
+				document.getElementById("cancelarEmpresa").disabled = true;
+				document.getElementById("guardarEmpresa").disabled = true;
+			}
+
+			function CerrarContactos() {
+				document.getElementById('panelContactos').style.width = "0";
+				document.getElementById("cancelarEmpresa").disabled = false;
+				document.getElementById("guardarEmpresa").disabled = false;
+			}
+
+			function ListarContactosEmpresa(indEmpresa) {
+				let tabla = document.getElementById("e_listaC");
+				if (!tabla) return;
+				tabla.innerHTML = "";
+				if (!Array.isArray(contactos)) return;
+
+				for (let i = 1; i < contactos.length; i++) {
+					let c = contactos[i];
+					if (Number(getVal(c, 'indEmpresa')) === Number(indEmpresa)) {
+						let indC = Number(getVal(c, 'ind'));
+						let fila = document.createElement("tr");
+						fila.innerHTML = `
+							<td>${getVal(c, 'nombre')}</td>
+							<td>${getVal(c, 'apellido')}</td>
+							<td>${getVal(c, 'cargo')}</td>
+							<td class="w3-center"><button class="w3-button w3-teal w3-tiny" onclick="VerContacto(${indC})">Ver</button></td>
+						`;
+						tabla.appendChild(fila);
+					}
+				}
+			}
+
+			function VerContacto(ind) {
+				EditarContacto(ind);
+				if (ind === -1 && ventanaEmpresa.ind) {
+					document.getElementById("c_empresa").value = ventanaEmpresa.ind;
 				}
 			}
 
@@ -2453,66 +2114,11 @@
 				tabla.innerHTML = "";
 				for (let i = 1; i < datosContacto.length; i++) {
 					let d = datosContacto[i];
-					if (Number(getVal(d, 'indContacto')) === Number(indContacto)) {
-						let indD = Number(getVal(d, 'ind'));
-						let fila = `<tr>
-							<td id="tipoDato${indD}">${getVal(d, 'tipoDato')}</td>
-							<td id="dato${indD}">${getVal(d, 'dato')}</td>
-			function VerContacto(ind) {
-				EditarContacto(ind);
-				if (ind === -1 && ventanaEmpresa.ind && Number(ventanaEmpresa.ind) > 0) {
-					document.getElementById("c_esEmpresa").checked = false;
-					document.getElementById("c_empresa").disabled = false;
-					document.getElementById("c_empresa").value = ventanaEmpresa.ind;
-				}
-			}
-
-			function EditarDatoContacto(ind) {
-				let celdaTipo = document.getElementById("tipoDato" + ind);
-				let celdaDato = document.getElementById("dato" + ind);
-				let celdaBoton = document.getElementById("bDatosContacto" + ind);
-				if (!celdaTipo || !celdaDato || !celdaBoton) return;
-
-				let valTipo = celdaTipo.innerText;
-				let valDato = celdaDato.innerText;
-
-				celdaTipo.innerHTML = `<input type="text" id="editaTipoDato" class="w3-input w3-border" value="${valTipo}">`;
-				celdaDato.innerHTML = `<input type="text" id="editaDato" class="w3-input w3-border" value="${valDato}">`;
-				celdaBoton.innerHTML = `
-					<button class="w3-button w3-green w3-tiny" onclick="GuardarDatoContacto(${ind})">✓</button>
-					<button class="w3-button w3-red w3-tiny" onclick="ListarDatosContacto(${ventanaContacto.ind})">✕</button>`;
-			}
-
-			function LimpiaDatosContacto() {
-				document.getElementById("nuevoTipoDato").value = "";
-				document.getElementById("nuevoDato").value = "";
-				document.getElementById("botonAgregrarDatoContacto").disabled = true;
-			}
-
-			function ValidarDatoContacto(ind = -1) {
-				if (ind === -1) {
-					let t = document.getElementById("nuevoTipoDato").value;
-					let d = document.getElementById("nuevoDato").value;
-					document.getElementById("botonAgregrarDatoContacto").disabled = !(t !== "" && d !== "");
-				}
-			}
-
-			function ListarSeguimiento(indContacto) {
-				let panel = document.getElementById("listaRegistrosSeguimiento");
-				if (!panel || !Array.isArray(seguimiento)) return;
-				panel.innerHTML = "";
-			function ListarDatosContacto(indContacto) {
-				let tabla = document.getElementById("c_listaDC");
-				if (!tabla || !Array.isArray(datosContacto)) return;
-				tabla.innerHTML = "";
-				if (Number(indContacto) <= 0) return;
-				for (let i = 1; i < datosContacto.length; i++) {
-					let d = datosContacto[i];
 					if (Number(getVal(d, 'indContacto', 'IndContacto')) === Number(indContacto)) {
 						let indD = Number(getVal(d, 'ind', 'Ind'));
 						let fila = `<tr>
-							<td id="tipoDato${indD}">${getVal(d, 'tipoDato', 'TipoDato')}</td>
-							<td id="dato${indD}">${getVal(d, 'dato', 'Dato')}</td>
+							<td id="tipoDato${indD}">${getVal(d, 'tipoDato')}</td>
+							<td id="dato${indD}">${getVal(d, 'dato')}</td>
 							<td id="bDatosContacto${indD}" class="w3-center">
 								<button class="w3-button w3-teal w3-tiny datoContacto" onclick="EditarDatoContacto(${indD})">Editar</button>
 							</td>
@@ -2522,21 +2128,58 @@
 				}
 			}
 
-			function EditarSeguimiento(i) {
-				let s = seguimiento[i];
-				let indS = Number(getVal(s, 'ind'));
-				let celda = document.getElementById("celdaSeguimiento" + indS);
-				if (!celda) return;
-				celda.innerHTML = `
-					<div class="w3-row-padding" style="margin: 0 -8px;">
-						<div class="w3-col s12 w3-margin-bottom">
-							<textarea id="actualizacionSeguimiento" class="w3-input w3-border w3-round" rows="3" style="width:100%; box-sizing:border-box;">${getVal(s, 'registro')}</textarea>
-						</div>
-						<div class="w3-col s12 w3-right-align">
-							<button class="w3-button w3-green w3-tiny w3-round" onclick="GuardarSeguimiento(${i})">✓ Guardar</button>
-							<button class="w3-button w3-red w3-tiny w3-round" onclick="ListarSeguimiento(${ventanaContacto.ind})">✕ Cancelar</button>
-						</div>
-					</div>`;
+			function LimpiaDatosContacto() {
+				document.getElementById("nuevoTipoDato").value = "";
+				document.getElementById("nuevoDato").value = "";
+				document.getElementById("botonAgregrarDatoContacto").disabled = true;
+			}
+
+			function ValidarDatoContacto() {
+				let t = document.getElementById("nuevoTipoDato").value;
+				let d = document.getElementById("nuevoDato").value;
+				document.getElementById("botonAgregrarDatoContacto").disabled = !(t !== "" && d !== "");
+			}
+
+			function AgregarDatoContacto() {
+				showLoader(true, "Agregando Dato...");
+				let vector = [-1, ventanaContacto.ind, document.getElementById("nuevoTipoDato").value, document.getElementById("nuevoDato").value];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "DatosContacto", pos: -1, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							datosContacto = Array.isArray(info.matriz) ? info.matriz : [];
+							LimpiaDatosContacto();
+							ListarDatosContacto(ventanaContacto.ind);
+						}
+					});
+			}
+
+			function ListarSeguimiento(indContacto) {
+				let panel = document.getElementById("listaRegistrosSeguimiento");
+				if (!panel || !Array.isArray(seguimiento)) return;
+				panel.innerHTML = "";
+				for (let i = seguimiento.length - 1; i >= 1; i--) {
+					let s = seguimiento[i];
+					if (Number(getVal(s, 'indContacto', 'IndContacto')) === Number(indContacto)) {
+						let indS = Number(getVal(s, 'ind', 'Ind'));
+						let fechaStr = String(getVal(s, 'fecha')).slice(0, 10);
+						let item = `<div class="panel-item-card" id="celdaSeguimiento${indS}">
+							<div class="w3-row">
+								<div class="w3-col s9" style="word-break: break-word;">
+									<span class="w3-tag w3-teal w3-round w3-tiny">${fechaStr}</span>
+									<p style="margin: 6px 0 0 0; white-space: pre-wrap;">${getVal(s, 'registro')}</p>
+								</div>
+								<div class="w3-col s3 w3-right-align">
+									<button class="w3-button w3-teal w3-tiny w3-round" onclick="EditarSeguimiento(${i})">Editar</button>
+								</div>
+							</div>
+						</div>`;
+						panel.innerHTML += item;
+					}
+				}
 			}
 
 			function LimpiaSeguimiento() {
@@ -2551,79 +2194,57 @@
 				document.getElementById("botonGuardarSeguimiento").disabled = !(f !== "" && r !== "");
 			}
 
+			function GuardarSeguimiento(i) {
+				showLoader(true, i === -1 ? "Guardando Registro..." : "Actualizando Registro...");
+				let pos = i === -1 ? -1 : getVal(seguimiento[i], 'ind');
+				let fecha = i === -1 ? document.getElementById("fechaRegistroSeguimiento").value : getVal(seguimiento[i], 'fecha');
+				let reg = i === -1 ? document.getElementById("registroSeguimiento").value : document.getElementById("actualizacionSeguimiento").value;
+
+				let vector = [pos, ventanaContacto.ind, fecha, reg];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Seguimiento", pos: pos, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							seguimiento = Array.isArray(info.matriz) ? info.matriz : [];
+							LimpiaSeguimiento();
+							ListarSeguimiento(ventanaContacto.ind);
+						}
+					});
+			}
+
 			function ListarTareas(indContacto) {
 				let panel = document.getElementById("listaTareas");
 				if (!panel || !Array.isArray(tareas)) return;
 				panel.innerHTML = "";
 				const badgeColors = ["w3-blue", "w3-green", "w3-orange", "w3-red"];
 				for (let i = tareas.length - 1; i >= 1; i--) {
-			function ListarSeguimiento(indContacto) {
-				let panel = document.getElementById("listaRegistrosSeguimiento");
-				if (!panel || !Array.isArray(seguimiento)) return;
-				panel.innerHTML = "";
-				if (Number(indContacto) <= 0) return;
-				for (let i = seguimiento.length - 1; i >= 1; i--) {
-					let s = seguimiento[i];
-					if (Number(getVal(s, 'indContacto', 'IndContacto')) === Number(indContacto)) {
-						let indS = Number(getVal(s, 'ind', 'Ind'));
-						let fechaStr = String(getVal(s, 'fecha', 'Fecha')).slice(0, 10);
-						let item = `<div class="panel-item-card" id="celdaSeguimiento${indS}">
+					let t = tareas[i];
+					if (Number(getVal(t, 'indContacto', 'IndContacto')) === Number(indContacto)) {
+						let indT = Number(getVal(t, 'ind', 'Ind'));
+						let fechaStr = String(getVal(t, 'fechaEjecucion')).slice(0, 10);
+						let prioNum = Number(getVal(t, 'prioridad')) || 0;
+						let prioStr = prioridades[prioNum] || "Baja";
+						let color = badgeColors[prioNum] || "w3-grey";
+
+						let item = `<div class="panel-item-card" id="filaTarea${indT}">
 							<div class="w3-row">
 								<div class="w3-col s9" style="word-break: break-word;">
-									<span class="w3-tag w3-teal w3-round w3-tiny">${fechaStr}</span>
-									<p style="margin: 6px 0 0 0; white-space: pre-wrap;">${getVal(s, 'registro', 'Registro')}</p>
+									<span class="w3-badge ${color} w3-tiny">${prioStr}</span>
+									<span class="w3-text-grey w3-tiny w3-margin-left"><i class="fa fa-calendar"></i> ${fechaStr}</span>
+									<p style="margin: 4px 0; font-weight: bold; white-space: pre-wrap;">${getVal(t, 'descripcion')}</p>
+									<small class="w3-text-teal">Estado: ${getVal(t, 'estado')}</small>
 								</div>
 								<div class="w3-col s3 w3-right-align">
-									<button class="w3-button w3-teal w3-tiny w3-round" onclick="EditarSeguimiento(${i})">Editar</button>
+									<button class="w3-button w3-teal w3-tiny w3-round" onclick="EditarTarea(${i})">Editar</button>
 								</div>
 							</div>
 						</div>`;
 						panel.innerHTML += item;
 					}
 				}
-			}
-
-			function EditarTarea(i) {
-				let t = tareas[i];
-				let indT = Number(getVal(t, 'ind'));
-				let fila = document.getElementById("filaTarea" + indT);
-				if (!fila) return;
-				fila.innerHTML = `
-					<div class="w3-row-padding" style="margin: 0 -8px;">
-						<div class="w3-col s12 w3-margin-bottom">
-							<label class="w3-tiny w3-text-teal"><b>Descripción:</b></label>
-							<textarea id="e_descripcionTarea" class="w3-input w3-border w3-round" rows="2" style="width:100%; box-sizing:border-box;">${getVal(t, 'descripcion')}</textarea>
-						</div>
-						<div class="w3-col s6 w3-margin-bottom">
-							<label class="w3-tiny w3-text-teal"><b>Estado:</b></label>
-							<select id="e_estadoTarea" class="w3-select w3-border w3-round">
-								<option value="No iniciada">No iniciada</option>
-								<option value="Iniciada">Iniciada</option>
-								<option value="Terminada">Terminada</option>
-								<option value="Suspendida">Suspendida</option>
-								<option value="Cancelada">Cancelada</option>
-							</select>
-						</div>
-						<div class="w3-col s6 w3-margin-bottom">
-							<label class="w3-tiny w3-text-teal"><b>Prioridad:</b></label>
-							<select id="e_prioridadTarea" class="w3-select w3-border w3-round">
-								<option value="0">Baja</option>
-								<option value="1">Media</option>
-								<option value="2">Alta</option>
-								<option value="3">Máxima</option>
-							</select>
-						</div>
-						<div class="w3-col s12 w3-margin-bottom">
-							<label class="w3-tiny w3-text-teal"><b>Fecha:</b></label>
-							<input type="date" id="e_fechaTarea" class="w3-input w3-border w3-round" value="${FechaEnInput(getVal(t, 'fechaEjecucion'))}">
-						</div>
-						<div class="w3-col s12 w3-right-align">
-							<button class="w3-button w3-green w3-tiny w3-round" onclick="GuardarTarea(${i})">✓ Guardar</button>
-							<button class="w3-button w3-red w3-tiny w3-round" onclick="ListarTareas(${ventanaContacto.ind})">✕ Cancelar</button>
-						</div>
-					</div>`;
-				document.getElementById("e_estadoTarea").value = getVal(t, 'estado');
-				document.getElementById("e_prioridadTarea").value = getVal(t, 'prioridad');
 			}
 
 			function LimpiaTareas() {
@@ -2642,6 +2263,30 @@
 				document.getElementById("botonGuardarTarea").disabled = !(d !== "" && e !== "" && f !== "" && p !== "");
 			}
 
+			function GuardarTarea(i) {
+				showLoader(true, i === -1 ? "Guardando Tarea..." : "Actualizando Tarea...");
+				let pos = i === -1 ? -1 : getVal(tareas[i], 'ind');
+				let f = i === -1 ? document.getElementById("fechaTarea").value : document.getElementById("e_fechaTarea").value;
+				let d = i === -1 ? document.getElementById("descripcionTarea").value : document.getElementById("e_descripcionTarea").value;
+				let e = i === -1 ? document.getElementById("estadoTarea").value : document.getElementById("e_estadoTarea").value;
+				let p = i === -1 ? document.getElementById("prioridadTarea").value : document.getElementById("e_prioridadTarea").value;
+
+				let vector = [pos, ventanaContacto.ind, f, d, e, p];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Tareas", pos: pos, vector: vector };
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							tareas = Array.isArray(info.matriz) ? info.matriz : [];
+							LimpiaTareas();
+							ListarTareas(ventanaContacto.ind);
+							renderizarInterfaz();
+						}
+					});
+			}
+
 			function ListarProformas() {
 				let tabla = document.getElementById("bodyProformas");
 				if (!tabla) return;
@@ -2650,7 +2295,6 @@
 				if (!Array.isArray(proformas) || proformas.length <= 1) return;
 
 				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
-				let contador = 0;
 
 				for (let i = 1; i < proformas.length; i++) {
 					let pf = proformas[i];
@@ -2659,31 +2303,15 @@
 					let ind = Number(getVal(pf, 'ind', 'Ind'));
 					if (ind === 0) continue;
 
-					let numPf = getVal(pf, 'numProforma', 'numproforma', '# Proforma', 'consecutivoProforma');
+					let numPf = getVal(pf, 'numProforma', 'numproforma', '# Proforma');
 					let fecha = getVal(pf, 'fecha', 'Fecha');
-					let moneda = getVal(pf, 'moneda', 'Moneda operación', 'Moneda');
+					let moneda = getVal(pf, 'moneda', 'Moneda') || 'USD';
 					let totalVal = Number(getVal(pf, 'total', 'Total')).toFixed(2);
 					let estado = getVal(pf, 'estado', 'Estado') || 'Emitida';
 
 					let idEmp = Number(getVal(pf, 'idProspecto', 'idempresa', 'IndEmpresa'));
 					let empObj = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === idEmp) : null;
 					let nombreEmp = empObj ? getVal(empObj, 'nombre') : "Cliente N/A";
-
-					let fConsec = document.getElementById("filtroConsecutivoProforma")?.value || "";
-					let fCliente = document.getElementById("filtroClienteProforma")?.value || "";
-					let fFecha = document.getElementById("filtroFechaProforma")?.value || "";
-					let fMoneda = document.getElementById("filtroMonedaProforma")?.value || "";
-					let fEstado = document.getElementById("filtroEstadoProforma")?.value || "";
-					let fTotal = document.getElementById("filtroTotalProforma")?.value || "";
-
-					if (fConsec && !numPf.toLowerCase().includes(fConsec.toLowerCase())) continue;
-					if (fCliente && !nombreEmp.toLowerCase().includes(fCliente.toLowerCase())) continue;
-					if (fFecha && !fecha.includes(fFecha)) continue;
-					if (fMoneda && moneda !== fMoneda) continue;
-					if (fEstado && estado !== fEstado) continue;
-					if (fTotal && !totalVal.includes(fTotal)) continue;
-
-					contador++;
 
 					let fila = document.createElement("tr");
 					fila.innerHTML = `
@@ -2695,11 +2323,157 @@
 						<td><b>$${totalVal}</b></td>
 						<td class="w3-center">
 							<button class="w3-button w3-teal w3-tiny" onclick="EditarProforma(${ind})">${esConsulta ? 'Ver' : 'Editar'}</button>
-							<button class="w3-button w3-teal w3-tiny w3-margin-left" onclick="ImprimirProforma(${ind})"><i class="fa fa-print"></i> PDF / Vista Previa</button>
+							<button class="w3-button w3-teal w3-tiny w3-margin-left" onclick="ImprimirProforma(${ind})">PDF / Imprimir</button>
 						</td>
 					`;
 					tabla.appendChild(fila);
 				}
+			}
+
+			function CargarEmpresasProforma() {
+				let sel = document.getElementById("pf_empresa");
+				if (!sel) return;
+				sel.innerHTML = "<option value='-1'>-- Seleccionar Cliente --</option>";
+				if (Array.isArray(empresas)) {
+					for (let i = 1; i < empresas.length; i++) {
+						let ind = Number(getVal(empresas[i], 'ind'));
+						let nom = getVal(empresas[i], 'nombre');
+						sel.innerHTML += `<option value="${ind}">${nom}</option>`;
+					}
+				}
+			}
+
+			function CargarContactosProformaEmpresa() {
+				let idEmp = document.getElementById("pf_empresa").value;
+				let selC = document.getElementById("pf_contacto");
+				selC.innerHTML = "<option value='-1'>-- Seleccionar Contacto --</option>";
+
+				if (idEmp == -1 || !Array.isArray(contactos)) return;
+
+				for (let i = 1; i < contactos.length; i++) {
+					let c = contactos[i];
+					if (Number(getVal(c, 'indEmpresa')) === Number(idEmp)) {
+						let indC = Number(getVal(c, 'ind'));
+						let nomC = `${getVal(c, 'nombre')} ${getVal(c, 'apellido')} (${getVal(c, 'cargo')})`;
+						selC.innerHTML += `<option value="${indC}">${nomC}</option>`;
+					}
+				}
+			}
+
+			function CargarListasPreciosVentaProforma() {
+				let selLP = document.getElementById("pf_listaPrecios");
+				if (!selLP) return;
+				selLP.innerHTML = "<option value='0'>-- Lista General --</option>";
+				if (Array.isArray(listasPreciosVentas)) {
+					for (let i = 1; i < listasPreciosVentas.length; i++) {
+						let lp = listasPreciosVentas[i];
+						let ind = Number(getVal(lp, 'indLista', 'ind'));
+						let nom = getVal(lp, 'nombre', 'codigoLista');
+						let mon = getVal(lp, 'moneda');
+						selLP.innerHTML += `<option value="${ind}">[${mon}] ${nom}</option>`;
+					}
+				}
+			}
+
+			function AlCambiarMonedaOListaProforma() {
+				let selProd = document.getElementById("pf_selectorProducto");
+				if (!selProd) return;
+				selProd.innerHTML = "<option value=''>-- Seleccionar Producto Catálogo --</option>";
+
+				let idLista = document.getElementById("pf_listaPrecios").value;
+
+				if (Array.isArray(productosVentas)) {
+					for (let i = 1; i < productosVentas.length; i++) {
+						let p = productosVentas[i];
+						if (!p) continue;
+						let indP = Number(getVal(p, 'indProducto', 'ind'));
+						if (indP === 0) continue;
+
+						let ref = getVal(p, 'codigoRef');
+						let nom = getVal(p, 'nombre');
+
+						let precObj = Array.isArray(preciosProductosVentas) ?
+							preciosProductosVentas.find(pr => Number(getVal(pr, 'indProducto')) === indP && Number(getVal(pr, 'indLista')) === Number(idLista)) : null;
+
+						let precioVal = precObj ? Number(getVal(precObj, 'precio')) : 0;
+
+						let optJson = JSON.stringify({ indProducto: indP, indLista: idLista, codigoRef: ref, nombreProd: nom, precioUnitario: precioVal });
+						selProd.innerHTML += `<option value='${optJson}'>[${ref}] ${nom} ${precioVal > 0 ? '- $' + precioVal.toFixed(2) : ''}</option>`;
+					}
+				}
+			}
+
+			function CambiarTipoItemProforma() {
+				let tipo = document.getElementById("pf_tipoItem").value;
+				let wrapperCat = document.getElementById("wrapperProdCat");
+				let wrapperInl = document.getElementById("wrapperInl");
+
+				if (tipo === "INL") {
+					wrapperCat.style.display = "none";
+					wrapperInl.style.display = "block";
+					document.getElementById("pf_precioItem").value = "0.00";
+				} else {
+					wrapperCat.style.display = "block";
+					wrapperInl.style.display = "none";
+					AlSeleccionarProductoProforma();
+				}
+			}
+
+			function AlSeleccionarProductoProforma() {
+				let valStr = document.getElementById("pf_selectorProducto").value;
+				if (!valStr) return;
+				let obj = JSON.parse(valStr);
+				document.getElementById("pf_precioItem").value = obj.precioUnitario ? obj.precioUnitario.toFixed(2) : "0.00";
+				RecalcularItemTemporalProforma();
+			}
+
+			function RecalcularItemTemporalProforma() {
+				let cant = parseFloat(document.getElementById("pf_cantidadItem").value) || 1;
+				let prec = parseFloat(document.getElementById("pf_precioItem").value) || 0;
+				let mon = document.getElementById("pf_moneda").value;
+				document.getElementById("pf_totalItemPreview").value = `${mon} $${(cant * prec).toFixed(2)}`;
+			}
+
+			function AgregarItemAProforma() {
+				let tipo = document.getElementById("pf_tipoItem").value;
+				let cant = parseFloat(document.getElementById("pf_cantidadItem").value) || 1;
+				let prec = parseFloat(document.getElementById("pf_precioItem").value) || 0;
+
+				if (tipo === "INL") {
+					let nomInl = document.getElementById("pf_inlNombre").value.trim();
+					let descInl = document.getElementById("pf_inlDescripcion").value.trim();
+					if (!nomInl) {
+						showToast("Ingrese el nombre del ítem especial (INL)", "error");
+						return;
+					}
+					itemsProformaActual.push({
+						indProducto: 0,
+						indLista: 0,
+						codigoRef: "INL",
+						nombreProd: `${nomInl} ${descInl ? '(' + descInl + ')' : ''}`,
+						cantidad: cant,
+						precioUnitario: prec,
+						valorTotal: cant * prec
+					});
+				} else {
+					let selStr = document.getElementById("pf_selectorProducto").value;
+					if (!selStr) {
+						showToast("Seleccione un producto del catálogo", "error");
+						return;
+					}
+					let obj = JSON.parse(selStr);
+					itemsProformaActual.push({
+						indProducto: obj.indProducto,
+						indLista: Number(document.getElementById("pf_listaPrecios").value) || 0,
+						codigoRef: obj.codigoRef,
+						nombreProd: obj.nombreProd,
+						cantidad: cant,
+						precioUnitario: prec,
+						valorTotal: cant * prec
+					});
+				}
+
+				RenderizarItemsProforma();
 			}
 
 			function EditarProforma(ind) {
@@ -2720,17 +2494,17 @@
 						CargarContactosProformaEmpresa();
 						document.getElementById("pf_contacto").value = getVal(pf, 'idContacto', 'IndPersona') || -1;
 
-						document.getElementById("pf_moneda").value = getVal(pf, 'moneda', 'Moneda operación') || "USD";
+						document.getElementById("pf_moneda").value = getVal(pf, 'moneda', 'Moneda') || "USD";
 						document.getElementById("pf_copUsd").value = getVal(pf, 'copUsd', 'COP/USD') || 4000;
 						document.getElementById("pf_vigencia").value = getVal(pf, 'vigencia', 'Vigencia') || 30;
 						document.getElementById("pf_estado").value = getVal(pf, 'estado', 'Estado') || "Emitida";
 						document.getElementById("pf_razonDescuento").value = getVal(pf, 'razonDescuento', 'Razón Descuento');
-						document.getElementById("pf_montoDescuento").value = getVal(pf, 'montoDescuento', 'Monto específico Descuento') || 0;
+						document.getElementById("pf_montoDescuento").value = getVal(pf, 'montoDescuento', 'Monto Descuento') || 0;
 						
-						let pctIva = parseFloat(getVal(pf, 'iva', 'Porcentaje IVA')) || 0.19;
+						let pctIva = parseFloat(getVal(pf, 'iva', 'IVA')) || 0.19;
 						document.getElementById("pf_porcentajeIva").value = pctIva <= 1 ? (pctIva * 100) : pctIva;
 
-						let pctRet = parseFloat(getVal(pf, 'retefuente', 'Porcentaje Retefuente')) || 0;
+						let pctRet = parseFloat(getVal(pf, 'retefuente', 'Retefuente')) || 0;
 						document.getElementById("pf_porcentajeRetefuente").value = pctRet <= 1 ? (pctRet * 100) : pctRet;
 
 						document.getElementById("pf_observaciones").value = getVal(pf, 'observaciones', 'Observaciones');
@@ -2753,171 +2527,25 @@
 								}
 							}
 						}
-			function ListarTareas(indContacto) {
-				let panel = document.getElementById("listaTareas");
-				if (!panel || !Array.isArray(tareas)) return;
-				panel.innerHTML = "";
-				if (Number(indContacto) <= 0) return;
-				const badgeColors = ["w3-blue", "w3-green", "w3-orange", "w3-red"];
-				for (let i = tareas.length - 1; i >= 1; i--) {
-					let t = tareas[i];
-					if (Number(getVal(t, 'indContacto', 'IndContacto')) === Number(indContacto)) {
-						let indT = Number(getVal(t, 'ind', 'Ind'));
-						let fechaStr = String(getVal(t, 'fechaEjecucion', 'FechaEjecucion')).slice(0, 10);
-						let prioNum = Number(getVal(t, 'prioridad', 'Prioridad')) || 0;
-						let prioStr = prioridades[prioNum] || "Baja";
-						let color = badgeColors[prioNum] || "w3-grey";
-
-						let item = `<div class="panel-item-card" id="filaTarea${indT}">
-							<div class="w3-row">
-								<div class="w3-col s9" style="word-break: break-word;">
-									<span class="w3-badge ${color} w3-tiny">${prioStr}</span>
-									<span class="w3-text-grey w3-tiny w3-margin-left"><i class="fa fa-calendar"></i> ${fechaStr}</span>
-									<p style="margin: 4px 0; font-weight: bold; white-space: pre-wrap;">${getVal(t, 'descripcion', 'Descripcion')}</p>
-									<small class="w3-text-teal">Estado: ${getVal(t, 'estado', 'Estado')}</small>
-								</div>
-								<div class="w3-col s3 w3-right-align">
-									<button class="w3-button w3-teal w3-tiny w3-round" onclick="EditarTarea(${i})">Editar</button>
-								</div>
-							</div>
-						</div>`;
-						panel.innerHTML += item;
 					}
-				}
-			}
-
-			function CargarContactosProformaEmpresa() {
-				let idEmp = Number(document.getElementById("pf_empresa").value);
-				let selC = document.getElementById("pf_contacto");
-				if (!selC) return;
-				selC.innerHTML = "<option value='-1'>-- Seleccionar Contacto --</option>";
-
-				if (idEmp > 0 && Array.isArray(contactos)) {
-					for (let i = 1; i < contactos.length; i++) {
-						let c = contactos[i];
-						if (Number(getVal(c, 'indEmpresa')) === idEmp) {
-							let indC = Number(getVal(c, 'ind'));
-							selC.innerHTML += `<option value="${indC}">${getVal(c, 'nombre')} ${getVal(c, 'apellido')}</option>`;
-						}
-					}
-				}
-			}
-
-			function CargarListasPreciosVentaProforma() {
-				let sel = document.getElementById("pf_listaPrecios");
-				if (!sel) return;
-				sel.innerHTML = "<option value=''>-- Seleccionar Lista Base --</option>";
-				if (Array.isArray(listasPreciosVentas)) {
-					for (let i = 1; i < listasPreciosVentas.length; i++) {
-						let lp = listasPreciosVentas[i];
-						if (!lp) continue;
-						let cod = getVal(lp, 'codigoLista', 'CodigoLista');
-						let nom = getVal(lp, 'nombre', 'Nombre');
-						let mon = getVal(lp, 'moneda', 'Moneda');
-						let baseCod = cod.split('/')[0];
-						sel.innerHTML += `<option value="${baseCod}">${nom || cod} (${mon})</option>`;
-					}
-				}
-			}
-
-			function AlCambiarMonedaOListaProforma() {
-				let selProd = document.getElementById("pf_selectorProducto");
-				if (!selProd) return;
-
-				selProd.innerHTML = "<option value=''>-- Seleccionar Producto del Catálogo --</option>";
-				if (Array.isArray(productosVentas)) {
-					for (let i = 1; i < productosVentas.length; i++) {
-						let p = productosVentas[i];
-						if (!p) continue;
-						let indP = Number(getVal(p, 'indProducto', 'ind', 'Ind'));
-						if (indP === 0) continue;
-
-						let ref = getVal(p, 'codigoRef', 'Referencia');
-						let nom = getVal(p, 'nombre', 'NombreProducto');
-						selProd.innerHTML += `<option value="${indP}">[${ref}] ${nom}</option>`;
-					}
-				}
-			}
-
-			function CambiarTipoItemProforma() {
-				let tipo = document.getElementById("pf_tipoItem").value;
-				document.getElementById("wrapperProdCat").style.display = tipo === 'CATALOGO' ? 'block' : 'none';
-				document.getElementById("wrapperInl").style.display = tipo === 'INL' ? 'flex' : 'none';
-
-				if (tipo === 'INL') {
-					document.getElementById("pf_precioItem").value = "0.00";
-					document.getElementById("pf_precioItem").readOnly = false;
 				} else {
-					AlSeleccionarProductoProforma();
-				}
-			}
-
-			function AlSeleccionarProductoProforma() {
-				let indP = Number(document.getElementById("pf_selectorProducto").value);
-				if (!indP) return;
-
-				let mon = document.getElementById("pf_moneda").value;
-				let listaBase = document.getElementById("pf_listaPrecios").value;
-				let targetCodLista = `${listaBase}/${mon}`.toLowerCase();
-
-				let lpObj = Array.isArray(listasPreciosVentas) ? listasPreciosVentas.find(l => getVal(l, 'codigoLista', 'CodigoLista').toLowerCase() === targetCodLista) : null;
-				let precioEncontrado = 0;
-
-				if (lpObj) {
-					let indLP = Number(getVal(lpObj, 'indLista', 'ind', 'Ind'));
-					let prObj = Array.isArray(preciosProductosVentas) ? preciosProductosVentas.find(pr => Number(getVal(pr, 'indLista')) === indLP && Number(getVal(pr, 'indProducto')) === indP) : null;
-					if (prObj) precioEncontrado = Number(getVal(prObj, 'precio', 'PrecioVenta')) || 0;
+					if (esConsulta) return;
+					document.getElementById("pf_consecutivo").value = "PROF-" + new Date().getFullYear() + "-" + (proformas.length);
+					document.getElementById("pf_fecha").value = FechaEnInput(new Date());
+					document.getElementById("pf_moneda").value = "USD";
+					document.getElementById("pf_copUsd").value = 4000;
+					document.getElementById("pf_vigencia").value = 30;
+					document.getElementById("pf_estado").value = "Emitida";
+					document.getElementById("pf_razonDescuento").value = "";
+					document.getElementById("pf_montoDescuento").value = 0;
+					document.getElementById("pf_porcentajeIva").value = 19;
+					document.getElementById("pf_porcentajeRetefuente").value = 0;
+					document.getElementById("pf_observaciones").value = "";
 				}
 
-				document.getElementById("pf_precioItem").value = precioEncontrado.toFixed(2);
-				RecalcularItemTemporalProforma();
-			}
-
-			function RecalcularItemTemporalProforma() {
-				let cant = parseFloat(document.getElementById("pf_cantidadItem").value) || 1;
-				let pu = parseFloat(document.getElementById("pf_precioItem").value) || 0;
-				let mon = document.getElementById("pf_moneda").value;
-				let total = cant * pu;
-				document.getElementById("pf_totalItemPreview").value = `${mon} $${total.toFixed(2)}`;
-			}
-
-			function AgregarItemAProforma() {
-				let tipo = document.getElementById("pf_tipoItem").value;
-				let cant = parseFloat(document.getElementById("pf_cantidadItem").value) || 1;
-				let pu = parseFloat(document.getElementById("pf_precioItem").value) || 0;
-
-				let itemObj = {
-					indProducto: 0,
-					indLista: 0,
-					codigoRef: 'INL',
-					nombreProd: '',
-					cantidad: cant,
-					precioUnitario: pu,
-					valorTotal: cant * pu
-				};
-
-				if (tipo === 'INL') {
-					let nomInl = document.getElementById("pf_inlNombre").value.trim();
-					let descInl = document.getElementById("pf_inlDescripcion").value.trim();
-					if (!nomInl) {
-						showToast("Ingrese el nombre del Ítem No Listado", "error");
-						return;
-					}
-					itemObj.nombreProd = nomInl + (descInl ? ` (${descInl})` : '');
-				} else {
-					let indP = Number(document.getElementById("pf_selectorProducto").value);
-					if (!indP) {
-						showToast("Seleccione un producto del catálogo", "error");
-						return;
-					}
-					let pObj = Array.isArray(productosVentas) ? productosVentas.find(p => Number(getVal(p, 'indProducto', 'ind', 'Ind')) === indP) : null;
-					itemObj.indProducto = indP;
-					itemObj.codigoRef = pObj ? getVal(pObj, 'codigoRef', 'Referencia') : 'CAT';
-					itemObj.nombreProd = pObj ? getVal(pObj, 'nombre', 'NombreProducto') : 'Producto Catálogo';
-				}
-
-				itemsProformaActual.push(itemObj);
+				AlCambiarMonedaOListaProforma();
 				RenderizarItemsProforma();
+				document.getElementById("modalProforma").style.display = "block";
 			}
 
 			function RenderizarItemsProforma() {
@@ -2925,20 +2553,42 @@
 				if (!tabla) return;
 				tabla.innerHTML = "";
 
+				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
+
 				itemsProformaActual.forEach((item, index) => {
 					let fila = `<tr>
 						<td>${index + 1}</td>
 						<td><b>${item.codigoRef}</b></td>
 						<td>${item.nombreProd}</td>
-						<td>${item.cantidad}</td>
-						<td>$${item.precioUnitario.toFixed(2)}</td>
+						<td>
+							${esConsulta ? item.cantidad : `<input type="number" min="1" class="w3-input w3-border w3-round w3-tiny" style="width:70px;" value="${item.cantidad}" onchange="ActualizarCantidadItemProforma(${index}, this.value)">`}
+						</td>
+						<td>
+							${esConsulta ? '$' + item.precioUnitario.toFixed(2) : `<input type="number" step="0.01" class="w3-input w3-border w3-round w3-tiny" style="width:90px;" value="${item.precioUnitario.toFixed(2)}" onchange="ActualizarPrecioItemProforma(${index}, this.value)">`}
+						</td>
 						<td><b>$${item.valorTotal.toFixed(2)}</b></td>
-						<td class="w3-center"><button class="w3-button w3-red w3-tiny" onclick="EliminarItemProforma(${index})">✕</button></td>
+						<td class="w3-center">
+							${esConsulta ? '-' : `<button class="w3-button w3-red w3-tiny w3-round" onclick="EliminarItemProforma(${index})">✕</button>`}
+						</td>
 					</tr>`;
 					tabla.innerHTML += fila;
 				});
 
 				CalcularTotalesProforma();
+			}
+
+			function ActualizarCantidadItemProforma(index, nuevaCant) {
+				let cant = parseFloat(nuevaCant) || 1;
+				itemsProformaActual[index].cantidad = cant;
+				itemsProformaActual[index].valorTotal = cant * itemsProformaActual[index].precioUnitario;
+				RenderizarItemsProforma();
+			}
+
+			function ActualizarPrecioItemProforma(index, nuevoPrecio) {
+				let pu = parseFloat(nuevoPrecio) || 0;
+				itemsProformaActual[index].precioUnitario = pu;
+				itemsProformaActual[index].valorTotal = itemsProformaActual[index].cantidad * pu;
+				RenderizarItemsProforma();
 			}
 
 			function EliminarItemProforma(index) {
@@ -2950,11 +2600,13 @@
 				let subtotal1 = itemsProformaActual.reduce((acc, i) => acc + i.valorTotal, 0);
 				let descMonto = parseFloat(document.getElementById("pf_montoDescuento").value) || 0;
 				let pctIva = (parseFloat(document.getElementById("pf_porcentajeIva").value) || 0) / 100;
+				let pctRet = (parseFloat(document.getElementById("pf_porcentajeRetefuente").value) || 0) / 100;
 				let mon = document.getElementById("pf_moneda").value;
 
 				let subtotalNeto = Math.max(0, subtotal1 - descMonto);
 				let montoIva = subtotalNeto * pctIva;
-				let totalFinal = subtotalNeto + montoIva;
+				let montoRetefuente = subtotalNeto * pctRet;
+				let totalFinal = subtotalNeto + montoIva - montoRetefuente;
 
 				document.getElementById("lblSubtotalProforma").innerHTML = `${mon} $${subtotal1.toFixed(2)}`;
 				document.getElementById("lblDescuentoProforma").innerHTML = `${mon} $${descMonto.toFixed(2)}`;
@@ -3033,7 +2685,7 @@
 
 				let idEmp = Number(getVal(pf, 'idProspecto', 'idempresa', 'IndEmpresa'));
 				let empObj = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === idEmp) : null;
-				let mon = getVal(pf, 'moneda', 'Moneda operación') || 'USD';
+				let mon = getVal(pf, 'moneda', 'Moneda') || 'USD';
 
 				document.getElementById("print_pf_number").innerText = getVal(pf, 'numProforma', '# Proforma');
 				document.getElementById("print_pf_date").innerText = String(getVal(pf, 'fecha', 'Fecha')).slice(0, 10);
@@ -3144,7 +2796,7 @@
 				showLoader(true, "Guardando producto...");
 
 				let vector = [ind, cod, nom, document.getElementById("pv_descripcion").value, document.getElementById("pv_estado").value];
-				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "FA_ProductosVentas", pos: ind, vector: vector };
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "ProductosVentas", pos: ind, vector: vector };
 
 				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
 					.then(res => res.text())
@@ -3177,36 +2829,10 @@
 						<td><b>${getVal(lp, 'codigoLista', 'CodigoLista')}</b></td>
 						<td>${getVal(lp, 'nombre', 'Nombre')}</td>
 						<td><span class="w3-tag w3-teal w3-round w3-tiny">${getVal(lp, 'moneda', 'Moneda')}</span></td>
-						<td><span class="w3-badge w3-green w3-tiny">${getVal(lp, 'estado', 'Estado') || 'Activa'}</span></td>
+						<td class="w3-center"><button class="w3-button w3-teal w3-tiny" onclick="showToast('Lista Activa', 'info')">Ver</button></td>
 					</tr>`;
 					tabla.innerHTML += fila;
 				}
-			}
-
-			function FiltraNombreProveedor(p) {
-				let f = document.getElementById("filtroNombreProveedor");
-				if (!f || !f.value) return true;
-				return getVal(p, 'nombre').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraContactoProveedor(p) {
-				let f = document.getElementById("filtroContactoProveedor");
-				if (!f || !f.value) return true;
-				return getVal(p, 'personaContacto', 'contacto').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraCorreoProveedor(p) {
-				let f = document.getElementById("filtroCorreoProveedor");
-				if (!f || !f.value) return true;
-				return getVal(p, 'correo', 'email').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraWhatsAppProveedor(p) {
-				let f = document.getElementById("filtroWhatsAppProveedor");
-				if (!f || !f.value) return true;
-				return getVal(p, 'whatsApp', 'whatsapp', 'telefono').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraBancoProveedor(p) {
-				let f = document.getElementById("filtroBancoProveedor");
-				if (!f || !f.value) return true;
-				return getVal(p, 'banco').toLowerCase().includes(f.value.toLowerCase());
 			}
 
 			function ListarProveedores() {
@@ -3217,56 +2843,25 @@
 				if (!Array.isArray(proveedores) || proveedores.length <= 1) return;
 
 				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
-				let contador = 0;
 				for (let i = 1; i < proveedores.length; i++) {
 					let p = proveedores[i];
-					if (p && FiltraNombreProveedor(p) && FiltraContactoProveedor(p) && FiltraCorreoProveedor(p) && FiltraWhatsAppProveedor(p) && FiltraBancoProveedor(p)) {
-						contador++;
-						let ind = Number(getVal(p, 'ind'));
+					if (!p) continue;
+					let ind = Number(getVal(p, 'ind'));
+					if (ind === 0) continue;
 
-						let fila = document.createElement("tr");
-
-						let c1 = document.createElement("td"); c1.innerHTML = getVal(p, 'nombre'); fila.appendChild(c1);
-						let c2 = document.createElement("td"); c2.innerHTML = getVal(p, 'personaContacto', 'contacto'); fila.appendChild(c2);
-						let c3 = document.createElement("td"); c3.innerHTML = getVal(p, 'correo', 'email'); fila.appendChild(c3);
-						let c4 = document.createElement("td"); c4.innerHTML = getVal(p, 'whatsApp', 'whatsapp'); fila.appendChild(c4);
-						let c5 = document.createElement("td"); c5.innerHTML = getVal(p, 'banco'); fila.appendChild(c5);
-
-						let c6 = document.createElement("td"); c6.className = "w3-center";
-						
-						let btnEdit = document.createElement("button");
-						btnEdit.innerHTML = esConsulta ? "Ver" : "Editar";
-						btnEdit.className = esConsulta ? "w3-button w3-blue w3-tiny" : "w3-button w3-teal w3-tiny";
-						btnEdit.onclick = function() { EditarProveedor(ind); };
-						c6.appendChild(btnEdit);
-
-						let btnListas = document.createElement("button");
-						btnListas.innerHTML = "Listas de Precios";
-						btnListas.className = "w3-button w3-teal w3-tiny w3-margin-left";
-						btnListas.onclick = function() { GestionarListasProveedor(ind); };
-						c6.appendChild(btnListas);
-
-						fila.appendChild(c6);
-						tabla.appendChild(fila);
-					}
+					let fila = document.createElement("tr");
+					fila.innerHTML = `
+						<td>${getVal(p, 'nombre')}</td>
+						<td>${getVal(p, 'personaContacto')}</td>
+						<td>${getVal(p, 'correo')}</td>
+						<td>${getVal(p, 'whatsApp')}</td>
+						<td>${getVal(p, 'banco')}</td>
+						<td class="w3-center">
+							<button class="${esConsulta ? 'w3-button w3-blue w3-tiny' : 'w3-button w3-teal w3-tiny'}" onclick="EditarProveedor(${ind})">${esConsulta ? 'Ver' : 'Editar'}</button>
+						</td>
+					`;
+					tabla.appendChild(fila);
 				}
-
-				let filtroIcon = document.getElementById("filtroProveedores");
-				let agregarBtn = document.getElementById("agregarProveedor");
-				if (filtroIcon && agregarBtn) {
-					filtroIcon.style.display = contador > 0 ? "inline-block" : "none";
-					agregarBtn.style.display = (contador === 0 && !esConsulta) ? "inline-block" : "none";
-				}
-			}
-
-			function AgregarProveedor() {
-				EditarProveedor(-1);
-				let fNom = document.getElementById("filtroNombreProveedor");
-				if (fNom && fNom.value) document.getElementById("p_nombre").value = fNom.value;
-				let fCon = document.getElementById("filtroContactoProveedor");
-				if (fCon && fCon.value) document.getElementById("p_personaContacto").value = fCon.value;
-				let fCor = document.getElementById("filtroCorreoProveedor");
-				if (fCor && fCor.value) document.getElementById("p_correo").value = fCor.value;
 			}
 
 			function EditarProveedor(ind) {
@@ -3280,9 +2875,9 @@
 					if (p) {
 						document.getElementById("p_nombre").value = getVal(p, 'nombre');
 						document.getElementById("p_direccion").value = getVal(p, 'direccion');
-						document.getElementById("p_personaContacto").value = getVal(p, 'personaContacto', 'contacto');
-						document.getElementById("p_correo").value = getVal(p, 'correo', 'email');
-						document.getElementById("p_whatsApp").value = getVal(p, 'whatsApp', 'whatsapp');
+						document.getElementById("p_personaContacto").value = getVal(p, 'personaContacto');
+						document.getElementById("p_correo").value = getVal(p, 'correo');
+						document.getElementById("p_whatsApp").value = getVal(p, 'whatsApp');
 						document.getElementById("p_cuentaPago").value = getVal(p, 'cuentaPago');
 						document.getElementById("p_banco").value = getVal(p, 'banco');
 						document.getElementById("p_swift").value = getVal(p, 'swift');
@@ -3317,208 +2912,33 @@
 				boton.onclick = () => GuardarProveedor(ind);
 			}
 
-			function AbrirListasPrecios() {
-				if (ventanaProveedor.ind && ventanaProveedor.ind !== -1) {
-					GestionarListasProveedor(ventanaProveedor.ind);
-				} else {
-					showToast("Seleccione o guarde un proveedor primero.", "error");
-				}
-			}
-
-			function GestionarListasProveedor(indProveedor) {
-				ventanaProveedor.ind = indProveedor;
-				let p = Array.isArray(proveedores) ? proveedores.find(item => Number(getVal(item, 'ind')) === Number(indProveedor)) : null;
-				let nomP = p ? getVal(p, 'nombre') : "";
-				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
-				
-				document.getElementById("tituloModalListasPrecios").innerHTML = `<i class="fa fa-list-alt"></i> Listas de Precios y Productos - ${nomP}`;
-				document.getElementById("modalListasPrecios").style.display = "block";
-				
-				document.getElementById("lp_fecha").value = FechaEnInput(new Date());
-				document.getElementById("lp_nombre").value = "";
-
-				let boxCrearLista = document.querySelector("#modalListasPrecios .w3-card:nth-child(1)");
-				if (boxCrearLista) boxCrearLista.style.display = esConsulta ? "none" : "block";
-				
-				CargarSelectorListasProveedor();
-			}
-
-			function CargarSelectorListasProveedor() {
-				let selector = document.getElementById("lp_selectorLista");
-				if (!selector) return;
-				selector.innerHTML = "<option value=''>-- Seleccionar Lista --</option>";
-				
-				let indP = Number(ventanaProveedor.ind);
-				if (Array.isArray(listasPrecios)) {
-					for (let i = 1; i < listasPrecios.length; i++) {
-						let lp = listasPrecios[i];
-						if (!lp) continue;
-						if (Number(getVal(lp, 'ind')) === 0) continue;
-						
-						if (Number(getVal(lp, 'indProveedor', 'indproveedor')) === indP) {
-							let indLP = Number(getVal(lp, 'ind'));
-							let nomLP = getVal(lp, 'nombreLista', 'nombrelista', 'consecutivoLista');
-							selector.innerHTML += `<option value="${indLP}">${nomLP}</option>`;
-						}
-					}
-				}
-				CargarProductosDeLista();
-			}
-
-			function GuardarListaPrecios() {
-				let nom = document.getElementById("lp_nombre").value;
-				let fec = document.getElementById("lp_fecha").value;
-				let indP = ventanaProveedor.ind;
-
-				if (!nom || !fec || indP === -1) {
-					showToast("Complete el nombre y la fecha de la lista", "error");
-					return;
-				}
-
-				let consec = new Date().getFullYear() + "-LP-" + (listasPrecios.length);
-				let vector = [-1, indP, consec, nom, fec];
-
-				showLoader(true, "Guardando Lista de Precios...");
-				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "ListasPrecios", pos: -1, vector: vector };
-
+			function GuardarProveedor(ind) {
+				showLoader(true, ind !== -1 ? "Actualizando Proveedor..." : "Registrando Proveedor...");
+				let vector = [
+					ind,
+					document.getElementById("p_nombre").value,
+					document.getElementById("p_direccion").value,
+					document.getElementById("p_personaContacto").value,
+					document.getElementById("p_correo").value,
+					document.getElementById("p_whatsApp").value,
+					document.getElementById("p_cuentaPago").value,
+					document.getElementById("p_banco").value,
+					document.getElementById("p_swift").value,
+					document.getElementById("p_direccionBanco").value
+				];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Proveedores", pos: ind, vector: vector };
 				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
 					.then(res => res.text())
 					.then(text => {
 						showLoader(false);
-						try {
-							let info = JSON.parse(text);
-							if (info.status === "OK") {
-								listasPrecios = Array.isArray(info.matriz) ? info.matriz : [];
-								document.getElementById("lp_nombre").value = "";
-								showToast("Lista de Precios guardada", "success");
-								
-								CargarSelectorListasProveedor();
-								let nuevoInd = Number(info.ind);
-								if (nuevoInd > 0) {
-									document.getElementById("lp_selectorLista").value = nuevoInd;
-									CargarProductosDeLista();
-								}
-							}
-						} catch (e) {
-							showToast("Error al procesar respuesta de lista de precios", "error");
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							proveedores = Array.isArray(info.matriz) ? info.matriz : [];
+							ListarProveedores();
+							showToast("Proveedor guardado correctamente", "success");
+							document.getElementById("modalProveedor").style.display = "none";
 						}
-					})
-					.catch(err => {
-						showLoader(false);
-						showToast("Error de conexión al servidor", "error");
 					});
-			}
-
-			function CargarProductosDeLista() {
-				let idLP = document.getElementById("lp_selectorLista").value;
-				let box = document.getElementById("boxAgregarProducto");
-				let tabla = document.getElementById("bodyProductosLista");
-				if (!tabla) return;
-				tabla.innerHTML = "";
-
-				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
-
-				if (!idLP) {
-					if (box) box.style.display = "none";
-					return;
-				}
-
-				if (box) box.style.display = esConsulta ? "none" : "block";
-
-				if (Array.isArray(productosLista)) {
-					for (let i = 1; i < productosLista.length; i++) {
-						let pr = productosLista[i];
-						if (!pr) continue;
-						
-						let indP = Number(getVal(pr, 'ind', 'Ind'));
-						if (indP === 0) continue;
-
-						let parentLP = Number(getVal(pr, 'indListaPrecios', 'indlistaprecios', 'IndListaPrecios', 'indLista'));
-						
-						if (parentLP === Number(idLP)) {
-							let fila = document.createElement("tr");
-
-							let c1 = document.createElement("td"); c1.innerHTML = `<b>${getVal(pr, 'referencia', 'Referencia')}</b>`; fila.appendChild(c1);
-							let c2 = document.createElement("td"); c2.innerHTML = getVal(pr, 'nombreProducto', 'nombreproducto', 'NombreProducto', 'nombre'); fila.appendChild(c2);
-							let c3 = document.createElement("td"); c3.innerHTML = getVal(pr, 'descripcion', 'Descripcion'); fila.appendChild(c3);
-							
-							let precioVal = Number(getVal(pr, 'precioProveedor', 'precioproveedor', 'PrecioProveedor', 'precio'));
-							let c4 = document.createElement("td"); c4.innerHTML = `$${precioVal.toFixed(2)}`; fila.appendChild(c4);
-
-							tabla.appendChild(fila);
-						}
-					}
-				}
-			}
-
-			function AgregarProductoLista() {
-				let idLP = document.getElementById("lp_selectorLista").value;
-				let ref = document.getElementById("pr_referencia").value;
-				let nom = document.getElementById("pr_nombre").value;
-				let pre = document.getElementById("pr_precio").value;
-				let desc = document.getElementById("pr_descripcion").value;
-
-				if (!idLP || !ref || !nom || !pre) {
-					showToast("Complete los campos obligatorios del producto", "error");
-					return;
-				}
-
-				let vector = [-1, idLP, ref, nom, desc, parseFloat(pre)];
-				showLoader(true, "Registrando Producto...");
-
-				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "ProductosLista", pos: -1, vector: vector };
-				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
-					.then(res => res.text())
-					.then(text => {
-						showLoader(false);
-						try {
-							let info = JSON.parse(text);
-							if (info.status === "OK") {
-								productosLista = Array.isArray(info.matriz) ? info.matriz : [];
-								document.getElementById("pr_referencia").value = "";
-								document.getElementById("pr_nombre").value = "";
-								document.getElementById("pr_precio").value = "";
-								document.getElementById("pr_descripcion").value = "";
-								showToast("Producto agregado a la lista", "success");
-								CargarProductosDeLista();
-							}
-						} catch (e) {
-							showToast("Error de servidor al guardar producto", "error");
-						}
-					})
-					.catch(err => {
-						showLoader(false);
-						showToast("Error de conexión al servidor", "error");
-					});
-			}
-
-			function FiltraConsecutivoOrden(o) {
-				let f = document.getElementById("filtroConsecutivoOrden");
-				if (!f || !f.value) return true;
-				return getVal(o, 'consecutivoOrden', 'consecutivo').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraProveedorOrden(o) {
-				let f = document.getElementById("filtroProveedorOrden");
-				if (!f || !f.value) return true;
-				let indP = Number(getVal(o, 'indProveedor'));
-				let p = Array.isArray(proveedores) ? proveedores.find(item => Number(getVal(item, 'ind')) === indP) : null;
-				let nomP = p ? getVal(p, 'nombre') : "";
-				return nomP.toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraFechaOrden(o) {
-				let f = document.getElementById("filtroFechaOrden");
-				if (!f || !f.value) return true;
-				return getVal(o, 'fechaOrden', 'fecha').toLowerCase().includes(f.value.toLowerCase());
-			}
-			function FiltraFleteOrden(o) {
-				let f = document.getElementById("filtroFleteOrden");
-				if (!f || !f.value) return true;
-				return getVal(o, 'incluyeFlete').toLowerCase() === f.value.toLowerCase();
-			}
-			function FiltraValorOrden(o) {
-				let f = document.getElementById("filtroValorOrden");
-				if (!f || !f.value) return true;
-				return getVal(o, 'valorTotal', 'valor').toLowerCase().includes(f.value.toLowerCase());
 			}
 
 			function ListarOrdenes() {
@@ -3529,131 +2949,32 @@
 				if (!Array.isArray(ordenesCompra) || ordenesCompra.length <= 1) return;
 
 				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
-				let contador = 0;
+
 				for (let i = 1; i < ordenesCompra.length; i++) {
 					let o = ordenesCompra[i];
-					if (o && FiltraConsecutivoOrden(o) && FiltraProveedorOrden(o) && FiltraFechaOrden(o) && FiltraFleteOrden(o) && FiltraValorOrden(o)) {
-						contador++;
-						let ind = Number(getVal(o, 'ind'));
-						let indP = Number(getVal(o, 'indProveedor'));
-						let p = Array.isArray(proveedores) ? proveedores.find(item => Number(getVal(item, 'ind')) === indP) : null;
-						let nomP = p ? getVal(p, 'nombre') : "N/A";
-						let val = Number(getVal(o, 'valorTotal')).toFixed(2);
+					if (!o) continue;
 
-						let fila = document.createElement("tr");
+					let ind = Number(getVal(o, 'ind'));
+					if (ind === 0) continue;
 
-						let c1 = document.createElement("td"); c1.innerHTML = getVal(o, 'consecutivoOrden'); fila.appendChild(c1);
-						let c2 = document.createElement("td"); c2.innerHTML = nomP; fila.appendChild(c2);
-						let c3 = document.createElement("td"); c3.innerHTML = getVal(o, 'fechaOrden'); fila.appendChild(c3);
-						let c4 = document.createElement("td"); c4.innerHTML = getVal(o, 'incluyeFlete'); fila.appendChild(c4);
-						let c5 = document.createElement("td"); c5.innerHTML = "$" + val; fila.appendChild(c5);
+					let indP = Number(getVal(o, 'indProveedor'));
+					let p = Array.isArray(proveedores) ? proveedores.find(item => Number(getVal(item, 'ind')) === indP) : null;
+					let nomP = p ? getVal(p, 'nombre') : "N/A";
+					let val = Number(getVal(o, 'valorTotal')).toFixed(2);
 
-						let c6 = document.createElement("td"); c6.className = "w3-center";
-						
-						let btnEdit = document.createElement("button");
-						btnEdit.innerHTML = esConsulta ? "Ver" : "Editar";
-						btnEdit.className = esConsulta ? "w3-button w3-blue w3-tiny" : "w3-button w3-teal w3-tiny";
-						btnEdit.onclick = () => EditarOrden(ind);
-						c6.appendChild(btnEdit);
-
-						let btnPrint = document.createElement("button");
-						btnPrint.innerHTML = "Imprimir PO";
-						btnPrint.className = "w3-button w3-teal w3-tiny w3-margin-left";
-						btnPrint.onclick = () => ImprimirOrden(ind);
-						c6.appendChild(btnPrint);
-
-						fila.appendChild(c6);
-						tabla.appendChild(fila);
-					}
+					let fila = document.createElement("tr");
+					fila.innerHTML = `
+						<td><b>${getVal(o, 'consecutivoOrden')}</b></td>
+						<td>${nomP}</td>
+						<td>${getVal(o, 'fechaOrden')}</td>
+						<td>${getVal(o, 'incluyeFlete')}</td>
+						<td>$${val}</td>
+						<td class="w3-center">
+							<button class="${esConsulta ? 'w3-button w3-blue w3-tiny' : 'w3-button w3-teal w3-tiny'}" onclick="EditarOrden(${ind})">${esConsulta ? 'Ver' : 'Editar'}</button>
+						</td>
+					`;
+					tabla.appendChild(fila);
 				}
-
-				let filtroIcon = document.getElementById("filtroOrdenes");
-				let agregarBtn = document.getElementById("agregarOrden");
-				if (filtroIcon && agregarBtn) {
-					filtroIcon.style.display = contador > 0 ? "inline-block" : "none";
-					agregarBtn.style.display = (contador === 0 && !esConsulta) ? "inline-block" : "none";
-				}
-			}
-
-			function AgregarOrden() {
-				EditarOrden(-1);
-			}
-
-			function CargarListasProveedor() {
-				let idP = document.getElementById("po_proveedor").value;
-				let selLP = document.getElementById("po_listaPrecios");
-				selLP.innerHTML = "<option value=''>-- Seleccionar Lista --</option>";
-				document.getElementById("po_selectorProducto").innerHTML = "";
-				document.getElementById("po_selectorProducto").disabled = true;
-				document.getElementById("btnAgregarItemPO").disabled = true;
-
-				if (!idP) return;
-
-				if (Array.isArray(listasPrecios)) {
-					for (let i = 1; i < listasPrecios.length; i++) {
-						let lp = listasPrecios[i];
-						if (!lp) continue;
-						if (Number(getVal(lp, 'ind')) === 0) continue;
-
-						if (Number(getVal(lp, 'indProveedor', 'indproveedor')) === Number(idP)) {
-							let indLP = Number(getVal(lp, 'ind'));
-							let nomLP = getVal(lp, 'nombreLista', 'consecutivoLista');
-							selLP.innerHTML += `<option value="${indLP}">${nomLP}</option>`;
-						}
-					}
-				}
-			}
-
-			function HabilitarSelectorProductos() {
-				let idLP = document.getElementById("po_listaPrecios").value;
-				let selPr = document.getElementById("po_selectorProducto");
-				let btnAg = document.getElementById("btnAgregarItemPO");
-
-				selPr.innerHTML = "<option value=''>-- Seleccionar Producto --</option>";
-
-				if (!idLP) {
-					selPr.disabled = true;
-					btnAg.disabled = true;
-					return;
-				}
-
-				let count = 0;
-				if (Array.isArray(productosLista)) {
-					for (let i = 1; i < productosLista.length; i++) {
-						let pr = productosLista[i];
-						if (!pr) continue;
-						if (Number(getVal(pr, 'ind')) === 0) continue;
-
-						if (Number(getVal(pr, 'indListaPrecios', 'indlistaprecios', 'indLista')) === Number(idLP)) {
-							count++;
-							let ref = getVal(pr, 'referencia');
-							let nom = getVal(pr, 'nombreProducto');
-							let pre = Number(getVal(pr, 'precioProveedor')).toFixed(2);
-							let jsonStr = JSON.stringify({ referencia: ref, nombreProducto: nom, precioUnitario: Number(pre) });
-							selPr.innerHTML += `<option value='${jsonStr}'>[${ref}] ${nom} - $${pre}</option>`;
-						}
-					}
-				}
-
-				selPr.disabled = (count === 0);
-				btnAg.disabled = (count === 0);
-			}
-
-			function AgregarItemAOrden() {
-				let selPr = document.getElementById("po_selectorProducto").value;
-				let cant = parseInt(document.getElementById("po_cantidadProducto").value);
-
-				if (!selPr || isNaN(cant) || cant <= 0) {
-					showToast("Seleccione un producto y una cantidad válida", "error");
-					return;
-				}
-
-				let itemObj = JSON.parse(selPr);
-				itemObj.cantidad = cant;
-				itemObj.valorTotal = itemObj.precioUnitario * cant;
-
-				itemsPOActual.push(itemObj);
-				RenderizarItemsPO();
 			}
 
 			function EditarOrden(ind) {
@@ -3672,207 +2993,24 @@
 					}
 				}
 
-				let btnEmitir = document.querySelector("#modalOrden footer .w3-button.w3-teal");
-				let boxAgregarItem = document.querySelector("#modalOrden .w3-col.m7 .w3-card");
-
 				if (ind !== -1) {
 					let o = Array.isArray(ordenesCompra) ? ordenesCompra.find(item => Number(getVal(item, 'ind')) === Number(ind)) : null;
 					if (o) {
 						selProv.value = getVal(o, 'indProveedor');
-						CargarListasProveedor();
-
-						let selLP = document.getElementById("po_listaPrecios");
-						selLP.value = getVal(o, 'indListaPrecios');
-						HabilitarSelectorProductos();
-
 						document.getElementById("po_consecutivo").value = getVal(o, 'consecutivoOrden');
 						document.getElementById("po_fecha").value = FechaEnInput(getVal(o, 'fechaOrden'));
 						document.getElementById("po_incluyeFlete").checked = getVal(o, 'incluyeFlete') === "SI";
 						document.getElementById("po_observaciones").value = getVal(o, 'observaciones');
-
-						if (Array.isArray(detalleOrdenes)) {
-							for (let i = 0; i < detalleOrdenes.length; i++) {
-								let d = detalleOrdenes[i];
-								if (!d) continue;
-								if (Number(getVal(d, 'ind', 'Ind')) === 0) continue;
-								if (Number(getVal(d, 'indOrdenCompra', 'indordencompra', 'IndOrdenCompra', 'indOrden')) === Number(ind)) {
-									itemsPOActual.push({
-										referencia: getVal(d, 'referencia'),
-										nombreProducto: getVal(d, 'nombreProducto'),
-										cantidad: Number(getVal(d, 'cantidad')),
-										precioUnitario: Number(getVal(d, 'precioUnitario')),
-										valorTotal: Number(getVal(d, 'valorTotal'))
-									});
-								}
-							}
-						}
 					}
 				} else {
 					if (esConsulta) return;
-					document.getElementById("po_listaPrecios").innerHTML = "<option value=''>-- Seleccionar Lista --</option>";
-					document.getElementById("po_selectorProducto").innerHTML = "";
-					document.getElementById("po_selectorProducto").disabled = true;
-					document.getElementById("btnAgregarItemPO").disabled = true;
 					document.getElementById("po_consecutivo").value = "PO-" + new Date().getFullYear() + "-" + (ordenesCompra.length);
 					document.getElementById("po_fecha").value = FechaEnInput(new Date());
 					document.getElementById("po_incluyeFlete").checked = false;
 					document.getElementById("po_observaciones").value = "";
 				}
 
-				selProv.disabled = esConsulta;
-				document.getElementById("po_listaPrecios").disabled = esConsulta;
-				document.getElementById("po_consecutivo").disabled = esConsulta;
-				document.getElementById("po_fecha").disabled = esConsulta;
-				document.getElementById("po_incluyeFlete").disabled = esConsulta;
-				document.getElementById("po_observaciones").disabled = esConsulta;
-
-				if (btnEmitir) btnEmitir.style.display = esConsulta ? "none" : "inline-block";
-				if (boxAgregarItem) boxAgregarItem.style.display = esConsulta ? "none" : "block";
-
-				RenderizarItemsPO();
 				document.getElementById("modalOrden").style.display = "block";
-			}
-
-			function RenderizarItemsPO() {
-				let tabla = document.getElementById("bodyItemsPO");
-				if (!tabla) return;
-				tabla.innerHTML = "";
-				let sumaTotal = 0;
-				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
-
-				itemsPOActual.forEach((item, index) => {
-					sumaTotal += item.valorTotal;
-					let accionBtn = esConsulta ? "-" : `<button class="w3-button w3-red w3-tiny" onclick="EliminarItemPO(${index})">✕</button>`;
-					let fila = `<tr>
-						<td>${index + 1}</td>
-						<td>${item.referencia}</td>
-						<td>${item.nombreProducto}</td>
-						<td>${item.cantidad}</td>
-						<td>$${item.precioUnitario.toFixed(2)}</td>
-						<td>$${item.valorTotal.toFixed(2)}</td>
-						<td class="w3-center">${accionBtn}</td>
-					</tr>`;
-					tabla.innerHTML += fila;
-				});
-
-				document.getElementById("totalMontoPO").innerHTML = `<b>$${sumaTotal.toFixed(2)}</b>`;
-			}
-
-			function EliminarItemPO(index) {
-				itemsPOActual.splice(index, 1);
-				RenderizarItemsPO();
-			}
-
-			function GuardarOrdenCompra() {
-				let idProv = document.getElementById("po_proveedor").value;
-				let idLP = document.getElementById("po_listaPrecios").value;
-				let consec = document.getElementById("po_consecutivo").value;
-				let fecha = document.getElementById("po_fecha").value;
-				let flete = document.getElementById("po_incluyeFlete").checked ? "SI" : "NO";
-				let obs = document.getElementById("po_observaciones").value;
-
-				if (!idProv || !idLP || !consec || !fecha || itemsPOActual.length === 0) {
-					showToast("Complete todos los campos obligatorios y agregue al menos un producto.", "error");
-					return;
-				}
-
-				let sumaTotal = itemsPOActual.reduce((acc, item) => acc + item.valorTotal, 0);
-				let indOrden = ventanaOrden.ind;
-				let vectorOrden = [indOrden, idProv, idLP, consec, fecha, flete, obs, sumaTotal];
-
-				showLoader(true, indOrden !== -1 ? "Actualizando Orden de Compra..." : "Guardando Orden de Compra...");
-				let datos = {
-					accion: GUARDAR_ORDEN_COMPLETA,
-					pos: indOrden,
-					orden: vectorOrden,
-					detalles: itemsPOActual
-				};
-
-				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
-					.then(res => res.text())
-					.then(text => {
-						showLoader(false);
-						try {
-							let info = JSON.parse(text);
-							if (info.status === "OK") {
-								ordenesCompra = Array.isArray(info.ordenesCompra) ? info.ordenesCompra : [];
-								detalleOrdenes = Array.isArray(info.detalleOrdenes) ? info.detalleOrdenes : [];
-								document.getElementById("modalOrden").style.display = "none";
-								showToast("Orden de compra guardada con éxito", "success");
-								ListarOrdenes();
-								ImprimirOrden(info.indOrden);
-							} else {
-								showToast("Error al guardar la orden: " + (info.message || info.status), "error");
-							}
-						} catch (e) {
-							showToast("Respuesta del servidor no válida al guardar la orden.", "error");
-						}
-					})
-					.catch(err => {
-						showLoader(false);
-						showToast("Error de conexión al servidor: " + err, "error");
-					});
-			}
-
-			function ImprimirOrden(indOrden) {
-				let o = Array.isArray(ordenesCompra) ? ordenesCompra.find(item => Number(getVal(item, 'ind')) === Number(indOrden)) : null;
-				if (!o) return;
-
-				let p = Array.isArray(proveedores) ? proveedores.find(item => Number(getVal(item, 'ind')) === Number(getVal(o, 'indProveedor'))) : null;
-				let lp = Array.isArray(listasPrecios) ? listasPrecios.find(item => Number(getVal(item, 'ind')) === Number(getVal(o, 'indListaPrecios'))) : null;
-
-				document.getElementById("print_po_number").innerText = getVal(o, 'consecutivoOrden');
-				document.getElementById("print_po_date").innerText = getVal(o, 'fechaOrden');
-
-				let vInfo = p ? `<b>${getVal(p, 'nombre')}</b><br>
-					Attn: ${getVal(p, 'personaContacto', 'contacto')}<br>
-					Email: ${getVal(p, 'correo', 'email')}<br>
-					Phone/WhatsApp: ${getVal(p, 'whatsApp', 'whatsapp')}<br>
-					Address: ${getVal(p, 'direccion')}` : "N/A";
-				document.getElementById("print_po_vendor_info").innerHTML = vInfo;
-
-				let bInfo = p ? `Bank: ${getVal(p, 'banco')}<br>
-					Account #: ${getVal(p, 'cuentaPago')}<br>
-					SWIFT/BIC: ${getVal(p, 'swift')}<br>
-					Bank Address: ${getVal(p, 'direccionBanco')}` : "N/A";
-				document.getElementById("print_po_bank_info").innerHTML = bInfo;
-
-				document.getElementById("print_po_pricelist_ref").innerText = lp ? (getVal(lp, 'nombreLista') || getVal(lp, 'consecutivoLista')) : "N/A";
-				document.getElementById("print_po_freight_status").innerText = getVal(o, 'incluyeFlete') === "SI" ? "INCLUDES FREIGHT" : "EXCLUDES FREIGHT (EXW / FOB)";
-
-				let tabla = document.getElementById("print_po_items_body");
-				tabla.innerHTML = "";
-				let posCount = 1;
-				let sumaTotal = 0;
-
-				if (Array.isArray(detalleOrdenes)) {
-					for (let i = 0; i < detalleOrdenes.length; i++) {
-						let d = detalleOrdenes[i];
-						if (!d) continue;
-						if (Number(getVal(d, 'ind', 'Ind')) === 0) continue;
-						if (Number(getVal(d, 'indOrdenCompra', 'indordencompra', 'IndOrdenCompra', 'indOrden')) === Number(indOrden)) {
-							let cant = Number(getVal(d, 'cantidad'));
-							let pu = Number(getVal(d, 'precioUnitario'));
-							let vt = Number(getVal(d, 'valorTotal'));
-							sumaTotal += vt;
-
-							let fila = `<tr>
-								<td style="text-align:center;">${posCount++}</td>
-								<td>${getVal(d, 'referencia')}</td>
-								<td>${getVal(d, 'nombreProducto')}</td>
-								<td style="text-align:center;">${cant}</td>
-								<td style="text-align:right;">$${pu.toFixed(2)}</td>
-								<td style="text-align:right;">$${vt.toFixed(2)}</td>
-							</tr>`;
-							tabla.innerHTML += fila;
-						}
-					}
-				}
-
-				document.getElementById("print_po_total_amount").innerText = `$${sumaTotal.toFixed(2)}`;
-				document.getElementById("print_po_notes").innerText = getVal(o, 'observaciones') || "N/A";
-
-				document.getElementById("modalImpresionPO").style.display = "block";
 			}
 
 			function ListarUsuarios() {
@@ -3889,24 +3027,13 @@
 					if (ind === 0) continue;
 
 					let fila = document.createElement("tr");
-
-					let c1 = document.createElement("td"); c1.innerHTML = `<b>${getVal(u, 'usuario')}</b>`; fila.appendChild(c1);
-					let c2 = document.createElement("td"); c2.innerHTML = getVal(u, 'nombre'); fila.appendChild(c2);
-					let c3 = document.createElement("td"); c3.innerHTML = `<span class="w3-tag w3-teal w3-round">${getVal(u, 'rol')}</span>`; fila.appendChild(c3);
-					
-					let est = getVal(u, 'estado') || "Activo";
-					let c4 = document.createElement("td"); 
-					c4.innerHTML = `<span class="w3-badge ${est === 'Activo' ? 'w3-green' : 'w3-red'}">${est}</span>`; 
-					fila.appendChild(c4);
-
-					let c5 = document.createElement("td"); c5.className = "w3-center";
-					let btn = document.createElement("button");
-					btn.innerHTML = "Editar";
-					btn.className = "w3-button w3-teal w3-tiny";
-					btn.onclick = () => EditarUsuario(ind);
-					c5.appendChild(btn);
-					fila.appendChild(c5);
-
+					fila.innerHTML = `
+						<td><b>${getVal(u, 'usuario')}</b></td>
+						<td>${getVal(u, 'nombre')}</td>
+						<td><span class="w3-tag w3-teal w3-round">${getVal(u, 'rol')}</span></td>
+						<td><span class="w3-badge ${getVal(u, 'estado') === 'Activo' ? 'w3-green' : 'w3-red'}">${getVal(u, 'estado') || 'Activo'}</span></td>
+						<td class="w3-center"><button class="w3-button w3-teal w3-tiny" onclick="EditarUsuario(${ind})">Editar</button></td>
+					`;
 					tabla.appendChild(fila);
 				}
 			}
@@ -3938,6 +3065,8 @@
 				let uUser = document.getElementById("u_usuario").value;
 				let uPass = document.getElementById("u_clave").value;
 				let uNom = document.getElementById("u_nombre").value;
+				let uRol = document.getElementById("u_rol").value;
+				let uEst = document.getElementById("u_estado").value;
 
 				if (!uUser || !uPass || !uNom) {
 					showToast("Complete los campos obligatorios del usuario", "error");
@@ -3947,298 +3076,47 @@
 				let ind = ventanaUsuario.ind;
 				showLoader(true, ind !== -1 ? "Actualizando usuario..." : "Creando usuario...");
 
-				let vector = [ind, uUser, uPass, uNom, document.getElementById("u_rol").value, document.getElementById("u_estado").value];
+				let vector = [ind, uUser, uPass, uNom, uRol, uEst];
 				let datos = { accion: GUARDAR_USUARIO, pos: ind, vector: vector };
 
 				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
 					.then(res => res.text())
 					.then(text => {
 						showLoader(false);
-						try {
-							let info = JSON.parse(text);
-							if (info.status === "OK") {
-								usuarios = Array.isArray(info.matriz) ? info.matriz : [];
-								document.getElementById("modalGestionUsuario").style.display = "none";
-								showToast("Usuario guardado con éxito", "success");
-								ListarUsuarios();
-							} else {
-								showToast("Error al guardar usuario", "error");
-							}
-						} catch (e) {
-							showToast("Respuesta del servidor no válida", "error");
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							usuarios = Array.isArray(info.matriz) ? info.matriz : [];
+							document.getElementById("modalGestionUsuario").style.display = "none";
+							showToast("Usuario guardado con éxito", "success");
+							ListarUsuarios();
 						}
-					})
-					.catch(err => {
-						showLoader(false);
-						showToast("Error de conexión al servidor", "error");
 					});
 			}
 
-			function RegistrosCargados(valor) {
-				showLoader(false);
-				try {
-					let info = JSON.parse(valor);
-					if (info.status === "OK") {
-						contactos = Array.isArray(info.contactos) ? info.contactos : [];
-						empresas = Array.isArray(info.empresas) ? info.empresas : [];
-						seguimiento = Array.isArray(info.seguimiento) ? info.seguimiento : [];
-						tareas = Array.isArray(info.tareas) ? info.tareas : [];
-						datosContacto = Array.isArray(info.datosContacto) ? info.datosContacto : [];
-						proveedores = Array.isArray(info.proveedores) ? info.proveedores : [];
-						listasPrecios = Array.isArray(info.listasPrecios) ? info.listasPrecios : [];
-						productosLista = Array.isArray(info.productosLista) ? info.productosLista : [];
-						ordenesCompra = Array.isArray(info.ordenesCompra) ? info.ordenesCompra : [];
-						detalleOrdenes = Array.isArray(info.detalleOrdenes) ? info.detalleOrdenes : [];
-						usuarios = Array.isArray(info.usuarios) ? info.usuarios : [];
+			function renderizarInterfaz() {
+				let lista = document.getElementById('i_listaTareas');
+				if (!lista || !Array.isArray(tareas)) return;
+				lista.innerHTML = "";
 
-						// Tablas de Cotizaciones y Catálogo
-						proformas = Array.isArray(info.proformas) ? info.proformas : [];
-						detalleProformas = Array.isArray(info.detalleProformas) ? info.detalleProformas : [];
-						productosVentas = Array.isArray(info.productosVentas) ? info.productosVentas : [];
-						listasPreciosVentas = Array.isArray(info.listasPreciosVentas) ? info.listasPreciosVentas : [];
-						preciosProductosVentas = Array.isArray(info.preciosProductosVentas) ? info.preciosProductosVentas : [];
+				for (let i = 1; i < tareas.length; i++) {
+					let tarea = tareas[i];
+					let ind = Number(getVal(tarea, 'ind'));
+					if (ind === 0) continue;
 
-						ListarEmpresas();
-						ListarContactos();
-						ListarProveedores();
-						ListarOrdenes();
-						ListarUsuarios();
-						ListarProformas();
-						ListarProductosVentas();
-						ListarListasPreciosVentas();
-						ListarTiposDato();
-						renderizarInterfaz();
-						AbrirSeccion("inicio", "binicio");
-					}
-				} catch (e) {
-					showToast("Error al cargar registros desde Google: " + e.message, "error");
+					let item = document.createElement("div");
+					item.className = "w3-container w3-border-bottom w3-padding-small w3-hover-light-grey";
+					item.innerHTML = `
+						<div class="w3-row w3-small">
+							<div class="w3-col s9">
+								<b>${getVal(tarea, 'descripcion')}</b><br>
+								<small class="w3-text-grey">Estado: ${getVal(tarea, 'estado')} | Fecha: ${FechaEnInput(getVal(tarea, 'fechaEjecucion'))}</small>
+							</div>
+							<div class="w3-col s3 w3-right-align">
+								<button class="w3-button w3-tiny w3-round w3-teal" onclick="EditarContacto(${getVal(tarea, 'indContacto')})">Ver Contacto</button>
+							</div>
+						</div>`;
+					lista.appendChild(item);
 				}
-			}
-
-			function CargarTodo() {
-				showLoader(true, "Conectando con Google...");
-				fetch(appFollowApp, {
-					method: 'POST',
-					body: JSON.stringify({ accion: CARGAR_INFO })
-				})
-				.then(res => res.text())
-				.then(text => RegistrosCargados(text))
-				.catch(err => {
-					showLoader(false);
-					showToast("Error de conexión al servidor: " + err, "error");
-				});
-			}
-
-			function GuardarEmpresa(ind) {
-				showLoader(true, ind !== -1 ? "Actualizando Empresa..." : "Registrando Empresa...");
-				let vector = [
-					ind,
-					document.getElementById("e_nombre").value,
-					document.getElementById("e_descripcion").value,
-					document.getElementById("e_ciudad").value,
-					document.getElementById("e_departamento").value,
-					document.getElementById("e_pais").value,
-					document.getElementById("e_direccion").value,
-					document.getElementById("e_tipoID").value,
-					document.getElementById("e_identificacion").value
-				];
-				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Empresas", pos: ind, vector: vector };
-				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
-					.then(res => res.text())
-					.then(text => RespuestaGuardarEmpresa(text));
-			}
-
-			function RespuestaGuardarEmpresa(valor) {
-				showLoader(false);
-				try {
-					let info = JSON.parse(valor);
-					if (info.status === "OK") {
-						empresas = Array.isArray(info.matriz) ? info.matriz : [];
-						ListarEmpresas();
-						showToast("Empresa guardada correctamente", "success");
-						EditarEmpresa(Number(info.ind));
-					}
-				} catch (e) {
-					showToast("Error al guardar empresa: " + e.message, "error");
-				}
-			}
-
-			function GuardarContacto(ind) {
-				showLoader(true, ind !== -1 ? "Actualizando Contacto..." : "Registrando Contacto...");
-				let esEmpresa = document.getElementById("c_esEmpresa").checked;
-				let indEmpresa = esEmpresa ? -1 : document.getElementById("c_empresa").value;
-				let vector = [
-					ind,
-					document.getElementById("c_nombre").value,
-					document.getElementById("c_apellido").value,
-					document.getElementById("c_cargo").value,
-					indEmpresa
-				];
-				let datos = { accion: ESCRIBE_CONTACTO, contacto: vector, pos: ind };
-				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
-					.then(res => res.text())
-					.then(text => RespuestaGuardarContacto(text));
-			}
-
-			function RespuestaGuardarContacto(valor) {
-				showLoader(false);
-				try {
-					let info = JSON.parse(valor);
-					if (info.status === "OK") {
-						empresas = Array.isArray(info.empresas) ? info.empresas : empresas;
-						contactos = Array.isArray(info.contactos) ? info.contactos : contactos;
-						ListarEmpresas();
-						ListarContactos();
-						if (ventanaEmpresa.ind && Number(ventanaEmpresa.ind) > 0) {
-							ListarContactosEmpresa(ventanaEmpresa.ind);
-						}
-						showToast("Contacto guardado correctamente", "success");
-						EditarContacto(Number(info.ind));
-					}
-				} catch (e) {
-					showToast("Error al guardar contacto: " + e.message, "error");
-				}
-			}
-
-			function GuardarProveedor(ind) {
-				showLoader(true, ind !== -1 ? "Actualizando Proveedor..." : "Registrando Proveedor...");
-				let vector = [
-					ind,
-					document.getElementById("p_nombre").value,
-					document.getElementById("p_direccion").value,
-					document.getElementById("p_personaContacto").value,
-					document.getElementById("p_correo").value,
-					document.getElementById("p_whatsApp").value,
-					document.getElementById("p_cuentaPago").value,
-					document.getElementById("p_banco").value,
-					document.getElementById("p_swift").value,
-					document.getElementById("p_direccionBanco").value
-				];
-				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Proveedores", pos: ind, vector: vector };
-				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
-					.then(res => res.text())
-					.then(text => RespuestaGuardarProveedor(text));
-			}
-
-			function RespuestaGuardarProveedor(valor) {
-				showLoader(false);
-				try {
-					let info = JSON.parse(valor);
-					if (info.status === "OK") {
-						proveedores = Array.isArray(info.matriz) ? info.matriz : [];
-						ListarProveedores();
-						showToast("Proveedor guardado correctamente", "success");
-						EditarProveedor(Number(info.ind));
-					}
-				} catch (e) {
-					showToast("Error al guardar proveedor: " + e.message, "error");
-				}
-			}
-
-			function AgregarDatoContacto() {
-				showLoader(true, "Agregando Dato...");
-				let vector = [-1, ventanaContacto.ind, document.getElementById("nuevoTipoDato").value, document.getElementById("nuevoDato").value];
-				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "DatosContacto", pos: -1, vector: vector };
-				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
-					.then(res => res.text())
-					.then(text => {
-						showLoader(false);
-						let info = JSON.parse(text);
-						if (info.status === "OK") {
-							datosContacto = Array.isArray(info.matriz) ? info.matriz : [];
-							LimpiaDatosContacto();
-							ListarDatosContacto(ventanaContacto.ind);
-						}
-					});
-			}
-
-			function GuardarDatoContacto(ind) {
-				showLoader(true, "Actualizando Dato...");
-				let vector = [ind, ventanaContacto.ind, document.getElementById("editaTipoDato").value, document.getElementById("editaDato").value];
-				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "DatosContacto", pos: ind, vector: vector };
-				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
-					.then(res => res.text())
-					.then(text => {
-						showLoader(false);
-						let info = JSON.parse(text);
-						if (info.status === "OK") {
-							datosContacto = Array.isArray(info.matriz) ? info.matriz : [];
-							ListarDatosContacto(ventanaContacto.ind);
-						}
-					});
-			}
-
-			function GuardarSeguimiento(i) {
-				showLoader(true, i === -1 ? "Guardando Registro..." : "Actualizando Registro...");
-				let pos = i === -1 ? -1 : getVal(seguimiento[i], 'ind');
-				let fecha = i === -1 ? document.getElementById("fechaRegistroSeguimiento").value : getVal(seguimiento[i], 'fecha');
-				let reg = i === -1 ? document.getElementById("registroSeguimiento").value : document.getElementById("actualizacionSeguimiento").value;
-
-				let vector = [pos, ventanaContacto.ind, fecha, reg];
-				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Seguimiento", pos: pos, vector: vector };
-				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
-					.then(res => res.text())
-					.then(text => {
-						showLoader(false);
-						let info = JSON.parse(text);
-						if (info.status === "OK") {
-							seguimiento = Array.isArray(info.matriz) ? info.matriz : [];
-							LimpiaSeguimiento();
-							ListarSeguimiento(ventanaContacto.ind);
-						}
-					});
-			}
-
-			function GuardarTarea(i) {
-				showLoader(true, i === -1 ? "Guardando Tarea..." : "Actualizando Tarea...");
-				let pos = i === -1 ? -1 : getVal(tareas[i], 'ind');
-				let f = i === -1 ? document.getElementById("fechaTarea").value : document.getElementById("e_fechaTarea").value;
-				let d = i === -1 ? document.getElementById("descripcionTarea").value : document.getElementById("e_descripcionTarea").value;
-				let e = i === -1 ? document.getElementById("estadoTarea").value : document.getElementById("e_estadoTarea").value;
-				let p = i === -1 ? document.getElementById("prioridadTarea").value : document.getElementById("e_prioridadTarea").value;
-
-				let vector = [pos, ventanaContacto.ind, f, d, e, p];
-				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Tareas", pos: pos, vector: vector };
-				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
-					.then(res => res.text())
-					.then(text => {
-						showLoader(false);
-						let info = JSON.parse(text);
-						if (info.status === "OK") {
-							tareas = Array.isArray(info.matriz) ? info.matriz : [];
-							LimpiaTareas();
-							ListarTareas(ventanaContacto.ind);
-							renderizarInterfaz();
-						}
-					});
-			}
-
-			function ActualizarTarea() {
-				showLoader(true, "Actualizando Tarea...");
-				let ind = ventanaInicio.ind;
-				let t = Array.isArray(tareas) ? tareas.find(item => Number(getVal(item, 'ind')) === Number(ind)) : null;
-				let indC = t ? getVal(t, 'indContacto') : -1;
-
-				let vector = [
-					ind,
-					indC,
-					document.getElementById("i_fechaTarea").value,
-					document.getElementById("i_descripcion").value,
-					document.getElementById("i_estadoTarea").value,
-					document.getElementById("i_prioridadTarea").value
-				];
-				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Tareas", pos: ind, vector: vector };
-				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
-					.then(res => res.text())
-					.then(text => {
-						showLoader(false);
-						let info = JSON.parse(text);
-						if (info.status === "OK") {
-							tareas = Array.isArray(info.matriz) ? info.matriz : [];
-							renderizarInterfaz();
-							document.getElementById("modalInicio").style.display = "none";
-						}
-					});
 			}
 
 			function AlInicio() {
