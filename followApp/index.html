@@ -80,6 +80,10 @@
         
 			.w3-modal-content { border-radius: 8px; overflow: hidden; }
 			
+			.w3-modal { 
+				z-index: 9000 !important; 
+			}
+
 			.loading-overlay { 
 				display: none; 
 				position: fixed; 
@@ -239,7 +243,7 @@
 				<div class="w3-container w3-teal w3-center w3-padding-24">
 					<i class="fa fa-user-circle-o w3-xxxlarge"></i>
 					<h3 style="margin:8px 0 0 0;"><b>FollowApp</b></h3>
-					<small>Control de Acceso de Usuarios V1.1</small>
+					<small>Control de Acceso de Usuarios V1.2</small>
 				</div>
 				<form id="formLogin" class="w3-container w3-padding-24 w3-white" onsubmit="event.preventDefault(); IniciarSesion();">
 					<label class="w3-text-teal"><b>Usuario:</b></label>
@@ -3400,28 +3404,240 @@
 
 			function renderizarInterfaz() {
 				let lista = document.getElementById('i_listaTareas');
+				let canvas = document.getElementById('canvasTareas');
 				if (!lista || !Array.isArray(tareas)) return;
+
 				lista.innerHTML = "";
+				if (canvas) canvas.innerHTML = "";
+
+				// Filtros de prioridad
+				let pMax = document.getElementById("p_maxima")?.checked ?? true;
+				let pAlta = document.getElementById("p_alta")?.checked ?? true;
+				let pMed = document.getElementById("p_media")?.checked ?? true;
+				let pBaja = document.getElementById("p_baja")?.checked ?? false;
+
+				// Filtros de estado
+				let eNoIni = document.getElementById("e_noIniciada")?.checked ?? true;
+				let eIni = document.getElementById("e_iniciada")?.checked ?? true;
+				let eFin = document.getElementById("e_terminada")?.checked ?? false;
+				let eSusp = document.getElementById("e_suspendida")?.checked ?? false;
+				let eCanc = document.getElementById("e_cancelada")?.checked ?? false;
+
+				// Filtro de urgencia
+				let fUrgencia = document.getElementById("filtroUrgencia")?.value || "cualquierMomento";
+
+				let hoy = new Date();
+				hoy.setHours(0,0,0,0);
 
 				for (let i = 1; i < tareas.length; i++) {
-					let tarea = tareas[i];
-					let ind = Number(getVal(tarea, 'ind'));
+					let t = tareas[i];
+					if (!t) continue;
+					let ind = Number(getVal(t, 'ind', 'Ind'));
 					if (ind === 0) continue;
+
+					let prioNum = Number(getVal(t, 'prioridad', 'Prioridad')) || 0;
+					let estado = getVal(t, 'estado', 'Estado') || "No iniciada";
+					let fechaStr = getVal(t, 'fechaEjecucion', 'FechaEjecucion', 'fecha');
+					let desc = getVal(t, 'descripcion', 'Descripcion');
+
+					// Aplicar filtros de Prioridad
+					if (prioNum === 3 && !pMax) continue;
+					if (prioNum === 2 && !pAlta) continue;
+					if (prioNum === 1 && !pMed) continue;
+					if (prioNum === 0 && !pBaja) continue;
+
+					// Aplicar filtros de Estado
+					if (estado === "No iniciada" && !eNoIni) continue;
+					if (estado === "Iniciada" && !eIni) continue;
+					if (estado === "Terminada" && !eFin) continue;
+					if (estado === "Suspendida" && !eSusp) continue;
+					if (estado === "Cancelada" && !eCanc) continue;
+
+					// Calcular diferencia de días para la Urgencia
+					let fechaT = new Date(fechaStr);
+					let diffDias = 999;
+					if (!isNaN(fechaT.getTime())) {
+						diffDias = Math.ceil((fechaT - hoy) / (1000 * 60 * 60 * 24));
+					}
+
+					if (fUrgencia === "unDia" && diffDias > 1) continue;
+					if (fUrgencia === "unaSemana" && diffDias > 7) continue;
+					if (fUrgencia === "unaQuincena" && diffDias > 15) continue;
+					if (fUrgencia === "unMes" && diffDias > 30) continue;
+
+					// 1. Renderizar fila en la lista de tareas
+					let prioStr = prioridades[prioNum] || "Baja";
+					let badgeColors = ["w3-blue", "w3-green", "w3-orange", "w3-red"];
+					let badgeColor = badgeColors[prioNum] || "w3-grey";
 
 					let item = document.createElement("div");
 					item.className = "w3-container w3-border-bottom w3-padding-small w3-hover-light-grey";
 					item.innerHTML = `
 						<div class="w3-row w3-small">
 							<div class="w3-col s9">
-								<b>${getVal(tarea, 'descripcion')}</b><br>
-								<small class="w3-text-grey">Estado: ${getVal(tarea, 'estado')} | Fecha: ${FechaEnInput(getVal(tarea, 'fechaEjecucion'))}</small>
+								<span class="w3-badge ${badgeColor} w3-tiny">${prioStr}</span>
+								<b class="w3-margin-left">${desc}</b><br>
+								<small class="w3-text-grey">Estado: ${estado} | Fecha: ${FechaEnInput(fechaStr)}</small>
 							</div>
 							<div class="w3-col s3 w3-right-align">
-								<button class="w3-button w3-tiny w3-round w3-teal" onclick="EditarContacto(${getVal(tarea, 'indContacto')})">Ver Contacto</button>
+								<button class="w3-button w3-tiny w3-round w3-teal" onclick="AbrirAtencionTarea(${ind})">Atender</button>
 							</div>
 						</div>`;
 					lista.appendChild(item);
+
+					// 2. Plotear punto de tarea en el plano cartesiano (Matriz)
+					if (canvas) {
+						let xPct = 10;
+						if (diffDias <= 0) xPct = 88;
+						else if (diffDias <= 1) xPct = 76;
+						else if (diffDias <= 7) xPct = 60;
+						else if (diffDias <= 15) xPct = 42;
+						else if (diffDias <= 30) xPct = 26;
+						else xPct = 12;
+
+						// Desplazamiento controlado para evitar superposición idéntica entre tareas cercamente agendadas
+						let jitterX = ((ind * 17) % 10) - 5;
+						let jitterY = ((ind * 23) % 8) - 4;
+						xPct = Math.min(92, Math.max(8, xPct + jitterX));
+
+						let yPct = 15;
+						if (prioNum === 3) yPct = 82;
+						else if (prioNum === 2) yPct = 60;
+						else if (prioNum === 1) yPct = 38;
+						else yPct = 18;
+
+						yPct = Math.min(88, Math.max(10, yPct + jitterY));
+
+						let dot = document.createElement("div");
+						dot.style.position = "absolute";
+						dot.style.left = `${xPct}%`;
+						dot.style.bottom = `${yPct}%`;
+						dot.style.width = "26px";
+						dot.style.height = "26px";
+						dot.style.borderRadius = "50%";
+						dot.style.display = "flex";
+						dot.style.alignItems = "center";
+						dot.style.justifyContent = "center";
+						dot.style.fontSize = "11px";
+						dot.style.fontWeight = "bold";
+						dot.style.color = "white";
+						dot.style.cursor = "pointer";
+						dot.style.boxShadow = "0 2px 5px rgba(0,0,0,0.3)";
+						dot.style.zIndex = "5"; // z-index interno menor al de los modales (9000)
+						dot.style.transition = "transform 0.2s ease, box-shadow 0.2s ease";
+
+						let hexBg = "#2196F3"; 
+						if (prioNum === 3) hexBg = "#f44336"; 
+						else if (prioNum === 2) hexBg = "#ff9800"; 
+						else if (prioNum === 1) hexBg = "#4CAF50"; 
+
+						dot.style.backgroundColor = hexBg;
+						dot.innerText = ind;
+						dot.title = `Tarea #${ind}: ${desc}\nFecha: ${FechaEnInput(fechaStr)}\nPrioridad: ${prioStr}\nEstado: ${estado}`;
+
+						dot.onmouseover = function() {
+							this.style.transform = "scale(1.3)";
+							this.style.zIndex = "10";
+						};
+						dot.onmouseout = function() {
+							this.style.transform = "scale(1.0)";
+							this.style.zIndex = "5";
+						};
+						dot.onclick = function() {
+							AbrirAtencionTarea(ind);
+						};
+
+						canvas.appendChild(dot);
+					}
 				}
+			}
+
+			function AbrirAtencionTarea(indTarea) {
+				ventanaInicio.ind = indTarea;
+				let tarea = Array.isArray(tareas) ? tareas.find(t => Number(getVal(t, 'ind', 'Ind')) === Number(indTarea)) : null;
+				if (!tarea) return;
+
+				let indContacto = Number(getVal(tarea, 'indContacto', 'IndContacto'));
+				let contacto = Array.isArray(contactos) ? contactos.find(c => Number(getVal(c, 'ind', 'Ind')) === indContacto) : null;
+
+				document.getElementById("tituloModalInicio").innerText = `Atención Tarea #${indTarea}`;
+
+				if (contacto) {
+					document.getElementById("i_nombre").innerText = getVal(contacto, 'nombre');
+					document.getElementById("i_apellido").innerText = getVal(contacto, 'apellido');
+					document.getElementById("i_cargo").innerText = getVal(contacto, 'cargo');
+
+					let indEmp = Number(getVal(contacto, 'indEmpresa', 'IndEmpresa'));
+					let emp = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === indEmp) : null;
+					document.getElementById("i_empresa").innerText = emp ? getVal(emp, 'nombre') : "Sin empresa";
+
+					let btnVerC = document.getElementById("i_verContacto");
+					if (btnVerC) {
+						btnVerC.onclick = () => {
+							document.getElementById('modalInicio').style.display = 'none';
+							EditarContacto(indContacto);
+						};
+					}
+
+					let tablaDC = document.getElementById("i_listaDC");
+					if (tablaDC) {
+						tablaDC.innerHTML = "";
+						if (Array.isArray(datosContacto)) {
+							datosContacto.forEach(d => {
+								if (Number(getVal(d, 'indContacto', 'IndContacto')) === indContacto) {
+									tablaDC.innerHTML += `<tr><td>${getVal(d, 'tipoDato')}</td><td>${getVal(d, 'dato')}</td></tr>`;
+								}
+							});
+						}
+					}
+				} else {
+					document.getElementById("i_nombre").innerText = "N/A";
+					document.getElementById("i_apellido").innerText = "N/A";
+					document.getElementById("i_cargo").innerText = "N/A";
+					document.getElementById("i_empresa").innerText = "N/A";
+				}
+
+				document.getElementById("i_descripcion").value = getVal(tarea, 'descripcion', 'Descripcion');
+				document.getElementById("i_estadoTarea").value = getVal(tarea, 'estado', 'Estado') || "No iniciada";
+				document.getElementById("i_fechaTarea").value = FechaEnInput(getVal(tarea, 'fechaEjecucion', 'fecha'));
+				document.getElementById("i_prioridadTarea").value = String(getVal(tarea, 'prioridad', 'Prioridad') || 0);
+
+				document.getElementById("modalInicio").style.display = "block";
+			}
+
+			function ActualizarTarea() {
+				let indTarea = ventanaInicio.ind;
+				if (!indTarea) return;
+
+				let tareaObj = Array.isArray(tareas) ? tareas.find(t => Number(getVal(t, 'ind', 'Ind')) === Number(indTarea)) : null;
+				if (!tareaObj) return;
+
+				showLoader(true, "Actualizando Tarea...");
+				let indContacto = Number(getVal(tareaObj, 'indContacto', 'IndContacto'));
+				let f = document.getElementById("i_fechaTarea").value;
+				let d = document.getElementById("i_descripcion").value;
+				let e = document.getElementById("i_estadoTarea").value;
+				let p = document.getElementById("i_prioridadTarea").value;
+
+				let vector = [indTarea, indContacto, f, d, e, p];
+				let datos = { accion: ESCRIBIR_REGISTRO, hoja: "Tareas", pos: indTarea, vector: vector };
+
+				fetch(appFollowApp, { method: 'POST', body: JSON.stringify(datos) })
+					.then(res => res.text())
+					.then(text => {
+						showLoader(false);
+						let info = JSON.parse(text);
+						if (info.status === "OK") {
+							tareas = Array.isArray(info.matriz) ? info.matriz : [];
+							renderizarInterfaz();
+							showToast("Tarea actualizada con éxito", "success");
+							document.getElementById("modalInicio").style.display = "none";
+						}
+					})
+					.catch(err => {
+						showLoader(false);
+						showToast("Error al actualizar tarea", "error");
+					});
 			}
 
 			function AlInicio() {
