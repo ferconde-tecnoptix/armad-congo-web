@@ -27,8 +27,53 @@
 
 			.content-area {
 				flex: 1; 
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+			}
+
+			.seccion {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+				min-height: 0;
+				padding: 10px 16px;
+			}
+
+			#inicio.seccion {
+				display: block;
 				overflow-y: auto;
-				-webkit-overflow-scrolling: touch;
+			}
+
+			.table-scroll-container {
+				flex: 1;
+				overflow-y: auto;
+				min-height: 0;
+				position: relative;
+				border-radius: 6px;
+			}
+
+			.table-scroll-container table {
+				border-collapse: separate;
+				border-spacing: 0;
+			}
+
+			.table-scroll-container table thead tr:first-child th {
+				position: sticky;
+				top: 0;
+				z-index: 12;
+				background-color: #008080 !important;
+				color: white !important;
+				box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+			}
+
+			.table-scroll-container table thead tr:nth-child(2) td {
+				position: sticky;
+				top: 36px;
+				z-index: 11;
+				background-color: #f1f1f1 !important;
+				box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 			}
 
 			.logo-header { height: 45px; width: auto; vertical-align: middle; margin-right: 15px; }
@@ -194,7 +239,7 @@
 				<div class="w3-container w3-teal w3-center w3-padding-24">
 					<i class="fa fa-user-circle-o w3-xxxlarge"></i>
 					<h3 style="margin:8px 0 0 0;"><b>FollowApp</b></h3>
-					<small>Control de Acceso de Usuarios - V1.0</small>
+					<small>Control de Acceso de Usuarios</small>
 				</div>
 				<form id="formLogin" class="w3-container w3-padding-24 w3-white" onsubmit="event.preventDefault(); IniciarSesion();">
 					<label class="w3-text-teal"><b>Usuario:</b></label>
@@ -224,7 +269,7 @@
 			</header>
 
 			<main class="content-area w3-container">	
-				<div class="w3-bar w3-theme-l4 w3-padding-0">
+				<div class="w3-bar w3-theme-l4 w3-padding-0" style="flex-shrink: 0;">
 					<button class="navegacion w3-bar-item w3-button" id="binicio" onclick="AbrirSeccion('inicio','binicio')"><i class="fa fa-dashboard"></i> Inicio</button>
 					<button class="navegacion w3-bar-item w3-button" id="bempresas" onclick="AbrirSeccion('empresas','bempresas')"><i class="fa fa-university"></i> Empresas</button>
 					<button class="navegacion w3-bar-item w3-button" id="bcontactos" onclick="AbrirSeccion('contactos','bcontactos')"><i class="fa fa-users"></i> Contactos</button>
@@ -298,8 +343,8 @@
 				</div>
 
 				<div class="w3-container w3-theme-d2 seccion" id="empresas">
-					<div class="w3-container">
-						<div class="w3-row w3-margin-bottom w3-padding-16">
+					<div class="w3-container" style="display:flex; flex-direction:column; height:100%; min-height:0; padding:0;">
+						<div class="w3-row w3-margin-bottom w3-padding-16" style="flex-shrink: 0;">
 							<div class="w3-col s8">
 								<h2 class="w3-text-teal"><i class="fa fa-university"></i> Gestión de Empresas</h2>
 							</div>
@@ -310,7 +355,7 @@
 							</div>
 						</div>
 
-						<div class="w3-responsive w3-card-4 w3-white">
+						<div class="w3-responsive w3-card-4 w3-white table-scroll-container">
 							<table class="w3-table-all w3-hoverable" id="tablaEmpresas">
 								<thead>
 									<tr class="w3-teal">
@@ -363,8 +408,8 @@
 				</div>
 
 				<div class="w3-container w3-theme-d2 seccion" id="contactos">
-					<div class="w3-container">
-						<div class="w3-row w3-margin-bottom w3-padding-16">
+					<div class="w3-container" style="display:flex; flex-direction:column; height:100%; min-height:0; padding:0;">
+						<div class="w3-row w3-margin-bottom w3-padding-16" style="flex-shrink: 0;">
 							<div class="w3-col s8">
 								<h2 class="w3-text-teal"><i class="fa fa-users"></i> Directorio de Contactos</h2>
 							</div>
@@ -375,7 +420,7 @@
 							</div>
 						</div>
 
-						<div class="w3-responsive w3-card-4 w3-white">
+						<div class="w3-responsive w3-card-4 w3-white table-scroll-container">
 							<table class="w3-table-all w3-hoverable" id="tablaContactos">
 								<thead>
 									<tr class="w3-teal">
@@ -421,8 +466,8 @@
 				</div>
 
 				<div class="w3-container w3-theme-d2 seccion" id="proformas">
-					<div class="w3-container">
-						<div class="w3-row w3-margin-bottom w3-padding-16">
+					<div class="w3-container" style="display:flex; flex-direction:column; height:100%; min-height:0; padding:0;">
+						<div class="w3-row w3-margin-bottom w3-padding-16" style="flex-shrink: 0;">
 							<div class="w3-col s8">
 								<h2 class="w3-text-teal"><i class="fa fa-file-text-o"></i> Proformas y Cotizaciones Comerciales</h2>
 							</div>
@@ -433,7 +478,7 @@
 							</div>
 						</div>
 
-						<div class="w3-responsive w3-card-4 w3-white">
+						<div class="w3-responsive w3-card-4 w3-white table-scroll-container">
 							<table class="w3-table-all w3-hoverable" id="tablaProformas">
 								<thead>
 									<tr class="w3-teal">
@@ -500,8 +545,8 @@
 				</div>
 
 				<div class="w3-container w3-theme-d2 seccion" id="catalogo">
-					<div class="w3-container">
-						<div class="w3-row w3-margin-bottom w3-padding-16">
+					<div class="w3-container" style="display:flex; flex-direction:column; height:100%; min-height:0; padding:0;">
+						<div class="w3-row w3-margin-bottom w3-padding-16" style="flex-shrink: 0;">
 							<div class="w3-col s8">
 								<h2 class="w3-text-teal"><i class="fa fa-tags"></i> Catálogo de Productos y Precios de Venta</h2>
 							</div>
@@ -512,11 +557,11 @@
 							</div>
 						</div>
 
-						<div class="w3-row-padding">
+						<div class="w3-row-padding" style="flex:1; min-height:0; overflow-y:auto;">
 							<div class="w3-half">
 								<div class="w3-card-4 w3-white w3-padding">
 									<h4 class="w3-text-teal"><b>Catálogo de Productos (`ProductosVentas`)</b></h4>
-									<div class="w3-responsive" style="max-height: 450px; overflow-y: auto;">
+									<div class="table-scroll-container" style="max-height: 450px;">
 										<table class="w3-table-all w3-hoverable w3-small">
 											<thead>
 												<tr class="w3-teal">
@@ -536,7 +581,7 @@
 							<div class="w3-half">
 								<div class="w3-card-4 w3-white w3-padding">
 									<h4 class="w3-text-teal"><b>Listas de Precios de Venta (`ListasPreciosVentas`)</b></h4>
-									<div class="w3-responsive" style="max-height: 450px; overflow-y: auto;">
+									<div class="table-scroll-container" style="max-height: 450px;">
 										<table class="w3-table-all w3-hoverable w3-small">
 											<thead>
 												<tr class="w3-teal">
@@ -557,8 +602,8 @@
 				</div>
 
 				<div class="w3-container w3-theme-d2 seccion" id="proveedores">
-					<div class="w3-container">
-						<div class="w3-row w3-margin-bottom w3-padding-16">
+					<div class="w3-container" style="display:flex; flex-direction:column; height:100%; min-height:0; padding:0;">
+						<div class="w3-row w3-margin-bottom w3-padding-16" style="flex-shrink: 0;">
 							<div class="w3-col s8">
 								<h2 class="w3-text-teal"><i class="fa fa-truck"></i> Gestión de Proveedores</h2>
 							</div>
@@ -569,7 +614,7 @@
 							</div>
 						</div>
 
-						<div class="w3-responsive w3-card-4 w3-white">
+						<div class="w3-responsive w3-card-4 w3-white table-scroll-container">
 							<table class="w3-table-all w3-hoverable" id="tablaProveedores">
 								<thead>
 									<tr class="w3-teal">
@@ -622,8 +667,8 @@
 				</div>
 
 				<div class="w3-container w3-theme-d2 seccion" id="ordenes">
-					<div class="w3-container">
-						<div class="w3-row w3-margin-bottom w3-padding-16">
+					<div class="w3-container" style="display:flex; flex-direction:column; height:100%; min-height:0; padding:0;">
+						<div class="w3-row w3-margin-bottom w3-padding-16" style="flex-shrink: 0;">
 							<div class="w3-col s8">
 								<h2 class="w3-text-teal"><i class="fa fa-shopping-cart"></i> Órdenes de Compra (PO)</h2>
 							</div>
@@ -634,7 +679,7 @@
 							</div>
 						</div>
 
-						<div class="w3-responsive w3-card-4 w3-white">
+						<div class="w3-responsive w3-card-4 w3-white table-scroll-container">
 							<table class="w3-table-all w3-hoverable" id="tablaOrdenes">
 								<thead>
 									<tr class="w3-teal">
@@ -688,8 +733,8 @@
 				</div>
 
 				<div class="w3-container w3-theme-d2 seccion" id="usuarios">
-					<div class="w3-container">
-						<div class="w3-row w3-margin-bottom w3-padding-16">
+					<div class="w3-container" style="display:flex; flex-direction:column; height:100%; min-height:0; padding:0;">
+						<div class="w3-row w3-margin-bottom w3-padding-16" style="flex-shrink: 0;">
 							<div class="w3-col s8">
 								<h2 class="w3-text-teal"><i class="fa fa-user-circle"></i> Control de Usuarios del Sistema</h2>
 							</div>
@@ -700,7 +745,7 @@
 							</div>
 						</div>
 
-						<div class="w3-responsive w3-card-4 w3-white">
+						<div class="w3-responsive w3-card-4 w3-white table-scroll-container">
 							<table class="w3-table-all w3-hoverable" id="tablaUsuarios">
 								<thead>
 									<tr class="w3-teal">
