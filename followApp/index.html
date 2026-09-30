@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>FollowApp - Sistema de Gestión y Cotizaciones - Ver 1.0</title>
+		<title>FollowApp - Sistema de Gestión y Cotizaciones</title>
 		
 		<!-- External Stylesheets (W3.CSS, Theme Teal, FontAwesome) -->
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -194,7 +194,7 @@
 				<div class="w3-container w3-teal w3-center w3-padding-24">
 					<i class="fa fa-user-circle-o w3-xxxlarge"></i>
 					<h3 style="margin:8px 0 0 0;"><b>FollowApp</b></h3>
-					<small>Control de Acceso de Usuarios</small>
+					<small>Control de Acceso de Usuarios - V1.0</small>
 				</div>
 				<form id="formLogin" class="w3-container w3-padding-24 w3-white" onsubmit="event.preventDefault(); IniciarSesion();">
 					<label class="w3-text-teal"><b>Usuario:</b></label>
@@ -2581,19 +2581,35 @@
 				} else {
 					if (esConsulta) return;
 
-					// Formato del consecutivo: AAAA-00# (Ej: 2026-001)
+					// Calcular consecutivo basándose en el valor máximo de las proformas anteriores
 					let anioActual = new Date().getFullYear();
-					let countAnio = 1;
+					let maxNum = 0;
+					let tienePrefijoProf = false;
+
 					if (Array.isArray(proformas) && proformas.length > 1) {
 						for (let i = 1; i < proformas.length; i++) {
-							let numP = getVal(proformas[i], 'numProforma', 'NumProforma', '# Proforma');
-							if (numP && String(numP).startsWith(String(anioActual))) {
-								countAnio++;
+							let numP = getVal(proformas[i], 'numProforma', 'NumProforma', '# Proforma', 'numproforma', 'consecutivoProforma');
+							if (numP) {
+								if (numP.toUpperCase().startsWith("PROF-")) tienePrefijoProf = true;
+								let match = numP.match(/(\d+)\s*$/);
+								if (match) {
+									let valNum = parseInt(match[1], 10);
+									if (!isNaN(valNum) && valNum > maxNum) {
+										maxNum = valNum;
+									}
+								}
 							}
 						}
 					}
-					let padNum = String(countAnio).padStart(3, '0');
-					document.getElementById("pf_consecutivo").value = `${anioActual}-${padNum}`;
+
+					let nuevoNumSeq = maxNum + 1;
+					let padNum = String(nuevoNumSeq).padStart(3, '0');
+					
+					if (tienePrefijoProf) {
+						document.getElementById("pf_consecutivo").value = `PROF-${anioActual}-${padNum}`;
+					} else {
+						document.getElementById("pf_consecutivo").value = `${anioActual}-${padNum}`;
+					}
 
 					document.getElementById("pf_fecha").value = FechaEnInput(new Date());
 					document.getElementById("pf_moneda").value = "USD";
@@ -2750,24 +2766,20 @@
 				let idEmp = Number(getVal(pf, 'idProspecto', 'idempresa', 'IndEmpresa'));
 				let empObj = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === idEmp) : null;
 				let mon = getVal(pf, 'moneda', 'Moneda', 'Moneda operación') || 'USD';
+				let numProformaStr = getVal(pf, 'numProforma', 'NumProforma', '# Proforma', 'numproforma', 'consecutivoProforma');
+				let fechaStr = String(getVal(pf, 'fecha', 'Fecha')).slice(0, 10);
 
-				document.getElementById("print_pf_number").innerText = getVal(pf, 'numProforma', 'NumProforma', '# Proforma');
-				document.getElementById("print_pf_date").innerText = String(getVal(pf, 'fecha', 'Fecha')).slice(0, 10);
-
-				let clientInfo = empObj ? `<b>${getVal(empObj, 'nombre')}</b><br>
+				let clientInfoHtml = empObj ? `<b>${getVal(empObj, 'nombre')}</b><br>
 					NIT/ID: ${getVal(empObj, 'id')}<br>
 					Ciudad: ${getVal(empObj, 'ciudad')}, ${getVal(empObj, 'departamento')}<br>
 					Dirección: ${getVal(empObj, 'direccion')}` : "Cliente N/A";
-				document.getElementById("print_pf_client_info").innerHTML = clientInfo;
 
-				let termsInfo = `<b>Moneda:</b> ${mon}<br>
+				let termsInfoHtml = `<b>Moneda:</b> ${mon}<br>
 					<b>Vigencia:</b> ${getVal(pf, 'vigencia', 'Vigencia')} Días<br>
 					<b>Estado:</b> ${getVal(pf, 'estado', 'Estado')}<br>
 					<b>Responsable:</b> ${getVal(pf, 'responsable', 'Responsable')}`;
-				document.getElementById("print_pf_terms_info").innerHTML = termsInfo;
 
-				let tabla = document.getElementById("print_pf_items_body");
-				tabla.innerHTML = "";
+				let rowsHtml = "";
 				let subtotalAcc = 0;
 				let posCount = 1;
 
@@ -2781,7 +2793,7 @@
 							let vt = Number(getVal(d, 'valorTotal', 'ValorTotal'));
 							subtotalAcc += vt;
 
-							let fila = `<tr>
+							rowsHtml += `<tr>
 								<td style="text-align:center;">${posCount++}</td>
 								<td>${getVal(d, 'codigoRef', 'CodigoRef')}</td>
 								<td>${getVal(d, 'nombreProd', 'NombreProducto')}</td>
@@ -2789,20 +2801,204 @@
 								<td style="text-align:right;">${mon} $${pu.toFixed(2)}</td>
 								<td style="text-align:right;">${mon} $${vt.toFixed(2)}</td>
 							</tr>`;
-							tabla.innerHTML += fila;
 						}
 					}
 				}
 
 				let mIva = Number(getVal(pf, 'totalIVA', 'TotalIVA', 'IVA')) || 0;
 				let mTotal = Number(getVal(pf, 'total', 'Total')) || subtotalAcc;
+				let obsTxt = getVal(pf, 'observaciones', 'Observaciones') || "Sin observaciones adicionales.";
 
-				document.getElementById("print_pf_subtotal_amount").innerText = `${mon} $${subtotalAcc.toFixed(2)}`;
-				document.getElementById("print_pf_iva_amount").innerText = `${mon} $${mIva.toFixed(2)}`;
-				document.getElementById("print_pf_total_amount").innerText = `${mon} $${mTotal.toFixed(2)}`;
-				document.getElementById("print_pf_notes").innerText = getVal(pf, 'observaciones', 'Observaciones') || "Sin observaciones adicionales.";
+				// Abrir documento imprimible independiente en una nueva ventana/pestaña
+				let printWindow = window.open('', '_blank');
+				if (!printWindow) {
+					showToast("Por favor permita las ventanas emergentes (pop-ups) para abrir la impresión.", "error");
+					return;
+				}
 
-				document.getElementById("modalImpresionProforma").style.display = "block";
+				let printDocumentHtml = `<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Proforma Comercial ${numProformaStr}</title>
+	<style>
+		@page {
+			size: letter;
+			margin: 15mm;
+		}
+		body {
+			font-family: Arial, sans-serif;
+			color: #333;
+			margin: 0;
+			padding: 20px;
+			background: #fff;
+			-webkit-print-color-adjust: exact !important;
+			print-color-adjust: exact !important;
+		}
+		.toolbar {
+			background: #008080;
+			color: white;
+			padding: 12px 20px;
+			margin-bottom: 25px;
+			border-radius: 6px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+		}
+		.btn {
+			background: #ffffff;
+			color: #008080;
+			border: none;
+			padding: 8px 18px;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 14px;
+			font-weight: bold;
+		}
+		.btn-close {
+			background: #e53935;
+			color: #ffffff;
+			margin-left: 10px;
+		}
+		.header-table {
+			width: 100%;
+			border-bottom: 3px solid #008080;
+			padding-bottom: 12px;
+			margin-bottom: 20px;
+		}
+		.info-table {
+			width: 100%;
+			margin-bottom: 20px;
+			font-size: 13px;
+		}
+		.items-table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 15px;
+			font-size: 13px;
+		}
+		.items-table th {
+			background-color: #008080 !important;
+			color: white !important;
+			padding: 8px;
+			text-align: left;
+		}
+		.items-table td {
+			padding: 8px;
+			border: 1px solid #ddd;
+		}
+		.items-table tr {
+			page-break-inside: avoid;
+			break-inside: avoid;
+		}
+		.totals-row {
+			background-color: #f9f9f9;
+		}
+		.prevent-break {
+			page-break-inside: avoid;
+			break-inside: avoid;
+		}
+		@media print {
+			.toolbar { display: none !important; }
+			body { padding: 0 !important; }
+		}
+	</style>
+</head>
+<body>
+	<div class="toolbar">
+		<span><b>Cotización / Proforma Comercial: ${numProformaStr}</b></span>
+		<div>
+			<button class="btn" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+			<button class="btn btn-close" onclick="window.close()">✖ Cerrar</button>
+		</div>
+	</div>
+
+	<table class="header-table prevent-break">
+		<tr>
+			<td>
+				<h2 style="color: #008080; margin: 0; font-weight: bold;">TECNOPTIX S.A.S.</h2>
+				<small>NIT: 900.338.198-6 • División de Ventas y Proyectos</small>
+			</td>
+			<td style="text-align: right;">
+				<h3 style="margin: 0; color: #444; font-weight: bold;">COTIZACIÓN / PROFORMA</h3>
+				<b>Proforma #: </b><span>${numProformaStr}</span><br>
+				<b>Fecha: </b><span>${fechaStr}</span>
+			</td>
+		</tr>
+	</table>
+
+	<table class="info-table prevent-break">
+		<tr>
+			<td style="width: 50%; vertical-align: top; padding-right: 15px;">
+				<h4 style="color: #008080; margin-bottom: 6px; border-bottom: 1px solid #ddd;">CLIENTE / EMPRESA:</h4>
+				<div>${clientInfoHtml}</div>
+			</td>
+			<td style="width: 50%; vertical-align: top; padding-left: 15px;">
+				<h4 style="color: #008080; margin-bottom: 6px; border-bottom: 1px solid #ddd;">CONDICIONES COMERCIALES:</h4>
+				<div>${termsInfoHtml}</div>
+			</td>
+		</tr>
+	</table>
+
+	<table class="items-table">
+		<thead>
+			<tr>
+				<th style="width: 5%;">#</th>
+				<th style="width: 20%;">Código Ref</th>
+				<th style="width: 40%;">Descripción del Producto / Servicio</th>
+				<th style="width: 10%; text-align:center;">Cant</th>
+				<th style="width: 12.5%; text-align:right;">Precio Unit.</th>
+				<th style="width: 12.5%; text-align:right;">Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			${rowsHtml}
+		</tbody>
+		<tfoot>
+			<tr class="totals-row prevent-break">
+				<td colspan="5" style="text-align: right; font-weight: bold;">SUBTOTAL:</td>
+				<td style="text-align: right;">${mon} $${subtotalAcc.toFixed(2)}</td>
+			</tr>
+			<tr class="totals-row prevent-break">
+				<td colspan="5" style="text-align: right; font-weight: bold;">IVA / IMPUESTOS:</td>
+				<td style="text-align: right;">${mon} $${mIva.toFixed(2)}</td>
+			</tr>
+			<tr class="totals-row prevent-break">
+				<td colspan="5" style="text-align: right; font-weight: bold; font-size: 14px;">TOTAL OFERTA:</td>
+				<td style="font-weight: bold; text-align: right; font-size: 14px; color: #008080;">${mon} $${mTotal.toFixed(2)}</td>
+			</tr>
+		</tfoot>
+	</table>
+
+	<div style="margin-top: 25px; font-size: 12px; color: #555;" class="prevent-break">
+		<b>Observaciones & Instrucciones de Pago:</b>
+		<p style="margin: 6px 0 0 0; white-space: pre-wrap;">${obsTxt}</p>
+	</div>
+
+	<div style="margin-top: 45px; font-size: 13px;" class="prevent-break">
+		<table style="width:100%;">
+			<tr>
+				<td style="width: 50%;">
+					<br><br>
+					________________________________________<br>
+					<b>Asesor Comercial Responsable</b><br>
+					Tecnoptix S.A.S.
+				</td>
+				<td style="width: 50%; text-align: right;">
+					<br><br>
+					________________________________________<br>
+					<b>Aceptado por el Cliente</b>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>`;
+
+				printWindow.document.open();
+				printWindow.document.write(printDocumentHtml);
+				printWindow.document.close();
 			}
 
 			function ListarProductosVentas() {
