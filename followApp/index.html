@@ -1764,50 +1764,9 @@
 				return [anio, mes, dia].join('-');
 			}
 
-			function AbrirSeccion(seccionId, botonId) {
-				let secciones = document.getElementsByClassName("seccion");
-				for (let i = 0; i < secciones.length; i++) {
-					secciones[i].style.display = "none";
-				}
-
-				let botones = document.getElementsByClassName("navegacion");
-				for (let i = 0; i < botones.length; i++) {
-					botones[i].classList.remove("w3-theme-d1", "w3-teal");
-				}
-
-				let sec = document.getElementById(seccionId);
-				if (sec) sec.style.display = "block";
-
-				let btn = document.getElementById(botonId);
-				if (btn) btn.classList.add("w3-theme-d1", "w3-teal");
-			}
-
-			function controlarBotonBorrado(inputElement, botonId) {
-				let btn = document.getElementById(botonId);
-				if (btn) {
-					btn.style.display = inputElement.value.trim().length > 0 ? "block" : "none";
-				}
-			}
-
-			function limpiarCampo(inputId, botonId) {
-				let input = document.getElementById(inputId);
-				let btn = document.getElementById(botonId);
-				if (input) {
-					input.value = "";
-					input.focus();
-				}
-				if (btn) btn.style.display = "none";
-
-				if (inputId.includes("Empresa")) ListarEmpresas();
-				else if (inputId.includes("Contacto")) ListarContactos();
-				else if (inputId.includes("Proveedor")) ListarProveedores();
-				else if (inputId.includes("Orden")) ListarOrdenes();
-				else if (inputId.includes("Proforma")) ListarProformas();
-			}
-
 			function IniciarSesion() {
-				let userVal = document.getElementById("login_usuario").value;
-				let passVal = document.getElementById("login_clave").value;
+				let userVal = document.getElementById("login_usuario").value.trim();
+				let passVal = document.getElementById("login_clave").value.trim();
 
 				if (!userVal || !passVal) {
 					showToast("Ingrese usuario y contraseña", "error");
@@ -1815,11 +1774,22 @@
 				}
 
 				showLoader(true, "Verificando credenciales...");
+				
 				fetch(appFollowApp, {
 					method: 'POST',
+					mode: 'cors',
+					redirect: 'follow',
+					headers: {
+						'Content-Type': 'text/plain;charset=utf-8'
+					},
 					body: JSON.stringify({ accion: LOGIN_USUARIO, usuario: userVal, clave: passVal })
 				})
-				.then(res => res.text())
+				.then(res => {
+					if (!res.ok) {
+						throw new Error("Respuesta de red no OK (HTTP " + res.status + ")");
+					}
+					return res.text();
+				})
 				.then(text => {
 					showLoader(false);
 					try {
@@ -1834,12 +1804,14 @@
 							showToast(info.message || "Credenciales incorrectas", "error");
 						}
 					} catch (e) {
-						showToast("Error de respuesta del servidor", "error");
+						console.error("Error respuesta servidor:", text);
+						showToast("Error de formato de respuesta del servidor", "error");
 					}
 				})
 				.catch(err => {
 					showLoader(false);
-					showToast("Error de conexión al servidor", "error");
+					console.error("Error de conexión:", err);
+					showToast("Error de conexión al servidor: " + err.message, "error");
 				});
 			}
 
