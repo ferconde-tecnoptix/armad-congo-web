@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador y Relación de Cuentas de Cobro - V1.0.1</title>
+  <title>Generador y Relación de Cuentas de Cobro - V1.1.0</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -51,7 +51,7 @@
           <i class="fa-solid fa-file-invoice-dollar text-2xl text-white"></i>
         </div>
         <div>
-          <h1 class="text-xl font-bold tracking-tight">Sistema de Cuentas de Cobro - V1.0.1</h1>
+          <h1 class="text-xl font-bold tracking-tight">Sistema de Cuentas de Cobro - V1.1.0</h1>
           <p class="text-xs text-slate-400">Emisor: <span id="headerIssuerName" class="text-emerald-400 font-medium">Fernando Conde</span> • <span id="headerIssuerDoc">C.C. 7.706.430</span></p>
         </div>
       </div>
@@ -173,7 +173,7 @@
                 </select>
               </div>
               <div id="exchangeRateBox" class="hidden">
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Tasa Cambio (TRM 1 USD)</label>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Tasa Cambio (TRM 1 USD = $ COP)</label>
                 <input type="number" id="inputExchangeRate" value="4000" step="10" placeholder="Ej: 4000" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateDocumentPreview()">
               </div>
             </div>
@@ -601,16 +601,20 @@
       const chkCOP = document.getElementById("chkPayCOP");
       const chkUSD = document.getElementById("chkPayUSD");
 
-      if (curr === "DUAL") {
+      // Show exchange rate box for both DUAL and USD modes so TRM can be adjusted
+      if (curr === "DUAL" || curr === "USD") {
         rateBox.classList.remove("hidden");
+      } else {
+        rateBox.classList.add("hidden");
+      }
+
+      if (curr === "DUAL") {
         chkCOP.checked = true;
         chkUSD.checked = true;
       } else if (curr === "USD") {
-        rateBox.classList.add("hidden");
         chkCOP.checked = false;
         chkUSD.checked = true;
       } else { // COP
-        rateBox.classList.add("hidden");
         chkCOP.checked = true;
         chkUSD.checked = false;
       }
@@ -631,7 +635,7 @@
       const currencyMode = document.getElementById("inputCurrency")?.value || "COP";
       const exchangeRate = parseFloat(document.getElementById("inputExchangeRate")?.value) || 4000;
 
-      const { items, total } = getFormConcepts();
+      const { items, total } = getFormConcepts(); // total is ALWAYS in COP $
 
       document.getElementById("docHeaderCity").textContent = cityHeader;
       document.getElementById("docHeaderDate").textContent = formattedDate;
@@ -644,17 +648,18 @@
       document.getElementById("docIssuerName").textContent = i.name;
       document.getElementById("docIssuerDoc").textContent = `${i.docType} ${i.docNum}`;
 
-      // Currency Formatting logic
+      // Currency Formatting logic (Base input in form is always in COP)
       let formattedTotal = "";
       let totalInWords = "";
 
       if (currencyMode === "USD") {
-        formattedTotal = formatCurrencyUSD(total);
-        totalInWords = numberToWordsUSD(total);
+        const totalUSD = total / exchangeRate;
+        formattedTotal = formatCurrencyUSD(totalUSD);
+        totalInWords = `${numberToWordsUSD(totalUSD)} (CALCULADO A PARTIR DE ${numberToWordsPesos(total)} A TRM $${exchangeRate.toLocaleString("es-CO")} COP)`;
       } else if (currencyMode === "DUAL") {
-        const totalCOP = total * exchangeRate;
-        formattedTotal = `${formatCurrencyUSD(total)} / ${formatCurrency(totalCOP)} COP`;
-        totalInWords = `${numberToWordsUSD(total)} (EQUIVALENTE A ${numberToWordsPesos(totalCOP)} A TRM $${exchangeRate.toLocaleString("es-CO")} COP)`;
+        const totalUSD = total / exchangeRate;
+        formattedTotal = `${formatCurrency(total)} COP / ${formatCurrencyUSD(totalUSD)}`;
+        totalInWords = `${numberToWordsPesos(total)} (EQUIVALENTE A ${numberToWordsUSD(totalUSD)} A TRM $${exchangeRate.toLocaleString("es-CO")} COP)`;
       } else { // COP
         formattedTotal = formatCurrency(total);
         totalInWords = numberToWordsPesos(total);
@@ -672,7 +677,14 @@
         items.forEach(it => {
           const li = document.createElement("li");
           li.className = "flex justify-between items-baseline border-b border-dotted border-slate-300 pb-1";
-          const itemVal = currencyMode === "USD" ? formatCurrencyUSD(it.amount) : formatCurrency(it.amount);
+          
+          let itemVal = formatCurrency(it.amount);
+          if (currencyMode === "USD") {
+            itemVal = formatCurrencyUSD(it.amount / exchangeRate);
+          } else if (currencyMode === "DUAL") {
+            itemVal = `${formatCurrency(it.amount)} COP / ${formatCurrencyUSD(it.amount / exchangeRate)}`;
+          }
+
           li.innerHTML = `
             <span class="flex-1 pr-4">${escapeHtml(it.description)}</span>
             <span class="font-mono font-bold">${itemVal}</span>
