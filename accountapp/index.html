@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador y Relación de Cuentas de Cobro - V1.1.0</title>
+  <title>Generador y Relación de Cuentas de Cobro - V1.2.1</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -51,7 +51,7 @@
           <i class="fa-solid fa-file-invoice-dollar text-2xl text-white"></i>
         </div>
         <div>
-          <h1 class="text-xl font-bold tracking-tight">Sistema de Cuentas de Cobro - V1.1.0</h1>
+          <h1 class="text-xl font-bold tracking-tight">Sistema de Cuentas de Cobro - V1.2.1</h1>
           <p class="text-xs text-slate-400">Emisor: <span id="headerIssuerName" class="text-emerald-400 font-medium">Fernando Conde</span> • <span id="headerIssuerDoc">C.C. 7.706.430</span></p>
         </div>
       </div>
@@ -802,135 +802,36 @@
       updateDocumentPreview();
     }
 
-    function getNextConsecutiveForYear(year) {
+    function getNextConsecutiveForYear(targetYear) {
+      const year = parseInt(targetYear) || new Date().getFullYear();
       let maxNum = 0;
+
       appState.accounts.forEach(acc => {
-        const accYear = parseInt(acc.year) || year;
+        let accYear = parseInt(acc.year);
+        let accNum = 0;
+
+        const consecutiveStr = String(acc.formattedConsecutive || "").trim();
+        
+        // Extraer año y número secuencial del consecutivo (ej: 2026-003 o 2026-3)
+        if (consecutiveStr.includes("-")) {
+          const parts = consecutiveStr.split("-");
+          const parsedYear = parseInt(parts[0]);
+          const parsedNum = parseInt(parts[parts.length - 1]);
+          if (!isNaN(parsedYear)) accYear = parsedYear;
+          if (!isNaN(parsedNum)) accNum = parsedNum;
+        } else {
+          const parsedNum = parseInt(consecutiveStr);
+          if (!isNaN(parsedNum)) accNum = parsedNum;
+        }
+
+        // Si pertenece al año evaluado, registramos el secuencial más alto
         if (accYear === year) {
-          const parts = String(acc.formattedConsecutive || "").split("-");
-          const num = parseInt(parts[parts.length - 1]) || 0;
-          if (num > maxNum) maxNum = num;
+          if (accNum > maxNum) maxNum = accNum;
         }
       });
+
       const nextNum = maxNum + 1;
       return `${year}-${String(nextNum).padStart(3, '0')}`;
-    }
-
-    function addConceptRow(desc = "", val = 0) {
-      const container = document.getElementById("conceptsContainer");
-      const rowId = "concept_row_" + Date.now() + "_" + Math.floor(Math.random()*1000);
-      
-      const div = document.createElement("div");
-      div.id = rowId;
-      div.className = "flex items-center gap-2";
-      div.innerHTML = `
-        <input type="text" placeholder="Descripción del concepto" value="${escapeHtml(desc)}" class="concept-desc flex-1 px-3 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateDocumentPreview()">
-        <input type="number" step="0.01" placeholder="Valor $" value="${val || ''}" class="concept-val w-28 px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-mono text-right focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateDocumentPreview()">
-        <button type="button" onclick="removeConceptRow('${rowId}')" class="text-slate-400 hover:text-rose-600 p-1.5 transition">
-          <i class="fa-solid fa-trash-can"></i>
-        </button>
-      `;
-      container.appendChild(div);
-      updateDocumentPreview();
-    }
-
-    function removeConceptRow(rowId) {
-      const el = document.getElementById(rowId);
-      if (el) el.remove();
-      updateDocumentPreview();
-    }
-
-    function getFormConcepts() {
-      const rows = document.querySelectorAll("#conceptsContainer > div");
-      const items = [];
-      let total = 0;
-
-      rows.forEach(r => {
-        const desc = r.querySelector(".concept-desc")?.value.trim() || "";
-        const val = parseFloat(r.querySelector(".concept-val")?.value) || 0;
-        if (desc || val > 0) {
-          items.push({ description: desc, amount: val });
-          total += val;
-        }
-      });
-
-      return { items, total };
-    }
-
-    async function handleFormSubmit(e) {
-      e.preventDefault();
-
-      const btn = document.getElementById("btnSaveAccount");
-      const btnText = document.getElementById("btnSaveText");
-      btn.disabled = true;
-      btnText.textContent = "Guardando en Google Sheets...";
-
-      const { items, total } = getFormConcepts();
-      const isEdit = appState.editingAccountIndex !== -1;
-      const currentAccount = isEdit ? appState.accounts[appState.editingAccountIndex] : null;
-
-      const payload = {
-        isEdit: isEdit,
-        sheetRow: currentAccount ? currentAccount.sheetRow : -1,
-        formattedConsecutive: document.getElementById("inputConsecutive").value.trim(),
-        year: parseInt(document.getElementById("inputYear").value) || new Date().getFullYear(),
-        docCity: document.getElementById("inputDocCity").value.trim(),
-        dateString: formatDateSpanish(document.getElementById("inputDate").value),
-        clientName: document.getElementById("inputClientName").value.trim(),
-        clientNitType: document.getElementById("inputClientNitType").value.trim() || "NIT",
-        clientNit: document.getElementById("inputClientNit").value.trim(),
-        totalAmount: total,
-        status: document.getElementById("inputStatus").value,
-        observations: document.getElementById("inputObservations").value.trim(),
-        itemsJson: JSON.stringify(items),
-        conceptsSummary: items.map(i => `${i.description} ($${i.amount})`).join(" | "),
-        issuerJson: JSON.stringify(appState.issuer)
-      };
-
-      try {
-        if (appState.scriptUrl) {
-          await fetch(appState.scriptUrl, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload)
-          });
-        }
-
-        if (isEdit) {
-          appState.accounts[appState.editingAccountIndex] = { ...currentAccount, ...payload };
-        } else {
-          appState.accounts.unshift({ ...payload, sheetRow: 2 });
-        }
-
-        updateYearFilterOptions();
-        resetForm();
-        switchTab("list");
-        showToast(isEdit ? "¡Registro actualizado correctamente!" : "¡Guardado exitosamente en Fila 2 de Google Sheet!", "success");
-
-      } catch (err) {
-        console.error("Error al guardar:", err);
-        showToast("Se guardó en el historial local, pero hubo un detalle al conectar con Google Sheets.", "info");
-      } finally {
-        btn.disabled = false;
-        btnText.textContent = "Guardar en Google Sheet (Fila 2)";
-      }
-    }
-
-    async function fetchFromGoogleSheet() {
-      if (!appState.scriptUrl) return;
-
-      try {
-        const response = await fetch(appState.scriptUrl + "?action=read");
-        const json = await response.json();
-
-        if (json && json.status === "success" && Array.isArray(json.data)) {
-          parseSheetRows(json.data);
-          showToast("Sincronización con Google Sheets completada.", "success");
-        }
-      } catch (err) {
-        console.warn("Error al sincronizar con Google Sheet:", err);
-      }
     }
 
     function parseSheetRows(dataRows) {
@@ -949,9 +850,19 @@
           items = [{ description: String(row[3]), amount: parseFloat(row[4]) || 0 }];
         }
 
+        const consecStr = String(row[0] || "").trim();
+        let parsedYear = parseInt(row[8]);
+        
+        // Si el año no está explícito en la columna I, extraerlo del consecutivo (ej: 2026-001)
+        if ((!parsedYear || isNaN(parsedYear)) && consecStr.includes("-")) {
+          const yPart = parseInt(consecStr.split("-")[0]);
+          if (!isNaN(yPart)) parsedYear = yPart;
+        }
+        if (!parsedYear || isNaN(parsedYear)) parsedYear = new Date().getFullYear();
+
         parsed.push({
           sheetRow: i + 1,
-          formattedConsecutive: String(row[0] || ""),
+          formattedConsecutive: consecStr,
           dateString: String(row[1] || ""),
           clientName: String(row[2] || ""),
           conceptsSummary: String(row[3] || ""),
@@ -959,7 +870,7 @@
           status: String(row[5] || "Pendiente"),
           observations: String(row[6] || ""),
           clientNit: String(row[7] || ""),
-          year: parseInt(row[8]) || new Date().getFullYear(),
+          year: parsedYear,
           itemsJson: row[9] || "",
           clientNitType: String(row[10] || "NIT"),
           items: items
@@ -1270,6 +1181,333 @@
       }
 
       return `${textVal} ${pesosSuffix} ${centsFormatted}`.replace(/\s+/g, " ").trim();
+    }
+  </script>
+</body>
+</html>
+  <!-- MODAL: Confirmar Eliminación -->
+  <div id="deleteConfirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 space-y-4 border border-slate-200 text-center">
+      <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto text-xl">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <div>
+        <h3 class="font-bold text-slate-800 text-lg">¿Eliminar Cuenta de Cobro?</h3>
+        <p class="text-xs text-slate-500 mt-1">Esta acción eliminará el registro <span id="deleteConsecutiveText" class="font-bold text-slate-700"></span> de tu Google Sheet y no se podrá deshacer.</p>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="confirmDeleteAccount()" id="btnConfirmDelete" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-2.5 rounded-xl transition text-xs flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-trash-can"></i>
+          <span>Sí, Eliminar</span>
+        </button>
+        <button onclick="closeDeleteModal()" class="px-4 py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-xl text-xs hover:bg-slate-200 transition">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
+
+  <script>
+    // --- ESTADO GLOBAL ---
+    const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXPWutYAsobMqPNNqx74EW2VvKFuSswphfgM4a7sb9pKoJYIOi1tPlz5mG_e17Tje4-g/exec";
+    const DEFAULT_SHEET_ID = "1WEv4ApE8ggS97Y1Yh0VUVVFvESd9utOE3V2IPbIP5L4";
+
+    let deletingAccountIndex = -1;
+
+    let appState = {
+      scriptUrl: localStorage.getItem("accountapp_scriptUrl") || DEFAULT_SCRIPT_URL,
+      sheetId: localStorage.getItem("accountapp_sheetId") || DEFAULT_SHEET_ID,
+      accounts: [],
+      editingAccountIndex: -1,
+      issuer: JSON.parse(localStorage.getItem("accountapp_issuer")) || {
+        name: "FERNANDO CONDE",
+        docType: "C.C.",
+        docNum: "7.706.430",
+        phone: "316 691 88 05",
+        address: "CLL 168 No. 8 G 61 BLO 2 APTO 602",
+        city: "BOGOTÁ",
+        state: "D.C.",
+        country: "COLOMBIA"
+      }
+    };
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const btn = document.getElementById("btnSaveAccount");
+      const btnText = document.getElementById("btnSaveText");
+      btn.disabled = true;
+      btnText.textContent = "Guardando en Google Sheets...";
+
+      const { items, total } = getFormConcepts();
+      const isEdit = appState.editingAccountIndex !== -1;
+      const currentAccount = isEdit ? appState.accounts[appState.editingAccountIndex] : null;
+
+      const payload = {
+        isEdit: isEdit,
+        sheetRow: currentAccount ? currentAccount.sheetRow : -1,
+        formattedConsecutive: document.getElementById("inputConsecutive").value.trim(),
+        year: parseInt(document.getElementById("inputYear").value) || new Date().getFullYear(),
+        docCity: document.getElementById("inputDocCity").value.trim(),
+        dateVal: document.getElementById("inputDate").value,
+        dateString: formatDateSpanish(document.getElementById("inputDate").value),
+        clientName: document.getElementById("inputClientName").value.trim(),
+        clientNitType: document.getElementById("inputClientNitType").value.trim() || "NIT",
+        clientNit: document.getElementById("inputClientNit").value.trim(),
+        currencyMode: document.getElementById("inputCurrency")?.value || "COP",
+        exchangeRate: parseFloat(document.getElementById("inputExchangeRate")?.value) || 4000,
+        showPayCOP: document.getElementById("chkPayCOP")?.checked,
+        showPayUSD: document.getElementById("chkPayUSD")?.checked,
+        totalAmount: total,
+        status: document.getElementById("inputStatus").value,
+        observations: document.getElementById("inputObservations").value.trim(),
+        itemsJson: JSON.stringify(items),
+        conceptsSummary: items.map(i => `${i.description} ($${i.amount})`).join(" | "),
+        issuerJson: JSON.stringify(appState.issuer)
+      };
+
+      try {
+        if (appState.scriptUrl) {
+          await fetch(appState.scriptUrl, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+          });
+        }
+
+        if (isEdit) {
+          appState.accounts[appState.editingAccountIndex] = { ...currentAccount, ...payload };
+        } else {
+          appState.accounts.unshift({ ...payload, sheetRow: 2 });
+        }
+
+        updateYearFilterOptions();
+        resetForm();
+        switchTab("list");
+        showToast(isEdit ? "¡Registro actualizado correctamente!" : "¡Guardado exitosamente en Fila 2 de Google Sheet!", "success");
+
+      } catch (err) {
+        console.error("Error al guardar:", err);
+        showToast("Se guardó localmente pero hubo un detalle al conectar con Google Sheets.", "info");
+      } finally {
+        btn.disabled = false;
+        btnText.textContent = "Guardar en Google Sheet (Fila 2)";
+      }
+    }
+
+    function parseSheetRows(dataRows) {
+      if (!dataRows || dataRows.length <= 1) return;
+
+      const parsed = [];
+      for (let i = 1; i < dataRows.length; i++) {
+        const row = dataRows[i];
+        if (!row[0] && !row[2]) continue;
+
+        let items = [];
+        if (row[9]) {
+          try { items = JSON.parse(row[9]); } catch(e){}
+        }
+        if (items.length === 0 && row[3]) {
+          items = [{ description: String(row[3]), amount: parseFloat(row[4]) || 0 }];
+        }
+
+        parsed.push({
+          sheetRow: i + 1,
+          formattedConsecutive: String(row[0] || ""),
+          dateString: String(row[1] || ""),
+          clientName: String(row[2] || ""),
+          conceptsSummary: String(row[3] || ""),
+          totalAmount: parseFloat(row[4]) || 0,
+          status: String(row[5] || "Pendiente"),
+          observations: String(row[6] || ""),
+          clientNit: String(row[7] || ""),
+          year: parseInt(row[8]) || new Date().getFullYear(),
+          itemsJson: row[9] || "",
+          clientNitType: String(row[10] || "NIT"),
+          items: items
+        });
+      }
+
+      appState.accounts = parsed;
+      document.getElementById("recordCountBadge").textContent = parsed.length;
+      updateYearFilterOptions();
+      renderHistoryTable();
+      updateConsecutiveForYear();
+    }
+
+    function renderHistoryTable() {
+      const tbody = document.getElementById("historyTableBody");
+      const yearFilter = document.getElementById("filterYear").value;
+      const searchQuery = document.getElementById("searchTable").value.toLowerCase();
+
+      tbody.innerHTML = "";
+
+      const filtered = appState.accounts.filter(acc => {
+        const matchYear = (yearFilter === "ALL" || String(acc.year) === yearFilter);
+        const matchSearch = (!searchQuery || 
+          acc.clientName.toLowerCase().includes(searchQuery) || 
+          acc.formattedConsecutive.toLowerCase().includes(searchQuery)
+        );
+        return matchYear && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400">No hay registros de cuentas de cobro.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach((acc) => {
+        const realIdx = appState.accounts.indexOf(acc);
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+
+        const statusBadge = getStatusBadgeHtml(acc.status);
+
+        tr.innerHTML = `
+          <td class="py-3 px-3">
+            <div class="font-mono font-bold text-emerald-700">${escapeHtml(acc.formattedConsecutive)}</div>
+            <div class="text-[10px] text-slate-400">Fila ${acc.sheetRow || '-'}</div>
+          </td>
+          <td class="py-3 px-3 text-slate-600">${escapeHtml(acc.dateString)}</td>
+          <td class="py-3 px-3">
+            <div class="font-semibold text-slate-800">${escapeHtml(acc.clientName)}</div>
+            <div class="text-[10px] text-slate-400">${escapeHtml(acc.clientNitType || 'NIT')}: ${escapeHtml(acc.clientNit)}</div>
+          </td>
+          <td class="py-3 px-3 text-right font-mono font-bold text-slate-800">${formatCurrency(acc.totalAmount)}</td>
+          <td class="py-3 px-3 text-center">${statusBadge}</td>
+          <td class="py-3 px-3 text-center">
+            <div class="flex items-center justify-center gap-1">
+              <button onclick="previewAccount(${realIdx})" title="Ver e imprimir vista previa" class="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <button onclick="editAccount(${realIdx})" title="Modificar esta cuenta" class="p-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg transition">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button onclick="duplicateAccount(${realIdx})" title="Usar datos como plantilla" class="p-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg transition">
+                <i class="fa-solid fa-copy"></i>
+              </button>
+              <button onclick="openDeleteModal(${realIdx})" title="Eliminar registro" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg transition">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function previewAccount(index) {
+      const acc = appState.accounts[index];
+      if (!acc) return;
+
+      // Cargar en el formulario temporalmente para renderizar vista previa
+      loadAccountIntoInputs(acc);
+      updateDocumentPreview();
+
+      // Desplazar suavemente a la vista previa del documento
+      document.getElementById("printArea").scrollIntoView({ behavior: "smooth", block: "start" });
+      showToast(`Cargada vista previa de la cuenta ${acc.formattedConsecutive}`, "info");
+    }
+
+    function editAccount(index) {
+      const acc = appState.accounts[index];
+      if (!acc) return;
+
+      appState.editingAccountIndex = index;
+      
+      document.getElementById("formHeaderTitle").textContent = "Modificar Cuenta de Cobro";
+      document.getElementById("editBadge").classList.remove("hidden");
+      document.getElementById("btnCancelEdit").classList.remove("hidden");
+
+      loadAccountIntoInputs(acc);
+
+      switchTab("new");
+      updateDocumentPreview();
+    }
+
+    function loadAccountIntoInputs(acc) {
+      document.getElementById("inputYear").value = acc.year || new Date().getFullYear();
+      document.getElementById("inputConsecutive").value = acc.formattedConsecutive;
+      if (acc.docCity) document.getElementById("inputDocCity").value = acc.docCity;
+      if (acc.dateVal) document.getElementById("inputDate").value = acc.dateVal;
+
+      document.getElementById("inputClientName").value = acc.clientName;
+      document.getElementById("inputClientNitType").value = acc.clientNitType || "NIT";
+      document.getElementById("inputClientNit").value = acc.clientNit;
+
+      if (acc.currencyMode) document.getElementById("inputCurrency").value = acc.currencyMode;
+      if (acc.exchangeRate) document.getElementById("inputExchangeRate").value = acc.exchangeRate;
+
+      if (acc.showPayCOP !== undefined) document.getElementById("chkPayCOP").checked = acc.showPayCOP;
+      if (acc.showPayUSD !== undefined) document.getElementById("chkPayUSD").checked = acc.showPayUSD;
+
+      document.getElementById("inputStatus").value = acc.status || "Pendiente";
+      document.getElementById("inputObservations").value = acc.observations || "";
+
+      document.getElementById("conceptsContainer").innerHTML = "";
+      if (acc.items && acc.items.length > 0) {
+        acc.items.forEach(it => addConceptRow(it.description, it.amount));
+      } else {
+        addConceptRow(acc.conceptsSummary || "Por concepto de servicios", acc.totalAmount);
+      }
+
+      toggleCurrencyOptions();
+    }
+
+    // --- MODAL DE ELIMINACIÓN ---
+    function openDeleteModal(index) {
+      const acc = appState.accounts[index];
+      if (!acc) return;
+
+      deletingAccountIndex = index;
+      document.getElementById("deleteConsecutiveText").textContent = acc.formattedConsecutive;
+      document.getElementById("deleteConfirmModal").classList.remove("hidden");
+    }
+
+    function closeDeleteModal() {
+      deletingAccountIndex = -1;
+      document.getElementById("deleteConfirmModal").classList.add("hidden");
+    }
+
+    async function confirmDeleteAccount() {
+      if (deletingAccountIndex === -1) return;
+
+      const acc = appState.accounts[deletingAccountIndex];
+      const btn = document.getElementById("btnConfirmDelete");
+      btn.disabled = true;
+
+      try {
+        if (appState.scriptUrl) {
+          await fetch(appState.scriptUrl, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({
+              isDelete: true,
+              action: "DELETE",
+              sheetRow: acc.sheetRow,
+              formattedConsecutive: acc.formattedConsecutive
+            })
+          });
+        }
+
+        appState.accounts.splice(deletingAccountIndex, 1);
+        document.getElementById("recordCountBadge").textContent = appState.accounts.length;
+        
+        closeDeleteModal();
+        renderHistoryTable();
+        updateYearFilterOptions();
+        showToast(`Cuenta ${acc.formattedConsecutive} eliminada correctamente.`, "success");
+
+      } catch (err) {
+        console.error("Error al eliminar:", err);
+        showToast("Hubo un error al eliminar en Google Sheets.", "error");
+      } finally {
+        btn.disabled = false;
+      }
     }
   </script>
 </body>
