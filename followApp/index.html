@@ -243,7 +243,7 @@
 				<div class="w3-container w3-teal w3-center w3-padding-24">
 					<i class="fa fa-user-circle-o w3-xxxlarge"></i>
 					<h3 style="margin:8px 0 0 0;"><b>FollowApp</b></h3>
-					<small>Control de Acceso de Usuarios V1.7.1</small>
+					<small>Control de Acceso de Usuarios V1.8.0</small>
 				</div>
 				<form id="formLogin" class="w3-container w3-padding-24 w3-white" onsubmit="event.preventDefault(); IniciarSesion();">
 					<label class="w3-text-teal"><b>Usuario:</b></label>
@@ -2412,7 +2412,7 @@
 					let ind = Number(getVal(pf, 'ind', 'Ind'));
 					if (ind === 0) continue;
 
-					let numPf = getVal(pf, 'numProforma', 'numproforma', '# Proforma');
+					let numPf = getVal(pf, 'numProforma', 'numproforma', '# Proforma', 'NumeroProforma', 'numeroProforma', 'NumProforma', 'numeroproforma');
 					let fecha = getVal(pf, 'fecha', 'Fecha');
 					let moneda = getVal(pf, 'moneda', 'Moneda') || 'USD';
 					let totalVal = Number(getVal(pf, 'total', 'Total')).toFixed(2);
@@ -2614,7 +2614,7 @@
 				if (ind !== -1) {
 					let pf = Array.isArray(proformas) ? proformas.find(item => Number(getVal(item, 'ind', 'Ind')) === Number(ind)) : null;
 					if (pf) {
-						document.getElementById("pf_consecutivo").value = getVal(pf, 'numProforma', 'NumProforma', '# Proforma', 'numproforma', 'consecutivoProforma');
+						document.getElementById("pf_consecutivo").value = getVal(pf, 'numProforma', 'NumProforma', '# Proforma', 'numproforma', 'consecutivoProforma', 'NumeroProforma', 'numeroProforma', 'numeroproforma');
 						document.getElementById("pf_fecha").value = FechaEnInput(getVal(pf, 'fecha', 'Fecha'));
 						document.getElementById("pf_empresa").value = getVal(pf, 'idProspecto', 'idempresa', 'IndEmpresa');
 						
@@ -2686,7 +2686,7 @@
 
 					if (Array.isArray(proformas) && proformas.length > 1) {
 						for (let i = 1; i < proformas.length; i++) {
-							let numP = getVal(proformas[i], 'numProforma', 'NumProforma', '# Proforma', 'numproforma', 'consecutivoProforma');
+							let numP = getVal(proformas[i], 'numProforma', 'NumProforma', '# Proforma', 'numproforma', 'consecutivoProforma', 'NumeroProforma', 'numeroProforma', 'numeroproforma');
 							if (numP) {
 								if (numP.toUpperCase().startsWith("PROF-")) tienePrefijoProf = true;
 								let match = numP.match(/(\d+)\s*$/);
@@ -2864,7 +2864,7 @@
 				let idEmp = Number(getVal(pf, 'idProspecto', 'idempresa', 'IndEmpresa'));
 				let empObj = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === idEmp) : null;
 				let mon = getVal(pf, 'moneda', 'Moneda', 'Moneda operación') || 'USD';
-				let numProformaStr = getVal(pf, 'numProforma', 'NumProforma', '# Proforma', 'numproforma', 'consecutivoProforma');
+				let numProformaStr = getVal(pf, 'numProforma', 'NumProforma', '# Proforma', 'numproforma', 'consecutivoProforma', 'NumeroProforma', 'numeroProforma', 'numeroproforma');
 				let fechaStr = String(getVal(pf, 'fecha', 'Fecha')).slice(0, 10);
 
 				let clientInfoHtml = empObj ? `<b>${getVal(empObj, 'nombre')}</b><br>
