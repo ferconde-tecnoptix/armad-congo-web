@@ -243,7 +243,7 @@
 				<div class="w3-container w3-teal w3-center w3-padding-24">
 					<i class="fa fa-user-circle-o w3-xxxlarge"></i>
 					<h3 style="margin:8px 0 0 0;"><b>FollowApp</b></h3>
-					<small>Control de Acceso de Usuarios V1.6.1</small>
+					<small>Control de Acceso de Usuarios V1.7.0</small>
 				</div>
 				<form id="formLogin" class="w3-container w3-padding-24 w3-white" onsubmit="event.preventDefault(); IniciarSesion();">
 					<label class="w3-text-teal"><b>Usuario:</b></label>
@@ -935,7 +935,7 @@
 							<label>Apellido</label>
 							<input class="w3-input w3-border w3-round w3-margin-bottom modalContacto" type="text" id="c_apellido" required>
 							
-							<label>Cargo</label>
+							<label>Cargo / Profesión</label>
 							<input class="w3-input w3-border w3-round w3-margin-bottom modalContacto" type="text" id="c_cargo" required>
 							
 							<p><input type="checkbox" class="w3-check modalContacto" id="c_esEmpresa" onclick="EsEmpresa()"><label for="c_esEmpresa">Es empresa</label></p>
@@ -2005,7 +2005,7 @@
 
 					let nom = getVal(c, 'nombre');
 					let ape = getVal(c, 'apellido');
-					let car = getVal(c, 'cargo');
+					let car = getVal(c, 'cargo', 'Cargo', 'cargo/profesion', 'Cargo / Profesión', 'Cargo/Profesión', 'profesion', 'Profesion');
 
 					if (fNom && !nom.toLowerCase().includes(fNom)) continue;
 					if (fApe && !ape.toLowerCase().includes(fApe)) continue;
@@ -2050,7 +2050,7 @@
 					if (c) {
 						document.getElementById("c_nombre").value = getVal(c, 'nombre');
 						document.getElementById("c_apellido").value = getVal(c, 'apellido');
-						document.getElementById("c_cargo").value = getVal(c, 'cargo');
+						document.getElementById("c_cargo").value = getVal(c, 'cargo', 'Cargo', 'cargo/profesion', 'Cargo / Profesión', 'Cargo/Profesión', 'profesion', 'Profesion');
 						document.getElementById("c_empresa").value = getVal(c, 'indEmpresa');
 					}
 					for (let i = 0; i < controles.length; i++) controles[i].disabled = true;
@@ -2158,7 +2158,7 @@
 						fila.innerHTML = `
 							<td>${getVal(c, 'nombre')}</td>
 							<td>${getVal(c, 'apellido')}</td>
-							<td>${getVal(c, 'cargo')}</td>
+							<td>${getVal(c, 'cargo', 'Cargo', 'cargo/profesion', 'Cargo / Profesión', 'Cargo/Profesión', 'profesion', 'Profesion')}</td>
 							<td class="w3-center"><button class="w3-button w3-teal w3-tiny" onclick="VerContacto(${indC})">Ver</button></td>
 						`;
 						tabla.appendChild(fila);
@@ -2470,7 +2470,7 @@
 					let c = contactos[i];
 					if (Number(getVal(c, 'indEmpresa')) === Number(idEmp)) {
 						let indC = Number(getVal(c, 'ind'));
-						let nomC = `${getVal(c, 'nombre')} ${getVal(c, 'apellido')} (${getVal(c, 'cargo')})`;
+						let nomC = `${getVal(c, 'nombre')} ${getVal(c, 'apellido')} (${getVal(c, 'cargo', 'Cargo', 'cargo/profesion', 'Cargo / Profesión', 'Cargo/Profesión', 'profesion', 'Profesion')})`;
 						selC.innerHTML += `<option value="${indC}">${nomC}</option>`;
 					}
 				}
@@ -3640,14 +3640,14 @@
 				if (!tarea) return;
 
 				let indContacto = Number(getVal(tarea, 'indContacto', 'IndContacto'));
-				let contacto = Array.isArray(contactos) ? contactos.find(c => Number(getVal(c, 'ind', 'Ind')) === indContacto) : null;
+				let contacto = Array.isArray(contactos) ? contactos.find(c => Number(getVal(c, 'ind', 'Ind')) === Number(indContacto)) : null;
 
 				document.getElementById("tituloModalInicio").innerText = `Atención Tarea #${indTarea}`;
 
 				if (contacto) {
 					document.getElementById("i_nombre").innerText = getVal(contacto, 'nombre');
 					document.getElementById("i_apellido").innerText = getVal(contacto, 'apellido');
-					document.getElementById("i_cargo").innerText = getVal(contacto, 'cargo');
+					document.getElementById("i_cargo").innerText = getVal(contacto, 'cargo', 'Cargo', 'cargo/profesion', 'Cargo / Profesión', 'Cargo/Profesión', 'profesion', 'Profesion');
 
 					let indEmp = Number(getVal(contacto, 'indEmpresa', 'IndEmpresa'));
 					let emp = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === indEmp) : null;
