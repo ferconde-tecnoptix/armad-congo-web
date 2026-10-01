@@ -243,7 +243,7 @@
 				<div class="w3-container w3-teal w3-center w3-padding-24">
 					<i class="fa fa-user-circle-o w3-xxxlarge"></i>
 					<h3 style="margin:8px 0 0 0;"><b>FollowApp</b></h3>
-					<small>Control de Acceso de Usuarios V1.4</small>
+					<small>Control de Acceso de Usuarios V1.5</small>
 				</div>
 				<form id="formLogin" class="w3-container w3-padding-24 w3-white" onsubmit="event.preventDefault(); IniciarSesion();">
 					<label class="w3-text-teal"><b>Usuario:</b></label>
@@ -1861,6 +1861,13 @@
 				tabla.innerHTML = "";
 				if (!Array.isArray(empresas) || empresas.length <= 1) return;
 
+				// Obtener valores de los filtros por columna
+				let fNom = (document.getElementById("filtroNombreEmpresa")?.value || "").toLowerCase().trim();
+				let fCiu = (document.getElementById("filtroCiudadEmpresa")?.value || "").toLowerCase().trim();
+				let fDep = (document.getElementById("filtroDepartamentoEmpresa")?.value || "").toLowerCase().trim();
+				let fPai = (document.getElementById("filtroPaisEmpresa")?.value || "").toLowerCase().trim();
+				let fIde = (document.getElementById("filtroIdentificacionEmpresa")?.value || "").toLowerCase().trim();
+
 				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
 				for (let i = 1; i < empresas.length; i++) {
 					let emp = empresas[i];
@@ -1868,13 +1875,26 @@
 					let ind = Number(getVal(emp, 'ind'));
 					if (ind === 0) continue;
 
+					let nombre = getVal(emp, 'nombre');
+					let ciudad = getVal(emp, 'ciudad');
+					let depto = getVal(emp, 'departamento');
+					let pais = getVal(emp, 'pais');
+					let ident = getVal(emp, 'id');
+
+					// Aplicar filtros de coincidencia parcial (Case-Insensitive)
+					if (fNom && !nombre.toLowerCase().includes(fNom)) continue;
+					if (fCiu && !ciudad.toLowerCase().includes(fCiu)) continue;
+					if (fDep && !depto.toLowerCase().includes(fDep)) continue;
+					if (fPai && !pais.toLowerCase().includes(fPai)) continue;
+					if (fIde && !ident.toLowerCase().includes(fIde)) continue;
+
 					let fila = document.createElement("tr");
 					fila.innerHTML = `
-						<td>${getVal(emp, 'nombre')}</td>
-						<td>${getVal(emp, 'ciudad')}</td>
-						<td>${getVal(emp, 'departamento')}</td>
-						<td>${getVal(emp, 'pais')}</td>
-						<td>${getVal(emp, 'id')}</td>
+						<td>${nombre}</td>
+						<td>${ciudad}</td>
+						<td>${depto}</td>
+						<td>${pais}</td>
+						<td>${ident}</td>
 						<td class="w3-center">
 							<button class="${esConsulta ? 'w3-button w3-blue w3-tiny' : 'w3-button w3-teal w3-tiny'}" onclick="EditarEmpresa(${ind})">${esConsulta ? 'Ver' : 'Editar'}</button>
 						</td>
@@ -1966,6 +1986,11 @@
 				tabla.innerHTML = "";
 				if (!Array.isArray(contactos) || contactos.length <= 1) return;
 
+				let fNom = (document.getElementById("filtroNombreContacto")?.value || "").toLowerCase().trim();
+				let fApe = (document.getElementById("filtroApellidoContacto")?.value || "").toLowerCase().trim();
+				let fCar = (document.getElementById("filtroCargoContacto")?.value || "").toLowerCase().trim();
+				let fEmp = (document.getElementById("filtroEmpresaContacto")?.value || "").toLowerCase().trim();
+
 				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
 				for (let i = 1; i < contactos.length; i++) {
 					let c = contactos[i];
@@ -1977,11 +2002,20 @@
 					let emp = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === indE) : null;
 					let nombreEmp = emp ? getVal(emp, 'nombre') : "N/A";
 
+					let nom = getVal(c, 'nombre');
+					let ape = getVal(c, 'apellido');
+					let car = getVal(c, 'cargo');
+
+					if (fNom && !nom.toLowerCase().includes(fNom)) continue;
+					if (fApe && !ape.toLowerCase().includes(fApe)) continue;
+					if (fCar && !car.toLowerCase().includes(fCar)) continue;
+					if (fEmp && !nombreEmp.toLowerCase().includes(fEmp)) continue;
+
 					let fila = document.createElement("tr");
 					fila.innerHTML = `
-						<td>${getVal(c, 'nombre')}</td>
-						<td>${getVal(c, 'apellido')}</td>
-						<td>${getVal(c, 'cargo')}</td>
+						<td>${nom}</td>
+						<td>${ape}</td>
+						<td>${car}</td>
 						<td>${nombreEmp}</td>
 						<td class="w3-center">
 							<button class="${esConsulta ? 'w3-button w3-blue w3-tiny' : 'w3-button w3-teal w3-tiny'}" onclick="EditarContacto(${ind})">${esConsulta ? 'Ver' : 'Editar'}</button>
@@ -2361,6 +2395,13 @@
 
 				if (!Array.isArray(proformas) || proformas.length <= 1) return;
 
+				let fConsec = (document.getElementById("filtroConsecutivoProforma")?.value || "").toLowerCase().trim();
+				let fCliente = (document.getElementById("filtroClienteProforma")?.value || "").toLowerCase().trim();
+				let fFecha = (document.getElementById("filtroFechaProforma")?.value || "").toLowerCase().trim();
+				let fMoneda = document.getElementById("filtroMonedaProforma")?.value || "";
+				let fEstado = document.getElementById("filtroEstadoProforma")?.value || "";
+				let fTotal = (document.getElementById("filtroTotalProforma")?.value || "").toLowerCase().trim();
+
 				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
 
 				for (let i = 1; i < proformas.length; i++) {
@@ -2379,6 +2420,13 @@
 					let idEmp = Number(getVal(pf, 'idProspecto', 'idempresa', 'IndEmpresa'));
 					let empObj = Array.isArray(empresas) ? empresas.find(e => Number(getVal(e, 'ind')) === idEmp) : null;
 					let nombreEmp = empObj ? getVal(empObj, 'nombre') : "Cliente N/A";
+
+					if (fConsec && !numPf.toLowerCase().includes(fConsec)) continue;
+					if (fCliente && !nombreEmp.toLowerCase().includes(fCliente)) continue;
+					if (fFecha && !String(fecha).toLowerCase().includes(fFecha)) continue;
+					if (fMoneda && moneda !== fMoneda) continue;
+					if (fEstado && estado !== fEstado) continue;
+					if (fTotal && !totalVal.includes(fTotal)) continue;
 
 					let fila = document.createElement("tr");
 					fila.innerHTML = `
@@ -3151,6 +3199,12 @@
 
 				if (!Array.isArray(proveedores) || proveedores.length <= 1) return;
 
+				let fNom = (document.getElementById("filtroNombreProveedor")?.value || "").toLowerCase().trim();
+				let fCon = (document.getElementById("filtroContactoProveedor")?.value || "").toLowerCase().trim();
+				let fCor = (document.getElementById("filtroCorreoProveedor")?.value || "").toLowerCase().trim();
+				let fWsp = (document.getElementById("filtroWhatsAppProveedor")?.value || "").toLowerCase().trim();
+				let fBnc = (document.getElementById("filtroBancoProveedor")?.value || "").toLowerCase().trim();
+
 				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
 				for (let i = 1; i < proveedores.length; i++) {
 					let p = proveedores[i];
@@ -3158,13 +3212,25 @@
 					let ind = Number(getVal(p, 'ind'));
 					if (ind === 0) continue;
 
+					let nom = getVal(p, 'nombre');
+					let con = getVal(p, 'personaContacto');
+					let cor = getVal(p, 'correo');
+					let wsp = getVal(p, 'whatsApp');
+					let bnc = getVal(p, 'banco');
+
+					if (fNom && !nom.toLowerCase().includes(fNom)) continue;
+					if (fCon && !con.toLowerCase().includes(fCon)) continue;
+					if (fCor && !cor.toLowerCase().includes(fCor)) continue;
+					if (fWsp && !wsp.toLowerCase().includes(fWsp)) continue;
+					if (fBnc && !bnc.toLowerCase().includes(fBnc)) continue;
+
 					let fila = document.createElement("tr");
 					fila.innerHTML = `
-						<td>${getVal(p, 'nombre')}</td>
-						<td>${getVal(p, 'personaContacto')}</td>
-						<td>${getVal(p, 'correo')}</td>
-						<td>${getVal(p, 'whatsApp')}</td>
-						<td>${getVal(p, 'banco')}</td>
+						<td>${nom}</td>
+						<td>${con}</td>
+						<td>${cor}</td>
+						<td>${wsp}</td>
+						<td>${bnc}</td>
 						<td class="w3-center">
 							<button class="${esConsulta ? 'w3-button w3-blue w3-tiny' : 'w3-button w3-teal w3-tiny'}" onclick="EditarProveedor(${ind})">${esConsulta ? 'Ver' : 'Editar'}</button>
 						</td>
@@ -3257,6 +3323,12 @@
 
 				if (!Array.isArray(ordenesCompra) || ordenesCompra.length <= 1) return;
 
+				let fConsec = (document.getElementById("filtroConsecutivoOrden")?.value || "").toLowerCase().trim();
+				let fProv = (document.getElementById("filtroProveedorOrden")?.value || "").toLowerCase().trim();
+				let fFecha = (document.getElementById("filtroFechaOrden")?.value || "").toLowerCase().trim();
+				let fFlete = document.getElementById("filtroFleteOrden")?.value || "";
+				let fValor = (document.getElementById("filtroValorOrden")?.value || "").toLowerCase().trim();
+
 				let esConsulta = (usuarioSesion && usuarioSesion.rol === "Consulta");
 
 				for (let i = 1; i < ordenesCompra.length; i++) {
@@ -3269,14 +3341,23 @@
 					let indP = Number(getVal(o, 'indProveedor'));
 					let p = Array.isArray(proveedores) ? proveedores.find(item => Number(getVal(item, 'ind')) === indP) : null;
 					let nomP = p ? getVal(p, 'nombre') : "N/A";
+					let consec = getVal(o, 'consecutivoOrden');
+					let fecha = getVal(o, 'fechaOrden');
+					let flete = getVal(o, 'incluyeFlete');
 					let val = Number(getVal(o, 'valorTotal')).toFixed(2);
+
+					if (fConsec && !consec.toLowerCase().includes(fConsec)) continue;
+					if (fProv && !nomP.toLowerCase().includes(fProv)) continue;
+					if (fFecha && !String(fecha).toLowerCase().includes(fFecha)) continue;
+					if (fFlete && flete !== fFlete) continue;
+					if (fValor && !val.includes(fValor)) continue;
 
 					let fila = document.createElement("tr");
 					fila.innerHTML = `
-						<td><b>${getVal(o, 'consecutivoOrden')}</b></td>
+						<td><b>${consec}</b></td>
 						<td>${nomP}</td>
-						<td>${getVal(o, 'fechaOrden')}</td>
-						<td>${getVal(o, 'incluyeFlete')}</td>
+						<td>${fecha}</td>
+						<td>${flete}</td>
 						<td>$${val}</td>
 						<td class="w3-center">
 							<button class="${esConsulta ? 'w3-button w3-blue w3-tiny' : 'w3-button w3-teal w3-tiny'}" onclick="EditarOrden(${ind})">${esConsulta ? 'Ver' : 'Editar'}</button>
