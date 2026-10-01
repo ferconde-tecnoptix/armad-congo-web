@@ -243,7 +243,7 @@
 				<div class="w3-container w3-teal w3-center w3-padding-24">
 					<i class="fa fa-user-circle-o w3-xxxlarge"></i>
 					<h3 style="margin:8px 0 0 0;"><b>FollowApp</b></h3>
-					<small>Control de Acceso de Usuarios V1.6</small>
+					<small>Control de Acceso de Usuarios V1.6.1</small>
 				</div>
 				<form id="formLogin" class="w3-container w3-padding-24 w3-white" onsubmit="event.preventDefault(); IniciarSesion();">
 					<label class="w3-text-teal"><b>Usuario:</b></label>
@@ -1880,7 +1880,7 @@
 					let ciudad = getVal(emp, 'ciudad');
 					let depto = getVal(emp, 'departamento');
 					let pais = getVal(emp, 'pais', 'País', 'Pais');
-					let ident = getVal(emp, 'id');
+					let ident = getVal(emp, 'identificacion', 'Identificacion', 'Identificación', 'id', 'ID', 'nit', 'NIT');
 
 					// Aplicar filtros de coincidencia parcial (Case-Insensitive)
 					if (fNom && !nombre.toLowerCase().includes(fNom)) continue;
@@ -1921,7 +1921,7 @@
 						document.getElementById("e_ciudad").value = getVal(emp, 'ciudad');
 						document.getElementById("e_direccion").value = getVal(emp, 'direccion');
 						document.getElementById("e_tipoID").value = getVal(emp, 'tipoID');
-						document.getElementById("e_identificacion").value = getVal(emp, 'id');
+						document.getElementById("e_identificacion").value = getVal(emp, 'identificacion', 'Identificacion', 'Identificación', 'id', 'ID', 'nit', 'NIT');
 					}
 					for (let i = 0; i < controles.length; i++) controles[i].disabled = true;
 					if (boton) {
@@ -2868,7 +2868,7 @@
 				let fechaStr = String(getVal(pf, 'fecha', 'Fecha')).slice(0, 10);
 
 				let clientInfoHtml = empObj ? `<b>${getVal(empObj, 'nombre')}</b><br>
-					NIT/ID: ${getVal(empObj, 'id')}<br>
+					NIT/ID: ${getVal(empObj, 'identificacion', 'Identificacion', 'Identificación', 'id', 'ID', 'nit', 'NIT')}<br>
 					Ciudad: ${getVal(empObj, 'ciudad')}, ${getVal(empObj, 'departamento')}<br>
 					Dirección: ${getVal(empObj, 'direccion')}` : "Cliente N/A";
 
