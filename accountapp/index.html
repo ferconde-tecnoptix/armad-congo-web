@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador y Relación de Cuentas de Cobro</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .font-document {
+      font-family: 'Libre Baskerville', Georgia, serif;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printArea, #printArea * {
+        visibility: visible;
+      }
+      #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        box-shadow: none !important;
+        border: none !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col relative">
+
+  <header class="bg-slate-900 text-white shadow-md no-print">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="bg-emerald-600 p-2.5 rounded-xl shadow-lg">
+          <i class="fa-solid fa-file-invoice-dollar text-2xl text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight">Sistema de Cuentas de Cobro</h1>
+          <p class="text-xs text-slate-400">Emisor: <span id="headerIssuerName" class="text-emerald-400 font-medium">Fernando Conde</span> • <span id="headerIssuerDoc">C.C. 7.706.430</span></p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="openIssuerModal()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium rounded-lg transition flex items-center gap-2 border border-slate-700">
+          <i class="fa-solid fa-id-card text-emerald-400"></i>
+          <span>Mis Datos de Firma</span>
+        </button>
+        <button onclick="openConfigModal()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium rounded-lg transition flex items-center gap-2 border border-slate-700">
+          <i class="fa-solid fa-gear text-slate-400"></i>
+          <span>Conexión Sheet</span>
+        </button>
+        <button onclick="fetchFromGoogleSheet()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium rounded-lg transition flex items-center gap-2 shadow-sm">
+          <i class="fa-solid fa-rotate text-white"></i>
+          <span>Sincronizar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- Left Column: Tabs & Forms (5 cols) -->
+    <section class="lg:col-span-5 flex flex-col gap-4 no-print">
+
+      <!-- Navigation Tabs -->
+      <div class="bg-white p-1.5 rounded-xl shadow-sm border border-slate-200 flex text-sm font-medium">
+        <button id="tabBtnNew" onclick="switchTab('new')" class="flex-1 py-2.5 px-4 rounded-lg transition flex items-center justify-center gap-2 bg-emerald-600 text-white font-semibold shadow-sm">
+          <i class="fa-solid fa-plus"></i>
+          <span id="tabNewTitle">Nueva Cuenta</span>
+        </button>
+        <button id="tabBtnList" onclick="switchTab('list')" class="flex-1 py-2.5 px-4 rounded-lg transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900">
+          <i class="fa-solid fa-list"></i>
+          <span>Relación (<span id="recordCountBadge">0</span>)</span>
+        </button>
+      </div>
+
+      <div id="tabContentNew" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-4">
+        
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <h2 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+            <i class="fa-solid fa-pen-to-square text-emerald-600"></i>
+            <span id="formHeaderTitle">Crear Cuenta de Cobro</span>
+          </h2>
+          <span id="editBadge" class="hidden text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-semibold">Modificando Registro Existente</span>
+        </div>
+
+        <form id="accountForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+          
+          <!-- Year & Consecutive -->
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Año Correspondiente</label>
+              <input type="number" id="inputYear" min="2010" max="2099" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" onchange="updateConsecutiveForYear()">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Consecutivo Formateado</label>
+              <input type="text" id="inputConsecutive" placeholder="Ej: 2026-001" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-mono font-bold text-emerald-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            </div>
+          </div>
+
+          <!-- Date & City Header -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="md:col-span-1">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Ciudad Expedición</label>
+              <input type="text" id="inputDocCity" value="Bogotá, D.C." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateDocumentPreview()">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Emisión</label>
+              <input type="date" id="inputDate" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" onchange="updateDocumentPreview()">
+            </div>
+          </div>
+
+          <!-- Client Info -->
+          <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+              <span>Datos del Cliente / Deudor</span>
+              <button type="button" onclick="openClientHistoryModal()" class="text-emerald-600 hover:text-emerald-700 text-xs font-semibold underline flex items-center gap-1">
+                <i class="fa-solid fa-clock-rotate-left"></i> Clientes previos
+              </button>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-700 mb-1">Nombre / Razón Social Cliente</label>
+              <input type="text" id="inputClientName" placeholder="Ej: TECNOPTIX S.A.S." required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateDocumentPreview()">
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">Tipo Doc.</label>
+                <input type="text" id="inputClientNitType" list="nitTypeList" placeholder="NIT / CC" value="NIT" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateDocumentPreview()">
+                <datalist id="nitTypeList">
+                  <option value="NIT"></option>
+                  <option value="CC"></option>
+                  <option value="CE"></option>
+                  <option value="PASAPORTE"></option>
+                </datalist>
+              </div>
+              <div class="col-span-2">
+                <label class="block text-xs font-medium text-slate-700 mb-1">Número de Identificación</label>
+                <input type="text" id="inputClientNit" placeholder="Ej: 900.338.198 - 6" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateDocumentPreview()">
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Conceptos e Ítems de Cobro</span>
+              <button type="button" onclick="addConceptRow()" class="text-xs bg-emerald-100 text-emerald-800 hover:bg-emerald-200 px-2.5 py-1 rounded-md font-semibold transition flex items-center gap-1">
+                <i class="fa-solid fa-plus text-xs"></i> Añadir Ítem
+              </button>
+            </div>
+
+            <div id="conceptsContainer" class="space-y-2">
+              <!-- Dynamic Rows injected via JS -->
+            </div>
+
+            <!-- Total display -->
+            <div class="pt-2 border-t border-slate-200 flex justify-between items-center">
+              <span class="text-sm font-bold text-slate-700">Monto Total:</span>
+              <span id="calculatedTotalDisplay" class="text-lg font-bold text-emerald-700">$0,00</span>
+            </div>
+          </div>
+
+          <!-- Status & Notes -->
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Estado de Pago</label>
+              <select id="inputStatus" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                <option value="Pendiente">Pendiente</option>
+                <option value="Pago Parcial">Pago Parcial</option>
+                <option value="Pago Total">Pago Total</option>
+                <option value="Anulado">Anulado</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Observaciones Internas</label>
+              <input type="text" id="inputObservations" placeholder="Notas adicionales..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            </div>
+          </div>
+
+          <!-- Form Action Buttons -->
+          <div class="flex gap-2 pt-2">
+            <button type="submit" id="btnSaveAccount" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span id="btnSaveText">Guardar en Google Sheet (Fila 2)</span>
+            </button>
+            <button type="button" id="btnCancelEdit" onclick="resetForm()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 px-4 rounded-xl transition">
+              Cancelar
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <div id="tabContentList" class="hidden bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-4">
+        
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <h2 class="font-bold text-slate-800 text-lg">Relación de Cuentas de Cobro</h2>
+            <p class="text-xs text-slate-500">Último registro insertado arriba (Fila 2 del Spreadsheet)</p>
+          </div>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <select id="filterYear" onchange="renderHistoryTable()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-medium focus:outline-none">
+              <option value="ALL">Todos los Años</option>
+            </select>
+            <input type="text" id="searchTable" placeholder="Buscar cliente, consecutivo..." oninput="renderHistoryTable()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs w-full sm:w-40 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-800 text-slate-200 text-xs font-semibold uppercase tracking-wider">
+                <th class="py-3 px-3">Fila / Consec.</th>
+                <th class="py-3 px-3">Fecha</th>
+                <th class="py-3 px-3">Cliente</th>
+                <th class="py-3 px-3 text-right">Monto Total</th>
+                <th class="py-3 px-3 text-center">Estado</th>
+                <th class="py-3 px-3 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody" class="divide-y divide-slate-200 text-xs">
+              <!-- Rows injected via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="lg:col-span-7 flex flex-col gap-4">
+      
+      <!-- Toolbar Preview Actions -->
+      <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-3 no-print">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs font-bold text-slate-700">Vista Previa del Documento</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow transition flex items-center gap-2">
+            <i class="fa-solid fa-print"></i>
+            <span>Imprimir / Exportar PDF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Formal Printable Document Page -->
+      <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-12 font-document text-slate-900 leading-relaxed text-sm md:text-base relative" id="printArea">
+        
+        <!-- Header Date -->
+        <div class="text-left mb-6 font-semibold">
+          <span id="docHeaderCity">Bogotá, D.C.</span>, <span id="docHeaderDate">21 de junio de 2026</span>
+        </div>
+
+        <!-- Title & Consecutive -->
+        <div class="text-left mb-8">
+          <h2 class="text-lg md:text-xl font-bold uppercase tracking-wide">
+            Cuenta de cobro <span id="docConsecutive">2026-001</span>
+          </h2>
+        </div>
+
+        <!-- Debtor / Client Info -->
+        <div class="mb-8 space-y-1">
+          <div id="docClientName" class="font-bold text-lg uppercase tracking-wide">TECNOPTIX S.A.S.</div>
+          <div id="docClientNit" class="font-bold text-sm">NIT 900.338.198 - 6</div>
+          <div class="font-bold text-sm uppercase mt-4">DEBE A</div>
+          <div id="docIssuerName" class="font-bold text-base uppercase">FERNANDO CONDE</div>
+          <div id="docIssuerDoc" class="font-bold text-sm">C.C. 7.706.430</div>
+        </div>
+
+        <!-- Sum Display -->
+        <div class="my-8 py-2 border-y-2 border-slate-800 font-bold flex flex-wrap justify-between items-center text-base md:text-lg">
+          <span>LA SUMA DE</span>
+          <span id="docTotalAmount" class="font-mono">$7’717.170.99</span>
+        </div>
+
+        <!-- Concept list -->
+        <div class="mb-8 space-y-3">
+          <div class="font-bold uppercase tracking-wide text-sm">POR CONCEPTO DE:</div>
+          <ul id="docConceptList" class="space-y-2 pl-2">
+            <!-- Dynamic Concept items -->
+          </ul>
+          <div class="pt-4 font-bold border-t border-slate-300 flex justify-between">
+            <span>Monto total:</span>
+            <span id="docTotalAmountFooter" class="font-mono">$7’717.170.99</span>
+          </div>
+        </div>
+
+        <!-- Words Amount -->
+        <div class="mb-12 font-bold text-sm md:text-base uppercase leading-snug">
+          SON: <span id="docAmountInWords">SIETE MILLONES SETECIENTOS DIECISIETE MIL CIENTO SETENTA PESOS CON NOVENTA Y NUEVE CENTAVOS M/CTE</span>
+        </div>
+
+        <!-- Signature & Cordialmente -->
+        <div class="mt-16 pt-6 border-t border-slate-200">
+          <div class="font-bold uppercase mb-6">CORDIALMENTE,</div>
+          
+          <div class="space-y-1 font-bold text-sm md:text-base">
+            <div id="docSignName" class="text-base md:text-lg uppercase">FERNANDO CONDE</div>
+            <div id="docSignDoc">C.C. 7.706.430</div>
+            <div id="docSignPhone">TELÉFONO 316 691 88 05</div>
+            <div id="docSignAddress">CLL 168 No. 8 G 61 BLO 2 APTO 602</div>
+            <div id="docSignLocation">BOGOTÁ, D.C. - COLOMBIA</div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL: Configuración de Datos de Firma/Emisor -->
+  <div id="issuerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-5 border border-slate-200">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+          <i class="fa-solid fa-id-card text-emerald-600"></i>
+          <span>Mis Datos de Firma / Emisor</span>
+        </h3>
+        <button onclick="closeIssuerModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="issuerConfigForm" onsubmit="saveIssuerConfig(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo / Razón Social</label>
+          <input type="text" id="cfgIssuerName" value="FERNANDO CONDE" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Tipo Doc.</label>
+            <input type="text" id="cfgIssuerDocType" value="C.C." required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <div class="col-span-2">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Número de Identificación</label>
+            <input type="text" id="cfgIssuerDocNum" value="7.706.430" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono / Celular</label>
+          <input type="text" id="cfgIssuerPhone" value="316 691 88 05" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección (Sin anteponer la palabra 'Dirección')</label>
+          <input type="text" id="cfgIssuerAddress" value="CLL 168 No. 8 G 61 BLO 2 APTO 602" placeholder="Ej: Calle 168 No. 8 G 61 Bloque 2 Apto 602" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          <p class="text-[11px] text-slate-400 mt-0.5">Se mostrará exactamente como lo escribas aquí en la firma.</p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Ciudad</label>
+            <input type="text" id="cfgIssuerCity" value="BOGOTÁ" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Dpto / D.C.</label>
+            <input type="text" id="cfgIssuerState" value="D.C." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">País</label>
+            <input type="text" id="cfgIssuerCountry" value="COLOMBIA" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="pt-3 flex gap-2">
+          <button type="submit" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl transition text-sm">
+            Guardar Mis Datos
+          </button>
+          <button type="button" onclick="closeIssuerModal()" class="px-4 py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-xl text-sm hover:bg-slate-200">
+            Cerrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Configuración Google Sheet -->
+  <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+          <i class="fa-solid fa-gear text-emerald-600"></i>
+          <span>Conexión Google Sheets</span>
+        </h3>
+        <button onclick="closeConfigModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">ID del Google Spreadsheet</label>
+          <input type="text" id="cfgSheetId" value="1WEv4ApE8ggS97Y1Yh0VUVVFvESd9utOE3V2IPbIP5L4" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">URL de la Web App (Google Apps Script)</label>
+          <input type="text" id="cfgScriptUrl" value="https://script.google.com/macros/s/AKfycbwXPWutYAsobMqPNNqx74EW2VvKFuSswphfgM4a7sb9pKoJYIOi1tPlz5mG_e17Tje4-g/exec" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+      </div>
+
+      <div class="pt-3 flex gap-2">
+        <button onclick="saveConfig()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl transition text-sm">
+          Guardar Conexión
+        </button>
+        <button onclick="closeConfigModal()" class="px-4 py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-xl text-sm hover:bg-slate-200">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Clientes Previos -->
+  <div id="clientHistoryModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-800 text-base">Seleccionar Cliente Guardado</h3>
+        <button onclick="closeClientHistoryModal()" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="clientHistoryList" class="max-h-60 overflow-y-auto divide-y divide-slate-100 text-xs">
+        <!-- List injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
+
+  <script>
+    // --- ESTADO GLOBAL ---
+    const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXPWutYAsobMqPNNqx74EW2VvKFuSswphfgM4a7sb9pKoJYIOi1tPlz5mG_e17Tje4-g/exec";
+    const DEFAULT_SHEET_ID = "1WEv4ApE8ggS97Y1Yh0VUVVFvESd9utOE3V2IPbIP5L4";
+
+    let appState = {
+      scriptUrl: localStorage.getItem("accountapp_scriptUrl") || DEFAULT_SCRIPT_URL,
+      sheetId: localStorage.getItem("accountapp_sheetId") || DEFAULT_SHEET_ID,
+      accounts: [],
+      editingAccountIndex: -1,
+      issuer: JSON.parse(localStorage.getItem("accountapp_issuer")) || {
+        name: "FERNANDO CONDE",
+        docType: "C.C.",
+        docNum: "7.706.430",
+        phone: "316 691 88 05",
+        address: "CLL 168 No. 8 G 61 BLO 2 APTO 602",
+        city: "BOGOTÁ",
+        state: "D.C.",
+        country: "COLOMBIA"
+      }
+    };
+
+    window.addEventListener("DOMContentLoaded", () => {
+      initIssuerData();
+      const currentYear = new Date().getFullYear();
+      document.getElementById("inputYear").value = currentYear;
+      document.getElementById("inputDate").valueAsDate = new Date();
+      
+      addConceptRow("Alquiler Carro con placas DOO763", 2000000);
+      addConceptRow("Alquiler portátil Toshiba", 1000000);
+      
+      updateConsecutiveForYear();
+      updateDocumentPreview();
+      fetchFromGoogleSheet();
+    });
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      
+      const bgColors = {
+        success: "bg-emerald-800 text-white border-emerald-600",
+        error: "bg-rose-800 text-white border-rose-600",
+        info: "bg-slate-800 text-white border-slate-600"
+      };
+
+      const icons = {
+        success: "fa-circle-check text-emerald-400",
+        error: "fa-circle-xmark text-rose-400",
+        info: "fa-circle-info text-blue-400"
+      };
+
+      toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border text-xs font-semibold transition-all duration-300 transform translate-y-4 opacity-0 ${bgColors[type] || bgColors.info}`;
+      toast.innerHTML = `
+        <i class="fa-solid ${icons[type] || icons.info} text-base"></i>
+        <span>${escapeHtml(message)}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove("translate-y-4", "opacity-0");
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add("opacity-0", "translate-y-4");
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function initIssuerData() {
+      const i = appState.issuer;
+      document.getElementById("headerIssuerName").textContent = i.name;
+      document.getElementById("headerIssuerDoc").textContent = `${i.docType} ${i.docNum}`;
+
+      document.getElementById("cfgIssuerName").value = i.name;
+      document.getElementById("cfgIssuerDocType").value = i.docType;
+      document.getElementById("cfgIssuerDocNum").value = i.docNum;
+      document.getElementById("cfgIssuerPhone").value = i.phone;
+      document.getElementById("cfgIssuerAddress").value = i.address;
+      document.getElementById("cfgIssuerCity").value = i.city;
+      document.getElementById("cfgIssuerState").value = i.state;
+      document.getElementById("cfgIssuerCountry").value = i.country;
+    }
+
+    function openIssuerModal() {
+      initIssuerData();
+      document.getElementById("issuerModal").classList.remove("hidden");
+    }
+
+    function closeIssuerModal() {
+      document.getElementById("issuerModal").classList.add("hidden");
+    }
+
+    function saveIssuerConfig(e) {
+      e.preventDefault();
+      appState.issuer = {
+        name: document.getElementById("cfgIssuerName").value.trim(),
+        docType: document.getElementById("cfgIssuerDocType").value.trim(),
+        docNum: document.getElementById("cfgIssuerDocNum").value.trim(),
+        phone: document.getElementById("cfgIssuerPhone").value.trim(),
+        address: document.getElementById("cfgIssuerAddress").value.trim(),
+        city: document.getElementById("cfgIssuerCity").value.trim(),
+        state: document.getElementById("cfgIssuerState").value.trim(),
+        country: document.getElementById("cfgIssuerCountry").value.trim()
+      };
+
+      localStorage.setItem("accountapp_issuer", JSON.stringify(appState.issuer));
+      initIssuerData();
+      updateDocumentPreview();
+      closeIssuerModal();
+      showToast("Datos de firma guardados correctamente.", "success");
+    }
+
+    function switchTab(tab) {
+      const btnNew = document.getElementById("tabBtnNew");
+      const btnList = document.getElementById("tabBtnList");
+      const contentNew = document.getElementById("tabContentNew");
+      const contentList = document.getElementById("tabContentList");
+
+      if (tab === "new") {
+        btnNew.className = "flex-1 py-2.5 px-4 rounded-lg transition flex items-center justify-center gap-2 bg-emerald-600 text-white font-semibold shadow-sm";
+        btnList.className = "flex-1 py-2.5 px-4 rounded-lg transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900";
+        contentNew.classList.remove("hidden");
+        contentList.classList.add("hidden");
+      } else {
+        btnList.className = "flex-1 py-2.5 px-4 rounded-lg transition flex items-center justify-center gap-2 bg-emerald-600 text-white font-semibold shadow-sm";
+        btnNew.className = "flex-1 py-2.5 px-4 rounded-lg transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900";
+        contentList.classList.remove("hidden");
+        contentNew.classList.add("hidden");
+        renderHistoryTable();
+      }
+    }
+
+    function updateConsecutiveForYear() {
+      if (appState.editingAccountIndex !== -1) return;
+      const year = parseInt(document.getElementById("inputYear").value) || new Date().getFullYear();
+      const formatted = getNextConsecutiveForYear(year);
+      document.getElementById("inputConsecutive").value = formatted;
+      updateDocumentPreview();
+    }
+
+    function getNextConsecutiveForYear(year) {
+      let maxNum = 0;
+      appState.accounts.forEach(acc => {
+        const accYear = parseInt(acc.year) || year;
+        if (accYear === year) {
+          const parts = String(acc.formattedConsecutive || "").split("-");
+          const num = parseInt(parts[parts.length - 1]) || 0;
+          if (num > maxNum) maxNum = num;
+        }
+      });
+      const nextNum = maxNum + 1;
+      return `${year}-${String(nextNum).padStart(3, '0')}`;
+    }
+
+    function addConceptRow(desc = "", val = 0) {
+      const container = document.getElementById("conceptsContainer");
+      const rowId = "concept_row_" + Date.now() + "_" + Math.floor(Math.random()*1000);
+      
+      const div = document.createElement("div");
+      div.id = rowId;
+      div.className = "flex items-center gap-2";
+      div.innerHTML = `
+        <input type="text" placeholder="Descripción del concepto" value="${escapeHtml(desc)}" class="concept-desc flex-1 px-3 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateDocumentPreview()">
+        <input type="number" step="0.01" placeholder="Valor $" value="${val || ''}" class="concept-val w-28 px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-mono text-right focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateDocumentPreview()">
+        <button type="button" onclick="removeConceptRow('${rowId}')" class="text-slate-400 hover:text-rose-600 p-1.5 transition">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      `;
+      container.appendChild(div);
+      updateDocumentPreview();
+    }
+
+    function removeConceptRow(rowId) {
+      const el = document.getElementById(rowId);
+      if (el) el.remove();
+      updateDocumentPreview();
+    }
+
+    function getFormConcepts() {
+      const rows = document.querySelectorAll("#conceptsContainer > div");
+      const items = [];
+      let total = 0;
+
+      rows.forEach(r => {
+        const desc = r.querySelector(".concept-desc")?.value.trim() || "";
+        const val = parseFloat(r.querySelector(".concept-val")?.value) || 0;
+        if (desc || val > 0) {
+          items.push({ description: desc, amount: val });
+          total += val;
+        }
+      });
+
+      return { items, total };
+    }
+
+    function updateDocumentPreview() {
+      const cityHeader = document.getElementById("inputDocCity").value || "Bogotá, D.C.";
+      const dateVal = document.getElementById("inputDate").value;
+      const formattedDate = formatDateSpanish(dateVal);
+      const consecutive = document.getElementById("inputConsecutive").value || "2026-001";
+      
+      const clientName = document.getElementById("inputClientName").value || "CLIENTE / DEUDOR";
+      const clientNitType = document.getElementById("inputClientNitType").value || "NIT";
+      const clientNit = document.getElementById("inputClientNit").value || "000.000.000";
+
+      const { items, total } = getFormConcepts();
+
+      document.getElementById("docHeaderCity").textContent = cityHeader;
+      document.getElementById("docHeaderDate").textContent = formattedDate;
+      document.getElementById("docConsecutive").textContent = consecutive;
+
+      document.getElementById("docClientName").textContent = clientName;
+      document.getElementById("docClientNit").textContent = `${clientNitType} ${clientNit}`;
+
+      const i = appState.issuer;
+      document.getElementById("docIssuerName").textContent = i.name;
+      document.getElementById("docIssuerDoc").textContent = `${i.docType} ${i.docNum}`;
+
+      const formattedTotal = formatCurrency(total);
+      document.getElementById("docTotalAmount").textContent = formattedTotal;
+      document.getElementById("docTotalAmountFooter").textContent = formattedTotal;
+      document.getElementById("calculatedTotalDisplay").textContent = formattedTotal;
+
+      const conceptListEl = document.getElementById("docConceptList");
+      conceptListEl.innerHTML = "";
+      if (items.length === 0) {
+        conceptListEl.innerHTML = `<li class="text-slate-400 italic">No hay conceptos registrados.</li>`;
+      } else {
+        items.forEach(it => {
+          const li = document.createElement("li");
+          li.className = "flex justify-between items-baseline border-b border-dotted border-slate-300 pb-1";
+          li.innerHTML = `
+            <span class="flex-1 pr-4">${escapeHtml(it.description)}</span>
+            <span class="font-mono font-bold">${formatCurrency(it.amount)}</span>
+          `;
+          conceptListEl.appendChild(li);
+        });
+      }
+
+      document.getElementById("docAmountInWords").textContent = numberToWordsPesos(total);
+
+      document.getElementById("docSignName").textContent = i.name;
+      document.getElementById("docSignDoc").textContent = `${i.docType} ${i.docNum}`;
+      document.getElementById("docSignPhone").textContent = i.phone ? `TELÉFONO ${i.phone}` : "";
+      
+      const addrEl = document.getElementById("docSignAddress");
+      if (i.address) {
+        addrEl.textContent = i.address;
+        addrEl.classList.remove("hidden");
+      } else {
+        addrEl.classList.add("hidden");
+      }
+
+      const locationParts = [i.city, i.state, i.country].filter(Boolean);
+      document.getElementById("docSignLocation").textContent = locationParts.join(" - ");
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const btn = document.getElementById("btnSaveAccount");
+      const btnText = document.getElementById("btnSaveText");
+      btn.disabled = true;
+      btnText.textContent = "Guardando en Google Sheets...";
+
+      const { items, total } = getFormConcepts();
+      const isEdit = appState.editingAccountIndex !== -1;
+      const currentAccount = isEdit ? appState.accounts[appState.editingAccountIndex] : null;
+
+      const payload = {
+        isEdit: isEdit,
+        sheetRow: currentAccount ? currentAccount.sheetRow : -1,
+        formattedConsecutive: document.getElementById("inputConsecutive").value.trim(),
+        year: parseInt(document.getElementById("inputYear").value) || new Date().getFullYear(),
+        docCity: document.getElementById("inputDocCity").value.trim(),
+        dateString: formatDateSpanish(document.getElementById("inputDate").value),
+        clientName: document.getElementById("inputClientName").value.trim(),
+        clientNitType: document.getElementById("inputClientNitType").value.trim() || "NIT",
+        clientNit: document.getElementById("inputClientNit").value.trim(),
+        totalAmount: total,
+        status: document.getElementById("inputStatus").value,
+        observations: document.getElementById("inputObservations").value.trim(),
+        itemsJson: JSON.stringify(items),
+        conceptsSummary: items.map(i => `${i.description} ($${i.amount})`).join(" | "),
+        issuerJson: JSON.stringify(appState.issuer)
+      };
+
+      try {
+        if (appState.scriptUrl) {
+          await fetch(appState.scriptUrl, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+          });
+        }
+
+        if (isEdit) {
+          appState.accounts[appState.editingAccountIndex] = { ...currentAccount, ...payload };
+        } else {
+          appState.accounts.unshift({ ...payload, sheetRow: 2 });
+        }
+
+        updateYearFilterOptions();
+        resetForm();
+        switchTab("list");
+        showToast(isEdit ? "¡Registro actualizado correctamente!" : "¡Guardado exitosamente en Fila 2 de Google Sheet!", "success");
+
+      } catch (err) {
+        console.error("Error al guardar:", err);
+        showToast("Se guardó en el historial local, pero hubo un detalle al conectar con Google Sheets.", "info");
+      } finally {
+        btn.disabled = false;
+        btnText.textContent = "Guardar en Google Sheet (Fila 2)";
+      }
+    }
+
+    async function fetchFromGoogleSheet() {
+      if (!appState.scriptUrl) return;
+
+      try {
+        const response = await fetch(appState.scriptUrl + "?action=read");
+        const json = await response.json();
+
+        if (json && json.status === "success" && Array.isArray(json.data)) {
+          parseSheetRows(json.data);
+          showToast("Sincronización con Google Sheets completada.", "success");
+        }
+      } catch (err) {
+        console.warn("Error al sincronizar con Google Sheet:", err);
+      }
+    }
+
+    function parseSheetRows(dataRows) {
+      if (!dataRows || dataRows.length <= 1) return;
+
+      const parsed = [];
+      for (let i = 1; i < dataRows.length; i++) {
+        const row = dataRows[i];
+        if (!row[0] && !row[2]) continue;
+
+        let items = [];
+        if (row[9]) {
+          try { items = JSON.parse(row[9]); } catch(e){}
+        }
+        if (items.length === 0 && row[3]) {
+          items = [{ description: String(row[3]), amount: parseFloat(row[4]) || 0 }];
+        }
+
+        parsed.push({
+          sheetRow: i + 1,
+          formattedConsecutive: String(row[0] || ""),
+          dateString: String(row[1] || ""),
+          clientName: String(row[2] || ""),
+          conceptsSummary: String(row[3] || ""),
+          totalAmount: parseFloat(row[4]) || 0,
+          status: String(row[5] || "Pendiente"),
+          observations: String(row[6] || ""),
+          clientNit: String(row[7] || ""),
+          year: parseInt(row[8]) || new Date().getFullYear(),
+          itemsJson: row[9] || "",
+          clientNitType: String(row[10] || "NIT"),
+          items: items
+        });
+      }
+
+      appState.accounts = parsed;
+      document.getElementById("recordCountBadge").textContent = parsed.length;
+      updateYearFilterOptions();
+      renderHistoryTable();
+      updateConsecutiveForYear();
+    }
+
+    function renderHistoryTable() {
+      const tbody = document.getElementById("historyTableBody");
+      const yearFilter = document.getElementById("filterYear").value;
+      const searchQuery = document.getElementById("searchTable").value.toLowerCase();
+
+      tbody.innerHTML = "";
+
+      const filtered = appState.accounts.filter(acc => {
+        const matchYear = (yearFilter === "ALL" || String(acc.year) === yearFilter);
+        const matchSearch = (!searchQuery || 
+          acc.clientName.toLowerCase().includes(searchQuery) || 
+          acc.formattedConsecutive.toLowerCase().includes(searchQuery)
+        );
+        return matchYear && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400">No hay registros de cuentas de cobro.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach((acc) => {
+        const realIdx = appState.accounts.indexOf(acc);
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+
+        const statusBadge = getStatusBadgeHtml(acc.status);
+
+        tr.innerHTML = `
+          <td class="py-3 px-3">
+            <div class="font-mono font-bold text-emerald-700">${escapeHtml(acc.formattedConsecutive)}</div>
+            <div class="text-[10px] text-slate-400">Fila ${acc.sheetRow || '-'}</div>
+          </td>
+          <td class="py-3 px-3 text-slate-600">${escapeHtml(acc.dateString)}</td>
+          <td class="py-3 px-3">
+            <div class="font-semibold text-slate-800">${escapeHtml(acc.clientName)}</div>
+            <div class="text-[10px] text-slate-400">${escapeHtml(acc.clientNitType || 'NIT')}: ${escapeHtml(acc.clientNit)}</div>
+          </td>
+          <td class="py-3 px-3 text-right font-mono font-bold text-slate-800">${formatCurrency(acc.totalAmount)}</td>
+          <td class="py-3 px-3 text-center">${statusBadge}</td>
+          <td class="py-3 px-3 text-center">
+            <div class="flex items-center justify-center gap-1">
+              <button onclick="editAccount(${realIdx})" title="Modificar esta cuenta" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button onclick="duplicateAccount(${realIdx})" title="Usar datos como plantilla" class="p-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg transition">
+                <i class="fa-solid fa-copy"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function editAccount(index) {
+      const acc = appState.accounts[index];
+      if (!acc) return;
+
+      appState.editingAccountIndex = index;
+      
+      document.getElementById("formHeaderTitle").textContent = "Modificar Cuenta de Cobro";
+      document.getElementById("editBadge").classList.remove("hidden");
+      document.getElementById("btnCancelEdit").classList.remove("hidden");
+
+      document.getElementById("inputYear").value = acc.year || new Date().getFullYear();
+      document.getElementById("inputConsecutive").value = acc.formattedConsecutive;
+      document.getElementById("inputClientName").value = acc.clientName;
+      document.getElementById("inputClientNitType").value = acc.clientNitType || "NIT";
+      document.getElementById("inputClientNit").value = acc.clientNit;
+      document.getElementById("inputStatus").value = acc.status || "Pendiente";
+      document.getElementById("inputObservations").value = acc.observations || "";
+
+      document.getElementById("conceptsContainer").innerHTML = "";
+      if (acc.items && acc.items.length > 0) {
+        acc.items.forEach(it => addConceptRow(it.description, it.amount));
+      } else {
+        addConceptRow(acc.conceptsSummary || "Por concepto de servicios", acc.totalAmount);
+      }
+
+      switchTab("new");
+      updateDocumentPreview();
+    }
+
+    function duplicateAccount(index) {
+      const acc = appState.accounts[index];
+      if (!acc) return;
+
+      resetForm();
+      document.getElementById("inputClientName").value = acc.clientName;
+      document.getElementById("inputClientNitType").value = acc.clientNitType || "NIT";
+      document.getElementById("inputClientNit").value = acc.clientNit;
+
+      document.getElementById("conceptsContainer").innerHTML = "";
+      if (acc.items && acc.items.length > 0) {
+        acc.items.forEach(it => addConceptRow(it.description, it.amount));
+      }
+
+      switchTab("new");
+      updateConsecutiveForYear();
+      updateDocumentPreview();
+      showToast("Datos copiados al formulario como nueva plantilla.", "info");
+    }
+
+    function resetForm() {
+      appState.editingAccountIndex = -1;
+      document.getElementById("formHeaderTitle").textContent = "Crear Cuenta de Cobro";
+      document.getElementById("editBadge").classList.add("hidden");
+      document.getElementById("btnCancelEdit").classList.add("hidden");
+
+      document.getElementById("accountForm").reset();
+      document.getElementById("inputYear").value = new Date().getFullYear();
+      document.getElementById("inputDate").valueAsDate = new Date();
+      document.getElementById("conceptsContainer").innerHTML = "";
+      
+      addConceptRow();
+      updateConsecutiveForYear();
+      updateDocumentPreview();
+    }
+
+    function openClientHistoryModal() {
+      const modal = document.getElementById("clientHistoryModal");
+      const listEl = document.getElementById("clientHistoryList");
+      listEl.innerHTML = "";
+
+      const uniqueClients = {};
+      appState.accounts.forEach(a => {
+        if (a.clientName && !uniqueClients[a.clientName]) {
+          uniqueClients[a.clientName] = { name: a.clientName, type: a.clientNitType || 'NIT', nit: a.clientNit };
+        }
+      });
+
+      const clients = Object.values(uniqueClients);
+      if (clients.length === 0) {
+        listEl.innerHTML = `<div class="p-4 text-center text-slate-400">No hay clientes previos guardados.</div>`;
+      } else {
+        clients.forEach(c => {
+          const div = document.createElement("div");
+          div.className = "p-3 hover:bg-slate-50 cursor-pointer flex justify-between items-center transition";
+          div.onclick = () => {
+            document.getElementById("inputClientName").value = c.name;
+            document.getElementById("inputClientNitType").value = c.type;
+            document.getElementById("inputClientNit").value = c.nit;
+            updateDocumentPreview();
+            closeClientHistoryModal();
+            showToast(`Cliente '${c.name}' cargado.`, "info");
+          };
+          div.innerHTML = `
+            <div>
+              <div class="font-bold text-slate-800">${escapeHtml(c.name)}</div>
+              <div class="text-slate-500">${escapeHtml(c.type)}: ${escapeHtml(c.nit)}</div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-slate-300"></i>
+          `;
+          listEl.appendChild(div);
+        });
+      }
+
+      modal.classList.remove("hidden");
+    }
+
+    function closeClientHistoryModal() {
+      document.getElementById("clientHistoryModal").classList.add("hidden");
+    }
+
+    function openConfigModal() {
+      document.getElementById("cfgSheetId").value = appState.sheetId;
+      document.getElementById("cfgScriptUrl").value = appState.scriptUrl;
+      document.getElementById("configModal").classList.remove("hidden");
+    }
+
+    function closeConfigModal() {
+      document.getElementById("configModal").classList.add("hidden");
+    }
+
+    function saveConfig() {
+      appState.sheetId = document.getElementById("cfgSheetId").value.trim();
+      appState.scriptUrl = document.getElementById("cfgScriptUrl").value.trim();
+
+      localStorage.setItem("accountapp_sheetId", appState.sheetId);
+      localStorage.setItem("accountapp_scriptUrl", appState.scriptUrl);
+
+      closeConfigModal();
+      showToast("Configuración de Google Sheets guardada.", "success");
+      fetchFromGoogleSheet();
+    }
+
+    function updateYearFilterOptions() {
+      const select = document.getElementById("filterYear");
+      const current = select.value;
+      const years = new Set(appState.accounts.map(a => a.year));
+      years.add(new Date().getFullYear());
+
+      select.innerHTML = `<option value="ALL">Todos los Años</option>`;
+      Array.from(years).sort((a,b) => b-a).forEach(y => {
+        select.innerHTML += `<option value="${y}">${y}</option>`;
+      });
+      select.value = current;
+    }
+
+    function formatCurrency(val) {
+      return "$" + Number(val || 0).toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatDateSpanish(dateStr) {
+      if (!dateStr) return "";
+      const [year, month, day] = dateStr.split("-");
+      if (!year || !month || !day) return dateStr;
+
+      const months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+      const monthName = months[parseInt(month) - 1] || "";
+      return `${parseInt(day)} de ${monthName} de ${year}`;
+    }
+
+    function getStatusBadgeHtml(status) {
+      switch (status) {
+        case "Pago Total": return `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Pago Total</span>`;
+        case "Pago Parcial": return `<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">Pago Parcial</span>`;
+        case "Anulado": return `<span class="bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full font-bold">Anulado</span>`;
+        default: return `<span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full font-bold">Pendiente</span>`;
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function numberToWordsPesos(num) {
+      if (isNaN(num) || num <= 0) return "CERO PESOS M/CTE";
+
+      const integerPart = Math.floor(num);
+      const cents = Math.round((num - integerPart) * 100);
+
+      function unisen(n) {
+        const u = ["", "UN", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE"];
+        const d = ["", "DIEZ", "VEINTE", "TREINTA", "CUARENTA", "CINCUENTA", "SESENTA", "SETENTA", "OCHENTA", "NOVENTA"];
+        const dt = ["DIEZ", "ONCE", "DOCE", "TRECE", "CATORCE", "QUINCE", "DIECISÉIS", "DIECISIETE", "DIECIOCHO", "DIECINUEVE"];
+        const c = ["", "CIENTO", "DOSCIENTOS", "TRESCIENTOS", "CUATROCIENTOS", "QUINIENTOS", "SEISCIENTOS", "SETECIENTOS", "OCHOCIENTOS", "NOVECIENTOS"];
+
+        if (n === 100) return "CIEN";
+        let str = "";
+        if (n >= 100) { str += c[Math.floor(n / 100)] + " "; n %= 100; }
+        if (n >= 10 && n <= 19) { return str + dt[n - 10]; }
+        if (n >= 20 && n <= 29) { 
+          if (n === 20) return str + "VEINTE";
+          return str + "VEINTI" + u[n - 20];
+        }
+        if (n >= 30) { 
+          str += d[Math.floor(n / 10)];
+          if (n % 10 > 0) str += " Y " + u[n % 10];
+          return str;
+        }
+        if (n > 0) str += u[n];
+        return str.trim();
+      }
+
+      function convertMillions(n) {
+        if (n < 1000) return unisen(n);
+        if (n < 1000000) {
+          const thousands = Math.floor(n / 1000);
+          const remainder = n % 1000;
+          const thStr = thousands === 1 ? "MIL" : unisen(thousands) + " MIL";
+          return (thStr + " " + unisen(remainder)).trim();
+        }
+        const millions = Math.floor(n / 1000000);
+        const remainder = n % 1000000;
+        const millStr = millions === 1 ? "UN MILLÓN" : unisen(millions) + " MILLONES";
+        return (millStr + " " + convertMillions(remainder)).trim();
+      }
+
+      const textVal = convertMillions(integerPart);
+      let pesosSuffix = "PESOS";
+      if (integerPart % 1000000 === 0 && integerPart >= 1000000) {
+        pesosSuffix = "DE PESOS";
+      }
+
+      let centsFormatted = "M/CTE";
+      if (cents > 0) {
+        centsFormatted = `CON ${String(cents).padStart(2, '0')}/100 CENTAVOS M/CTE`;
+      }
+
+      return `${textVal} ${pesosSuffix} ${centsFormatted}`.replace(/\s+/g, " ").trim();
+    }
+  </script>
+</body>
+</html>
