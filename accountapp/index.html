@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador y Relación de Cuentas de Cobro</title>
+  <title>Generador y Relación de Cuentas de Cobro - V1.0.1</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -43,6 +43,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col relative">
 
+  <!-- Header / Navbar -->
   <header class="bg-slate-900 text-white shadow-md no-print">
     <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="flex items-center space-x-3">
@@ -73,6 +74,7 @@
     </div>
   </header>
 
+  <!-- Main Layout -->
   <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
 
     <!-- Left Column: Tabs & Forms (5 cols) -->
@@ -90,6 +92,7 @@
         </button>
       </div>
 
+      <!-- TAB 1: FORM (New/Edit) -->
       <div id="tabContentNew" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-4">
         
         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -190,6 +193,7 @@
             </div>
           </div>
 
+          <!-- Billing Items / Concepts -->
           <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
             <div class="flex justify-between items-center">
               <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Conceptos e Ítems de Cobro</span>
@@ -240,6 +244,7 @@
         </form>
       </div>
 
+      <!-- TAB 2: LIST / HISTORY -->
       <div id="tabContentList" class="hidden bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-4">
         
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
@@ -278,6 +283,7 @@
 
     </section>
 
+    <!-- Right Column: Live Document Preview (7 cols) -->
     <section class="lg:col-span-7 flex flex-col gap-4">
       
       <!-- Toolbar Preview Actions -->
@@ -382,6 +388,45 @@
 
         <!-- Signature & Cordialmente -->
         <div class="mt-12 pt-6 border-t border-slate-200">
+          <div class="font-bold uppercase mb-6">CORDIALMENTE,</div>
+          
+          <div class="space-y-1 font-bold text-sm md:text-base">
+            <div id="docSignName" class="text-base md:text-lg uppercase">FERNANDO CONDE</div>
+            <div id="docSignDoc">C.C. 7.706.430</div>
+            <div id="docSignPhone">TELÉFONO 316 691 88 05</div>
+            <div id="docSignAddress">CLL 168 No. 8 G 61 BLO 2 APTO 602</div>
+            <div id="docSignLocation">BOGOTÁ, D.C. - COLOMBIA</div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL: Configuración de Datos de Firma/Emisor -->
+  <div id="issuerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-5 border border-slate-200">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+          <i class="fa-solid fa-id-card text-emerald-600"></i>
+          <span>Mis Datos de Firma / Emisor</span>
+        </h3>
+        <button onclick="closeIssuerModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="issuerConfigForm" onsubmit="saveIssuerConfig(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo / Razón Social</label>
+          <input type="text" id="cfgIssuerName" value="FERNANDO CONDE" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Tipo Doc.</label>
             <input type="text" id="cfgIssuerDocType" value="C.C." required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
           </div>
           <div class="col-span-2">
@@ -481,6 +526,75 @@
   <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
 
   <script>
+    // --- ESTADO GLOBAL (DECLARADO EN EL TOP LEVEL PARA EVITAR REFERENCE ERRORS) ---
+    const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXPWutYAsobMqPNNqx74EW2VvKFuSswphfgM4a7sb9pKoJYIOi1tPlz5mG_e17Tje4-g/exec";
+    const DEFAULT_SHEET_ID = "1WEv4ApE8ggS97Y1Yh0VUVVFvESd9utOE3V2IPbIP5L4";
+
+    let appState = {
+      scriptUrl: localStorage.getItem("accountapp_scriptUrl") || DEFAULT_SCRIPT_URL,
+      sheetId: localStorage.getItem("accountapp_sheetId") || DEFAULT_SHEET_ID,
+      accounts: [],
+      editingAccountIndex: -1,
+      issuer: JSON.parse(localStorage.getItem("accountapp_issuer")) || {
+        name: "FERNANDO CONDE",
+        docType: "C.C.",
+        docNum: "7.706.430",
+        phone: "316 691 88 05",
+        address: "CLL 168 No. 8 G 61 BLO 2 APTO 602",
+        city: "BOGOTÁ",
+        state: "D.C.",
+        country: "COLOMBIA"
+      }
+    };
+
+    window.addEventListener("DOMContentLoaded", () => {
+      initIssuerData();
+      const currentYear = new Date().getFullYear();
+      document.getElementById("inputYear").value = currentYear;
+      document.getElementById("inputDate").valueAsDate = new Date();
+      
+      addConceptRow("Alquiler Carro con placas DOO763", 2000000);
+      addConceptRow("Alquiler portátil Toshiba", 1000000);
+      
+      updateConsecutiveForYear();
+      updateDocumentPreview();
+      fetchFromGoogleSheet();
+    });
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      
+      const bgColors = {
+        success: "bg-emerald-800 text-white border-emerald-600",
+        error: "bg-rose-800 text-white border-rose-600",
+        info: "bg-slate-800 text-white border-slate-600"
+      };
+
+      const icons = {
+        success: "fa-circle-check text-emerald-400",
+        error: "fa-circle-xmark text-rose-400",
+        info: "fa-circle-info text-blue-400"
+      };
+
+      toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border text-xs font-semibold transition-all duration-300 transform translate-y-4 opacity-0 ${bgColors[type] || bgColors.info}`;
+      toast.innerHTML = `
+        <i class="fa-solid ${icons[type] || icons.info} text-base"></i>
+        <span>${escapeHtml(message)}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove("translate-y-4", "opacity-0");
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add("opacity-0", "translate-y-4");
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
     function toggleCurrencyOptions() {
       const curr = document.getElementById("inputCurrency").value;
       const rateBox = document.getElementById("exchangeRateBox");
@@ -602,70 +716,6 @@
 
       const locationParts = [i.city, i.state, i.country].filter(Boolean);
       document.getElementById("docSignLocation").textContent = locationParts.join(" - ");
-    }
-
-    function formatCurrencyUSD(val) {
-      return "USD $" + Number(val || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    function numberToWordsUSD(num) {
-      if (isNaN(num) || num <= 0) return "CERO DÓLARES USD";
-      const integerPart = Math.floor(num);
-      const cents = Math.round((num - integerPart) * 100);
-
-      const pesosWord = numberToWordsPesos(integerPart).replace(" PESOS M/CTE", "").replace(" PESOS CON NOVENTA Y NUEVE CENTAVOS M/CTE", "");
-      const centsText = cents > 0 ? `CON ${String(cents).padStart(2, '0')}/100 CENTS` : "CON 00/100 CENTS";
-
-      return `${pesosWord} DÓLARES (${centsText}) USD`.replace(/\s+/g, " ").trim();
-    }
-    //};
-
-    window.addEventListener("DOMContentLoaded", () => {
-      initIssuerData();
-      const currentYear = new Date().getFullYear();
-      document.getElementById("inputYear").value = currentYear;
-      document.getElementById("inputDate").valueAsDate = new Date();
-      
-      addConceptRow("Alquiler Carro con placas DOO763", 2000000);
-      addConceptRow("Alquiler portátil Toshiba", 1000000);
-      
-      updateConsecutiveForYear();
-      updateDocumentPreview();
-      fetchFromGoogleSheet();
-    });
-
-    function showToast(message, type = 'success') {
-      const container = document.getElementById("toastContainer");
-      const toast = document.createElement("div");
-      
-      const bgColors = {
-        success: "bg-emerald-800 text-white border-emerald-600",
-        error: "bg-rose-800 text-white border-rose-600",
-        info: "bg-slate-800 text-white border-slate-600"
-      };
-
-      const icons = {
-        success: "fa-circle-check text-emerald-400",
-        error: "fa-circle-xmark text-rose-400",
-        info: "fa-circle-info text-blue-400"
-      };
-
-      toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border text-xs font-semibold transition-all duration-300 transform translate-y-4 opacity-0 ${bgColors[type] || bgColors.info}`;
-      toast.innerHTML = `
-        <i class="fa-solid ${icons[type] || icons.info} text-base"></i>
-        <span>${escapeHtml(message)}</span>
-      `;
-
-      container.appendChild(toast);
-
-      setTimeout(() => {
-        toast.classList.remove("translate-y-4", "opacity-0");
-      }, 10);
-
-      setTimeout(() => {
-        toast.classList.add("opacity-0", "translate-y-4");
-        setTimeout(() => toast.remove(), 300);
-      }, 4000);
     }
 
     function initIssuerData() {
@@ -793,68 +843,6 @@
       });
 
       return { items, total };
-    }
-
-    function updateDocumentPreview() {
-      const cityHeader = document.getElementById("inputDocCity").value || "Bogotá, D.C.";
-      const dateVal = document.getElementById("inputDate").value;
-      const formattedDate = formatDateSpanish(dateVal);
-      const consecutive = document.getElementById("inputConsecutive").value || "2026-001";
-      
-      const clientName = document.getElementById("inputClientName").value || "CLIENTE / DEUDOR";
-      const clientNitType = document.getElementById("inputClientNitType").value || "NIT";
-      const clientNit = document.getElementById("inputClientNit").value || "000.000.000";
-
-      const { items, total } = getFormConcepts();
-
-      document.getElementById("docHeaderCity").textContent = cityHeader;
-      document.getElementById("docHeaderDate").textContent = formattedDate;
-      document.getElementById("docConsecutive").textContent = consecutive;
-
-      document.getElementById("docClientName").textContent = clientName;
-      document.getElementById("docClientNit").textContent = `${clientNitType} ${clientNit}`;
-
-      const i = appState.issuer;
-      document.getElementById("docIssuerName").textContent = i.name;
-      document.getElementById("docIssuerDoc").textContent = `${i.docType} ${i.docNum}`;
-
-      const formattedTotal = formatCurrency(total);
-      document.getElementById("docTotalAmount").textContent = formattedTotal;
-      document.getElementById("docTotalAmountFooter").textContent = formattedTotal;
-      document.getElementById("calculatedTotalDisplay").textContent = formattedTotal;
-
-      const conceptListEl = document.getElementById("docConceptList");
-      conceptListEl.innerHTML = "";
-      if (items.length === 0) {
-        conceptListEl.innerHTML = `<li class="text-slate-400 italic">No hay conceptos registrados.</li>`;
-      } else {
-        items.forEach(it => {
-          const li = document.createElement("li");
-          li.className = "flex justify-between items-baseline border-b border-dotted border-slate-300 pb-1";
-          li.innerHTML = `
-            <span class="flex-1 pr-4">${escapeHtml(it.description)}</span>
-            <span class="font-mono font-bold">${formatCurrency(it.amount)}</span>
-          `;
-          conceptListEl.appendChild(li);
-        });
-      }
-
-      document.getElementById("docAmountInWords").textContent = numberToWordsPesos(total);
-
-      document.getElementById("docSignName").textContent = i.name;
-      document.getElementById("docSignDoc").textContent = `${i.docType} ${i.docNum}`;
-      document.getElementById("docSignPhone").textContent = i.phone ? `TELÉFONO ${i.phone}` : "";
-      
-      const addrEl = document.getElementById("docSignAddress");
-      if (i.address) {
-        addrEl.textContent = i.address;
-        addrEl.classList.remove("hidden");
-      } else {
-        addrEl.classList.add("hidden");
-      }
-
-      const locationParts = [i.city, i.state, i.country].filter(Boolean);
-      document.getElementById("docSignLocation").textContent = locationParts.join(" - ");
     }
 
     async function handleFormSubmit(e) {
@@ -1177,6 +1165,10 @@
       return "$" + Number(val || 0).toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
+    function formatCurrencyUSD(val) {
+      return "USD $" + Number(val || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
     function formatDateSpanish(dateStr) {
       if (!dateStr) return "";
       const [year, month, day] = dateStr.split("-");
@@ -1198,6 +1190,17 @@
 
     function escapeHtml(str) {
       return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function numberToWordsUSD(num) {
+      if (isNaN(num) || num <= 0) return "CERO DÓLARES USD";
+      const integerPart = Math.floor(num);
+      const cents = Math.round((num - integerPart) * 100);
+
+      const pesosWord = numberToWordsPesos(integerPart).replace(" PESOS M/CTE", "").replace(" PESOS CON NOVENTA Y NUEVE CENTAVOS M/CTE", "");
+      const centsText = cents > 0 ? `CON ${String(cents).padStart(2, '0')}/100 CENTS` : "CON 00/100 CENTS";
+
+      return `${pesosWord} DÓLARES (${centsText}) USD`.replace(/\s+/g, " ").trim();
     }
 
     function numberToWordsPesos(num) {
