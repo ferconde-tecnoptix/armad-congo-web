@@ -50,7 +50,7 @@
           <i class="fa-solid fa-file-invoice-dollar text-2xl text-white"></i>
         </div>
         <div>
-          <h1 class="text-xl font-bold tracking-tight">Sistema de Cuentas de Cobro</h1>
+          <h1 class="text-xl font-bold tracking-tight">Sistema de Cuentas de Cobro - V1.0</h1>
           <p class="text-xs text-slate-400">Emisor: <span id="headerIssuerName" class="text-emerald-400 font-medium">Fernando Conde</span> • <span id="headerIssuerDoc">C.C. 7.706.430</span></p>
         </div>
       </div>
@@ -152,6 +152,40 @@
               <div class="col-span-2">
                 <label class="block text-xs font-medium text-slate-700 mb-1">Número de Identificación</label>
                 <input type="text" id="inputClientNit" placeholder="Ej: 900.338.198 - 6" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateDocumentPreview()">
+              </div>
+            </div>
+          </div>
+
+          <!-- Currency & Payment Instruction Configuration -->
+          <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Moneda e Instrucciones de Pago</div>
+            
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Moneda del Cobro</label>
+                <select id="inputCurrency" onchange="toggleCurrencyOptions()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                  <option value="COP">Pesos Colombianos (COP $)</option>
+                  <option value="USD">Dólares Americanos (USD $)</option>
+                  <option value="DUAL">Opción Doble (COP $ / USD $)</option>
+                </select>
+              </div>
+              <div id="exchangeRateBox" class="hidden">
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Tasa Cambio (TRM 1 USD)</label>
+                <input type="number" id="inputExchangeRate" value="4000" step="10" placeholder="Ej: 4000" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateDocumentPreview()">
+              </div>
+            </div>
+
+            <div class="space-y-1.5 pt-1">
+              <label class="block text-[11px] font-semibold text-slate-600">Instrucciones bancarias a incluir en el documento:</label>
+              <div class="flex flex-wrap gap-4 text-xs">
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" id="chkPayCOP" checked onchange="updateDocumentPreview()" class="rounded text-emerald-600 focus:ring-emerald-500">
+                  <span class="text-slate-700 font-medium">Bancos Colombia (Bancolombia / Davibank)</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" id="chkPayUSD" checked onchange="updateDocumentPreview()" class="rounded text-emerald-600 focus:ring-emerald-500">
+                  <span class="text-slate-700 font-medium">Cuenta USD (Community Federal Savings)</span>
+                </label>
               </div>
             </div>
           </div>
@@ -303,51 +337,51 @@
         </div>
 
         <!-- Words Amount -->
-        <div class="mb-12 font-bold text-sm md:text-base uppercase leading-snug">
+        <div class="mb-8 font-bold text-sm md:text-base uppercase leading-snug">
           SON: <span id="docAmountInWords">SIETE MILLONES SETECIENTOS DIECISIETE MIL CIENTO SETENTA PESOS CON NOVENTA Y NUEVE CENTAVOS M/CTE</span>
         </div>
 
-        <!-- Signature & Cordialmente -->
-        <div class="mt-16 pt-6 border-t border-slate-200">
-          <div class="font-bold uppercase mb-6">CORDIALMENTE,</div>
-          
-          <div class="space-y-1 font-bold text-sm md:text-base">
-            <div id="docSignName" class="text-base md:text-lg uppercase">FERNANDO CONDE</div>
-            <div id="docSignDoc">C.C. 7.706.430</div>
-            <div id="docSignPhone">TELÉFONO 316 691 88 05</div>
-            <div id="docSignAddress">CLL 168 No. 8 G 61 BLO 2 APTO 602</div>
-            <div id="docSignLocation">BOGOTÁ, D.C. - COLOMBIA</div>
+        <!-- Payment Instructions Section -->
+        <div id="docPaymentInstructions" class="my-8 p-4 bg-slate-50 border border-slate-300 rounded-xl space-y-3 text-xs md:text-sm">
+          <div class="font-bold uppercase tracking-wider text-slate-800 border-b border-slate-300 pb-1 flex justify-between items-center">
+            <span>INSTRUCCIONES Y OPCIONES DE PAGO</span>
+            <span id="docPaymentCurrencyNotice" class="text-[11px] font-mono text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">COP / USD</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Colombia COP Accounts -->
+            <div id="docPayCopContainer" class="space-y-1">
+              <div class="font-bold text-slate-900 border-b border-slate-200 pb-0.5 flex items-center gap-1.5">
+                <i class="fa-solid fa-building-columns text-emerald-700"></i>
+                <span>Para pagos en Colombia (COP $):</span>
+              </div>
+              <div class="pl-1 space-y-0.5 text-slate-800 font-mono text-[12px] leading-tight">
+                <div><strong>Titular:</strong> Fernando Conde</div>
+                <div><strong>Identificación:</strong> C.C. 7.706.430</div>
+                <div><strong>Bancolombia (Ahorros):</strong> 191 662 675 63</div>
+                <div><strong>Davibank (Ahorros):</strong> 5785498013</div>
+              </div>
+            </div>
+
+            <!-- USD International Account -->
+            <div id="docPayUsdContainer" class="space-y-1">
+              <div class="font-bold text-slate-900 border-b border-slate-200 pb-0.5 flex items-center gap-1.5">
+                <i class="fa-solid fa-globe text-blue-700"></i>
+                <span>Para pagos en Dólares (USD $):</span>
+              </div>
+              <div class="pl-1 space-y-0.5 text-slate-800 font-mono text-[11px] leading-tight">
+                <div><strong>Account Holder:</strong> Fernando Enrique Conde Tocancipa</div>
+                <div><strong>Bank Name:</strong> Community Federal Savings Bank</div>
+                <div><strong>Account Number:</strong> 8333752082 (Checking)</div>
+                <div><strong>ACH Routing Number:</strong> 026073150</div>
+                <div><strong>Bank Address:</strong> 5 Penn Plaza, 14th Fl, NY 10001, US</div>
+              </div>
+            </div>
           </div>
         </div>
 
-      </div>
-
-    </section>
-
-  </main>
-
-  <!-- MODAL: Configuración de Datos de Firma/Emisor -->
-  <div id="issuerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-5 border border-slate-200">
-      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-        <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
-          <i class="fa-solid fa-id-card text-emerald-600"></i>
-          <span>Mis Datos de Firma / Emisor</span>
-        </h3>
-        <button onclick="closeIssuerModal()" class="text-slate-400 hover:text-slate-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <form id="issuerConfigForm" onsubmit="saveIssuerConfig(event)" class="space-y-3">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo / Razón Social</label>
-          <input type="text" id="cfgIssuerName" value="FERNANDO CONDE" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-        </div>
-
-        <div class="grid grid-cols-3 gap-2">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Tipo Doc.</label>
+        <!-- Signature & Cordialmente -->
+        <div class="mt-12 pt-6 border-t border-slate-200">
             <input type="text" id="cfgIssuerDocType" value="C.C." required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
           </div>
           <div class="col-span-2">
@@ -447,25 +481,143 @@
   <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
 
   <script>
-    // --- ESTADO GLOBAL ---
-    const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXPWutYAsobMqPNNqx74EW2VvKFuSswphfgM4a7sb9pKoJYIOi1tPlz5mG_e17Tje4-g/exec";
-    const DEFAULT_SHEET_ID = "1WEv4ApE8ggS97Y1Yh0VUVVFvESd9utOE3V2IPbIP5L4";
+    function toggleCurrencyOptions() {
+      const curr = document.getElementById("inputCurrency").value;
+      const rateBox = document.getElementById("exchangeRateBox");
+      const chkCOP = document.getElementById("chkPayCOP");
+      const chkUSD = document.getElementById("chkPayUSD");
 
-    let appState = {
-      scriptUrl: localStorage.getItem("accountapp_scriptUrl") || DEFAULT_SCRIPT_URL,
-      sheetId: localStorage.getItem("accountapp_sheetId") || DEFAULT_SHEET_ID,
-      accounts: [],
-      editingAccountIndex: -1,
-      issuer: JSON.parse(localStorage.getItem("accountapp_issuer")) || {
-        name: "FERNANDO CONDE",
-        docType: "C.C.",
-        docNum: "7.706.430",
-        phone: "316 691 88 05",
-        address: "CLL 168 No. 8 G 61 BLO 2 APTO 602",
-        city: "BOGOTÁ",
-        state: "D.C.",
-        country: "COLOMBIA"
+      if (curr === "DUAL") {
+        rateBox.classList.remove("hidden");
+        chkCOP.checked = true;
+        chkUSD.checked = true;
+      } else if (curr === "USD") {
+        rateBox.classList.add("hidden");
+        chkCOP.checked = false;
+        chkUSD.checked = true;
+      } else { // COP
+        rateBox.classList.add("hidden");
+        chkCOP.checked = true;
+        chkUSD.checked = false;
       }
+
+      updateDocumentPreview();
+    }
+
+    function updateDocumentPreview() {
+      const cityHeader = document.getElementById("inputDocCity").value || "Bogotá, D.C.";
+      const dateVal = document.getElementById("inputDate").value;
+      const formattedDate = formatDateSpanish(dateVal);
+      const consecutive = document.getElementById("inputConsecutive").value || "2026-001";
+      
+      const clientName = document.getElementById("inputClientName").value || "CLIENTE / DEUDOR";
+      const clientNitType = document.getElementById("inputClientNitType").value || "NIT";
+      const clientNit = document.getElementById("inputClientNit").value || "000.000.000";
+
+      const currencyMode = document.getElementById("inputCurrency")?.value || "COP";
+      const exchangeRate = parseFloat(document.getElementById("inputExchangeRate")?.value) || 4000;
+
+      const { items, total } = getFormConcepts();
+
+      document.getElementById("docHeaderCity").textContent = cityHeader;
+      document.getElementById("docHeaderDate").textContent = formattedDate;
+      document.getElementById("docConsecutive").textContent = consecutive;
+
+      document.getElementById("docClientName").textContent = clientName;
+      document.getElementById("docClientNit").textContent = `${clientNitType} ${clientNit}`;
+
+      const i = appState.issuer;
+      document.getElementById("docIssuerName").textContent = i.name;
+      document.getElementById("docIssuerDoc").textContent = `${i.docType} ${i.docNum}`;
+
+      // Currency Formatting logic
+      let formattedTotal = "";
+      let totalInWords = "";
+
+      if (currencyMode === "USD") {
+        formattedTotal = formatCurrencyUSD(total);
+        totalInWords = numberToWordsUSD(total);
+      } else if (currencyMode === "DUAL") {
+        const totalCOP = total * exchangeRate;
+        formattedTotal = `${formatCurrencyUSD(total)} / ${formatCurrency(totalCOP)} COP`;
+        totalInWords = `${numberToWordsUSD(total)} (EQUIVALENTE A ${numberToWordsPesos(totalCOP)} A TRM $${exchangeRate.toLocaleString("es-CO")} COP)`;
+      } else { // COP
+        formattedTotal = formatCurrency(total);
+        totalInWords = numberToWordsPesos(total);
+      }
+
+      document.getElementById("docTotalAmount").textContent = formattedTotal;
+      document.getElementById("docTotalAmountFooter").textContent = formattedTotal;
+      document.getElementById("calculatedTotalDisplay").textContent = formattedTotal;
+
+      const conceptListEl = document.getElementById("docConceptList");
+      conceptListEl.innerHTML = "";
+      if (items.length === 0) {
+        conceptListEl.innerHTML = `<li class="text-slate-400 italic">No hay conceptos registrados.</li>`;
+      } else {
+        items.forEach(it => {
+          const li = document.createElement("li");
+          li.className = "flex justify-between items-baseline border-b border-dotted border-slate-300 pb-1";
+          const itemVal = currencyMode === "USD" ? formatCurrencyUSD(it.amount) : formatCurrency(it.amount);
+          li.innerHTML = `
+            <span class="flex-1 pr-4">${escapeHtml(it.description)}</span>
+            <span class="font-mono font-bold">${itemVal}</span>
+          `;
+          conceptListEl.appendChild(li);
+        });
+      }
+
+      document.getElementById("docAmountInWords").textContent = totalInWords;
+
+      // Toggle Payment instructions view
+      const showCOP = document.getElementById("chkPayCOP")?.checked;
+      const showUSD = document.getElementById("chkPayUSD")?.checked;
+
+      const payBox = document.getElementById("docPaymentInstructions");
+      const copBox = document.getElementById("docPayCopContainer");
+      const usdBox = document.getElementById("docPayUsdContainer");
+
+      if (!showCOP && !showUSD) {
+        payBox.classList.add("hidden");
+      } else {
+        payBox.classList.remove("hidden");
+        copBox.classList.toggle("hidden", !showCOP);
+        usdBox.classList.toggle("hidden", !showUSD);
+      }
+
+      document.getElementById("docPaymentCurrencyNotice").textContent = currencyMode;
+
+      // Cordialmente signature block
+      document.getElementById("docSignName").textContent = i.name;
+      document.getElementById("docSignDoc").textContent = `${i.docType} ${i.docNum}`;
+      document.getElementById("docSignPhone").textContent = i.phone ? `TELÉFONO ${i.phone}` : "";
+      
+      const addrEl = document.getElementById("docSignAddress");
+      if (i.address) {
+        addrEl.textContent = i.address;
+        addrEl.classList.remove("hidden");
+      } else {
+        addrEl.classList.add("hidden");
+      }
+
+      const locationParts = [i.city, i.state, i.country].filter(Boolean);
+      document.getElementById("docSignLocation").textContent = locationParts.join(" - ");
+    }
+
+    function formatCurrencyUSD(val) {
+      return "USD $" + Number(val || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function numberToWordsUSD(num) {
+      if (isNaN(num) || num <= 0) return "CERO DÓLARES USD";
+      const integerPart = Math.floor(num);
+      const cents = Math.round((num - integerPart) * 100);
+
+      const pesosWord = numberToWordsPesos(integerPart).replace(" PESOS M/CTE", "").replace(" PESOS CON NOVENTA Y NUEVE CENTAVOS M/CTE", "");
+      const centsText = cents > 0 ? `CON ${String(cents).padStart(2, '0')}/100 CENTS` : "CON 00/100 CENTS";
+
+      return `${pesosWord} DÓLARES (${centsText}) USD`.replace(/\s+/g, " ").trim();
+    }
     };
 
     window.addEventListener("DOMContentLoaded", () => {
