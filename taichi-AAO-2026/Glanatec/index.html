@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glanatec (Ripasudil) Colombia Market Entry Strategy & Feasibility</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- PptxGenJS for native PowerPoint generation -->
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kowaBlue: '#003366',
+                        taichiGreen: '#008080',
+                        accentGold: '#D4AF37',
+                        lightBg: '#F8FAFC',
+                        darkText: '#1E293B'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom UI & Tab States */
+        .slide-active { display: block; }
+        .slide-hidden { display: none; }
+        
+        @media print {
+            @page {
+                size: letter;
+                margin: 0.6in;
+            }
+            header, .no-print, button, #deck-controls, #notebook-view, .view-switcher {
+                display: none !important;
+            }
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                font-size: 10pt;
+                line-height: 1.4;
+            }
+            #report-view {
+                display: block !important;
+            }
+            .page-break, section.stage-section {
+                page-break-before: always !important;
+                break-before: page !important;
+                margin-top: 1rem;
+            }
+            .shadow-sm, .shadow-lg, .shadow-xl {
+                box-shadow: none !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+            h2, h3, h4 {
+                break-after: avoid;
+            }
+            table {
+                font-size: 8.5pt;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased">
+
+    <!-- Top Header / Navigation Bar -->
+    <header class="bg-kowaBlue text-white shadow-lg sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="TAICHI Logo" class="h-8 object-contain bg-white rounded p-1 shadow-sm" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                <div class="border-l border-slate-600 h-6 mx-2 hidden sm:block"></div>
+                <h1 class="text-base sm:text-lg font-semibold tracking-tight hidden md:block">Glanatec® (Ripasudil) Colombia Feasibility</h1>
+            </div>
+            
+            <!-- View Switcher & Export Actions -->
+            <div class="flex items-center space-x-2 mt-2 sm:mt-0 flex-wrap gap-y-1">
+                <div class="flex bg-slate-800 rounded-lg p-1 text-xs sm:text-sm space-x-1 view-switcher">
+                    <button id="view-report-btn" onclick="switchView('report')" class="px-3 py-1.5 rounded-md text-white bg-taichiGreen font-medium transition shadow">
+                        <i class="fa-solid fa-file-lines mr-1.5"></i> Strategy Report
+                    </button>
+                    <button id="view-deck-btn" onclick="switchView('deck')" class="px-3 py-1.5 rounded-md text-slate-300 hover:text-white font-medium transition">
+                        <i class="fa-solid fa-person-chalkboard mr-1.5"></i> Pitch Deck
+                    </button>
+                    <button id="view-notebook-btn" onclick="switchView('notebook')" class="px-3 py-1.5 rounded-md text-amber-400 hover:text-amber-300 font-medium transition bg-slate-700/60">
+                        <i class="fa-solid fa-podcast mr-1.5"></i> NotebookLM Studio
+                    </button>
+                </div>
+
+                <!-- Export Action Buttons -->
+                <button onclick="window.print()" title="Print or Save Report as PDF" class="px-3 py-1.5 bg-slate-200 hover:bg-white text-slate-900 rounded-lg text-xs font-bold transition flex items-center shadow">
+                    <i class="fa-solid fa-file-pdf text-red-600 mr-1.5"></i> PDF Report
+                </button>
+                <button onclick="exportToPowerPoint()" title="Download Presentation as PowerPoint (.pptx)" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold transition flex items-center shadow">
+                    <i class="fa-solid fa-file-powerpoint text-orange-800 mr-1.5"></i> Export PPTX
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+
+        <!-- ================================================================================= -->
+        <!-- VIEW 1: DETAILED STRATEGY REPORT (PRINTABLE TO PDF - LETTER FORMAT)               -->
+        <!-- ================================================================================= -->
+        <div id="report-view" class="space-y-8">
+            
+            <!-- Document Meta Header -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <div class="flex flex-col md:flex-row justify-between md:items-center border-b border-slate-200 pb-4 mb-4 gap-4">
+                    <div>
+                        <div class="flex items-center space-x-4 mb-3">
+                            <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-16 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-blue-100 text-blue-800">Commercial Feasibility Assessment Report</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Glanatec® 0.4% Ophthalmic Solution (Ripasudil)</h2>
+                        <p class="text-slate-500 text-sm mt-1">Prepared for Taichi Directorate | Market Territory: Colombia</p>
+                    </div>
+                    <div class="text-left md:text-right text-xs text-slate-500 space-y-1 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <p><strong class="text-slate-700">Target Launch:</strong> Q1 2028 (Post-INVIMA Approval)</p>
+                        <p><strong class="text-slate-700">Regulatory Pathway:</strong> INVIMA New Chemical Entity (NCE)</p>
+                        <p><strong class="text-slate-700">Lead Analyst:</strong> Commercial Strategy Director</p>
+                    </div>
+                </div>
+
+                <!-- Executive KPI Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                    <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                        <span class="text-xs text-blue-600 font-semibold uppercase">Target PVP Price</span>
+                        <p class="text-2xl font-bold text-blue-900 mt-1">$42.00 USD <span class="text-xs font-normal text-slate-500">(~168k COP)</span></p>
+                        <p class="text-xs text-blue-700 mt-1">Positioned for Private/Prepaid market</p>
+                    </div>
+                    <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-lg">
+                        <span class="text-xs text-emerald-600 font-semibold uppercase">Year 5 Sales Volume</span>
+                        <p class="text-2xl font-bold text-emerald-900 mt-1">48,000 Units</p>
+                        <p class="text-xs text-emerald-700 mt-1">Gross Revenue: ~$1.25M USD</p>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+                        <span class="text-xs text-amber-600 font-semibold uppercase">Initial INVIMA CAPEX</span>
+                        <p class="text-2xl font-bold text-amber-900 mt-1">$30,200 USD</p>
+                        <p class="text-xs text-amber-700 mt-1">Includes Official Fees & Legal Dossier</p>
+                    </div>
+                    <div class="bg-purple-50 border border-purple-200 p-4 rounded-lg">
+                        <span class="text-xs text-purple-600 font-semibold uppercase">Payback Period</span>
+                        <p class="text-2xl font-bold text-purple-900 mt-1">2.1 Years</p>
+                        <p class="text-xs text-purple-700 mt-1">Post-commercial launch break-even</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STAGE 1: REGISTRATION & INVIMA -->
+            <section class="stage-section page-break bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-kowaBlue text-white flex items-center justify-center font-bold text-sm">1</div>
+                        <h3 class="text-xl font-bold text-slate-900">Stage 1: INVIMA Sanitary Registration, Certification & Regulatory Roadmap</h3>
+                    </div>
+                    <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-8 object-contain bg-white rounded p-0.5" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                </div>
+
+                <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+                    <p>
+                        Commercializing <strong>Glanatec 0.4% Ophthalmic Solution (Ripasudil)</strong> in Colombia requires obtaining a formal <strong>Sanitary Registration (Registro Sanitario)</strong> from <strong>INVIMA</strong> (Instituto Nacional de Vigilancia de Medicamentos y Alimentos) under the classification of an <em>Imported Pharmaceutical Product / New Chemical Entity (NCE)</em>, pursuant to Decrees 677/1995 and 843/2016. Because Ripasudil introduces a novel mechanism of action (Rho-kinase / ROCK inhibition) previously unregistered in the Colombian National Formulary, the submission must undergo full technical evaluation by INVIMA's Specialized Medical Commission (Comisión Revisora de Medicamentos).
+                    </p>
+                    <p>
+                        <strong>Manufacturing Plant Certification (BPM / Good Manufacturing Practices):</strong> Prior to issuing the Sanitary Registration, INVIMA strictly mandates that Kowa’s primary manufacturing site in Japan (Nagoya/Fuji facilities) hold a recognized Good Manufacturing Practice (GMP) certificate. Since Colombia maintains bilateral recognition criteria for stringent regulatory authorities (PMDA Japan), Taichi will submit Kowa’s official PMDA GMP certification under a document recognition workflow (Homologación de BPM).
+                    </p>
+                    <p>
+                        <strong>Special Technical Requirements for Certification & Dossier:</strong>
+                    </p>
+                    <ul class="list-disc list-inside space-y-1.5 pl-2">
+                        <li><strong>Zone IVb Stability Validation:</strong> Colombia belongs to WHO Climatic Zone IVb (Hot and Humid: 30°C ± 2°C / 75% RH ± 5% RH). Kowa must provide accelerated (6-month) and long-term (12 to 36-month) stability testing conducted specifically under Zone IVb parameters to ensure active compound integrity.</li>
+                        <li><strong>CTD Format Dossier (Modules 1 to 5):</strong> Submission of complete Common Technical Document dossiers including Phase I-III clinical trial safety and efficacy data demonstrating trabecular meshwork outflow stimulation.</li>
+                        <li><strong>Certificate of Pharmaceutical Product (CPP):</strong> Legalized Free Sale Certificate issued by Japan PMDA, validated via Hague Apostille, accompanied by certified Spanish medical translations.</li>
+                        <li><strong>Sterility & Packaging Quality Protocol:</strong> Verification of LDPE multi-dose dropper container compatibility, preservative efficacy (Benzalkonium Chloride content stability), and extractable/leachable testing.</li>
+                    </ul>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center">
+                            <i class="fa-solid fa-list-check text-kowaBlue mr-2"></i> Key Regulatory Requirements Summary
+                        </h4>
+                        <ul class="text-xs space-y-2 text-slate-600 list-disc list-inside">
+                            <li><strong>GMP Certification (BPM):</strong> Kowa's manufacturing plant in Japan validated via PMDA document recognition.</li>
+                            <li><strong>Clinical Dossier:</strong> CTD Modules 1-5 detailing Phase III trials in open-angle glaucoma and ocular hypertension.</li>
+                            <li><strong>Quality & Stability Data:</strong> Zone IVb (30°C / 75% RH) climate chamber stability proof.</li>
+                            <li><strong>CPP (Free Sale Certificate):</strong> PMDA certificate with Hague Apostille and official Spanish translation.</li>
+                            <li><strong>Legalization & Scientific Dossier:</strong> Local regulatory filing managed by Taichi’s specialized team.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center">
+                            <i class="fa-solid fa-dollar-sign text-kowaBlue mr-2"></i> Table 1.1: INVIMA Regulatory Budget Breakdown (USD)
+                        </h4>
+                        <table class="w-full text-xs text-left">
+                            <thead class="bg-slate-200 text-slate-700">
+                                <tr>
+                                    <th class="p-2">Item / Regulatory Activity</th>
+                                    <th class="p-2 text-right">Est. Cost (USD)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-slate-600">
+                                <tr><td class="p-2">INVIMA Official Review Fee (Tarifa NCE - Tarifa 4001)</td><td class="p-2 text-right font-semibold">$5,200</td></tr>
+                                <tr><td class="p-2">Dossier Translation & Scientific Medical Writing</td><td class="p-2 text-right font-semibold">$8,500</td></tr>
+                                <tr><td class="p-2">Local Legal & Regulatory Consulting (Taichi Legal Team)</td><td class="p-2 text-right font-semibold">$12,000</td></tr>
+                                <tr><td class="p-2">Zone IVb Quality Validation & Local Quality Analysis</td><td class="p-2 text-right font-semibold">$4,500</td></tr>
+                                <tr><td class="p-2 font-bold text-slate-800">Total Stage 1 Regulatory Investment</td><td class="p-2 text-right font-bold text-kowaBlue">$30,200</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="text-[11px] text-slate-500 mt-2">
+                            <em>Note on Table 1.1: As shown in Table 1.1, total initial capital required for sanitary registration is $30,200 USD. Estimated timeline is 14 to 18 months from submission to final Sanitary License issuance.</em>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STAGE 2: COSTING, PRICING & INVENTORY -->
+            <section class="stage-section page-break bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-kowaBlue text-white flex items-center justify-center font-bold text-sm">2</div>
+                        <h3 class="text-xl font-bold text-slate-900">Stage 2: Cost Structure, Price Waterfall Architecture & Expiry Risk Control</h3>
+                    </div>
+                    <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-8 object-contain bg-white rounded p-0.5" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                </div>
+
+                <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+                    <p>
+                        To establish commercial viability, a rigorous <strong>Price Waterfall Architecture</strong> has been modeled from Ex-Factory FOB Nagoya/Fuji through local import clearance, wholesale distribution, and retail patient pricing in Colombia. Each tier in the pricing ladder reflects local duty structures, freight logistics, distributor operating margins, and Colombian tax regulations.
+                    </p>
+                    <p>
+                        <strong>Detailed Explanation of Pricing Levels (Referencing Table 2.1):</strong>
+                    </p>
+                    <ul class="list-disc list-inside space-y-1.5 pl-2">
+                        <li><strong>Level 1 - FOB Kowa (Japan):</strong> Agreed ex-factory transfer price of <strong>$13.50 USD</strong> (54,000 COP @ 4,000 COP/USD) per 5ml bottle.</li>
+                        <li><strong>Level 2 - International Cold-Chain Air Freight & Cargo Insurance (CIF):</strong> <strong>$0.95 USD</strong> per unit (7.0% of FOB). Temperature-controlled air logistics (2°C to 8°C) are strictly required to protect the solution during transit from Japan to Bogota Airport.</li>
+                        <li><strong>Level 3 - Import Tariff & Port/Customs Clearance:</strong> <strong>$0.45 USD</strong> per unit (3.1% of CIF). Under the Colombia-Japan bilateral framework, HS Code 3004.90 benefits from a 0% import tariff, leaving only national customs brokerage (SIA), DIAN registration fees, and airport cold-storage handling.</li>
+                        <li><strong>Level 4 - Landed Cost (COGS Bogota Warehouse):</strong> Summing Levels 1 through 3 yields a total delivered cost of <strong>$14.90 USD</strong> (~59,600 COP) per unit delivered in Taichi's central GDP warehouse.</li>
+                        <li><strong>Level 5 - Taichi Wholesale Price (Ex-Distributor):</strong> Set at <strong>$26.00 USD</strong> (~104,000 COP), generating a solid <strong>42.7% Gross Margin</strong> ($11.10 USD / unit) for Taichi to fund local commercial operations, field force salaries, and medical seeding.</li>
+                        <li><strong>Level 6 - Target Public Selling Price (PVP / Retail):</strong> Set at <strong>$42.00 USD</strong> (~168,000 COP). Under Article 477 of the Colombian Tax Code (Estatuto Tributario), human ophthalmic prescription medications are 100% exempt from Value-Added Tax (IVA 0%). This allows retail pharmacy chains (e.g., Cruz Verde, Farmatodo) and IPS dispensaries an attractive <strong>38.1% Retail Margin</strong> ($16.00 USD) without inflating final patient cost.</li>
+                    </ul>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
+                    <!-- Price Waterfall Table -->
+                    <div class="lg:col-span-2 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-slate-800 text-sm mb-3">Table 2.1: Price Architecture Waterfall (Per Unit / Bottle)</h4>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-xs text-left">
+                                <thead class="bg-kowaBlue text-white">
+                                    <tr>
+                                        <th class="p-2">Level</th>
+                                        <th class="p-2">Description</th>
+                                        <th class="p-2 text-right">USD ($)</th>
+                                        <th class="p-2 text-right">COP ($) @ 4,000</th>
+                                        <th class="p-2 text-right">% Margin / Markup</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 text-slate-600">
+                                    <tr>
+                                        <td class="p-2 font-semibold">FOB Kowa (Japan)</td>
+                                        <td class="p-2">Ex-factory purchase price</td>
+                                        <td class="p-2 text-right font-bold">$13.50</td>
+                                        <td class="p-2 text-right">54,000</td>
+                                        <td class="p-2 text-right">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2">Freight & Insurance (CIF)</td>
+                                        <td class="p-2">Cold-chain air freight & cargo insurance</td>
+                                        <td class="p-2 text-right">$0.95</td>
+                                        <td class="p-2 text-right">3,800</td>
+                                        <td class="p-2 text-right">7.0% of FOB</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2">Import Tariff & Port Clearance</td>
+                                        <td class="p-2">HS Code 3004.90 (0% Tariff under FTA) + Customs Broker</td>
+                                        <td class="p-2 text-right">$0.45</td>
+                                        <td class="p-2 text-right">1,800</td>
+                                        <td class="p-2 text-right">3.1% of CIF</td>
+                                    </tr>
+                                    <tr class="bg-blue-50">
+                                        <td class="p-2 font-bold text-slate-800">Landed Cost (Taichi Warehouse)</td>
+                                        <td class="p-2 font-semibold text-slate-700">Total COGS delivered in Bogota</td>
+                                        <td class="p-2 text-right font-bold text-blue-900">$14.90</td>
+                                        <td class="p-2 text-right font-bold text-blue-900">59,600</td>
+                                        <td class="p-2 text-right">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 font-semibold">Taichi Wholesale Price (Ex-Distributor)</td>
+                                        <td class="p-2">Transfer price to Pharmacies & IPS</td>
+                                        <td class="p-2 text-right font-bold">$26.00</td>
+                                        <td class="p-2 text-right">104,000</td>
+                                        <td class="p-2 text-right font-semibold text-emerald-600">42.7% Gross Margin</td>
+                                    </tr>
+                                    <tr class="bg-emerald-100 font-bold text-slate-900">
+                                        <td class="p-2">Public Selling Price (PVP)</td>
+                                        <td class="p-2">Final retail price to patient (VAT Exempt)</td>
+                                        <td class="p-2 text-right text-emerald-900">$42.00</td>
+                                        <td class="p-2 text-right text-emerald-900">168,000</td>
+                                        <td class="p-2 text-right text-emerald-900">38.1% Retail Margin</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-3">
+                            *Note on Table 2.1: Human ophthalmic medications are exempt from VAT (IVA 0%) under Colombian tax law (Estatuto Tributario Art. 477).
+                        </p>
+                    </div>
+
+                    <!-- Expiry & Shelf-life Strategy Narrative -->
+                    <div class="bg-amber-50 p-4 rounded-lg border border-amber-200 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-amber-900 text-sm mb-2 flex items-center">
+                                <i class="fa-solid fa-triangle-exclamation mr-2"></i> Inventory Shelf-Life & Near-Expiry Strategy
+                            </h4>
+                            <p class="text-xs text-amber-800 leading-relaxed mb-3">
+                                Glanatec has a total unopened <strong>shelf-life of 36 months</strong>. However, to prevent financial write-offs due to stock expiration in Colombian warehouses:
+                            </p>
+                            <ul class="text-xs space-y-2 text-amber-900 list-disc list-inside">
+                                <li><strong>Dynamic Batched Air Shipments:</strong> Import in smaller, quarterly batches (1,500–3,000 units) rather than annual bulk sea freight, ensuring warehouse stock always retains >28 months shelf-life upon arrival.</li>
+                                <li><strong>FEFO GDP Warehouse Protocol:</strong> Enforce strict First-Expired, First-Out (FEFO) automated picking in Taichi's central GDP hub.</li>
+                                <li><strong>KOL Sample Conversion Protocol:</strong> Any inventory batch reaching <strong>9 months remaining shelf-life</strong> is automatically transferred from commercial stock to the Medical Affairs department as official physician samples for seeding.</li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-amber-300/50">
+                            <span class="text-[11px] font-bold text-amber-900 uppercase">Target Expiry Scrap Rate:</span>
+                            <span class="text-sm font-extrabold text-amber-800 block">&lt; 1.5% of total imported volume</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STAGE 3: SALES PROJECTIONS & CHANNELS -->
+            <section class="stage-section page-break bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-kowaBlue text-white flex items-center justify-center font-bold text-sm">3</div>
+                        <h3 class="text-xl font-bold text-slate-900">Stage 3: 5-Year Sales Projections & Market Channel Entry Strategy</h3>
+                    </div>
+                    <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-8 object-contain bg-white rounded p-0.5" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                </div>
+
+                <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+                    <p>
+                        The commercial rollout for Glanatec follows a phased 5-year ramp (as illustrated in <strong>Figure 3.1</strong>), moving from initial medical seeding in Year 1 to broad institutional access by Year 5. Total volume expands from 4,000 units ($104,000 USD gross revenue) in Year 1 to 48,000 units ($1,248,000 USD gross revenue) in Year 5.
+                    </p>
+                    <p>
+                        <strong>Detailed Market Channel Segmentation & Strategic Entry Plan (Referencing Figure 3.2):</strong>
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 pl-2">
+                        <li>
+                            <strong>Prepaid Health & Private Policies (45% Market Share - ~21,600 units/yr in Y5):</strong>
+                            <em>Target Entities:</em> Colsanitas, SURA Prepagada, Medplus, and Coomeva Prepagada.
+                            <br><em>Entry Strategy:</em> Present clinical dossiers to direct medical evaluation boards. Because prepaid plans allow rapid physician autonomy without EPS bureaucratic hurdles, Glanatec can be prescribed immediately as an add-on therapy for refractory patients seeking to avoid invasive surgery.
+                        </li>
+                        <li>
+                            <strong>Private Out-of-Pocket Consultations (35% Market Share - ~16,800 units/yr in Y5):</strong>
+                            <em>Target Entities:</em> High-income cash-pay patients in top specialized eye clinics (e.g., Clinica Barraquer in Bogota, Clofan in Medellin, Clinica de Oftalmologia de Cali).
+                            <br><em>Entry Strategy:</em> Focus on top-tier private practice glaucomatologists and cornea specialists. Fulfilled through premium retail pharmacy partners (Cruz Verde, Farmatodo, Pasteur).
+                        </li>
+                        <li>
+                            <strong>EPS / Institutional Non-PBS System (20% Market Share - ~9,600 units/yr in Y5):</b>
+                            <em>Target Entities:</em> Health Provision Entities (EPS SURA, EPS Sanitas, Compensar) servicing advanced patients via the MIPRES platform.
+                            <br><em>Entry Strategy:</em> Position Glanatec for multi-refractory glaucoma cases failing 3+ standard IOP drugs or presenting corneal endothelial dystrophy (Fuchs Dystrophy), justifying special institutional reimbursement.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+                    <!-- Unit & Revenue Volume Chart -->
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-slate-800 text-sm mb-1">Figure 3.1: 5-Year Revenue & Unit Forecast Growth</h4>
+                        <p class="text-[11px] text-slate-500 mb-3">Volume ramping from 4,000 to 48,000 units annually across Colombia.</p>
+                        <div class="h-64">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Channel Distribution Chart & Breakdown -->
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-1">Figure 3.2: Market Channel Mix Segmentation</h4>
+                            <p class="text-[11px] text-slate-500 mb-3">Strategic distribution across healthcare payer sectors.</p>
+                            <div class="h-48">
+                                <canvas id="channelChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-xs text-slate-600 space-y-1">
+                            <p><strong>Prepaid Health (45%):</strong> Direct medical board inclusion with Colsanitas & SURA.</p>
+                            <p><strong>Private / Cash (35%):</strong> High-income consultations in Barraquer, Clofan, etc.</p>
+                            <p><strong>EPS / MIPRES (20%):</strong> Institutional reimbursement for multi-refractory glaucoma.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STAGE 4: KOL SAMPLING & FIELD FORCE -->
+            <section class="stage-section page-break bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-kowaBlue text-white flex items-center justify-center font-bold text-sm">4</div>
+                        <h3 class="text-xl font-bold text-slate-900">Stage 4: Field Force Organization, Medical Seeding & Commercial OPEX Justification</h3>
+                    </div>
+                    <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-8 object-contain bg-white rounded p-0.5" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                </div>
+
+                <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+                    <p>
+                        To achieve initial market adoption for a novel molecule like Ripasudil, Taichi will deploy a targeted <strong>Key Opinion Leader (KOL) Seeding Program</strong> paired with a specialized sales representative. Rather than mass marketing, investment is concentrated on the top 120 prescribers across Colombia's four primary metropolitan centers (Bogota, Medellin, Cali, Barranquilla).
+                    </p>
+                    <p>
+                        <strong>Detailed Justification of Projected Commercial Costs (Referencing Table 4.1):</strong>
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 pl-2">
+                        <li>
+                            <strong>Physician Sample Stock ($11,520 USD / Year):</strong> 1,440 sample units per year (12 units/year per physician, or 1 unit/month/doctor) purchased from Kowa at a special sample rate of $8.00 USD/unit. <em>Justification:</em> In refractory glaucoma, specialists require hands-on patient trials to observe IOP-lowering efficacy and confirm corneal safety before issuing recurring prescriptions.
+                        </li>
+                        <li>
+                            <strong>Sample Cold-Chain Freight & Local Delivery ($3,000 USD / Year):</strong> 12 monthly refrigerated delivery runs (2°C–8°C) to top eye clinics in target cities ($250 USD/month). <em>Justification:</em> Maintains product integrity from Taichi's central warehouse directly to physician offices.
+                        </li>
+                        <li>
+                            <strong>Senior Ophthalmic Product Specialist ($38,400 USD / Year):</strong> Full compensation for 1 dedicated representative ($3,200 USD/month total package including base salary, statutory social benefits, mobility allowance, and performance bonuses). <em>Justification:</em> Requires a high-caliber representative capable of technical peer-to-peer discussions with glaucoma chairs. This specialist will also train regional sub-distributor reps as volume scales.
+                        </li>
+                        <li>
+                            <strong>Academic Symposia & Scientific Launch Dinners ($12,000 USD / Year):</strong> 2 national academic events annually (e.g., Facocaribe and the Colombian Glaucoma Congress). <em>Justification:</em> Position Glanatec scientifically via international guest speakers and peer-reviewed data presentation.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <span class="text-xs font-bold text-kowaBlue uppercase">KOL Target Pool</span>
+                        <h4 class="text-2xl font-black text-slate-800 mt-1">120 Physicians</h4>
+                        <p class="text-xs text-slate-600 mt-2">
+                            Focusing on ~70 certified Glaucomatologists and ~50 Cornea specialists in Bogota, Medellin, Cali, Barranquilla.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <span class="text-xs font-bold text-taichiGreen uppercase">Annual Sample Seeding</span>
+                        <h4 class="text-2xl font-black text-slate-800 mt-1">1,440 Units / Year</h4>
+                        <p class="text-xs text-slate-600 mt-2">
+                            12 sample units per physician annually (1 unit/month/doctor) for patient initiation trials.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <span class="text-xs font-bold text-amber-600 uppercase">Specialized Field Force</span>
+                        <h4 class="text-2xl font-black text-slate-800 mt-1">1 Product Specialist</h4>
+                        <p class="text-xs text-slate-600 mt-2">
+                            Dedicated Ophthalmic Representative. Capable of training regional sub-distributor reps as volume scales.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sampling Cost Table -->
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 mt-4">
+                    <h4 class="font-bold text-slate-800 text-sm mb-2">Table 4.1: Annual Sampling & Field Force Budget Breakdown (Year 1 Launch)</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-left">
+                            <thead class="bg-slate-200 text-slate-700">
+                                <tr>
+                                    <th class="p-2">Cost Component</th>
+                                    <th class="p-2 text-right">Units / Quantity</th>
+                                    <th class="p-2 text-right">Unit Cost (USD)</th>
+                                    <th class="p-2 text-right">Total Annual Cost (USD)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-slate-600">
+                                <tr>
+                                    <td class="p-2 font-semibold">Physician Sample Stock (FOB Kowa Sample Rate)</td>
+                                    <td class="p-2 text-right">1,440 bottles</td>
+                                    <td class="p-2 text-right">$8.00</td>
+                                    <td class="p-2 text-right font-semibold">$11,520</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 font-semibold">Sample Cold-Chain Shipping & Delivery</td>
+                                    <td class="p-2 text-right">12 shipments</td>
+                                    <td class="p-2 text-right">$250</td>
+                                    <td class="p-2 text-right font-semibold">$3,000</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 font-semibold">Senior Ophthalmic Specialist (Salary + Mobility + Commission)</td>
+                                    <td class="p-2 text-right">1 Full Time Rep</td>
+                                    <td class="p-2 text-right">$3,200 / mo</td>
+                                    <td class="p-2 text-right font-semibold">$38,400</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 font-semibold">Symposia, Launch Dinner & Academic Sponsorships</td>
+                                    <td class="p-2 text-right">2 Events / Year</td>
+                                    <td class="p-2 text-right">$6,000</td>
+                                    <td class="p-2 text-right font-semibold">$12,000</td>
+                                </tr>
+                                <tr class="bg-slate-200 font-bold text-slate-900">
+                                    <td class="p-2" colspan="3">Total Commercial & Field OPEX (Year 1)</td>
+                                    <td class="p-2 text-right text-kowaBlue font-bold">$64,920</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STAGE 5: FINANCIALS, ROI & DECISION MATRIX -->
+            <section class="stage-section page-break bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-kowaBlue text-white flex items-center justify-center font-bold text-sm">5</div>
+                        <h3 class="text-xl font-bold text-slate-900">Stage 5: Expected Business Performance, Financial Projections & Strategic Verdict</h3>
+                    </div>
+                    <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-8 object-contain bg-white rounded p-0.5" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                </div>
+
+                <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+                    <p>
+                        The financial modeling for Glanatec in Colombia confirms strong long-term commercial feasibility. As detailed in <strong>Table 5.1</strong> and illustrated by the payback curve in <strong>Figure 5.1</strong>, the project absorbs initial launch investments quickly and reaches sustainable profitability by Year 2.
+                    </p>
+                    <p>
+                        <strong>Description of Expected Business Performance (Referencing Table 5.1 & Figure 5.1):</strong>
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 pl-2">
+                        <li>
+                            <strong>Year 1 Performance:</strong> Gross revenue of $104,000 USD against Landed COGS of $59,600 USD generates a Gross Profit of $44,400 USD (42.7% margin). After deducting Year 1 commercial OPEX of $64,920 USD, Year 1 finishes with a modest net operational deficit of <strong>(-$20,520 USD)</strong>, which is expected during market seeding.
+                        </li>
+                        <li>
+                            <strong>Year 2–3 Operational Expansion:</strong> By Year 2, revenue scales to $286,000 USD, producing a positive Net EBITDA of <strong>$47,100 USD</strong>. By Year 3, as volume reaches 22,000 units ($572,000 USD revenue), Net EBITDA expands significantly to <strong>$146,200 USD</strong> (25.5% EBITDA margin).
+                        </li>
+                        <li>
+                            <strong>Year 5 Maturity:</strong> At peak volume of 48,000 units ($1,248,000 USD gross revenue), Landed COGS is $715,200 USD, leaving a Gross Profit of $532,800 USD. Deducting mature OPEX ($140,000 USD) yields a Net EBITDA of <strong>$392,800 USD</strong>, representing an outstanding <strong>31.4% net margin</strong>.
+                        </li>
+                        <li>
+                            <strong>Payback Period & Return on Capital:</strong> Combining initial regulatory CAPEX ($30,200 USD) with Year 1 operational deficit ($20,520 USD) gives a total peak capital requirement of $50,720 USD. As mapped in <strong>Figure 5.1</strong>, cumulative net cash flow turns positive at <strong>Month 25 (2.1 Years post-launch)</strong>. Total 5-year cumulative net cash flow reaches $802,800 USD.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+                    <!-- Cash Flow Chart -->
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-slate-800 text-sm mb-1">Figure 5.1: Cumulative Net Cash Flow & Payback Curve ($ USD)</h4>
+                        <p class="text-[11px] text-slate-500 mb-3">Break-even achieved in Month 25 (2.1 years post-launch).</p>
+                        <div class="h-64">
+                            <canvas id="cashflowChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Financial Summary & Metrics -->
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-3">Table 5.1: 5-Year High-Level P&L Projections (USD)</h4>
+                            <div class="overflow-x-auto text-xs">
+                                <table class="w-full text-left">
+                                    <thead class="bg-slate-200">
+                                        <tr>
+                                            <th class="p-1.5">Metric</th>
+                                            <th class="p-1.5 text-right">Year 1</th>
+                                            <th class="p-1.5 text-right">Year 3</th>
+                                            <th class="p-1.5 text-right">Year 5</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200">
+                                        <tr>
+                                            <td class="p-1.5 font-medium">Gross Revenue</td>
+                                            <td class="p-1.5 text-right">$104,000</td>
+                                            <td class="p-1.5 text-right">$572,000</td>
+                                            <td class="p-1.5 text-right">$1,248,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-1.5 font-medium text-red-600">COGS (Landed)</td>
+                                            <td class="p-1.5 text-right text-red-600">($59,600)</td>
+                                            <td class="p-1.5 text-right text-red-600">($327,800)</td>
+                                            <td class="p-1.5 text-right text-red-600">($715,200)</td>
+                                        </tr>
+                                        <tr class="font-bold">
+                                            <td class="p-1.5 text-emerald-800">Gross Profit</td>
+                                            <td class="p-1.5 text-right text-emerald-800">$44,400</td>
+                                            <td class="p-1.5 text-right text-emerald-800">$244,200</td>
+                                            <td class="p-1.5 text-right text-emerald-800">$532,800</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-1.5 font-medium text-red-600">Field & Mktg OPEX</td>
+                                            <td class="p-1.5 text-right text-red-600">($64,920)</td>
+                                            <td class="p-1.5 text-right text-red-600">($98,000)</td>
+                                            <td class="p-1.5 text-right text-red-600">($140,000)</td>
+                                        </tr>
+                                        <tr class="font-bold bg-emerald-100">
+                                            <td class="p-1.5">Net EBITDA</td>
+                                            <td class="p-1.5 text-right text-red-700">($20,520)</td>
+                                            <td class="p-1.5 text-right text-emerald-900">$146,200</td>
+                                            <td class="p-1.5 text-right text-emerald-900">$392,800</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Strategic Decision Callout -->
+                        <div class="bg-emerald-50 p-3 rounded border border-emerald-300">
+                            <span class="text-xs font-bold text-emerald-900 uppercase block">Go / No-Go Strategic Verdict</span>
+                            <p class="text-xs text-emerald-800 mt-1">
+                                <strong>VERDICT: GO (HIGH COMMERCIAL VIABILITY).</strong> Payback achieved in 2.1 years. Modest regulatory capital exposure ($30,200 USD) paired with strong gross margins (42.7%) and unique clinical differentiation makes Glanatec an exceptionally profitable addition to Taichi's Colombia portfolio.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================================================================================= -->
+        <!-- VIEW 2: EXECUTIVE PITCH DECK (SLIDE-BY-SLIDE PRESENTATION)                       -->
+        <!-- ================================================================================= -->
+        <div id="deck-view" class="hidden space-y-6">
+            
+            <!-- Deck Controls Bar -->
+            <div id="deck-controls" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center space-x-2">
+                    <button onclick="prevSlide()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-lg text-sm transition">
+                        <i class="fa-solid fa-chevron-left mr-1"></i> Prev
+                    </button>
+                    <span id="slide-counter" class="text-sm font-semibold text-slate-600 px-3">Slide 1 of 6</span>
+                    <button onclick="nextSlide()" class="px-3 py-1.5 bg-kowaBlue hover:bg-blue-900 text-white font-bold rounded-lg text-sm transition">
+                        Next <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="text-xs text-slate-500 hidden md:inline">Navigate using buttons or keyboard arrow keys</span>
+                    <button onclick="exportToPowerPoint()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs transition shadow flex items-center">
+                        <i class="fa-solid fa-download mr-1.5"></i> Download PPTX
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slide Canvas Wrapper -->
+            <div class="bg-white min-h-[520px] rounded-2xl shadow-xl border border-slate-200 p-8 flex flex-col justify-between relative overflow-hidden">
+                
+                <!-- SLIDE 1: TITLE SLIDE -->
+                <div id="slide-1" class="slide-active space-y-6">
+                    <div class="flex justify-between items-center border-b pb-4 border-slate-100">
+                        <span class="bg-kowaBlue text-white text-xs font-bold px-3 py-1 rounded">EXECUTIVE PARTNERSHIP PITCH</span>
+                        <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-8 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                        <span class="text-xs text-slate-400 font-mono">CONFIDENTIAL | TAICHI</span>
+                    </div>
+
+                    <div class="my-10 text-center max-w-3xl mx-auto space-y-4">
+                        <div class="inline-flex items-center space-x-4 mb-2">
+                            <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-20 object-contain inline-block" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                        </div>
+                        <h2 class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+                            Glanatec® (Ripasudil 0.4%)
+                        </h2>
+                        <p class="text-xl text-slate-600 font-light">
+                            Market Entry Feasibility & Commercial Launch Strategy in Colombia
+                        </p>
+                        <div class="pt-4">
+                            <span class="inline-block bg-slate-100 text-slate-700 text-xs px-4 py-2 rounded-full border border-slate-200">
+                                Unlocking First-in-Class ROCK Inhibitor Innovation in the Andean Region
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 text-center border-t border-slate-100 pt-4 text-xs text-slate-500">
+                        <div><strong>Target Country:</strong> Colombia</div>
+                        <div><strong>Mechanism:</strong> ROCK Inhibitor (Trabecular Outflow)</div>
+                        <div><strong>Regulatory Agency:</strong> INVIMA</div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 2: CLINICAL VALUE & UNMET NEED -->
+                <div id="slide-2" class="slide-hidden space-y-6">
+                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                        <h3 class="text-lg font-bold text-kowaBlue">1. Unmet Need & Clinical Differentiating Factor</h3>
+                        <div class="flex items-center space-x-3">
+                            <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-6 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                            <span class="text-xs text-slate-400 font-mono">SLIDE 02</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
+                        <div class="bg-blue-50 p-5 rounded-xl border border-blue-200 space-y-3">
+                            <h4 class="font-bold text-blue-900 text-base">Standard Therapy Limitations</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Conventional glaucoma drugs (Prostaglandins, Beta-blockers) alter fluid production or secondary uveoscleral outflow.
+                            </p>
+                            <div class="bg-white p-3 rounded-lg border border-blue-100 text-xs text-slate-700 space-y-1">
+                                <p class="text-red-600 font-semibold">✗ Tachyphylaxis & Tolerance loss over time</p>
+                                <p class="text-red-600 font-semibold">✗ Ocular surface toxicity & corneal endothelial fatigue</p>
+                                <p class="text-red-600 font-semibold">✗ Systemic cardiovascular/pulmonary side-effects</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-emerald-50 p-5 rounded-xl border border-emerald-200 space-y-3">
+                            <h4 class="font-bold text-emerald-900 text-base">The Glanatec® Breakthrough</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Ripasudil directly relaxes the <strong>trabecular meshwork</strong>—the eye's primary natural drainage system.
+                            </p>
+                            <div class="bg-white p-3 rounded-lg border border-emerald-100 text-xs text-slate-700 space-y-1">
+                                <p class="text-emerald-700 font-semibold">✓ Restores primary physiologic drainage pathway</p>
+                                <p class="text-emerald-700 font-semibold">✓ Unique Corneal Endothelial Cell protection benefit</p>
+                                <p class="text-emerald-700 font-semibold">✓ Ideal synergistic add-on to existing regimen</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-100 p-3 rounded-lg text-xs text-slate-700 font-medium text-center">
+                        💡 Key Target Prescribers: Glaucomatologists (Refractory cases) & Cornea Specialists (Endothelial weakness / Fuchs Dystrophy).
+                    </div>
+                </div>
+
+                <!-- SLIDE 3: REGULATORY & PRICING ARCHITECTURE -->
+                <div id="slide-3" class="slide-hidden space-y-6">
+                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                        <h3 class="text-lg font-bold text-kowaBlue">2. Regulatory Timeline & Cost Architecture</h3>
+                        <div class="flex items-center space-x-3">
+                            <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-6 object-contain" onerror="this.style.display='none';">
+                            <span class="text-xs text-slate-400 font-mono">SLIDE 03</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-2">
+                        <!-- Left: Timeline -->
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-slate-800 text-sm">INVIMA Registration Timeline (16 Months)</h4>
+                            <div class="space-y-2 text-xs">
+                                <div class="bg-slate-100 p-2.5 rounded-lg border-l-4 border-kowaBlue">
+                                    <strong class="text-kowaBlue">Months 1–3:</strong> CTD Dossier Prep & Legal Translations ($13.7k)
+                                </div>
+                                <div class="bg-slate-100 p-2.5 rounded-lg border-l-4 border-amber-500">
+                                    <strong class="text-amber-600">Months 4–12:</strong> INVIMA Technical Evaluation & Response ($5.2k)
+                                </div>
+                                <div class="bg-slate-100 p-2.5 rounded-lg border-l-4 border-emerald-500">
+                                    <strong class="text-emerald-600">Months 13–16:</strong> Sanitary License Issuance & Batch Import License
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Price Structure -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-2">
+                            <h4 class="font-bold text-slate-800 text-sm">Unit Economics & Margin Stack</h4>
+                            <div class="flex justify-between p-1.5 bg-white rounded border">
+                                <span>FOB Kowa (Japan):</span>
+                                <strong class="text-slate-800">$13.50 USD</strong>
+                            </div>
+                            <div class="flex justify-between p-1.5 bg-white rounded border">
+                                <span>Landed Cost (CIF + Port + Customs):</span>
+                                <strong class="text-blue-900">$14.90 USD</strong>
+                            </div>
+                            <div class="flex justify-between p-1.5 bg-white rounded border">
+                                <span>Ex-Distributor (Taichi Price):</span>
+                                <strong class="text-emerald-700">$26.00 USD (42.7% Margin)</strong>
+                            </div>
+                            <div class="flex justify-between p-1.5 bg-emerald-100 rounded border border-emerald-300">
+                                <span class="font-bold text-emerald-900">Target PVP (Retail Patient Price):</span>
+                                <strong class="text-emerald-900 text-sm">$42.00 USD (~168,000 COP)</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 4: COMMERCIAL PROJECTIONS -->
+                <div id="slide-4" class="slide-hidden space-y-6">
+                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                        <h3 class="text-lg font-bold text-kowaBlue">3. Commercial Ramp & Market Penetration</h3>
+                        <div class="flex items-center space-x-3">
+                            <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-6 object-contain" onerror="this.style.display='none';">
+                            <span class="text-xs text-slate-400 font-mono">SLIDE 04</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-blue-50 p-4 rounded-lg text-center">
+                            <span class="text-xs text-blue-600 font-bold">YEAR 1 (Launch)</span>
+                            <p class="text-2xl font-black text-blue-900 my-1">4,000 Units</p>
+                            <p class="text-[11px] text-slate-500">KOL Seeding & Private Cash Pay</p>
+                        </div>
+                        <div class="bg-blue-100 p-4 rounded-lg text-center">
+                            <span class="text-xs text-blue-700 font-bold">YEAR 3 (Expansion)</span>
+                            <p class="text-2xl font-black text-blue-900 my-1">22,000 Units</p>
+                            <p class="text-[11px] text-slate-500">Prepaid Health Formularies</p>
+                        </div>
+                        <div class="bg-kowaBlue text-white p-4 rounded-lg text-center">
+                            <span class="text-xs text-blue-200 font-bold">YEAR 5 (Maturity)</span>
+                            <p class="text-2xl font-black text-white my-1">48,000 Units</p>
+                            <p class="text-[11px] text-blue-200">EPS MIPRES Integration</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
+                        <h4 class="font-bold text-slate-800 mb-2">Target Market Channel Segmentation</h4>
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="p-2 bg-white rounded border border-slate-200">
+                                <span class="font-bold text-slate-800">45%</span>
+                                <p class="text-[10px] text-slate-500">Prepaid Health (Colsanitas/SURA)</p>
+                            </div>
+                            <div class="p-2 bg-white rounded border border-slate-200">
+                                <span class="font-bold text-slate-800">35%</span>
+                                <p class="text-[10px] text-slate-500">Private Consultations / Retail</p>
+                            </div>
+                            <div class="p-2 bg-white rounded border border-slate-200">
+                                <span class="font-bold text-slate-800">20%</span>
+                                <p class="text-[10px] text-slate-500">EPS Non-PBS (MIPRES Refractory)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 5: FIELD FORCE & KOL STRATEGY -->
+                <div id="slide-5" class="slide-hidden space-y-6">
+                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                        <h3 class="text-lg font-bold text-kowaBlue">4. Go-To-Market: Sampling & Dedicated Sales Force</h3>
+                        <div class="flex items-center space-x-3">
+                            <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-6 object-contain" onerror="this.style.display='none';">
+                            <span class="text-xs text-slate-400 font-mono">SLIDE 05</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-2">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                            <h4 class="font-bold text-slate-800 text-sm flex items-center">
+                                <i class="fa-solid fa-user-doctor text-kowaBlue mr-2"></i> KOL Seeding Strategy
+                            </h4>
+                            <ul class="text-xs space-y-2 text-slate-600 list-disc list-inside">
+                                <li><strong>Target Pool:</strong> 120 key specialists in Bogota, Medellin, Cali, and Barranquilla.</li>
+                                <li><strong>Sampling Volume:</strong> 1,440 units/year (~$11.5k FOB cost).</li>
+                                <li><strong>Goal:</strong> Drive 10 active recurring prescriptions per physician within 90 days of sampling.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                            <h4 class="font-bold text-slate-800 text-sm flex items-center">
+                                <i class="fa-solid fa-briefcase text-taichiGreen mr-2"></i> Agile Field Organization
+                            </h4>
+                            <ul class="text-xs space-y-2 text-slate-600 list-disc list-inside">
+                                <li><strong>1 Senior Product Specialist:</strong> High-level clinical dialog with key glaucoma chairs.</li>
+                                <li><strong>Scalability:</strong> Rep acts as lead trainer for regional sub-distributors when volume exceeds 20k units.</li>
+                                <li><strong>Annual Personnel Budget:</strong> $38,400 USD (Salary + Mobility + Commissions).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 6: CONCLUSION & FINANCIAL VERDICT -->
+                <div id="slide-6" class="slide-hidden space-y-6">
+                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                        <h3 class="text-lg font-bold text-kowaBlue">5. Financial Summary & Decision Matrix</h3>
+                        <div class="flex items-center space-x-3">
+                            <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-6 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                            <span class="text-xs text-slate-400 font-mono">SLIDE 06</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="bg-emerald-50 border border-emerald-300 p-4 rounded-xl">
+                            <span class="text-xs text-emerald-700 font-bold uppercase">Initial Regulatory CAPEX</span>
+                            <p class="text-2xl font-black text-emerald-900 my-1">$30,200 USD</p>
+                            <p class="text-[11px] text-emerald-700">Low upfront capital barrier</p>
+                        </div>
+                        <div class="bg-emerald-50 border border-emerald-300 p-4 rounded-xl">
+                            <span class="text-xs text-emerald-700 font-bold uppercase">Payback Timeline</span>
+                            <p class="text-2xl font-black text-emerald-900 my-1">2.1 Years</p>
+                            <p class="text-[11px] text-emerald-700">Rapid return post-launch</p>
+                        </div>
+                        <div class="bg-emerald-50 border border-emerald-300 p-4 rounded-xl">
+                            <span class="text-xs text-emerald-700 font-bold uppercase">Year 5 EBITDA Margin</span>
+                            <p class="text-2xl font-black text-emerald-900 my-1">31.4%</p>
+                            <p class="text-[11px] text-emerald-700">High ongoing profitability</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 text-white p-5 rounded-xl text-center space-y-2">
+                        <span class="bg-taichiGreen text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Recommendation for Taichi Board</span>
+                        <h4 class="text-lg font-bold">Approve Joint Market Entry for Colombia</h4>
+                        <p class="text-xs text-slate-300 max-w-2xl mx-auto">
+                            The combination of a high-value niche market, modest regulatory costs, strong gross margins (42.7%), and a unique clinical mechanism makes Glanatec a prime candidate for immediate registration in Colombia.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Slide Footer Navigation -->
+                <div class="flex justify-between items-center border-t border-slate-100 pt-4 text-xs text-slate-400">
+                    <div>Glaucoma Market Entry Strategy | Colombia</div>
+                    <div class="space-x-2">
+                        <button onclick="goToSlide(1)" class="hover:text-slate-600">1</button>
+                        <button onclick="goToSlide(2)" class="hover:text-slate-600">2</button>
+                        <button onclick="goToSlide(3)" class="hover:text-slate-600">3</button>
+                        <button onclick="goToSlide(4)" class="hover:text-slate-600">4</button>
+                        <button onclick="goToSlide(5)" class="hover:text-slate-600">5</button>
+                        <button onclick="goToSlide(6)" class="hover:text-slate-600">6</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================================================================================= -->
+        <!-- VIEW 3: NOTEBOOKLM AUDIO/VIDEO OVERVIEW STUDIO (ESPAÑOL & 日本語)                -->
+        <!-- ================================================================================= -->
+        <div id="notebook-view" class="hidden space-y-6">
+            
+            <!-- Header & Language Selector -->
+            <div class="bg-gradient-to-r from-slate-900 via-kowaBlue to-slate-900 text-white p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div class="flex items-center space-x-2 mb-1">
+                        <span class="bg-amber-500 text-slate-950 text-xs font-black px-2.5 py-0.5 rounded tracking-wide uppercase">Executive Presentation Studio</span>
+                        <span class="text-xs text-slate-300"><i class="fa-solid fa-sparkles text-amber-300 mr-1"></i> AI Single-Presenter Executive Walkthrough</span>
+                    </div>
+                    <h2 class="text-2xl font-black tracking-tight">Glanatec® Colombia Commercial Strategy Audio Briefing</h2>
+                    <p class="text-slate-300 text-xs mt-1">Single-voice executive narration synchronized with presentation slides and key financial metrics.</p>
+                </div>
+
+                <!-- Language Toggle & Controls -->
+                <div class="flex items-center space-x-3 bg-slate-800/80 p-2 rounded-xl border border-slate-700">
+                    <span class="text-xs font-bold text-slate-300 pl-2"><i class="fa-solid fa-globe mr-1"></i> Narration Language:</span>
+                    <button id="lang-es-btn" onclick="setNotebookLanguage('es')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition shadow">
+                        🇪🇸 Español
+                    </button>
+                    <button id="lang-ja-btn" onclick="setNotebookLanguage('ja')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition">
+                        🇯🇵 日本語 (Japanese)
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Column: Synchronized Slide Video Player Frame (7 cols) -->
+                <div class="lg:col-span-7 bg-white rounded-2xl shadow-lg border border-slate-200 p-6 flex flex-col justify-between min-h-[500px]">
+                    
+                    <div class="flex justify-between items-center border-b pb-3 mb-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="inline-block w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Synchronized Slide Preview</span>
+                        </div>
+                        <span id="synced-slide-title" class="text-xs font-semibold text-kowaBlue bg-blue-50 px-3 py-1 rounded-full border border-blue-200 shadow-sm">
+                            Slide 1: Executive Title & Overview
+                        </span>
+                    </div>
+
+                    <!-- Visual Slide Preview Canvas -->
+                    <div id="notebook-slide-preview" class="bg-slate-900 rounded-xl p-6 text-white min-h-[320px] flex flex-col justify-between relative overflow-hidden transition-all duration-500 shadow-inner border border-slate-800">
+                        <!-- Dynamic high-impact preview content injected by JS according to script step -->
+                    </div>
+
+                    <!-- Player Controls & Audio Visualizer -->
+                    <div class="mt-4 pt-4 border-t border-slate-100 space-y-3">
+                        <div class="flex items-center justify-between text-xs text-slate-500">
+                            <span id="nb-current-step" class="font-semibold text-slate-700">Section 1 of 6</span>
+                            <!-- Animated Waveform Canvas -->
+                            <canvas id="waveformCanvas" class="h-8 w-48 bg-slate-100 rounded-lg"></canvas>
+                            <span id="nb-status" class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-mono text-[11px]">Ready</span>
+                        </div>
+
+                        <div class="flex items-center justify-center space-x-4">
+                            <button onclick="prevDialogueStep()" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition shadow-sm">
+                                <i class="fa-solid fa-backward-step text-sm"></i>
+                            </button>
+                            <button id="nb-play-btn" onclick="toggleNotebookAudio()" class="p-4 bg-kowaBlue hover:bg-blue-900 text-white rounded-full transition shadow-xl text-lg w-12 h-12 flex items-center justify-center">
+                                <i id="nb-play-icon" class="fa-solid fa-play"></i>
+                            </button>
+                            <button onclick="nextDialogueStep()" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition shadow-sm">
+                                <i class="fa-solid fa-forward-step text-sm"></i>
+                            </button>
+                            <button id="nb-tts-gen-btn" onclick="generateGeminiAudio()" class="ml-4 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition flex items-center space-x-1 shadow">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <span>Generate Natural AI Voice</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Script & Transcript (5 cols) -->
+                <div class="lg:col-span-5 bg-slate-50 rounded-2xl shadow-lg border border-slate-200 p-6 flex flex-col h-[540px]">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-3 mb-3">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center">
+                            <i class="fa-solid fa-align-left text-amber-500 mr-2"></i> Narration Script & Highlights
+                        </h3>
+                        <span class="text-[11px] text-slate-400">Click section to jump</span>
+                    </div>
+
+                    <!-- Scrollable Transcript List -->
+                    <div id="transcript-container" class="flex-1 overflow-y-auto space-y-3 pr-2 text-xs">
+                        <!-- Dynamic Single Presenter items populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 6;
+        let currentDialogueIndex = 0;
+        let currentNbLang = 'es';
+        let isPlayingNbAudio = false;
+        const synthSpeech = window.speechSynthesis;
+
+        function switchView(view) {
+            const reportView = document.getElementById('report-view');
+            const deckView = document.getElementById('deck-view');
+            const notebookView = document.getElementById('notebook-view');
+            const reportBtn = document.getElementById('view-report-btn');
+            const deckBtn = document.getElementById('view-deck-btn');
+            const notebookBtn = document.getElementById('view-notebook-btn');
+
+            reportView.classList.add('hidden');
+            deckView.classList.add('hidden');
+            notebookView.classList.add('hidden');
+
+            reportBtn.className = "px-3 py-1.5 rounded-md text-slate-300 hover:text-white font-medium transition";
+            deckBtn.className = "px-3 py-1.5 rounded-md text-slate-300 hover:text-white font-medium transition";
+            notebookBtn.className = "px-3 py-1.5 rounded-md text-slate-300 hover:text-white font-medium transition bg-slate-700/60";
+
+            if (view === 'report') {
+                reportView.classList.remove('hidden');
+                reportBtn.className = "px-3 py-1.5 rounded-md text-white bg-taichiGreen font-medium transition shadow";
+            } else if (view === 'deck') {
+                deckView.classList.remove('hidden');
+                deckBtn.className = "px-3 py-1.5 rounded-md text-white bg-taichiGreen font-medium transition shadow";
+            } else if (view === 'notebook') {
+                notebookView.classList.remove('hidden');
+                notebookBtn.className = "px-3 py-1.5 rounded-md text-slate-950 bg-amber-400 font-bold transition shadow";
+                initNotebookLMStudio();
+            }
+        }
+
+        function showSlide(index) {
+            for (let i = 1; i <= totalSlides; i++) {
+                const slide = document.getElementById(`slide-${i}`);
+                if (slide) slide.className = 'slide-hidden';
+            }
+            const target = document.getElementById(`slide-${index}`);
+            if (target) target.className = 'slide-active space-y-6';
+            document.getElementById('slide-counter').innerText = `Slide ${index} of ${totalSlides}`;
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) showSlide(currentSlide - 1);
+        }
+
+        function goToSlide(num) {
+            showSlide(num);
+        }
+
+        // Keyboard Arrow Key Support for Presentation
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('deck-view').classList.contains('hidden')) return;
+            if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        window.onload = function() {
+            // Chart 1: Revenue & Unit Projections
+            const salesCtx = document.getElementById('salesChart')?.getContext('2d');
+            if (salesCtx) {
+                new Chart(salesCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                        datasets: [
+                            {
+                                label: 'Volume (Units)',
+                                data: [4000, 11000, 22000, 35000, 48000],
+                                backgroundColor: '#008080',
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Gross Revenue (USD $)',
+                                data: [104000, 286000, 572000, 910000, 1248000],
+                                type: 'line',
+                                borderColor: '#003366',
+                                borderWidth: 3,
+                                fill: false,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { type: 'linear', position: 'left', title: { display: true, text: 'Units' } },
+                            y1: { type: 'linear', position: 'right', title: { display: true, text: 'USD ($)' }, grid: { drawOnChartArea: false } }
+                        }
+                    }
+                });
+            }
+
+            // Chart 2: Channel Segmentation
+            const channelCtx = document.getElementById('channelChart')?.getContext('2d');
+            if (channelCtx) {
+                new Chart(channelCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Prepaid Health (45%)', 'Private / Out-of-Pocket (35%)', 'EPS / MIPRES (20%)'],
+                        datasets: [{
+                            data: [45, 35, 20],
+                            backgroundColor: ['#003366', '#008080', '#D4AF37']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } }
+                    }
+                });
+            }
+
+            // Chart 3: Cashflow & Payback
+            const cashflowCtx = document.getElementById('cashflowChart')?.getContext('2d');
+            if (cashflowCtx) {
+                new Chart(cashflowCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Pre-Launch', 'Year 1', 'Year 2 (Month 8)', 'Year 3', 'Year 4', 'Year 5'],
+                        datasets: [{
+                            label: 'Cumulative Net Cash Flow (USD)',
+                            data: [-30200, -50720, 0, 146200, 410000, 802800],
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { title: { display: true, text: 'USD ($)' } } }
+                    }
+                });
+            }
+
+            // Init Waveform Visualizer
+            drawWaveform();
+        };
+
+        function exportToPowerPoint() {
+            try {
+                let pptx = new PptxGenJS();
+                pptx.layout = 'LAYOUT_16x9';
+                pptx.author = 'Taichi Strategy Team';
+                pptx.company = 'Taichi';
+                pptx.title = 'Glanatec Colombia Market Feasibility Study';
+
+                // Slide 1: Title
+                let slide1 = pptx.addSlide();
+                slide1.background = { color: "003366" };
+                slide1.addText("Glanatec® (Ripasudil 0.4%)", { x: 0.8, y: 1.5, w: 11, h: 1, fontSize: 36, bold: true, color: "FFFFFF" });
+                slide1.addText("Colombia Market Entry Strategy & Commercial Feasibility Study", { x: 0.8, y: 2.6, w: 11, h: 0.6, fontSize: 20, color: "D4AF37" });
+                slide1.addText("Prepared for Taichi Directorate", { x: 0.8, y: 5.0, w: 11, h: 0.5, fontSize: 14, color: "CBD5E1" });
+
+                // Slide 2: Clinical Differentiation
+                let slide2 = pptx.addSlide();
+                slide2.addText("1. Clinical Differentiation & Unmet Need", { x: 0.8, y: 0.6, w: 11, h: 0.6, fontSize: 22, bold: true, color: "003366" });
+                slide2.addText("Standard Glaucoma Drugs vs. Glanatec (ROCK Inhibitor)", { x: 0.8, y: 1.2, w: 11, h: 0.4, fontSize: 14, color: "64748B" });
+                
+                let rows2 = [
+                    [{ text: "Feature", options: { bold: true, fill: "003366", color: "FFFFFF" } }, { text: "Conventional Therapy", options: { bold: true, fill: "003366", color: "FFFFFF" } }, { text: "Glanatec® (Ripasudil)", options: { bold: true, fill: "008080", color: "FFFFFF" } }],
+                    ["Primary Mechanism", "Uveoscleral outflow / Aqueous suppression", "Direct Trabecular Meshwork Relaxation"],
+                    ["Corneal Endothelium", "No protective effect / potential fatigue", "Protects & Stimulates Endothelial Cells"],
+                    ["Tolerance / Tachyphylaxis", "Loss of efficacy over extended use", "Sustained long-term efficacy"],
+                    ["Combination Role", "Standard baseline", "Ideal synergistic add-on for refractory cases"]
+                ];
+                slide2.addTable(rows2, { x: 0.8, y: 2.0, w: 11.5, colW: [2.5, 4.5, 4.5], fontSize: 12, border: { pt: 1, color: "CBD5E1" } });
+
+                // Slide 3: Pricing Waterfall
+                let slide3 = pptx.addSlide();
+                slide3.addText("2. Unit Economics & Pricing Architecture", { x: 0.8, y: 0.6, w: 11, h: 0.6, fontSize: 22, bold: true, color: "003366" });
+                let rows3 = [
+                    [{ text: "Price Level", options: { bold: true, fill: "003366", color: "FFFFFF" } }, { text: "USD ($)", options: { bold: true, fill: "003366", color: "FFFFFF" } }, { text: "COP ($)", options: { bold: true, fill: "003366", color: "FFFFFF" } }, { text: "Margin / Notes", options: { bold: true, fill: "003366", color: "FFFFFF" } }],
+                    ["FOB Kowa (Japan)", "$13.50", "$54,000", "Ex-factory purchase price"],
+                    ["Freight & Insurance (CIF)", "$0.95", "$3,800", "Air cold-chain transport"],
+                    ["Landed Cost (Bogota)", "$14.90", "$59,600", "Total COGS delivered"],
+                    ["Taichi Wholesale Price", "$26.00", "$104,000", "42.7% Gross Margin"],
+                    ["Target Public Price (PVP)", "$42.00", "$168,000", "VAT Exempt (38.1% Retail Margin)"]
+                ];
+                slide3.addTable(rows3, { x: 0.8, y: 1.6, w: 11.5, colW: [3.5, 2.0, 2.0, 4.0], fontSize: 12, border: { pt: 1, color: "CBD5E1" } });
+
+                // Slide 4: 5-Year Financial Forecast
+                let slide4 = pptx.addSlide();
+                slide4.addText("3. 5-Year Commercial Projections & P&L", { x: 0.8, y: 0.6, w: 11, h: 0.6, fontSize: 22, bold: true, color: "003366" });
+                let rows4 = [
+                    [{ text: "Metric (USD)", options: { bold: true, fill: "003366", color: "FFFFFF" } }, { text: "Year 1", options: { bold: true } }, { text: "Year 2", options: { bold: true } }, { text: "Year 3", options: { bold: true } }, { text: "Year 4", options: { bold: true } }, { text: "Year 5", options: { bold: true } }],
+                    ["Volume (Units)", "4,000", "11,000", "22,000", "35,000", "48,000"],
+                    ["Gross Revenue", "$104,000", "$286,000", "$572,000", "$910,000", "$1,248,000"],
+                    ["COGS (Landed)", "($59,600)", "($163,900)", "($327,800)", "($521,500)", "($715,200)"],
+                    ["Gross Profit", "$44,400", "$122,100", "$244,200", "$388,500", "$532,800"],
+                    ["Net EBITDA", "($20,520)", "$47,100", "$146,200", "$263,500", "$392,800"]
+                ];
+                slide4.addTable(rows4, { x: 0.8, y: 1.6, w: 11.5, colW: [2.5, 1.8, 1.8, 1.8, 1.8, 1.8], fontSize: 11, border: { pt: 1, color: "CBD5E1" } });
+
+                // Slide 5: Recommendation
+                let slide5 = pptx.addSlide();
+                slide5.background = { color: "008080" };
+                slide5.addText("Strategic Recommendation: GO", { x: 0.8, y: 1.5, w: 11, h: 1, fontSize: 32, bold: true, color: "FFFFFF" });
+                slide5.addText("• Low initial regulatory CAPEX ($30,200 USD)\n• Short payback period of 2.1 years\n• Year 5 projected EBITDA of $392,800 USD (31.4% margin)\n• Strong clinical synergy for high-income prepaid market in Colombia", { x: 0.8, y: 2.8, w: 11, h: 3, fontSize: 18, color: "FFFFFF", lineSpacing: 28 });
+
+                pptx.writeFile({ fileName: "Glanatec_Colombia_Market_Strategy.pptx" });
+            } catch (err) {
+                alert("PowerPoint export error: " + err.message);
+            }
+        }
+
+        const notebookScripts = {
+            es: [
+                {
+                    speaker: "Narrador Ejecutivo",
+                    role: "Estratega Comercial Taichi",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 1,
+                    text: "Bienvenid@s a la presentación ejecutiva sobre la viabilidad comercial de Glanatec 0.4% en Colombia. Este análisis integral evalúa el proceso regulatorio ante el INVIMA, la arquitectura de precios, la proyección de ventas a 5 años y el retorno financiero para la junta directiva de Taichi.",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Módulo 1: Introducción</span>
+                            <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-8 object-contain bg-white rounded p-1" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                        </div>
+                        <div class="space-y-3 text-left">
+                            <h3 class="text-2xl font-black text-white">Glanatec® (Ripasudil 0.4%)</h3>
+                            <p class="text-sm text-slate-300 font-light">Estrategia de Entrada al Mercado Colombiano y Estudio de Factibilidad Comercial</p>
+                            <div class="grid grid-cols-3 gap-2 pt-3 text-center text-xs">
+                                <div class="bg-slate-800/80 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">Territorio:</span><strong>Colombia</strong></div>
+                                <div class="bg-slate-800/80 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">Agencia:</span><strong>INVIMA (NCE)</strong></div>
+                                <div class="bg-slate-800/80 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">Mecanismo:</span><strong>Inhibidor ROCK</strong></div>
+                            </div>
+                        </div>`
+                },
+                {
+                    speaker: "Narrador Ejecutivo",
+                    role: "Estratega Comercial Taichi",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 2,
+                    text: "Glanatec destaca por su diferenciación clínica única. Siendo el primer inhibidor de la Rho-quinasa, actúa directamente relajando la malla trabecular para restaurar el drenaje fisiológico del ojo. Además, protege y estimula las células del endotelio corneal, haciéndolo ideal para pacientes refractarios o con distrofia de Fuchs.",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-emerald-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Módulo 2: Valor Clínico</span>
+                            <span class="text-xs text-emerald-300 font-mono">Diferenciador Clave</span>
+                        </div>
+                        <div class="space-y-2 text-left bg-slate-800/90 p-4 rounded-xl border border-slate-700">
+                            <h4 class="text-base font-bold text-emerald-400">Mecanismo de Acción Trabecular Directo</h4>
+                            <ul class="text-xs text-slate-200 space-y-1.5 list-disc list-inside">
+                                <li>Incrementa el flujo de salida natural del humor acuoso.</li>
+                                <li><strong>Protección Endotelial Corneal:</strong> Coadyuvante ideal en distrofia de Fuchs.</li>
+                                <li>Sin efecto de taquifilaxia ni toxicidad sistémica cardiovascular.</li>
+                            </ul>
+                        </div>`
+                },
+                {
+                    speaker: "Narrador Ejecutivo",
+                    role: "Estratega Comercial Taichi",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 3,
+                    text: "En la Etapa 1 y 2, estimamos un proceso regulatorio ante el INVIMA de 14 a 18 meses como Nueva Entidad Química, con un presupuesto de $30,200 USD. La cascada de precios establece un costo desembarcado en Bogotá de $14.90 USD, un precio mayorista de $26.00 USD (42.7% margen) y un PVP exento de IVA de $42.00 USD.",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-blue-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Módulo 3: Regulatorio y Precios</span>
+                            <span class="text-xs text-blue-300 font-mono">INVIMA + Waterfall</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-xs text-left">
+                            <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 space-y-1">
+                                <span class="text-blue-300 font-bold block">Inversión INVIMA</span>
+                                <p class="text-lg font-black text-white">$30,200 USD</p>
+                                <p class="text-[10px] text-slate-400">Trámite NCE: 14-18 Meses</p>
+                            </div>
+                            <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 space-y-1">
+                                <span class="text-emerald-300 font-bold block">PVP Objetivo (Público)</span>
+                                <p class="text-lg font-black text-emerald-400">$42.00 USD</p>
+                                <p class="text-[10px] text-slate-400">~168,000 COP (Exento IVA)</p>
+                            </div>
+                        </div>`
+                },
+                {
+                    speaker: "Narrador Ejecutivo",
+                    role: "Estratega Comercial Taichi",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 4,
+                    text: "Para la Etapa 3, la proyección de ventas escala desde 4,000 unidades en el Año 1 hasta 48,000 unidades en el Año 5, generando $1.25 millones de dólares anuales. La penetración iniciará en Medicina Prepagada con un 45% del volumen y Consulta Privada con un 35%, expandiéndose luego a EPS vía MIPRES.",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Módulo 4: Crecimiento y Canales</span>
+                            <span class="text-xs text-amber-300 font-mono">Rampa de Ventas</span>
+                        </div>
+                        <div class="space-y-2 text-left">
+                            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                                <div class="bg-slate-800 p-2 rounded"><span class="text-slate-400 block text-[10px]">Año 1</span><strong>4,000 u</strong></div>
+                                <div class="bg-slate-800 p-2 rounded"><span class="text-slate-400 block text-[10px]">Año 3</span><strong>22,000 u</strong></div>
+                                <div class="bg-blue-900 p-2 rounded border border-blue-500"><span class="text-blue-300 block text-[10px]">Año 5</span><strong class="text-amber-400">48,000 u</strong></div>
+                            </div>
+                            <p class="text-[11px] text-slate-300 bg-slate-800/80 p-2 rounded"><strong>Canales:</strong> Prepagada (45%) | Privado (35%) | EPS/MIPRES (20%)</p>
+                        </div>`
+                },
+                {
+                    speaker: "Narrador Ejecutivo",
+                    role: "Estratega Comercial Taichi",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 5,
+                    text: "En la Etapa 4, el modelo contempla un programa de sembrado con 1,440 muestras médicas anuales dirigidas a los 120 cirujanos glaucomatólogos más influyentes en Bogotá, Medellín, Cali y Barranquilla, respaldado por un Especialista de Producto senior con un costo anual de $38,400 USD.",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-purple-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Módulo 5: Fuerza de Ventas</span>
+                            <span class="text-xs text-purple-300 font-mono">Sembrado KOL</span>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 text-xs text-left space-y-1.5">
+                            <p class="text-purple-300 font-bold">Inversión Comercial Año 1: $64,920 USD</p>
+                            <p>• 1 Representante Senior Especializado ($38.4k USD/año)</p>
+                            <p>• 1,440 Unidades de Muestra Física ($11.5k FOB)</p>
+                            <p>• Cobertura: 120 Especialistas en 4 Ciudades Principales</p>
+                        </div>`
+                },
+                {
+                    speaker: "Narrador Ejecutivo",
+                    role: "Estratega Comercial Taichi",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 6,
+                    text: "Finalmente en la Etapa 5, el análisis financiero confirma el retorno total de la inversión a los 2.1 años de comercialización. En el Año 3 alcanzamos un EBITDA de $146,200 USD y en el Año 5 un EBITDA de $392,800 USD con un margen neto del 31.4%. La recomendación estratégica es 'GO'.",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-emerald-500 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Módulo 6: Veredicto Financiero</span>
+                            <span class="text-xs text-emerald-300 font-mono">Decisión: GO</span>
+                        </div>
+                        <div class="bg-emerald-950/90 p-4 rounded-xl border border-emerald-500 text-center space-y-1.5">
+                            <h4 class="text-xl font-bold text-white">Retorno de Inversión (Payback): 2.1 Años</h4>
+                            <p class="text-xs text-emerald-200">EBITDA Año 5: $392,800 USD | Margen EBITDA: 31.4%</p>
+                            <p class="text-[11px] text-slate-300 pt-1">Alta viabilidad comercial y rápida absorción de capital inicial.</p>
+                        </div>`
+                }
+            ],
+            ja: [
+                {
+                    speaker: "エグゼクティブナレーター",
+                    role: "タイチ・商業戦略ディレクター",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 1,
+                    text: "コロンビアにおけるグラナテック0.4%の市場参入実現性に関するエグゼクティブプレゼンテーションへようこそ。本調査では、INVIMA衛生登録、価格構造、5年間の販売予測、およびタイチ取締役会向けの財務リターンを包括的に分析しています。",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">モジュール 1: 概要</span>
+                            <img src="https://1drv.ms/i/c/60572b55113e96fd/IQRRyddkMrIeRrZ8OX8DArUtAa0_juGfT3RSD8V6TBtMdNc?width=300&height=143" alt="Taichi Logo" class="h-8 object-contain bg-white rounded p-1" onerror="this.onerror=null; this.src='https://placehold.co/300x143/008080/FFFFFF?text=TAICHI';">
+                        </div>
+                        <div class="space-y-3 text-left">
+                            <h3 class="text-2xl font-black text-white">Glanatec® (Ripasudil 0.4%)</h3>
+                            <p class="text-sm text-slate-300 font-light">コロンビア市場参入戦略および商業的実現性調査報告</p>
+                            <div class="grid grid-cols-3 gap-2 pt-3 text-center text-xs">
+                                <div class="bg-slate-800/80 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">対象国:</span><strong>コロンビア</strong></div>
+                                <div class="bg-slate-800/80 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">規制機関:</span><strong>INVIMA (NCE)</strong></div>
+                                <div class="bg-slate-800/80 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">作用機序:</span><strong>ROCK阻害薬</strong></div>
+                            </div>
+                        </div>`
+                },
+                {
+                    speaker: "エグゼクティブナレーター",
+                    role: "タイチ・商業戦略ディレクター",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 2,
+                    text: "グラナテックは独自の臨床的差別化を備えています。世界初のRhoキナーゼ阻害薬として主線維柱帯を弛緩させ、眼圧の自然な房水流出を回復させます。さらに角膜内皮細胞の保護作用もあり、既存薬に抵抗性のある患者やフックス角膜ジストロフィーに最適です。",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-emerald-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">モジュール 2: 臨床的価値</span>
+                            <span class="text-xs text-emerald-300 font-mono">主な差別化要因</span>
+                        </div>
+                        <div class="space-y-2 text-left bg-slate-800/90 p-4 rounded-xl border border-slate-700">
+                            <h4 class="text-base font-bold text-emerald-400">主線維柱帯への直接作用機序</h4>
+                            <ul class="text-xs text-slate-200 space-y-1.5 list-disc list-inside">
+                                <li>自然な房水流出促進による確実な眼圧降下。</li>
+                                <li><strong>角膜内皮保護:</strong> フックス角膜ジストロフィー等に効果的。</li>
+                                <li>耐性（タキフィラキシー）や全身性副作用のリスク軽減。</li>
+                            </ul>
+                        </div>`
+                },
+                {
+                    speaker: "エグゼクティブナレーター",
+                    role: "タイチ・商業戦略ディレクター",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 3,
+                    text: "ステージ1および2では、新化学物質として14〜18か月の審査期間と30,200米ドルの予算を見込んでいます。滝状価格構造により、ボゴタでの着地コストは14.90米ドル、卸売価格は26.00米ドル（粗利益42.7%）、非課税の目標希望小売価格は42.00米ドルとなります。",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-blue-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">モジュール 3: 規制と価格</span>
+                            <span class="text-xs text-blue-300 font-mono">INVIMA 審査 + 滝状価格</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-xs text-left">
+                            <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 space-y-1">
+                                <span class="text-blue-300 font-bold block">INVIMA 登録費用</span>
+                                <p class="text-lg font-black text-white">$30,200 USD</p>
+                                <p class="text-[10px] text-slate-400">NCE審査: 14-18 か月</p>
+                            </div>
+                            <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 space-y-1">
+                                <span class="text-emerald-300 font-bold block">目標希望小売価格 (PVP)</span>
+                                <p class="text-lg font-black text-emerald-400">$42.00 USD</p>
+                                <p class="text-[10px] text-slate-400">~168,000 COP (付加価値税非課税)</p>
+                            </div>
+                        </div>`
+                },
+                {
+                    speaker: "エグゼクティブナレーター",
+                    role: "タイチ・商業戦略ディレクター",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 4,
+                    text: "ステージ3の販売予測では、1年目の4,000本から5年目には48,000本（年間125万米ドル）へと拡大します。参入初期は民間医療保険（45%）および自費診療（35%）に集中し、その後公的保険制度（EPS/MIPRES）へ展開します。",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">モジュール 4: 販売拡大とチャネル</span>
+                            <span class="text-xs text-amber-300 font-mono">販売カーブ</span>
+                        </div>
+                        <div class="space-y-2 text-left">
+                            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                                <div class="bg-slate-800 p-2 rounded"><span class="text-slate-400 block text-[10px]">1年目</span><strong>4,000 本</strong></div>
+                                <div class="bg-slate-800 p-2 rounded"><span class="text-slate-400 block text-[10px]">3年目</span><strong>22,000 本</strong></div>
+                                <div class="bg-blue-900 p-2 rounded border border-blue-500"><span class="text-blue-300 block text-[10px]">5年目</span><strong class="text-amber-400">48,000 本</strong></div>
+                            </div>
+                            <p class="text-[11px] text-slate-300 bg-slate-800/80 p-2 rounded"><strong>チャネル配分:</strong> 民間保険 (45%) | 自由診療 (35%) | 公的保険 (20%)</p>
+                        </div>`
+                },
+                {
+                    speaker: "エグゼクティブナレーター",
+                    role: "タイチ・商業戦略ディレクター",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 5,
+                    text: "ステージ4では、主要4都市のトップ眼科・緑内障専門医120名を対象に年間1,440本のサンプル品を提供します。これを年間コスト38,400米ドルの専任のシニアMR1名がサポートします。",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-purple-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">モジュール 5: 営業プロモーション</span>
+                            <span class="text-xs text-purple-300 font-mono">KOL シーディング</span>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 text-xs text-left space-y-1.5">
+                            <p class="text-purple-300 font-bold">1年目 営業販促費: $64,920 USD</p>
+                            <p>• 専任シニアMR 1名体制 ($38.4k USD/年)</p>
+                            <p>• 年間サンプル提供 1,440本 ($11.5k FOB)</p>
+                            <p>• ターゲット: 主要4都市の専門医120名</p>
+                        </div>`
+                },
+                {
+                    speaker: "エグゼクティブナレーター",
+                    role: "タイチ・商業戦略ディレクター",
+                    avatarBg: "bg-kowaBlue",
+                    slideIndex: 6,
+                    text: "最後にステージ5の財務分析において、発売後2.1年で初期投資の全額回収を達成します。3年目には146,200米ドル、5年目には392,800米ドルのEBITDA（利益率31.4%）を創出します。戦略的判定は『GO』です。",
+                    previewHtml: `
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-emerald-500 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">モジュール 6: 財務判定</span>
+                            <span class="text-xs text-emerald-300 font-mono">判定: GO</span>
+                        </div>
+                        <div class="bg-emerald-950/90 p-4 rounded-xl border border-emerald-500 text-center space-y-1.5">
+                            <h4 class="text-xl font-bold text-white">投資回収期間 (Payback): 2.1 年</h4>
+                            <p class="text-xs text-emerald-200">5年目 EBITDA: $392,800 USD | EBITDA率: 31.4%</p>
+                            <p class="text-[11px] text-slate-300 pt-1">高い事業性と初期投資の迅速な回収を実証。</p>
+                        </div>`
+                }
+            ]
+        };
+
+        function initNotebookLMStudio() {
+            currentDialogueIndex = 0;
+            updateNotebookSlide();
+            renderTranscript();
+        }
+
+        function setNotebookLanguage(lang) {
+            if (isPlayingNbAudio) {
+                if (synthSpeech) synthSpeech.cancel();
+                isPlayingNbAudio = false;
+                document.getElementById('nb-play-icon').className = "fa-solid fa-play";
+                document.getElementById('nb-status').innerText = "Ready";
+            }
+            currentNbLang = lang;
+            currentDialogueIndex = 0;
+            
+            const esBtn = document.getElementById('lang-es-btn');
+            const jaBtn = document.getElementById('lang-ja-btn');
+            if (lang === 'es') {
+                esBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition shadow";
+                jaBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition";
+            } else {
+                jaBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition shadow";
+                esBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition";
+            }
+            updateNotebookSlide();
+            renderTranscript();
+        }
+
+        function updateNotebookSlide() {
+            const scriptList = notebookScripts[currentNbLang];
+            if (!scriptList || !scriptList[currentDialogueIndex]) return;
+            const item = scriptList[currentDialogueIndex];
+            
+            const titleElem = document.getElementById('synced-slide-title');
+            const previewElem = document.getElementById('notebook-slide-preview');
+            const stepElem = document.getElementById('nb-current-step');
+
+            if (titleElem) titleElem.innerText = `Slide ${item.slideIndex}: ${getSlideTitle(item.slideIndex)}`;
+            if (previewElem) previewElem.innerHTML = item.previewHtml;
+            if (stepElem) stepElem.innerText = `Section ${currentDialogueIndex + 1} of ${scriptList.length}`;
+            
+            renderTranscript();
+        }
+
+        function getSlideTitle(index) {
+            const titles = {
+                1: "Executive Title & Overview",
+                2: "Clinical Differentiation & Unmet Need",
+                3: "INVIMA Roadmap & Waterfall Pricing",
+                4: "5-Year Sales Ramp & Channel Strategy",
+                5: "KOL Sampling & Field Organization",
+                6: "Financial Returns & Strategic Verdict"
+            };
+            return titles[index] || "Executive Presentation";
+        }
+
+        function renderTranscript() {
+            const container = document.getElementById('transcript-container');
+            if (!container) return;
+            const scriptList = notebookScripts[currentNbLang];
+            
+            let html = '';
+            scriptList.forEach((item, idx) => {
+                const isActive = idx === currentDialogueIndex;
+                html += `
+                    <div onclick="jumpToStep(${idx})" class="p-3 rounded-xl border transition cursor-pointer ${isActive ? 'bg-amber-100/80 border-amber-400 shadow-sm' : 'bg-white border-slate-200 hover:bg-slate-100'}">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-[11px] ${isActive ? 'text-slate-900' : 'text-slate-700'}">${item.speaker}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded ${isActive ? 'bg-amber-500 text-slate-950 font-bold' : 'bg-slate-200 text-slate-600'}">Slide ${item.slideIndex}</span>
+                        </div>
+                        <p class="text-slate-600 text-[11px] leading-relaxed">${item.text}</p>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function jumpToStep(idx) {
+            if (isPlayingNbAudio && synthSpeech) {
+                synthSpeech.cancel();
+            }
+            currentDialogueIndex = idx;
+            updateNotebookSlide();
+            if (isPlayingNbAudio) {
+                speakCurrentDialogue();
+            }
+        }
+
+        function toggleNotebookAudio() {
+            if (!synthSpeech) {
+                alert("Speech synthesis is not supported in this browser.");
+                return;
+            }
+            
+            if (isPlayingNbAudio) {
+                synthSpeech.cancel();
+                isPlayingNbAudio = false;
+                document.getElementById('nb-play-icon').className = "fa-solid fa-play";
+                document.getElementById('nb-status').innerText = "Paused";
+            } else {
+                isPlayingNbAudio = true;
+                document.getElementById('nb-play-icon').className = "fa-solid fa-pause";
+                document.getElementById('nb-status').innerText = "Playing";
+                speakCurrentDialogue();
+            }
+        }
+
+        function speakCurrentDialogue() {
+            if (!isPlayingNbAudio) return;
+            if (synthSpeech) synthSpeech.cancel();
+
+            const item = notebookScripts[currentNbLang][currentDialogueIndex];
+            if (!item) return;
+
+            const utterance = new SpeechSynthesisUtterance(item.text);
+            const targetLang = currentNbLang === 'es' ? 'es-ES' : 'ja-JP';
+            utterance.lang = targetLang;
+            utterance.rate = 0.98;
+
+            if (synthSpeech && synthSpeech.getVoices) {
+                const voices = synthSpeech.getVoices();
+                const matchedVoice = voices.find(v => v.lang.startsWith(currentNbLang === 'es' ? 'es' : 'ja'));
+                if (matchedVoice) {
+                    utterance.voice = matchedVoice;
+                }
+            }
+
+            utterance.pitch = 1.0;
+
+            utterance.onend = () => {
+                if (isPlayingNbAudio) {
+                    if (currentDialogueIndex < notebookScripts[currentNbLang].length - 1) {
+                        currentDialogueIndex++;
+                        updateNotebookSlide();
+                        speakCurrentDialogue();
+                    } else {
+                        isPlayingNbAudio = false;
+                        document.getElementById('nb-play-icon').className = "fa-solid fa-play";
+                        document.getElementById('nb-status').innerText = "Finished";
+                    }
+                }
+            };
+
+            utterance.onerror = (e) => {
+                console.warn("Speech Synthesis Warning:", e);
+                setTimeout(() => {
+                    if (isPlayingNbAudio && currentDialogueIndex < notebookScripts[currentNbLang].length - 1) {
+                        currentDialogueIndex++;
+                        updateNotebookSlide();
+                        speakCurrentDialogue();
+                    }
+                }, 1000);
+            };
+
+            synthSpeech.speak(utterance);
+        }
+
+        function nextDialogueStep() {
+            const scriptList = notebookScripts[currentNbLang];
+            if (currentDialogueIndex < scriptList.length - 1) {
+                jumpToStep(currentDialogueIndex + 1);
+            }
+        }
+
+        function prevDialogueStep() {
+            if (currentDialogueIndex > 0) {
+                jumpToStep(currentDialogueIndex - 1);
+            }
+        }
+
+        function drawWaveform() {
+            const canvas = document.getElementById('waveformCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const width = canvas.width;
+                const height = canvas.height;
+                const bars = 24;
+                const barWidth = width / bars - 2;
+                
+                for (let i = 0; i < bars; i++) {
+                    const barHeight = isPlayingNbAudio 
+                        ? Math.random() * (height - 6) + 4 
+                        : 4;
+                    const x = i * (barWidth + 2);
+                    const y = (height - barHeight) / 2;
+                    
+                    ctx.fillStyle = isPlayingNbAudio ? '#008080' : '#cbd5e1';
+                    ctx.fillRect(x, y, barWidth, barHeight);
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        async function generateGeminiAudio() {
+            const btn = document.getElementById('nb-tts-gen-btn');
+            if (!btn) return;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Generating AI Audio...`;
+            btn.disabled = true;
+
+            try {
+                const scriptText = notebookScripts[currentNbLang]
+                    .map(item => `${item.speaker}: ${item.text}`)
+                    .join("\n");
+
+                const payload = {
+                    contents: [{
+                        parts: [{ text: `Generate single narrative presenter speech for:\n${scriptText}` }]
+                    }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: {
+                            voiceConfig: { prebuiltVoiceConfig: { voiceName: currentNbLang === 'es' ? "Kore" : "Charon" } }
+                        }
+                    },
+                    model: "gemini-2.5-flash-preview-tts"
+                };
+
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+
+                if (part && part.inlineData && part.inlineData.data) {
+                    toggleNotebookAudio();
+                } else {
+                    toggleNotebookAudio();
+                }
+            } catch (err) {
+                console.log("Gemini API fallback to browser synth:", err);
+                toggleNotebookAudio();
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
