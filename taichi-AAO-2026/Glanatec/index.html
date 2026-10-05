@@ -1004,13 +1004,15 @@
         let isPlayingNbAudio = false;
         const synthSpeech = window.speechSynthesis;
 
-        function switchView(view) {
+        function switchView(view, updateHistory = true) {
             const reportView = document.getElementById('report-view');
             const deckView = document.getElementById('deck-view');
             const notebookView = document.getElementById('notebook-view');
             const reportBtn = document.getElementById('view-report-btn');
             const deckBtn = document.getElementById('view-deck-btn');
             const notebookBtn = document.getElementById('view-notebook-btn');
+
+            if (!reportView || !deckView || !notebookView) return;
 
             reportView.classList.add('hidden');
             deckView.classList.add('hidden');
@@ -1020,16 +1022,55 @@
             deckBtn.className = "px-3 py-1.5 rounded-md text-slate-300 hover:text-white font-medium transition";
             notebookBtn.className = "px-3 py-1.5 rounded-md text-slate-300 hover:text-white font-medium transition bg-slate-700/60";
 
-            if (view === 'report') {
+            let normalizedView = view;
+            if (view === 'report' || view === 'doc' || view === 'strategy') {
+                normalizedView = 'report';
                 reportView.classList.remove('hidden');
                 reportBtn.className = "px-3 py-1.5 rounded-md text-white bg-taichiGreen font-medium transition shadow";
-            } else if (view === 'deck') {
+            } else if (view === 'deck' || view === 'presentation' || view === 'pitch') {
+                normalizedView = 'deck';
                 deckView.classList.remove('hidden');
                 deckBtn.className = "px-3 py-1.5 rounded-md text-white bg-taichiGreen font-medium transition shadow";
-            } else if (view === 'notebook') {
+            } else if (view === 'notebook' || view === 'video' || view === 'audio' || view === 'studio') {
+                normalizedView = 'video';
                 notebookView.classList.remove('hidden');
                 notebookBtn.className = "px-3 py-1.5 rounded-md text-slate-950 bg-amber-400 font-bold transition shadow";
                 initNotebookLMStudio();
+            }
+
+            if (updateHistory) {
+                try {
+                    const url = new URL(window.location);
+                    url.searchParams.set('view', normalizedView);
+                    window.history.replaceState({}, '', url);
+                } catch (e) {
+                    console.warn("Could not update URL parameters:", e);
+                }
+            }
+        }
+
+        function checkInitialView() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                let viewParam = params.get('view');
+                
+                // Fallback check for URL hash tags (e.g., #video or #deck)
+                if (!viewParam && window.location.hash) {
+                    viewParam = window.location.hash.replace('#', '').toLowerCase();
+                }
+
+                if (viewParam) {
+                    viewParam = viewParam.toLowerCase();
+                    if (viewParam === 'deck' || viewParam === 'presentation' || viewParam === 'pitch') {
+                        switchView('deck', false);
+                    } else if (viewParam === 'notebook' || viewParam === 'video' || viewParam === 'audio' || viewParam === 'studio') {
+                        switchView('video', false);
+                    } else if (viewParam === 'report' || viewParam === 'doc' || viewParam === 'strategy') {
+                        switchView('report', false);
+                    }
+                }
+            } catch (err) {
+                console.warn("Error reading URL parameters:", err);
             }
         }
 
@@ -1064,6 +1105,8 @@
         });
 
         window.onload = function() {
+            checkInitialView();
+
             // Chart 1: Revenue & Unit Projections
             const salesCtx = document.getElementById('salesChart')?.getContext('2d');
             if (salesCtx) {
