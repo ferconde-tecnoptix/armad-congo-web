@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BigVision - AAO Visitor Registration</title>
+  <!-- Tailwind CSS CDN para un diseño rápido, limpio y adaptativo -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Estilos adicionales para usabilidad táctil */
+    input, select, textarea, button {
+      font-size: 16px !important; /* Previene el zoom automático en iOS/Safari */
+    }
+    .touch-target {
+      min-height: 48px;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-3 md:p-6 font-sans">
+
+  <div class="w-full max-w-xl bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 overflow-hidden">
+    
+    <!-- Encabezado con Marca y Selector de Idioma -->
+    <div class="bg-slate-950 p-5 border-b border-slate-700 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-blue-400 tracking-wide">BigVision</h1>
+        <p class="text-xs text-slate-400">AAO Visitor Registration</p>
+      </div>
+
+      <!-- Selector de Idioma (Buttons rápidos para tablets) -->
+      <div class="flex bg-slate-800 p-1 rounded-xl border border-slate-700" id="langSelector">
+        <button type="button" data-lang="EN" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-blue-600 text-white">English</button>
+        <button type="button" data-lang="ES" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white">Español</button>
+        <button type="button" data-lang="PT" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white">Português</button>
+      </div>
+    </div>
+
+    <!-- Formulario Principal -->
+    <form id="visitorForm" class="p-5 md:p-6 space-y-5">
+      
+      <!-- Campo Oculto para Idioma -->
+      <input type="hidden" id="idioma" name="idioma" value="EN">
+
+      <!-- SECCIÓN 1: DATOS PERSONALES -->
+      <div class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_nombre">First Name *</label>
+            <input type="text" id="nombre" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_apellido">Last Name *</label>
+            <input type="text" id="apellido" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_sexo">Gender</label>
+          <select id="sexo" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+            <option value="Male" id="opt_male">Male</option>
+            <option value="Female" id="opt_female">Female</option>
+            <option value="Other" id="opt_other">Other / Prefer not to say</option>
+          </select>
+        </div>
+      </div>
+
+      <hr class="border-slate-700">
+
+      <!-- SECCIÓN 2: PERFIL Y UBICACIÓN CON AUTOCOMPLETADO DINO/INTELIGENTE -->
+      <div class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_profesion">Profession</label>
+            <select id="profesion" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+              <option value="Ophthalmologist">Ophthalmologist</option>
+              <option value="Optometrist">Optometrist</option>
+              <option value="Resident / Fellow">Resident / Fellow</option>
+              <option value="Biomedical Engineer">Biomedical Engineer</option>
+
+              <option value="Administrator / Manager">Administrator / Manager</option>
+              <option value="Distributor">Distributor</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <!-- Especialidad con Datalist (Sugerencias dinámicas) -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_especialidad">Specialty / Subspecialty</label>
+            <input type="text" id="especialidad" list="dl_especialidades" placeholder="Type or select..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+            <datalist id="dl_especialidades">
+              <option value="Retina">
+              <option value="Cornea & Refractive">
+              <option value="Glaucoma">
+              <option value="Cataract">
+              <option value="Anterior Segment">
+              <option value="Pediatrics">
+              <option value="Oculoplastics">
+              <option value="Neuro-ophthalmology">
+              <option value="General Ophthalmology">
+            </datalist>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_cargo">Job Title</label>
+            <input type="text" id="cargo" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_empresa">Company / Clinic *</label>
+            <input type="text" id="empresa" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+          </div>
+        </div>
+
+        <!-- País y Ciudad con Datalist Dinámico -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_pais">Country *</label>
+            <input type="text" id="pais" list="dl_paises" required placeholder="Type or select..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+            <datalist id="dl_paises">
+              <option value="United States">
+              <option value="Colombia">
+              <option value="Brazil">
+              <option value="Mexico">
+              <option value="Argentina">
+              <option value="Chile">
+              <option value="Peru">
+              <option value="Ecuador">
+              <option value="Panama">
+              <option value="Spain">
+            </datalist>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_ciudad">City</label>
+            <input type="text" id="ciudad" list="dl_ciudades" placeholder="Type or select..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+            <datalist id="dl_ciudades">
+              <!-- Se va popular dinámicamente -->
+            </datalist>
+          </div>
+        </div>
+      </div>
+
+      <hr class="border-slate-700">
+
+      <!-- SECCIÓN 3: CONTACTO E INTERÉS -->
+      <div class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_email">Email Address *</label>
+            <input type="email" id="email" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_celular">Mobile / WhatsApp</label>
+            <input type="tel" id="celular" placeholder="+1..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-2" id="lbl_equipos">Equipment of Interest</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <label class="flex items-center space-x-3 bg-slate-900 p-3 rounded-xl border border-slate-700 cursor-pointer">
+              <input type="checkbox" name="equipos" value="OCT" class="w-5 h-5 text-blue-600 rounded">
+              <span class="text-sm font-medium">OCT</span>
+            </label>
+            <label class="flex items-center space-x-3 bg-slate-900 p-3 rounded-xl border border-slate-700 cursor-pointer">
+              <input type="checkbox" name="equipos" value="Optical Biometer" class="w-5 h-5 text-blue-600 rounded">
+              <span class="text-sm font-medium" id="chk_biometro">Biometer</span>
+            </label>
+            <label class="flex items-center space-x-3 bg-slate-900 p-3 rounded-xl border border-slate-700 cursor-pointer">
+              <input type="checkbox" name="equipos" value="Otros" id="chkOtros" class="w-5 h-5 text-blue-600 rounded">
+              <span class="text-sm font-medium" id="chk_otros">Other</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Campo libre habilitado si se selecciona "Otros" -->
+        <div id="divOtrosDetalle" class="hidden">
+          <label class="block text-xs font-medium text-slate-300 mb-1" id="lbl_otros_detalle">Specify Other Equipment</label>
+          <input type="text" id="otrosDetalle" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 touch-target">
+        </div>
+      </div>
+
+      <!-- Botón de Envío -->
+      <button type="submit" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg transition-all touch-target text-base">
+        Submit Registration
+      </button>
+
+      <!-- Mensajes de estado -->
+      <div id="statusMsg" class="hidden text-center p-3 rounded-xl text-sm font-semibold"></div>
+    </form>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9GOx1Vrq7jHggSyjyrj3bmz_9xkpM_dlPW2XMyB78L17gKuz0aR2JrMcT2M7Oa4lE/exec";
+
+    // 1. DICCIONARIO TRADUCCIONES (EN, ES, PT)
+    const translations = {
+      EN: {
+        nombre: "First Name *", apellido: "Last Name *", sexo: "Gender",
+        male: "Male", female: "Female", other: "Other / Prefer not to say",
+        profesion: "Profession", especialidad: "Specialty / Subspecialty",
+        cargo: "Job Title", empresa: "Company / Clinic *", pais: "Country *", ciudad: "City",
+        email: "Email Address *", celular: "Mobile / WhatsApp", equipos: "Equipment of Interest",
+        biometro: "Optical Biometer", otros: "Other", otros_detalle: "Specify Other Equipment",
+        submit: "Submit Registration", sending: "Sending...", success: "Registration Saved Successfully!",
+        error: "Error saving data. Please try again."
+      },
+      ES: {
+        nombre: "Nombre *", apellido: "Apellido *", sexo: "Sexo",
+        male: "Masculino", female: "Femenino", other: "Otro / Prefiero no decir",
+        profesion: "Profesión", especialidad: "Especialidad / Subespecialidad",
+        cargo: "Cargo", empresa: "Empresa / Clínica *", pais: "País *", ciudad: "Ciudad",
+        email: "Correo Electrónico *", celular: "Celular / WhatsApp", equipos: "Equipo de Interés",
+        biometro: "Biómetro Óptico", otros: "Otros", otros_detalle: "Especificar Otro Equipo",
+        submit: "Registrar Visitante", sending: "Enviando...", success: "¡Registro Guardado con Éxito!",
+        error: "Error al guardar. Intente de nuevo."
+      },
+      PT: {
+        nombre: "Nome *", apellido: "Sobrenome *", sexo: "Gênero",
+        male: "Masculino", female: "Feminino", other: "Outro / Prefiro não dizer",
+        profesion: "Profissão", especialidad: "Especialidade / Subespecialidade",
+        cargo: "Cargo", empresa: "Empresa / Clínica *", pais: "País *", ciudad: "Cidade",
+        email: "E-mail *", celular: "Celular / WhatsApp", equipos: "Equipamento de Interesse",
+        biometro: "Biómetro Óptico", outros: "Outros", outros_detalle: "Especificar Outro Equipamento",
+        submit: "Registrar Visitante", sending: "Enviando...", success: "Registro Salvo com Sucesso!",
+        error: "Erro ao salvar. Tente novamente."
+      }
+    };
+
+    // 2. CAMBIO DINÁMICO DE IDIOMA
+    const langButtons = document.querySelectorAll('#langSelector button');
+    langButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.getAttribute('data-lang');
+        document.getElementById('idioma').value = lang;
+
+        // Actualizar UI Botones
+        langButtons.forEach(b => {
+          b.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white";
+        });
+        btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-blue-600 text-white";
+
+        // Aplicar textos traducidos
+        const t = translations[lang];
+        document.getElementById('lbl_nombre').textContent = t.nombre;
+        document.getElementById('lbl_apellido').textContent = t.apellido;
+        document.getElementById('lbl_sexo').textContent = t.sexo;
+        document.getElementById('opt_male').textContent = t.male;
+        document.getElementById('opt_female').textContent = t.female;
+        document.getElementById('opt_other').textContent = t.other;
+        document.getElementById('lbl_profesion').textContent = t.profesion;
+        document.getElementById('lbl_especialidad').textContent = t.especialidad;
+        document.getElementById('lbl_cargo').textContent = t.cargo;
+        document.getElementById('lbl_empresa').textContent = t.empresa;
+        document.getElementById('lbl_pais').textContent = t.pais;
+        document.getElementById('lbl_ciudad').textContent = t.ciudad;
+        document.getElementById('lbl_email').textContent = t.email;
+        document.getElementById('lbl_celular').textContent = t.celular;
+        document.getElementById('lbl_equipos').textContent = t.equipos;
+        document.getElementById('chk_biometro').textContent = t.biometro;
+        document.getElementById('chk_otros').textContent = t.otros;
+        document.getElementById('lbl_otros_detalle').textContent = t.otros_detalle;
+        document.getElementById('btnSubmit').textContent = t.submit;
+      });
+    });
+
+    // 3. CONTROL DE CAMPO LIBRE "OTROS"
+    document.getElementById('chkOtros').addEventListener('change', (e) => {
+      const div = document.getElementById('divOtrosDetalle');
+      if (e.target.checked) {
+        div.classList.remove('hidden');
+      } else {
+        div.classList.add('hidden');
+        document.getElementById('otrosDetalle').value = "";
+      }
+    });
+
+    // 4. MEMORIA LOCAL PARA AUTOCOMPLETADO CRECIENTE
+    function guardarEnMemoriaLocal(key, valor) {
+      if (!valor || valor.trim() === "") return;
+      let items = JSON.parse(localStorage.getItem(key) || "[]");
+      if (!items.includes(valor.trim())) {
+        items.push(valor.trim());
+        localStorage.setItem(key, JSON.stringify(items));
+        cargarDatalist(key, "dl_" + key);
+      }
+    }
+
+    function cargarDatalist(storageKey, datalistId) {
+      const datalist = document.getElementById(datalistId);
+      if (!datalist) return;
+      let items = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      items.forEach(item => {
+        // Verificar si ya existe en las opciones estáticas
+        const exists = Array.from(datalist.options).some(opt => opt.value === item);
+        if (!exists) {
+          const opt = document.createElement('option');
+          opt.value = item;
+          datalist.appendChild(opt);
+        }
+      });
+    }
+
+    // Cargar historial acumulado en la tablet al iniciar
+    cargarDatalist("paises", "dl_paises");
+    cargarDatalist("ciudades", "dl_ciudades");
+    cargarDatalist("especialidades", "dl_especialidades");
+
+    // 5. ENVÍO DEL FORMULARIO Y PROCESAMIENTO
+    document.getElementById('visitorForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const lang = document.getElementById('idioma').value;
+      const t = translations[lang];
+      const btn = document.getElementById('btnSubmit');
+      const statusMsg = document.getElementById('statusMsg');
+
+      // Obtener equipos seleccionados
+      const equipos = [];
+      document.querySelectorAll('input[name="equipos"]:checked').forEach(c => equipos.push(c.value));
+
+      const formData = {
+        idioma: lang,
+        nombre: document.getElementById('nombre').value,
+        apellido: document.getElementById('apellido').value,
+        sexo: document.getElementById('sexo').value,
+        profesion: document.getElementById('profesion').value,
+        especialidad: document.getElementById('especialidad').value,
+        cargo: document.getElementById('cargo').value,
+        empresa: document.getElementById('empresa').value,
+        pais: document.getElementById('pais').value,
+        ciudad: document.getElementById('ciudad').value,
+        email: document.getElementById('email').value,
+        celular: document.getElementById('celular').value,
+        equipos: equipos,
+        otrosDetalle: document.getElementById('otrosDetalle').value
+      };
+
+      // Guardar entradas en la memoria de autocompletado local para próximos visitantes
+      guardarEnMemoriaLocal("paises", formData.pais);
+      guardarEnMemoriaLocal("ciudades", formData.ciudad);
+      guardarEnMemoriaLocal("especialidades", formData.especialidad);
+
+      // Bloquear botón y mostrar loader
+      btn.disabled = true;
+      btn.textContent = t.sending;
+      statusMsg.classList.add('hidden');
+
+      try {
+        // Enviar datos al script mediante POST
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors", // Requerido para llamadas simples a Apps Script
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+
+        // Mostrar éxito
+        statusMsg.textContent = t.success;
+        statusMsg.className = "text-center p-3 rounded-xl text-sm font-semibold bg-emerald-950 text-emerald-300 border border-emerald-700";
+        statusMsg.classList.remove('hidden');
+
+        // Limpiar campos para el siguiente visitante
+        document.getElementById('visitorForm').reset();
+        document.getElementById('divOtrosDetalle').classList.add('hidden');
+        document.getElementById('idioma').value = lang; // Mantener idioma seleccionado
+
+      } catch (err) {
+        statusMsg.textContent = t.error;
+        statusMsg.className = "text-center p-3 rounded-xl text-sm font-semibold bg-rose-950 text-rose-300 border border-rose-700";
+        statusMsg.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = t.submit;
+      }
+    });
+  </script>
+</body>
+</html>
