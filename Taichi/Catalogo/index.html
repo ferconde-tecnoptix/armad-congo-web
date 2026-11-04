@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Tecnológico Oftalmológico - Taichi Colombia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1b365d;
+            --accent: #2a638a;
+            --highlight: #00a896;
+            --light-bg: #f4f7f9;
+            --dark-text: #2c3e50;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--light-bg); color: var(--dark-text); line-height: 1.6; }
+
+        /* Header & Navigation */
+        header { background: var(--primary); color: var(--white); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .header-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .brand-logo { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.5rem; color: var(--white); text-decoration: none; }
+        .brand-logo span { color: var(--highlight); }
+        
+        nav ul { display: flex; list-style: none; gap: 1.5rem; }
+        nav a { color: var(--white); text-decoration: none; font-weight: 500; transition: color 0.3s; cursor: pointer; }
+        nav a:hover, nav a.active { color: var(--highlight); }
+
+        /* Main Layout */
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .page-title { font-family: 'Montserrat', sans-serif; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 3px solid var(--accent); padding-bottom: 0.5rem; }
+        
+        /* Brand Sections & Cards */
+        .brand-section { margin-bottom: 3rem; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .product-card { background: var(--white); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-img { width: 100%; height: 200px; object-fit: cover; background: #eaeff2; }
+        .product-info { padding: 1.2rem; flex-grow: 1; }
+        .product-brand { font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+        .product-title { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--primary); margin: 0.3rem 0; }
+        .product-desc { font-size: 0.9rem; color: #555; margin-bottom: 1rem; }
+        
+        .card-actions { padding: 1rem 1.2rem; background: #fafbfc; border-top: 1px solid #edf2f7; display: flex; gap: 0.5rem; }
+        .btn { flex: 1; padding: 0.6rem; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center; font-size: 0.85rem; transition: background 0.3s; }
+        .btn-info { background: var(--accent); color: var(--white); }
+        .btn-info:hover { background: #1f4b69; }
+        .btn-quote { background: var(--highlight); color: var(--white); }
+        .btn-quote:hover { background: #008475; }
+
+        /* Modal Form */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--white); padding: 2rem; border-radius: 8px; max-width: 550px; width: 90%; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: #888; }
+        
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 0.3rem; font-size: 0.9rem; }
+        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; }
+        .form-submit { width: 100%; padding: 0.8rem; background: var(--primary); color: var(--white); font-weight: 700; border: none; border-radius: 4px; cursor: pointer; }
+        .form-submit:hover { background: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <a href="#" class="brand-logo">TAICHI <span>COLOMBIA</span></a>
+            <nav>
+                <ul>
+                    <li><a onclick="filterBrand('all')" class="active">Todos</a></li>
+                    <li><a onclick="filterBrand('bigvision')">BigVision</a></li>
+                    <li><a onclick="filterBrand('kowa')">Kowa</a></li>
+                    <li><a onclick="filterBrand('takagi')">Takagi</a></li>
+                    <li><a onclick="filterBrand('neitz')">Neitz</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Catálogo de Equipamiento e Instrumental Oftálmico</h1>
+        
+        <!-- BigVision -->
+        <section class="brand-section" id="brand-bigvision">
+            <h2>BigVision</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="images/bigvision-oct.jpg" alt="OCT BigVision" class="product-img" onerror="this.src='https://via.placeholder.com/300x200?text=BigVision+OCT'">
+                    <div class="product-info">
+                        <span class="product-brand">BigVision</span>
+                        <h3 class="product-title">Tomógrafo de Coherencia Óptica (OCT)</h3>
+                        <p class="product-desc">Diagnóstico avanzado de alta resolución para retina y segmento anterior. Registro INVIMA Vigente.</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-info" onclick="openForm('Información', 'BigVision', 'Tomógrafo OCT')">Información</button>
+                        <button class="btn btn-quote" onclick="openForm('Cotización', 'BigVision', 'Tomógrafo OCT')">Cotizar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="images/bigvision-biometro.jpg" alt="Biómetro BigVision" class="product-img" onerror="this.src='https://via.placeholder.com/300x200?text=BigVision+Biómetro'">
+                    <div class="product-info">
+                        <span class="product-brand">BigVision</span>
+                        <h3 class="product-title">Biómetro Óptico de Precisión</h3>
+                        <p class="product-desc">Cálculo de lente intraocular ultrarrápido y preciso. Registro INVIMA Vigente.</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-info" onclick="openForm('Información', 'BigVision', 'Biómetro Óptico')">Información</button>
+                        <button class="btn btn-quote" onclick="openForm('Cotización', 'BigVision', 'Biómetro Óptico')">Cotizar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kowa -->
+        <section class="brand-section" id="brand-kowa">
+            <h2>Kowa (Japón)</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="images/kowa-sl19.jpg" alt="Kowa SL-19" class="product-img" onerror="this.src='https://via.placeholder.com/300x200?text=Kowa+SL-19'">
+                    <div class="product-info">
+                        <span class="product-brand">Kowa</span>
+                        <h3 class="product-title">Lámpara de Hendidura Portátil SL-19</h3>
+                        <p class="product-desc">Iluminación LED ergonómica de alta intensidad para consulta itinerante. Registro INVIMA Vigente.</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-info" onclick="openForm('Información', 'Kowa', 'Lámpara Portátil SL-19')">Información</button>
+                        <button class="btn btn-quote" onclick="openForm('Cotización', 'Kowa', 'Lámpara Portátil SL-19')">Cotizar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="images/kowa-ha2.jpg" alt="Kowa HA-2" class="product-img" onerror="this.src='https://via.placeholder.com/300x200?text=Kowa+HA-2'">
+                    <div class="product-info">
+                        <span class="product-brand">Kowa</span>
+                        <h3 class="product-title">Tonómetro de Aplanación Portátil HA-2</h3>
+                        <p class="product-desc">Medición precisa de la PIO en cualquier entorno clínico. Registro INVIMA Vigente.</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-info" onclick="openForm('Información', 'Kowa', 'Tonómetro Portátil HA-2')">Información</button>
+                        <button class="btn btn-quote" onclick="openForm('Cotización', 'Kowa', 'Tonómetro Portátil HA-2')">Cotizar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="images/kowa-lio.jpg" alt="LIOs Kowa Avansee" class="product-img" onerror="this.src='https://via.placeholder.com/300x200?text=LIOs+Kowa+Avansee'">
+                    <div class="product-info">
+                        <span class="product-brand">Kowa</span>
+                        <h3 class="product-title">Lentes Intraoculares (LIO) Avansee</h3>
+                        <p class="product-desc">Portafolio monofocal y premium inyectable hidrofóbico de alta definición óptica.</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-info" onclick="openForm('Información', 'Kowa', 'LIOs Avansee')">Información</button>
+                        <button class="btn btn-quote" onclick="openForm('Cotización', 'Kowa', 'LIOs Avansee')">Cotizar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Takagi -->
+        <section class="brand-section" id="brand-takagi">
+            <h2>Takagi (Japón)</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="images/takagi-microscopios.jpg" alt="Microscopios Takagi" class="product-img" onerror="this.src='https://via.placeholder.com/300x200?text=Microscopios+Takagi'">
+                    <div class="product-info">
+                        <span class="product-brand">Takagi</span>
+                        <h3 class="product-title">Microscopios Quirúrgicos (OM-6 / OM-9 / OM-19)</h3>
+                        <p class="product-desc">Sistemas de microscopía quirúrgica ocular de alta gama con Red Reflex superior.</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-info" onclick="openForm('Información', 'Takagi', 'Microscopios Quirúrgicos OM Series')">Información</button>
+                        <button class="btn btn-quote" onclick="openForm('Cotización', 'Takagi', 'Microscopios Quirúrgicos OM Series')">Cotizar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="images/takagi-lamparas.jpg" alt="Lámparas Takagi" class="product-img" onerror="this.src='https://via.placeholder.com/300x200?text=Lámparas+Takagi'">
+                    <div class="product-info">
+                        <span class="product-brand">Takagi</span>
+                        <h3 class="product-title">Lámparas de Hendidura (2ZL / 4ZL / 30GL / 400GL)</h3>
+                        <p class="product-desc">Óptica convergente japonesa de máxima resolución para diagnóstico en consultorio.</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-info" onclick="openForm('Información', 'Takagi', 'Lámparas de Hendidura ZL/GL Series')">Información</button>
+                        <button class="btn btn-quote" onclick="openForm('Cotización', 'Takagi', 'Lámparas de Hendidura ZL/GL Series')">Cotizar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Neitz -->
+        <section class="brand-section" id="brand-neitz">
+            <h2>Neitz (Japón)</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="images/neitz-oftalmoscopios.jpg" alt="Neitz Oftalmoscopios" class="product-img" onerror="this.src='https://via.placeholder.com/300x200?text=Neitz+Oftalmoscopios'">
+                    <div class="product-info">
+                        <span class="product-brand">Neitz</span>
+                        <h3 class="product-title">Oftalmoscopios Directos e Indirectos LED</h3>
+                        <p class="product-desc">Instrumental diagnóstico binocular e iluminación de precisión para fondo de ojo.</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-info" onclick="openForm('Información', 'Neitz', 'Oftalmoscopios LED / Binoculares')">Información</button>
+                        <button class="btn btn-quote" onclick="openForm('Cotización', 'Neitz', 'Oftalmoscopios LED / Binoculares')">Cotizar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="images/neitz-retinoscopios.jpg" alt="Neitz Retinoscopios y Kits" class="product-img" onerror="this.src='https://via.placeholder.com/300x200?text=Neitz+Retinoscopios+y+Kits'">
+                    <div class="product-info">
+                        <span class="product-brand">Neitz</span>
+                        <h3 class="product-title">Retinoscopios LED y Kits Diagnósticos</h3>
+                        <p class="product-desc">Equipos portátiles para refracción y evaluación óptica en estuches rígidos.</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-info" onclick="openForm('Información', 'Neitz', 'Retinoscopios LED y Kits')">Información</button>
+                        <button class="btn btn-quote" onclick="openForm('Cotización', 'Neitz', 'Retinoscopios LED y Kits')">Cotizar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal Formulario -->
+    <div class="modal" id="modalForm">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeForm()">&times;</span>
+            <h2 style="font-family: 'Montserrat', sans-serif; color: var(--primary); margin-bottom: 0.5rem;" id="modalTitle">Solicitud</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;" id="modalSubtitle"></p>
+
+            <form id="prospectForm">
+                <input type="hidden" id="tipoSolicitud" name="tipoSolicitud">
+                <input type="hidden" id="marca" name="marca">
+                <input type="hidden" id="producto" name="producto">
+
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo / Clínica *</label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="Dr. / Dra. / Clínica IPS">
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico *</label>
+                    <input type="email" id="correo" name="correo" required placeholder="ejemplo@clinica.com">
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono de Contacto / WhatsApp *</label>
+                    <input type="tel" id="telefono" name="telefono" required placeholder="+57 300 000 0000">
+                </div>
+                <div class="form-group">
+                    <label for="ciudad">Ciudad *</label>
+                    <input type="text" id="ciudad" name="ciudad" required placeholder="Ej: Armenia, Pereira, Manizales, Bogotá">
+                </div>
+                <div class="form-group">
+                    <label for="direccion">Dirección *</label>
+                    <input type="text" id="direccion" name="direccion" required placeholder="Calle / Carrera / Consultorio">
+                </div>
+                <div class="form-group">
+                    <label for="prefContacto">Preferencia de Contacto *</label>
+                    <select id="prefContacto" name="prefContacto" required>
+                        <option value="WhatsApp">WhatsApp</option>
+                        <option value="Llamada Telefónica">Llamada Telefónica</option>
+                        <option value="Correo Electrónico">Correo Electrónico</option>
+                    </select>
+                </div>
+                <button type="submit" class="form-submit" id="submitBtn">Enviar Solicitud</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // REEMPLAZAR ESTA URL CON LA OBTENIDA AL DESPLEGAR APPS SCRIPT
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx3jfk5znzRetPJnlEFtCyyXdDse-9j6F6tdb3UrqLA3gRw3AiIzymm-uusATw3uFP_EQ/exec";
+
+        function filterBrand(brand) {
+            const sections = document.querySelectorAll('.brand-section');
+            const links = document.querySelectorAll('nav a');
+            
+            links.forEach(l => l.classList.remove('active'));
+            event.target.classList.add('active');
+
+            sections.forEach(sec => {
+                if(brand === 'all' || sec.id === `brand-${brand}`) {
+                    sec.style.display = 'block';
+                } else {
+                    sec.style.display = 'none';
+                }
+            });
+        }
+
+        function openForm(tipo, marca, producto) {
+            document.getElementById('tipoSolicitud').value = tipo;
+            document.getElementById('marca').value = marca;
+            document.getElementById('producto').value = producto;
+            
+            document.getElementById('modalTitle').innerText = `${tipo} de Producto`;
+            document.getElementById('modalSubtitle').innerText = `${marca} - ${producto}`;
+            
+            document.getElementById('modalForm').classList.add('active');
+        }
+
+        function closeForm() {
+            document.getElementById('modalForm').classList.remove('active');
+        }
+
+        document.getElementById('prospectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "Enviando...";
+
+            const formData = {
+                tipoSolicitud: document.getElementById('tipoSolicitud').value,
+                marca: document.getElementById('marca').value,
+                producto: document.getElementById('producto').value,
+                nombre: document.getElementById('nombre').value,
+                correo: document.getElementById('correo').value,
+                telefono: document.getElementById('telefono').value,
+                ciudad: document.getElementById('ciudad').value,
+                direccion: document.getElementById('direccion').value,
+                prefContacto: document.getElementById('prefContacto').value
+            };
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(() => {
+                alert('¡Muchas gracias! Su solicitud ha sido enviada con éxito. Nos pondremos en contacto muy pronto.');
+                closeForm();
+                document.getElementById('prospectForm').reset();
+            })
+            .catch(err => {
+                alert('Ocurrió un error al enviar la solicitud. Por favor intente de nuevo.');
+                console.error(err);
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerText = "Enviar Solicitud";
+            });
+        });
+    </script>
+</body>
+</html>
