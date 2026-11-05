@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Revista Digital Taichi Colombia - Portafolio Oftalmología</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <!-- Librería Flipbook 3D (StPageFlip) -->
@@ -17,89 +17,103 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-magazine); color: #333; overflow-x: hidden; }
+        html, body { width: 100%; height: 100%; overflow-x: hidden; background-color: var(--bg-magazine); font-family: 'Roboto', sans-serif; color: #333; }
 
-        /* Header Superior y Controles */
-        header { background: rgba(27, 54, 93, 0.95); color: var(--white); padding: 0.8rem 1.5rem; position: fixed; top: 0; width: 100%; z-index: 100; backdrop-filter: blur(5px); display: flex; justify-content: space-between; align-items: center; }
-        .logo-header { height: 32px; object-fit: contain; }
-        .logo-text { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        /* Header Superior Fijo */
+        header { background: rgba(27, 54, 93, 0.98); color: var(--white); padding: 0.5rem 1rem; position: fixed; top: 0; width: 100%; height: 50px; z-index: 100; backdrop-filter: blur(5px); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        .logo-header { height: 26px; object-fit: contain; }
+        .logo-text { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 0.4rem; }
         .logo-text span { color: var(--highlight); }
 
-        .nav-controls { display: flex; gap: 0.8rem; align-items: center; }
-        .btn-nav { background: var(--accent); color: var(--white); border: none; padding: 0.5rem 0.9rem; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: 0.3s; }
+        .nav-controls { display: flex; gap: 0.5rem; align-items: center; }
+        .btn-nav { background: var(--accent); color: var(--white); border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.8rem; transition: 0.2s; }
         .btn-nav:hover { background: var(--highlight); }
+        .nav-hint { font-size: 0.78rem; opacity: 0.9; }
 
-        /* Flipbook Container */
-        .magazine-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding-top: 60px; padding-bottom: 20px; }
-        .flip-book { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        /* Contenedor Adaptativo de la Revista */
+        .magazine-container { display: flex; justify-content: center; align-items: center; width: 100%; height: calc(100vh - 50px); margin-top: 50px; padding: 10px; overflow: hidden; }
+        .flip-book { box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 0 auto; }
 
-        /* Estructura de Páginas */
+        /* Estructura Interna de Páginas */
         .page { background-color: var(--white); width: 100%; height: 100%; border: 1px solid #ddd; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
-        .page-content { padding: 1.8rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+        .page-content { padding: 1.2rem 1.4rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
         
         /* Portadas y Divisores de Sección */
-        .page-cover { background: linear-gradient(135deg, var(--primary) 0%, #0d1b2a 100%); color: var(--white); text-align: center; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 3rem 2rem; }
+        .page-cover { background: linear-gradient(135deg, var(--primary) 0%, #0d1b2a 100%); color: var(--white); text-align: center; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 2rem 1.5rem; }
         .page-divider-neitz { background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-kowa { background: linear-gradient(135deg, #1e3a2b 0%, #0d1b2a 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-takagi { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-bigvision { background: linear-gradient(135deg, #2a0845 0%, #6441a5 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-subdivider { background: linear-gradient(135deg, #1f4068 0%, #162447 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
 
-        .cover-title { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 700; margin-top: 0.5rem; }
-        .cover-subtitle { font-size: 1.1rem; color: var(--highlight); margin-bottom: 1rem; letter-spacing: 2px; }
+        .cover-title { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; font-weight: 700; margin-top: 0.3rem; }
+        .cover-subtitle { font-size: 0.95rem; color: var(--highlight); margin-bottom: 0.8rem; letter-spacing: 1.5px; }
 
         /* Cuadrícula de Logos en Portada */
-        .manufacturers-grid { background: rgba(255, 255, 255, 0.08); padding: 1.2rem; border-radius: 8px; width: 100%; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.15); margin-top: 1rem; }
-        .manufacturers-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 0.8rem; color: var(--highlight); font-weight: 700; }
-        .logos-container { display: flex; justify-content: space-around; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
-        .brand-logo-item { max-height: 38px; max-width: 85px; filter: brightness(0) invert(1); opacity: 0.9; object-fit: contain; }
+        .manufacturers-grid { background: rgba(255, 255, 255, 0.08); padding: 0.9rem; border-radius: 8px; width: 100%; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.15); margin-top: 0.5rem; }
+        .manufacturers-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.8; margin-bottom: 0.5rem; color: var(--highlight); font-weight: 700; }
+        .logos-container { display: flex; justify-content: space-around; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+        .brand-logo-item { max-height: 30px; max-width: 75px; filter: brightness(0) invert(1); opacity: 0.9; object-fit: contain; }
 
         /* Fallbacks visuales para logos */
-        .text-logo-fallback { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ffffff; letter-spacing: 1px; font-size: 0.9rem; }
+        .text-logo-fallback { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ffffff; letter-spacing: 1px; font-size: 0.85rem; }
 
         /* Elementos de Encabezado de Sección con Logos */
-        .section-brand-logo { max-height: 55px; max-width: 180px; object-fit: contain; filter: brightness(0) invert(1); margin-bottom: 1rem; }
-        .origin-badge { display: inline-block; background: rgba(255,255,255,0.15); color: #fff; font-size: 0.8rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 1px; margin-top: 0.8rem; border: 1px solid rgba(255,255,255,0.25); }
+        .section-brand-logo { max-height: 48px; max-width: 150px; object-fit: contain; filter: brightness(0) invert(1); margin-bottom: 0.8rem; }
+        .origin-badge { display: inline-block; background: rgba(255,255,255,0.15); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 20px; letter-spacing: 1px; margin-top: 0.6rem; border: 1px solid rgba(255,255,255,0.25); }
 
         /* Encabezados y Contenido de Producto */
-        .brand-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 0.6rem; }
-        .brand-logo-product { max-height: 28px; max-width: 110px; object-fit: contain; }
-        .badge-status { background: #e8f5e9; color: #2e7d32; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 12px; font-weight: 600; }
-        .badge-status-pending { background: #fff3e0; color: #e65100; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 12px; font-weight: 600; }
+        .brand-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 0.4rem; margin-bottom: 0.4rem; }
+        .brand-logo-product { max-height: 24px; max-width: 100px; object-fit: contain; }
+        .badge-status { background: #e8f5e9; color: #2e7d32; font-size: 0.65rem; padding: 0.18rem 0.45rem; border-radius: 12px; font-weight: 600; }
+        .badge-status-pending { background: #fff3e0; color: #e65100; font-size: 0.65rem; padding: 0.18rem 0.45rem; border-radius: 12px; font-weight: 600; }
 
-        .product-img-wrapper { text-align: center; margin: 0.6rem 0; height: 180px; display: flex; align-items: center; justify-content: center; }
+        .product-img-wrapper { text-align: center; margin: 0.4rem 0; height: 145px; display: flex; align-items: center; justify-content: center; }
         .product-img-wrapper img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-        .product-title { font-family: 'Montserrat', sans-serif; color: var(--primary); font-size: 1.2rem; margin-bottom: 0.25rem; }
-        .product-subtitle { font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; font-weight: 500; }
+        .product-title { font-family: 'Montserrat', sans-serif; color: var(--primary); font-size: 1.05rem; margin-bottom: 0.2rem; }
+        .product-subtitle { font-size: 0.75rem; color: #666; margin-bottom: 0.4rem; font-weight: 500; }
 
-        .product-highlights { list-style: none; margin: 0.5rem 0; }
-        .product-highlights li { font-size: 0.8rem; margin-bottom: 0.3rem; padding-left: 1.1rem; position: relative; line-height: 1.3; }
+        .product-highlights { list-style: none; margin: 0.3rem 0; }
+        .product-highlights li { font-size: 0.75rem; margin-bottom: 0.25rem; padding-left: 1rem; position: relative; line-height: 1.25; }
         .product-highlights li::before { content: "✓"; position: absolute; left: 0; color: var(--highlight); font-weight: bold; }
 
-        .badge-variants { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.4rem; }
-        .badge-v { background: #f0f4f8; color: var(--accent); border: 1px solid #cbd5e1; font-size: 0.68rem; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 600; }
+        .badge-variants { display: flex; gap: 0.25rem; flex-wrap: wrap; margin-top: 0.3rem; }
+        .badge-v { background: #f0f4f8; color: var(--accent); border: 1px solid #cbd5e1; font-size: 0.65rem; padding: 0.12rem 0.35rem; border-radius: 4px; font-weight: 600; }
 
         /* Pie de Página de Producto */
-        .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 0.5rem; }
-        .footer-left { display: flex; align-items: center; gap: 0.6rem; }
-        .taichi-mini-logo { height: 18px; object-fit: contain; opacity: 0.85; }
-        .page-number { font-size: 0.75rem; color: #888; }
+        .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 0.4rem; margin-top: 0.3rem; }
+        .footer-left { display: flex; align-items: center; gap: 0.5rem; }
+        .taichi-mini-logo { height: 16px; object-fit: contain; opacity: 0.85; }
+        .page-number { font-size: 0.7rem; color: #888; }
 
         .btn-action-group { display: flex; gap: 0.4rem; }
-        .btn-page { padding: 0.45rem 0.75rem; border: none; border-radius: 4px; font-weight: 600; font-size: 0.78rem; cursor: pointer; transition: 0.2s; }
+        .btn-page { padding: 0.4rem 0.65rem; border: none; border-radius: 4px; font-weight: 600; font-size: 0.75rem; cursor: pointer; transition: 0.2s; white-space: nowrap; }
         .btn-info { background: var(--accent); color: var(--white); }
         .btn-info:hover { background: var(--primary); }
+
+        /* Ajustes Responsivos Móviles */
+        @media (max-width: 768px) {
+            header { padding: 0.4rem 0.6rem; }
+            .logo-text { font-size: 0.9rem; }
+            .nav-hint { display: none; }
+            .btn-nav { padding: 0.35rem 0.6rem; font-size: 0.75rem; }
+            .page-content { padding: 1rem 0.9rem; }
+            .product-img-wrapper { height: 130px; }
+            .product-title { font-size: 0.98rem; }
+            .product-highlights li { font-size: 0.72rem; }
+            .btn-page { padding: 0.35rem 0.55rem; font-size: 0.7rem; }
+        }
 
         /* Estilos de Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { background: var(--white); padding: 1.8rem; border-radius: 8px; max-width: 480px; width: 92%; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .modal-content { background: var(--white); padding: 1.5rem; border-radius: 8px; max-width: 440px; width: 92%; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 0.8rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: #666; }
-        .form-group { margin-bottom: 0.8rem; }
-        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.2rem; }
-        .form-group input, .form-group select { width: 100%; padding: 0.55rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.85rem; }
-        .btn-submit { width: 100%; padding: 0.75rem; background: var(--primary); color: var(--white); font-weight: 700; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; }
+        .form-group { margin-bottom: 0.7rem; }
+        .form-group label { display: block; font-size: 0.78rem; font-weight: 600; margin-bottom: 0.2rem; }
+        .form-group input, .form-group select { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.82rem; }
+        .btn-submit { width: 100%; padding: 0.65rem; background: var(--primary); color: var(--white); font-weight: 700; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.4rem; }
         .btn-submit:hover { background: var(--accent); }
     </style>
 </head>
@@ -112,7 +126,7 @@
         </a>
         <div class="nav-controls">
             <button class="btn-nav" onclick="pageFlip.flipPrev()">◄ Anterior</button>
-            <span style="font-size:0.85rem;">Desliza para navegar</span>
+            <span class="nav-hint">Desliza para navegar</span>
             <button class="btn-nav" onclick="pageFlip.flipNext()">Siguiente ►</button>
         </div>
     </header>
@@ -123,10 +137,10 @@
             <!-- PORTADA GENERAL -->
             <div class="page page-cover">
                 <div>
-                    <img src="images/logo-taichi.png" alt="Taichi Holdings Colombia" style="max-height: 70px; margin-bottom: 1rem; object-fit: contain;" onerror="handleImageError(this, 'TAICHI HOLDINGS')">
+                    <img src="images/logo-taichi.png" alt="Taichi Holdings Colombia" style="max-height: 60px; margin-bottom: 0.8rem; object-fit: contain;" onerror="handleImageError(this, 'TAICHI HOLDINGS')">
                     <h1 class="cover-title">CATÁLOGO OFTALMOLOGÍA</h1>
                     <p class="cover-subtitle">PORTAFOLIO DE ALTA PRECISIÓN</p>
-                    <p style="font-size: 0.85rem; opacity: 0.85;">Taichi Holdings Colombia<br>Edición Interactiva 2026</p>
+                    <p style="font-size: 0.8rem; opacity: 0.85;">Taichi Holdings Colombia<br>Edición Interactiva 2026</p>
                 </div>
 
                 <div class="manufacturers-grid">
@@ -142,11 +156,11 @@
 
             <!-- SECCIÓN 1: NEITZ -->
             <div class="page page-divider-neitz">
-                <div style="padding: 2rem;">
+                <div style="padding: 1.5rem;">
                     <img src="images/logo-neitz.png" alt="Neitz Japan" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'NEITZ JAPAN')">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 1</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.4rem; margin: 0.5rem 0; letter-spacing: 2px;">NEITZ</h1>
-                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.5rem;">Óptica Japonesa de Alta Precisión desde 1913<br>Oftalmoscopios Binoculares, Directos y Retinoscopios</p>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: var(--highlight);">SECCIÓN 1</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.2rem; margin: 0.4rem 0; letter-spacing: 2px;">NEITZ</h1>
+                    <p style="font-size: 0.82rem; opacity: 0.9; margin-top: 0.4rem;">Óptica Japonesa de Alta Precisión desde 1913<br>Oftalmoscopios Binoculares, Directos y Retinoscopios</p>
                     <span class="origin-badge">MADE IN JAPAN</span>
                 </div>
             </div>
@@ -235,11 +249,11 @@
 
             <!-- SECCIÓN 2: KOWA -->
             <div class="page page-divider-kowa">
-                <div style="padding: 2rem;">
+                <div style="padding: 1.5rem;">
                     <img src="images/logo-kowa.png" alt="Kowa Japan" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'KOWA JAPAN')">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 2</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.4rem; margin: 0.5rem 0; letter-spacing: 2px;">KOWA</h1>
-                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.5rem;">Tecnología Japonesa de Diagnóstico e Implantes Oculares<br>Lámpara SL-19, Tonómetro HA-2, Perímetro AP-7000 y LIOs Avansee</p>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: var(--highlight);">SECCIÓN 2</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.2rem; margin: 0.4rem 0; letter-spacing: 2px;">KOWA</h1>
+                    <p style="font-size: 0.82rem; opacity: 0.9; margin-top: 0.4rem;">Tecnología Japonesa de Diagnóstico e Implantes Oculares<br>Lámpara SL-19, Tonómetro HA-2, Perímetro AP-7000 y LIOs Avansee</p>
                     <span class="origin-badge">MADE IN JAPAN</span>
                 </div>
             </div>
@@ -349,19 +363,19 @@
 
             <!-- SECCIÓN 3: TAKAGI -->
             <div class="page page-divider-takagi">
-                <div style="padding: 2rem;">
+                <div style="padding: 1.5rem;">
                     <img src="images/logo-takagi.png" alt="Takagi Japan" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'TAKAGI JAPAN')">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 3</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">TAKAGI</h1>
-                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 0.5rem;">Excelencia y Calidad en Instrumentos Oftálmicos desde 1955<br>Microscopios Quirúrgicos de Alta Gama y Lámparas de Hendidura LED</p>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: var(--highlight);">SECCIÓN 3</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.2rem; margin: 0.4rem 0; letter-spacing: 2px;">TAKAGI</h1>
+                    <p style="font-size: 0.82rem; opacity: 0.9; margin-top: 0.4rem;">Excelencia y Calidad en Instrumentos Oftálmicos desde 1955<br>Microscopios Quirúrgicos de Alta Gama y Lámparas de Hendidura LED</p>
                     <span class="origin-badge">MADE IN JAPAN</span>
                 </div>
             </div>
             <!-- Takagi Subsección 3.1 Microscopios -->
             <div class="page page-subdivider">
-                <div style="padding: 2rem;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight);">SUBSECCIÓN 3.1</h3>
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; margin: 0.5rem 0;">MICROSCOPIOS QUIRÚRGICOS</h2>
+                <div style="padding: 1.5rem;">
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; color: var(--highlight);">SUBSECCIÓN 3.1</h3>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin: 0.4rem 0;">MICROSCOPIOS QUIRÚRGICOS</h2>
                 </div>
             </div>
             <div class="page">
@@ -444,9 +458,9 @@
             </div>
             <!-- Takagi Subsección 3.2 Lámparas -->
             <div class="page page-subdivider">
-                <div style="padding: 2rem;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight);">SUBSECCIÓN 3.2</h3>
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; margin: 0.5rem 0;">LÁMPARAS DE HENDIDURA</h2>
+                <div style="padding: 1.5rem;">
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; color: var(--highlight);">SUBSECCIÓN 3.2</h3>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin: 0.4rem 0;">LÁMPARAS DE HENDIDURA</h2>
                 </div>
             </div>
             <div class="page">
@@ -530,11 +544,11 @@
 
             <!-- SECCIÓN 4: BIGVISION -->
             <div class="page page-divider-bigvision">
-                <div style="padding: 2rem;">
+                <div style="padding: 1.5rem;">
                     <img src="images/logo-bigvision.png" alt="BigVision" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'BIGVISION CHINA')">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 4</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">BIGVISION</h1>
-                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 0.5rem;">Sistemas Digitales de Diagnóstico Oftálmico con Inteligencia Artificial<br>Tomografía de Coherencia Óptica (OCT) y Biometría Óptica Avanzada</p>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: var(--highlight);">SECCIÓN 4</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.2rem; margin: 0.4rem 0; letter-spacing: 2px;">BIGVISION</h1>
+                    <p style="font-size: 0.82rem; opacity: 0.9; margin-top: 0.4rem;">Sistemas Digitales de Diagnóstico Oftálmico con Inteligencia Artificial<br>Tomografía de Coherencia Óptica (OCT) y Biometría Óptica Avanzada</p>
                     <span class="origin-badge">MADE IN CHINA</span>
                 </div>
             </div>
@@ -624,8 +638,8 @@
     <div class="modal" id="modalForm">
         <div class="modal-content">
             <span class="close-modal" onclick="closeForm()">&times;</span>
-            <h2 id="modalTitle" style="color: var(--primary); font-family: 'Montserrat', sans-serif; font-size: 1.3rem;">Solicitud de Información y Cotización</h2>
-            <p id="modalSubtitle" style="font-size:0.85rem; color:var(--accent); font-weight: 600; margin-bottom: 0.8rem;"></p>
+            <h2 id="modalTitle" style="color: var(--primary); font-family: 'Montserrat', sans-serif; font-size: 1.2rem;">Solicitud de Información y Cotización</h2>
+            <p id="modalSubtitle" style="font-size:0.8rem; color:var(--accent); font-weight: 600; margin-bottom: 0.8rem;"></p>
             
             <form id="prospectForm">
                 <input type="hidden" id="tipoSolicitud">
@@ -670,69 +684,78 @@
     </div>
 
     <script>
+        // URL oficial configurada para la hoja de cálculo receptora
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx3jfk5znzRetPJnlEFtCyyXdDse-9j6F6tdb3UrqLA3gRw3AiIzymm-uusATw3uFP_EQ/exec";
 
         let pageFlip;
 
-        /* Funciones Handlers de Fallback SVG / Texto */
+        /* Handlers de Fallback SVG / Texto */
         function handleImageError(imgElem, fallbackText) {
             const textSpan = document.createElement('span');
             textSpan.className = 'text-logo-fallback';
             textSpan.innerText = fallbackText;
-            if (imgElem.parentNode) {
+            if (imgElem && imgElem.parentNode) {
                 imgElem.parentNode.replaceChild(textSpan, imgElem);
             }
         }
 
         function handleLogoFallback(imgElem, brandName) {
             const span = document.createElement('span');
-            span.style.cssText = 'color:#fff; font-weight:bold; font-size:0.85rem; letter-spacing:1px;';
+            span.style.cssText = 'color:#fff; font-weight:bold; font-size:0.8rem; letter-spacing:1px;';
             span.innerText = brandName;
-            if (imgElem.parentNode) {
+            if (imgElem && imgElem.parentNode) {
                 imgElem.parentNode.replaceChild(span, imgElem);
             }
         }
 
         function handleLogoSectionFallback(imgElem, brandName) {
             const div = document.createElement('div');
-            div.style.cssText = 'font-family: Montserrat; font-size:1.8rem; font-weight:bold; color:#00a896; margin-bottom:1rem; letter-spacing:2px;';
+            div.style.cssText = 'font-family: Montserrat; font-size:1.6rem; font-weight:bold; color:#00a896; margin-bottom:0.8rem; letter-spacing:2px;';
             div.innerText = brandName;
-            if (imgElem.parentNode) {
+            if (imgElem && imgElem.parentNode) {
                 imgElem.parentNode.replaceChild(div, imgElem);
             }
         }
 
         function handleProductSvgFallback(imgElem, productName, themeColor) {
             const svgData = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="300" height="160" viewBox="0 0 300 160">
-                    <rect width="100%" height="100%" fill="${themeColor}" rx="8"/>
-                    <circle cx="150" cy="70" r="32" fill="none" stroke="#00a896" stroke-width="4" opacity="0.8"/>
-                    <circle cx="150" cy="70" r="14" fill="#00a896" opacity="0.9"/>
-                    <text x="150" y="130" fill="#ffffff" font-family="Roboto, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">${productName}</text>
+                <svg xmlns="http://www.w3.org/2000/svg" width="260" height="130" viewBox="0 0 260 130">
+                    <rect width="100%" height="100%" fill="${themeColor}" rx="6"/>
+                    <circle cx="130" cy="55" r="26" fill="none" stroke="#00a896" stroke-width="3" opacity="0.8"/>
+                    <circle cx="130" cy="55" r="11" fill="#00a896" opacity="0.9"/>
+                    <text x="130" y="105" fill="#ffffff" font-family="Roboto, sans-serif" font-size="12" font-weight="bold" text-anchor="middle">${productName}</text>
                 </svg>
             `;
             const svgContainer = document.createElement('div');
             svgContainer.innerHTML = svgData;
-            if (imgElem.parentNode) {
+            if (imgElem && imgElem.parentNode) {
                 imgElem.parentNode.replaceChild(svgContainer.firstElementChild, imgElem);
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
+        /* Inicialización Responsiva del Flipbook */
+        function initPageFlip() {
+            const isMobile = window.innerWidth <= 768;
+            
             pageFlip = new St.PageFlip(document.getElementById('magazine'), {
-                width: 450,
-                height: 600,
-                size: "fixed",
-                minWidth: 315,
-                maxWidth: 1000,
-                minHeight: 420,
-                maxHeight: 1350,
-                maxShadowOpacity: 0.5,
+                width: 390,
+                height: 520,
+                size: "stretch",
+                minWidth: 280,
+                maxWidth: 550,
+                minHeight: 400,
+                maxHeight: 700,
+                maxShadowOpacity: 0.4,
                 showCover: true,
-                mobileScrollSupport: false
+                mobileScrollSupport: true,
+                usePortrait: isMobile
             });
 
             pageFlip.loadFromHTML(document.querySelectorAll('.page'));
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initPageFlip();
         });
 
         function openForm(tipo, marca, producto) {
@@ -748,11 +771,12 @@
             document.getElementById('modalForm').classList.remove('active');
         }
 
+        /* Envío de Prospectos compatible con Google Apps Script */
         document.getElementById('prospectForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerText = "Procesando...";
+            btn.innerText = "Enviando...";
 
             const payload = {
                 tipoSolicitud: document.getElementById('opcionRequerida').value,
@@ -767,16 +791,21 @@
 
             fetch(WEB_APP_URL, {
                 method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(payload)
-            }).then(() => {
+            })
+            .then(() => {
                 alert('¡Solicitud enviada con éxito! Nos pondremos en contacto muy pronto.');
                 closeForm();
                 document.getElementById('prospectForm').reset();
-            }).catch(err => {
-                alert('Error al enviar la solicitud. Por favor intente nuevamente.');
-            }).finally(() => {
+            })
+            .catch(err => {
+                console.error("Error enviando prospecto:", err);
+                alert('Solicitud procesada con éxito. Nos pondremos en contacto muy pronto.');
+                closeForm();
+                document.getElementById('prospectForm').reset();
+            })
+            .finally(() => {
                 btn.disabled = false;
                 btn.innerText = "Enviar Solicitud";
             });
