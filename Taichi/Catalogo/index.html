@@ -12,20 +12,21 @@
             --primary: #1b365d;
             --accent: #2a638a;
             --highlight: #00a896;
-            --bg-magazine: #2c3e50;
+            --bg-magazine: #1e293b;
             --white: #ffffff;
+            --neitz-red: #c0392b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Roboto', sans-serif; background-color: var(--bg-magazine); color: #333; overflow-x: hidden; }
 
         /* Controls & Top Header */
-        header { background: rgba(27, 54, 93, 0.95); color: var(--white); padding: 1rem 2rem; position: fixed; top: 0; width: 100%; z-index: 100; backdrop-filter: blur(5px); display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.3rem; color: var(--white); text-decoration: none; }
+        header { background: rgba(27, 54, 93, 0.95); color: var(--white); padding: 0.8rem 1.5rem; position: fixed; top: 0; width: 100%; z-index: 100; backdrop-filter: blur(5px); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--white); text-decoration: none; }
         .logo span { color: var(--highlight); }
 
-        .nav-controls { display: flex; gap: 1rem; align-items: center; }
-        .btn-nav { background: var(--accent); color: var(--white); border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: 0.3s; }
+        .nav-controls { display: flex; gap: 0.8rem; align-items: center; }
+        .btn-nav { background: var(--accent); color: var(--white); border: none; padding: 0.5rem 0.9rem; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: 0.3s; }
         .btn-nav:hover { background: var(--highlight); }
 
         /* Container & Flipbook */
@@ -34,43 +35,52 @@
 
         /* Page Layouts */
         .page { background-color: var(--white); width: 100%; height: 100%; border: 1px solid #ddd; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
-        .page-content { padding: 2.5rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+        .page-content { padding: 2rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
         
-        /* Cover Page */
+        /* Cover & Divider Pages */
         .page-cover { background: linear-gradient(135deg, var(--primary) 0%, #0d1b2a 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
+        .page-divider { background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .cover-title { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 700; margin-top: 1rem; }
         .cover-subtitle { font-size: 1.1rem; color: var(--highlight); margin-bottom: 2rem; letter-spacing: 2px; }
 
         /* Product Page Inner */
-        .brand-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 0.8rem; margin-bottom: 1rem; }
-        .brand-logo-img { height: 35px; object-fit: contain; }
-        .badge-status { background: #e8f5e9; color: #2e7d32; font-size: 0.75rem; padding: 0.3rem 0.6rem; border-radius: 12px; font-weight: 600; }
+        .brand-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 0.6rem; margin-bottom: 0.8rem; }
+        .brand-title-text { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary); font-size: 1.2rem; }
+        .badge-status { background: #e8f5e9; color: #2e7d32; font-size: 0.72rem; padding: 0.25rem 0.5rem; border-radius: 12px; font-weight: 600; }
 
-        .product-img-wrapper { text-align: center; margin: 1rem 0; height: 220px; display: flex; align-items: center; justify-content: center; }
+        .product-img-wrapper { text-align: center; margin: 0.8rem 0; height: 190px; display: flex; align-items: center; justify-content: center; }
         .product-img-wrapper img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-        .product-title { font-family: 'Montserrat', sans-serif; color: var(--primary); font-size: 1.4rem; margin-bottom: 0.5rem; }
-        .product-highlights { list-style: none; margin: 1rem 0; }
-        .product-highlights li { font-size: 0.85rem; margin-bottom: 0.4rem; padding-left: 1.2rem; position: relative; }
+        .product-title { font-family: 'Montserrat', sans-serif; color: var(--primary); font-size: 1.25rem; margin-bottom: 0.3rem; }
+        .product-subtitle { font-size: 0.82rem; color: #666; margin-bottom: 0.6rem; font-weight: 500; }
+
+        .product-highlights { list-style: none; margin: 0.6rem 0; }
+        .product-highlights li { font-size: 0.82rem; margin-bottom: 0.35rem; padding-left: 1.1rem; position: relative; line-height: 1.35; }
         .product-highlights li::before { content: "✓"; position: absolute; left: 0; color: var(--highlight); font-weight: bold; }
 
-        .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 0.8rem; }
-        .page-number { font-size: 0.8rem; color: #888; }
+        .badge-variants { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.5rem; }
+        .badge-v { background: #f0f4f8; color: var(--accent); border: 1px solid #cbd5e1; font-size: 0.7rem; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 600; }
 
-        .btn-action-group { display: flex; gap: 0.5rem; }
-        .btn-page { padding: 0.5rem 0.8rem; border: none; border-radius: 4px; font-weight: 600; font-size: 0.8rem; cursor: pointer; }
+        .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 0.6rem; }
+        .page-number { font-size: 0.75rem; color: #888; }
+
+        .btn-action-group { display: flex; gap: 0.4rem; }
+        .btn-page { padding: 0.45rem 0.75rem; border: none; border-radius: 4px; font-weight: 600; font-size: 0.78rem; cursor: pointer; transition: 0.2s; }
         .btn-info { background: var(--accent); color: var(--white); }
+        .btn-info:hover { background: var(--primary); }
         .btn-quote { background: var(--highlight); color: var(--white); }
+        .btn-quote:hover { background: #00897b; }
 
         /* Modal Styles */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { background: var(--white); padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; position: relative; }
-        .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; }
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.2rem; }
-        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; }
-        .btn-submit { width: 100%; padding: 0.8rem; background: var(--primary); color: var(--white); font-weight: 700; border: none; border-radius: 4px; cursor: pointer; }
+        .modal-content { background: var(--white); padding: 1.8rem; border-radius: 8px; max-width: 480px; width: 92%; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .close-modal { position: absolute; top: 0.8rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: #666; }
+        .form-group { margin-bottom: 0.8rem; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.2rem; }
+        .form-group input, .form-group select { width: 100%; padding: 0.55rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.85rem; }
+        .btn-submit { width: 100%; padding: 0.75rem; background: var(--primary); color: var(--white); font-weight: 700; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; }
+        .btn-submit:hover { background: var(--accent); }
     </style>
 </head>
 <body>
@@ -79,7 +89,7 @@
         <a href="#" class="logo">TAICHI <span>COLOMBIA</span></a>
         <div class="nav-controls">
             <button class="btn-nav" onclick="pageFlip.flipPrev()">◄ Anterior</button>
-            <span style="font-size:0.9rem;">Desliza las páginas</span>
+            <span style="font-size:0.85rem;">Desliza para navegar</span>
             <button class="btn-nav" onclick="pageFlip.flipNext()">Siguiente ►</button>
         </div>
     </header>
@@ -87,165 +97,191 @@
     <div class="magazine-container">
         <div id="magazine" class="flip-book">
             
-            <!-- PORTADA -->
+            <!-- PORTADA GENERAL -->
             <div class="page page-cover">
                 <div style="padding: 2rem;">
-                    <img src="images/logoBigVision.png" alt="BigVision Logo" style="height: 60px; filter: brightness(0) invert(1);" onerror="this.src='logoBigVision.webp'">
-                    <h1 class="cover-title">PORTAFOLIO OFTALMOLOGÍA</h1>
-                    <p class="cover-subtitle">REVISTA TECNOLÓGICA 2026-2027</p>
-                    <p style="font-size: 0.85rem; opacity: 0.8;">Taichi Holdings Colombia<br>Equipamiento Médico e Instrumental de Alta Precisión</p>
+                    <h1 class="cover-title">CATÁLOGO OFTALMOLOGÍA</h1>
+                    <p class="cover-subtitle">EQUIPAMIENTO DE ALTA PRECISIÓN</p>
+                    <p style="font-size: 0.85rem; opacity: 0.85;">Taichi Holdings Colombia<br>Edición Interactiva 2026</p>
                 </div>
             </div>
 
-            <!-- PÁGINA 1: BIGVISION OCT BV1000S -->
-            <div class="page">
-                <div class="page-content">
-                    <div>
-                        <div class="brand-header">
-                            <img src="logoBigVision.webp" alt="BigVision" class="brand-logo-img">
-                            <span class="badge-status">REGISTRO INVIMA VIGENTE</span>
-                        </div>
-                        <h2 class="product-title">Tomógrafo OCT BV1000S</h2>
-                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">Inteligencia Artificial Integrada & Operación 100% Automática</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="OCTBigVision.webp" alt="OCT BigVision BV1000S">
-                        </div>
-
-                        <ul class="product-highlights">
-                            <li><strong>Velocidad Ultra-rápida:</strong> 80.000 escaneos/segundo.</li>
-                            <li><strong>Gran Campo de Escaneo:</strong> 12mm x 9mm (Mácula y Disco Óptico).</li>
-                            <li><strong>Segmentación por IA:</strong> Detección de 16 patologías principales de retina.</li>
-                            <li><strong>Mapeo Coroideo:</strong> Medición cuantitativa del grosor coroideo y macular.</li>
-                        </ul>
-                    </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Página 1</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información', 'BigVision', 'Tomógrafo OCT BV1000S')">Información</button>
-                            <button class="btn-page btn-quote" onclick="openForm('Cotización', 'BigVision', 'Tomógrafo OCT BV1000S')">Cotizar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PÁGINA 2: BIGVISION BIÓMETRO BVB2000 -->
-            <div class="page">
-                <div class="page-content">
-                    <div>
-                        <div class="brand-header">
-                            <img src="logoBigVision.webp" alt="BigVision" class="brand-logo-img">
-                            <span class="badge-status">REGISTRO INVIMA VIGENTE</span>
-                        </div>
-                        <h2 class="product-title">Biómetro Óptico BVB2000</h2>
-                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">Equipo 2 en 1: Biómetro Óptico de Precisión + OCT Integrado</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="biometerBigVision.webp" alt="Biómetro BigVision BVB2000">
-                        </div>
-
-                        <ul class="product-highlights">
-                            <li><strong>Medición 1-Clic:</strong> 12 parámetros optométricos exactos en &lt;60 seg.</li>
-                            <li><strong>Parámetros Clave:</strong> AL, CCT, ACD, LT, K1/K2, Axis, WTW, PD, CT.</li>
-                            <li><strong>Monitoreo de Miopía:</strong> Seguimiento de grosor coroideo y proyección a 18 años.</li>
-                            <li><strong>Visualización OCT en Vivo:</strong> Confirmación visual de córnea y fovea.</li>
-                        </ul>
-                    </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Página 2</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información', 'BigVision', 'Biómetro Óptico BVB2000')">Información</button>
-                            <button class="btn-page btn-quote" onclick="openForm('Cotización', 'BigVision', 'Biómetro Óptico BVB2000')">Cotizar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PÁGINA 3: KOWA EQUIPOS PORTÁTILES -->
-            <div class="page">
-                <div class="page-content">
-                    <div>
-                        <div class="brand-header">
-                            <strong style="color: var(--primary);">KOWA JAPÓN</strong>
-                            <span class="badge-status">REGISTRO INVIMA VIGENTE</span>
-                        </div>
-                        <h2 class="product-title">Lámpara SL-19 & Tonómetro HA-2</h2>
-                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">Diagnóstico Portátil de Alta Ergonomía y Precisión</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="https://via.placeholder.com/300x200?text=Kowa+SL-19+%26+HA-2" alt="Kowa Portátiles">
-                        </div>
-
-                        <ul class="product-highlights">
-                            <li><strong>SL-19:</strong> Lámpara de hendidura portátil LED con iluminación variable.</li>
-                            <li><strong>HA-2:</strong> Tonómetro de aplanación portátil con lectura directa de PIO.</li>
-                            <li><strong>Movilidad Absoluta:</strong> Diseñados para brigadas y consulta itinerante.</li>
-                        </ul>
-                    </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Página 3</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información', 'Kowa', 'Lámpara SL-19 / Tonómetro HA-2')">Información</button>
-                            <button class="btn-page btn-quote" onclick="openForm('Cotización', 'Kowa', 'Lámpara SL-19 / Tonómetro HA-2')">Cotizar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CONTRA PORTADA -->
-            <div class="page page-cover">
+            <!-- SECCIÓN 1: DIVISOR NEITZ -->
+            <div class="page page-divider">
                 <div style="padding: 2rem;">
-                    <h2 style="font-family: 'Montserrat', sans-serif;">TAICHI HOLDINGS COLOMBIA</h2>
-                    <p style="margin: 1rem 0; font-size: 0.9rem;">Atención Comercial & Demostraciones:</p>
-                    <p style="font-weight: bold; color: var(--highlight);">Fernando Enrique Conde Tocancipá</p>
-                    <p style="font-size: 0.85rem;">Especialista y Líder Comercial Oftalmología</p>
-                    <p style="font-size: 0.85rem; margin-top: 1rem;">fernando.conde@anabas.co.jp</p>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; color: var(--highlight);">SECCIÓN 1</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">NEITZ</h1>
+                    <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 1rem;">Óptica Japonesa de Alta Precisión desde 1913[cite: 59]<br>Oftalmoscopios Binoculares, Directos y Retinoscopios</p>
+                </div>
+            </div>
+
+            <!-- NEITZ - PÁGINA 1: OFTALMOSCOPIOS INDIRECTOS BINOCULARES -->
+            <div class="page">
+                <div class="page-content">
+                    <div>
+                        <div class="brand-header">
+                            <span class="brand-title-text">NEITZ • Japón</span>
+                            <span class="badge-status">REGISTRO INVIMA</span>
+                        </div>
+                        <h2 class="product-title">Oftalmoscopios Indirectos Binoculares</h2>
+                        <p class="product-subtitle">Línea IO-α LED & IO-Vega: Claridad Óptica y Ergonomía Superior[cite: 58, 68]</p>
+                        
+                        <div class="product-img-wrapper">
+                            <img src="images/neitz-io-vega.webp" alt="Neitz IO-Vega y IO-a LED" onerror="this.src='https://via.placeholder.com/350x190?text=Neitz+IO-Vega+%2F+IO-a+LED'">
+                        </div>
+
+                        <ul class="product-highlights">
+                            <li><strong>IO-Vega:</strong> Ultra liviano (470g), sistema de carga inalámbrica 4 vías[cite: 61, 64] e iluminación ultra suave de baja intensidad (&lt;10 lx a 1.700 lx)[cite: 60, 61].</li>
+                            <li><strong>IO-α LED CAMERA:</strong> Sensor CMOS Full HD (1920x1080) integrado para grabación médica y docencia en vivo[cite: 65, 66].</li>
+                            <li><strong>IO-α LED:</strong> Iluminación LED color cálido tipo halógeno (3200K, Ra 90+)[cite: 66, 68] con hasta 10 hrs continuas[cite: 68].</li>
+                        </ul>
+
+                        <div class="badge-variants">
+                            <span class="badge-v">IO-Vega</span>
+                            <span class="badge-v">IO-α LED</span>
+                            <span class="badge-v">IO-α LED CAMERA</span>
+                        </div>
+                    </div>
+
+                    <div class="page-footer">
+                        <span class="page-number">Neitz - Pág. 1</span>
+                        <div class="btn-action-group">
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Indirectos Binoculares (IO-Vega / IO-a LED)')">Solicitar Información / Cotización</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEITZ - PÁGINA 2: OFTALMOSCOPIOS DIRECTOS -->
+            <div class="page">
+                <div class="page-content">
+                    <div>
+                        <div class="brand-header">
+                            <span class="brand-title-text">NEITZ • Japón</span>
+                            <span class="badge-status">REGISTRO INVIMA</span>
+                        </div>
+                        <h2 class="product-title">Oftalmoscopios Directos Serie BXα</h2>
+                        <p class="product-subtitle">Iluminación LED de Alta Reproducción Cromática (Ra &gt; 90)[cite: 70, 72]</p>
+                        
+                        <div class="product-img-wrapper">
+                            <img src="images/neitz-bxa.webp" alt="Neitz Oftalmoscopios Directos BXa" onerror="this.src='https://via.placeholder.com/350x190?text=Neitz+Oftalmoscopios+BXa'">
+                        </div>
+
+                        <ul class="product-highlights">
+                            <li><strong>Óptica Avanzada:</strong> Rango de corrección dióptrica continuo de -36D a +35D en pasos de 1D[cite: 69, 71].</li>
+                            <li><strong>Control Reflexivo:</strong> Filtro polarizado rotatorio para eliminar reflejos corneales molestos[cite: 70, 72].</li>
+                            <li><strong>Modo Boost Integrado:</strong> Intensidad regulable progresiva con opción de super-brillo y Filtro Azul Cobalto[cite: 70, 72].</li>
+                        </ul>
+
+                        <div class="badge-variants">
+                            <span class="badge-v">BXa13LED (Batería C)</span>[cite: 69]
+                            <span class="badge-v">BXa13ALED (Batería AA)</span>[cite: 69]
+                            <span class="badge-v">BXαRCLED (Base Carga)</span>[cite: 71]
+                            <span class="badge-v">BXαRCUSBLED (Carga USB-C)</span>[cite: 71]
+                        </div>
+                    </div>
+
+                    <div class="page-footer">
+                        <span class="page-number">Neitz - Pág. 2</span>
+                        <div class="btn-action-group">
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Directos Serie BXa')">Solicitar Información / Cotización</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEITZ - PÁGINA 3: RETINOSCOPIOS -->
+            <div class="page">
+                <div class="page-content">
+                    <div>
+                        <div class="brand-header">
+                            <span class="brand-title-text">NEITZ • Japón</span>
+                            <span class="badge-status">REGISTRO INVIMA</span>
+                        </div>
+                        <h2 class="product-title">Retinoscopios Serie RX3 & RXRC</h2>
+                        <p class="product-subtitle">Sistemas LED de Franja (Streak) y Punto (Spot)[cite: 73, 75]</p>
+                        
+                        <div class="product-img-wrapper">
+                            <img src="images/neitz-rx.webp" alt="Neitz Retinoscopios RX3 y RXRC" onerror="this.src='https://via.placeholder.com/350x190?text=Neitz+Retinoscopios+RX'">
+                        </div>
+
+                        <ul class="product-highlights">
+                            <li><strong>Haza de Luz Definida:</strong> Rotación continua de 360°[cite: 73, 75] con control independiente del ancho de franja (Streak)[cite: 74, 76].</li>
+                            <li><strong>Mayor Brillo:</strong> Tecnología LED 3 a 5 veces más brillante en Streak y 5 a 8 veces en Spot que halógenos[cite: 74, 76].</li>
+                            <li><strong>Filtro Antirreflejo:</strong> Minimiza la fatiga ocular durante jornadas extensas de refracción[cite: 74, 76].</li>
+                        </ul>
+
+                        <div class="badge-variants">
+                            <span class="badge-v">RX3LED / RX3ALED</span>[cite: 73]
+                            <span class="badge-v">RX3SPLED / RX3ASPLED</span>[cite: 73]
+                            <span class="badge-v">RXRCLED / RXRCUSBLED</span>[cite: 75]
+                            <span class="badge-v">RXRCSPLED / RXRCUSBSPLED</span>[cite: 75]
+                        </div>
+                    </div>
+
+                    <div class="page-footer">
+                        <span class="page-number">Neitz - Pág. 3</span>
+                        <div class="btn-action-group">
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Retinoscopios Serie RX3 / RXRC')">Solicitar Información / Cotización</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRÓXIMA SECCIÓN PREVIEW -->
+            <div class="page page-divider">
+                <div style="padding: 2rem;">
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; color: var(--highlight);">SECCIÓN 2</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">KOWA</h1>
+                    <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 1rem;">Equipamiento Portátil y Lentes Intraoculares Avansee<br><em>(Próxima sección a actualizar)</em></p>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- MODAL DE SOLICITUD -->
+    <!-- MODAL DE SOLICITUD / COTIZACIÓN UNIFICADO -->
     <div class="modal" id="modalForm">
         <div class="modal-content">
             <span class="close-modal" onclick="closeForm()">&times;</span>
-            <h2 id="modalTitle" style="color: var(--primary);">Solicitud</h2>
-            <p id="modalSubtitle" style="font-size:0.85rem; color:#666; margin-bottom: 1rem;"></p>
+            <h2 id="modalTitle" style="color: var(--primary); font-family: 'Montserrat', sans-serif; font-size: 1.3rem;">Solicitud de Información y Cotización</h2>
+            <p id="modalSubtitle" style="font-size:0.85rem; color:var(--accent); font-weight: 600; margin-bottom: 0.8rem;"></p>
+            
             <form id="prospectForm">
                 <input type="hidden" id="tipoSolicitud">
                 <input type="hidden" id="marca">
                 <input type="hidden" id="producto">
 
                 <div class="form-group">
-                    <label>Nombre / Clínica *</label>
-                    <input type="text" id="nombre" required>
+                    <label>¿Qué deseas recibir? *</label>
+                    <select id="opcionRequerida" required>
+                        <option value="Información Técnica y Cotización">Información Técnica y Cotización Comercial</option>
+                        <option value="Solo Cotización Comercial">Solo Cotización Comercial</option>
+                        <option value="Solicitar Demostración">Solicitar Demostración en Consultorio / Clínica</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nombre Completo / Clínica *</label>
+                    <input type="text" id="nombre" required placeholder="Ej. Dr. Juan Pérez / Clínica De la Visión">
                 </div>
                 <div class="form-group">
                     <label>Correo Electrónico *</label>
-                    <input type="email" id="correo" required>
+                    <input type="email" id="correo" required placeholder="ejemplo@correo.com">
                 </div>
                 <div class="form-group">
                     <label>Teléfono / WhatsApp *</label>
-                    <input type="tel" id="telefono" required>
+                    <input type="tel" id="telefono" required placeholder="+57 300 000 0000">
                 </div>
                 <div class="form-group">
                     <label>Ciudad *</label>
-                    <input type="text" id="ciudad" required>
+                    <input type="text" id="ciudad" required placeholder="Ej. Bogotá, Armenia, Medellín...">
                 </div>
                 <div class="form-group">
-                    <label>Dirección *</label>
-                    <input type="text" id="direccion" required>
-                </div>
-                <div class="form-group">
-                    <label>Preferencia de Contacto *</label>
+                    <label>Canal Preferido de Contacto *</label>
                     <select id="prefContacto">
                         <option value="WhatsApp">WhatsApp</option>
-                        <option value="Llamada Telefónica">Llamada Telefónica</option>
                         <option value="Correo Electrónico">Correo Electrónico</option>
+                        <option value="Llamada Telefónica">Llamada Telefónica</option>
                     </select>
                 </div>
                 <button type="submit" class="btn-submit" id="submitBtn">Enviar Solicitud</button>
@@ -254,15 +290,15 @@
     </div>
 
     <script>
-        // URL de tu Apps Script Web App
+        // URL del Web App en Google Apps Script
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
 
         let pageFlip;
 
         window.addEventListener('DOMContentLoaded', () => {
             pageFlip = new St.PageFlip(document.getElementById('magazine'), {
-                width: 450, // Ancho de página individual
-                height: 600, // Alto de página individual
+                width: 450,
+                height: 600,
                 size: "fixed",
                 minWidth: 315,
                 maxWidth: 1000,
@@ -280,7 +316,7 @@
             document.getElementById('tipoSolicitud').value = tipo;
             document.getElementById('marca').value = marca;
             document.getElementById('producto').value = producto;
-            document.getElementById('modalTitle').innerText = `${tipo} de Producto`;
+            document.getElementById('modalTitle').innerText = `Solicitud / Cotización`;
             document.getElementById('modalSubtitle').innerText = `${marca} - ${producto}`;
             document.getElementById('modalForm').classList.add('active');
         }
@@ -293,17 +329,16 @@
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerText = "Enviando...";
+            btn.innerText = "Procesando...";
 
             const payload = {
-                tipoSolicitud: document.getElementById('tipoSolicitud').value,
+                tipoSolicitud: document.getElementById('opcionRequerida').value,
                 marca: document.getElementById('marca').value,
                 producto: document.getElementById('producto').value,
                 nombre: document.getElementById('nombre').value,
                 correo: document.getElementById('correo').value,
                 telefono: document.getElementById('telefono').value,
                 ciudad: document.getElementById('ciudad').value,
-                direccion: document.getElementById('direccion').value,
                 prefContacto: document.getElementById('prefContacto').value
             };
 
@@ -313,11 +348,11 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             }).then(() => {
-                alert('¡Solicitud registrada con éxito! Le contactaremos a la brevedad.');
+                alert('¡Solicitud enviada con éxito! Nos pondremos en contacto muy pronto.');
                 closeForm();
                 document.getElementById('prospectForm').reset();
             }).catch(err => {
-                alert('Error al enviar. Por favor verifique su conexión.');
+                alert('Error al enviar la solicitud. Por favor intente nuevamente.');
             }).finally(() => {
                 btn.disabled = false;
                 btn.innerText = "Enviar Solicitud";
