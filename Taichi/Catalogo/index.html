@@ -14,7 +14,6 @@
             --highlight: #00a896;
             --bg-magazine: #1e293b;
             --white: #ffffff;
-            --bigvision-purple: #4a2574;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,8 +21,9 @@
 
         /* Header Superior y Controles */
         header { background: rgba(27, 54, 93, 0.95); color: var(--white); padding: 0.8rem 1.5rem; position: fixed; top: 0; width: 100%; z-index: 100; backdrop-filter: blur(5px); display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--white); text-decoration: none; }
-        .logo span { color: var(--highlight); }
+        .logo-header { height: 32px; object-fit: contain; }
+        .logo-text { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .logo-text span { color: var(--highlight); }
 
         .nav-controls { display: flex; gap: 0.8rem; align-items: center; }
         .btn-nav { background: var(--accent); color: var(--white); border: none; padding: 0.5rem 0.9rem; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: 0.3s; }
@@ -38,19 +38,29 @@
         .page-content { padding: 1.8rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
         
         /* Portadas y Divisores de Sección */
-        .page-cover { background: linear-gradient(135deg, var(--primary) 0%, #0d1b2a 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
+        .page-cover { background: linear-gradient(135deg, var(--primary) 0%, #0d1b2a 100%); color: var(--white); text-align: center; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 3rem 2rem; }
         .page-divider-neitz { background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-kowa { background: linear-gradient(135deg, #1e3a2b 0%, #0d1b2a 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-takagi { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-bigvision { background: linear-gradient(135deg, #2a0845 0%, #6441a5 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-subdivider { background: linear-gradient(135deg, #1f4068 0%, #162447 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
 
-        .cover-title { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 700; margin-top: 1rem; }
-        .cover-subtitle { font-size: 1.1rem; color: var(--highlight); margin-bottom: 2rem; letter-spacing: 2px; }
+        .cover-title { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 700; margin-top: 0.5rem; }
+        .cover-subtitle { font-size: 1.1rem; color: var(--highlight); margin-bottom: 1rem; letter-spacing: 2px; }
+
+        /* Cuadrícula de Logos en Portada */
+        .manufacturers-grid { background: rgba(255, 255, 255, 0.08); padding: 1.2rem; border-radius: 8px; width: 100%; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.15); margin-top: 1rem; }
+        .manufacturers-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 0.8rem; color: var(--highlight); font-weight: 700; }
+        .logos-container { display: flex; justify-content: space-around; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+        .brand-logo-item { max-height: 38px; max-width: 85px; filter: brightness(0) invert(1); opacity: 0.9; object-fit: contain; }
+
+        /* Elementos de Encabezado de Sección con Logos */
+        .section-brand-logo { max-height: 55px; max-width: 180px; object-fit: contain; filter: brightness(0) invert(1); margin-bottom: 1rem; }
+        .origin-badge { display: inline-block; background: rgba(255,255,255,0.15); color: #fff; font-size: 0.8rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 1px; margin-top: 0.8rem; border: 1px solid rgba(255,255,255,0.25); }
 
         /* Encabezados y Contenido de Producto */
         .brand-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 0.6rem; }
-        .brand-title-text { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary); font-size: 1.1rem; }
+        .brand-logo-product { max-height: 28px; max-width: 110px; object-fit: contain; }
         .badge-status { background: #e8f5e9; color: #2e7d32; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 12px; font-weight: 600; }
         .badge-status-pending { background: #fff3e0; color: #e65100; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 12px; font-weight: 600; }
 
@@ -67,7 +77,10 @@
         .badge-variants { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.4rem; }
         .badge-v { background: #f0f4f8; color: var(--accent); border: 1px solid #cbd5e1; font-size: 0.68rem; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 600; }
 
+        /* Pie de Página de Producto */
         .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 0.5rem; }
+        .footer-left { display: flex; align-items: center; gap: 0.6rem; }
+        .taichi-mini-logo { height: 18px; object-fit: contain; opacity: 0.85; }
         .page-number { font-size: 0.75rem; color: #888; }
 
         .btn-action-group { display: flex; gap: 0.4rem; }
@@ -90,7 +103,10 @@
 <body>
 
     <header>
-        <a href="#" class="logo">TAICHI <span>COLOMBIA</span></a>
+        <a href="#" class="logo-text">
+            <img src="images/logo-taichi.png" alt="Taichi Colombia" class="logo-header" onerror="this.style.display='none'">
+            TAICHI <span>COLOMBIA</span>
+        </a>
         <div class="nav-controls">
             <button class="btn-nav" onclick="pageFlip.flipPrev()">◄ Anterior</button>
             <span style="font-size:0.85rem;">Desliza para navegar</span>
@@ -103,112 +119,177 @@
             
             <!-- PORTADA GENERAL -->
             <div class="page page-cover">
-                <div style="padding: 2rem;">
+                <div>
+                    <img src="images/logo-taichi.png" alt="Taichi Holdings Colombia" style="max-height: 70px; margin-bottom: 1rem; object-fit: contain;" onerror="this.style.display='none'">
                     <h1 class="cover-title">CATÁLOGO OFTALMOLOGÍA</h1>
-                    <p class="cover-subtitle">EQUIPAMIENTO DE ALTA PRECISIÓN</p>
+                    <p class="cover-subtitle">PORTAFOLIO DE ALTA PRECISIÓN</p>
                     <p style="font-size: 0.85rem; opacity: 0.85;">Taichi Holdings Colombia<br>Edición Interactiva 2026</p>
+                </div>
+
+                <div class="manufacturers-grid">
+                    <p class="manufacturers-title">MARCAS OFICIALES DISTRIBUIDAS</p>
+                    <div class="logos-container">
+                        <img src="images/logo-neitz.png" alt="Neitz" class="brand-logo-item" title="Neitz" onerror="this.replaceWith('NEITZ')">
+                        <img src="images/logo-kowa.png" alt="Kowa" class="brand-logo-item" title="Kowa" onerror="this.replaceWith('KOWA')">
+                        <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-item" title="Takagi" onerror="this.replaceWith('TAKAGI')">
+                        <img src="images/logo-bigvision.png" alt="BigVision" class="brand-logo-item" title="BigVision" onerror="this.replaceWith('BIGVISION')">
+                    </div>
                 </div>
             </div>
 
             <!-- SECCIÓN 1: NEITZ -->
             <div class="page page-divider-neitz">
                 <div style="padding: 2rem;">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 1</h2>
+                    <img src="images/logo-neitz.png" alt="Neitz Japan" class="section-brand-logo" onerror="this.style.display='none'">
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 1</h2>
                     <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.4rem; margin: 0.5rem 0; letter-spacing: 2px;">NEITZ</h1>
-                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 1rem;">Óptica Japonesa de Alta Precisión desde 1913[cite: 59]<br>Oftalmoscopios Binoculares, Directos y Retinoscopios</p>
+                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.5rem;">Óptica Japonesa de Alta Precisión desde 1913<br>Oftalmoscopios Binoculares, Directos y Retinoscopios</p>
+                    <span class="origin-badge">MADE IN JAPAN</span>
                 </div>
             </div>
-            <!-- Neitz Págs 1-3 -->
+            <!-- Neitz Pág 1 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">NEITZ • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-neitz.png" alt="Neitz" class="brand-logo-product" onerror="this.replaceWith('NEITZ')">
+                            <span class="badge-status">REGISTRO INVIMA</span>
+                        </div>
                         <h2 class="product-title">Oftalmoscopios Indirectos Binoculares</h2>
-                        <p class="product-subtitle">Línea IO-α LED & IO-Vega: Claridad Óptica y Ergonomía[cite: 58, 68]</p>
+                        <p class="product-subtitle">Línea IO-α LED & IO-Vega: Claridad Óptica y Ergonomía</p>
                         <div class="product-img-wrapper"><img src="images/neitz-io-vega.webp" alt="Neitz IO-Vega" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+IO-Vega'"></div>
                         <ul class="product-highlights">
-                            <li><strong>IO-Vega:</strong> Ultra liviano (470g), carga inalámbrica 4 vías[cite: 61, 64].</li>
-                            <li><strong>IO-α LED CAMERA:</strong> CMOS Full HD integrado para docencia[cite: 65, 66].</li>
-                            <li><strong>IO-α LED:</strong> Iluminación cálida 3200K (Ra 90+)[cite: 66, 68].</li>
+                            <li><strong>IO-Vega:</strong> Ultra liviano (470g), carga inalámbrica 4 vías.</li>
+                            <li><strong>IO-α LED CAMERA:</strong> CMOS Full HD integrado para docencia.</li>
+                            <li><strong>IO-α LED:</strong> Iluminación cálida 3200K (Ra 90+).</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Neitz - Pág. 1</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Indirectos')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Neitz - Pág. 1</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Indirectos Binoculares')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
+            <!-- Neitz Pág 2 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">NEITZ • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-neitz.png" alt="Neitz" class="brand-logo-product" onerror="this.replaceWith('NEITZ')">
+                            <span class="badge-status">REGISTRO INVIMA</span>
+                        </div>
                         <h2 class="product-title">Oftalmoscopios Directos Serie BXα</h2>
-                        <p class="product-subtitle">Iluminación LED de Alta Reproducción Cromática[cite: 70, 72]</p>
+                        <p class="product-subtitle">Iluminación LED de Alta Reproducción Cromática</p>
                         <div class="product-img-wrapper"><img src="images/neitz-bxa.webp" alt="Neitz BXa" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+BXa'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Óptica Avanzada:</strong> Corrección de -36D a +35D en pasos de 1D[cite: 69, 71].</li>
-                            <li><strong>Filtro Polarizado:</strong> Elimina reflejos corneales[cite: 70, 72].</li>
+                            <li><strong>Óptica Avanzada:</strong> Corrección de -36D a +35D en pasos de 1D.</li>
+                            <li><strong>Filtro Polarizado:</strong> Elimina reflejos corneales.</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Neitz - Pág. 2</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Directos BXa')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Neitz - Pág. 2</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Directos Serie BXa')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
+            <!-- Neitz Pág 3 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">NEITZ • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-neitz.png" alt="Neitz" class="brand-logo-product" onerror="this.replaceWith('NEITZ')">
+                            <span class="badge-status">REGISTRO INVIMA</span>
+                        </div>
                         <h2 class="product-title">Retinoscopios Serie RX3 & RXRC</h2>
-                        <p class="product-subtitle">Sistemas LED de Franja (Streak) y Punto (Spot)[cite: 73, 75]</p>
+                        <p class="product-subtitle">Sistemas LED de Franja (Streak) y Punto (Spot)</p>
                         <div class="product-img-wrapper"><img src="images/neitz-rx.webp" alt="Neitz RX" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+RX'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Haza Definida:</strong> Rotación continua de 360°[cite: 73, 75].</li>
-                            <li><strong>Tecnología LED:</strong> Brillo superior frente a lámparas halógenas[cite: 74, 76].</li>
+                            <li><strong>Haza Definida:</strong> Rotación continua de 360°.</li>
+                            <li><strong>Tecnología LED:</strong> Brillo superior frente a lámparas halógenas.</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Neitz - Pág. 3</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Retinoscopios Serie RX3 / RXRC')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Neitz - Pág. 3</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Retinoscopios Serie RX3 / RXRC')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
 
             <!-- SECCIÓN 2: KOWA -->
             <div class="page page-divider-kowa">
                 <div style="padding: 2rem;">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 2</h2>
+                    <img src="images/logo-kowa.png" alt="Kowa Japan" class="section-brand-logo" onerror="this.style.display='none'">
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 2</h2>
                     <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.4rem; margin: 0.5rem 0; letter-spacing: 2px;">KOWA</h1>
-                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 1rem;">Tecnología Japonesa de Diagnóstico e Implantes Oculares<br>Lámpara SL-19, Tonómetro HA-2, Perímetro AP-7000 y LIOs Avansee[cite: 77, 79]</p>
+                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.5rem;">Tecnología Japonesa de Diagnóstico e Implantes Oculares<br>Lámpara SL-19, Tonómetro HA-2, Perímetro AP-7000 y LIOs Avansee</p>
+                    <span class="origin-badge">MADE IN JAPAN</span>
                 </div>
             </div>
             <!-- Kowa Págs 1-4 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-kowa.png" alt="Kowa" class="brand-logo-product" onerror="this.replaceWith('KOWA')">
+                            <span class="badge-status">REGISTRO INVIMA</span>
+                        </div>
                         <h2 class="product-title">Lámpara de Hendidura Portátil SL-19</h2>
-                        <p class="product-subtitle">La Lámpara Portátil más Liviana del Mercado[cite: 79, 80]</p>
+                        <p class="product-subtitle">La Lámpara Portátil más Liviana del Mercado</p>
                         <div class="product-img-wrapper"><img src="images/kowa-sl19.webp" alt="Kowa SL-19" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+SL-19'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Ultra Ligera:</strong> Chasis reforzado de 620g[cite: 80].</li>
-                            <li><strong>Iluminación Dual:</strong> Hendidura e iluminación de fondo simultáneas[cite: 80].</li>
+                            <li><strong>Ultra Ligera:</strong> Chasis reforzado de 620g.</li>
+                            <li><strong>Iluminación Dual:</strong> Hendidura e iluminación de fondo simultáneas.</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Kowa - Pág. 1</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Lámpara SL-19')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Kowa - Pág. 1</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Lámpara SL-19')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-kowa.png" alt="Kowa" class="brand-logo-product" onerror="this.replaceWith('KOWA')">
+                            <span class="badge-status">REGISTRO INVIMA</span>
+                        </div>
                         <h2 class="product-title">Tonómetro de Aplanación Portátil HA-2</h2>
-                        <p class="product-subtitle">Precisión Goldmann Móvil en Cualquier Posición[cite: 77, 78]</p>
+                        <p class="product-subtitle">Precisión Goldmann Móvil en Cualquier Posición</p>
                         <div class="product-img-wrapper"><img src="images/kowa-ha2.webp" alt="Kowa HA-2" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+HA-2'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Mecanismo Único de Resorte:</strong> Lectura precisa en cualquier postura[cite: 78].</li>
-                            <li><strong>Lectura Directa:</strong> Dial continuo (0-60 mmHg)[cite: 78].</li>
+                            <li><strong>Mecanismo Único de Resorte:</strong> Lectura precisa en cualquier postura.</li>
+                            <li><strong>Lectura Directa:</strong> Dial continuo (0-60 mmHg).</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Kowa - Pág. 2</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Tonómetro HA-2')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Kowa - Pág. 2</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Tonómetro HA-2')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-kowa.png" alt="Kowa" class="brand-logo-product" onerror="this.replaceWith('KOWA')">
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
                         <h2 class="product-title">Campímetro Automático AP-7000</h2>
                         <p class="product-subtitle">Perimetría Estática Estándar y Evaluación Digital</p>
                         <div class="product-img-wrapper"><img src="images/kowa-ap7000.webp" alt="Kowa AP-7000" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+AP-7000'"></div>
@@ -216,13 +297,22 @@
                             <li><strong>Pruebas Rápida de Glaucoma:</strong> Algoritmos optimizados para campo visual.</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Kowa - Pág. 3</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Campímetro AP-7000')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Kowa - Pág. 3</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Campímetro AP-7000')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-kowa.png" alt="Kowa" class="brand-logo-product" onerror="this.replaceWith('KOWA')">
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
                         <h2 class="product-title">Lentes Intraoculares AVANSEE</h2>
                         <p class="product-subtitle">Sistema Preloaded en Acrílico Hidrofóbico</p>
                         <div class="product-img-wrapper"><img src="images/kowa-avansee.webp" alt="Kowa AVANSEE" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+AVANSEE'"></div>
@@ -230,16 +320,24 @@
                             <li><strong>Inserción Aséptica:</strong> Sistema inyectable precurado de microincisión.</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Kowa - Pág. 4</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'LIOs AVANSEE')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Kowa - Pág. 4</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'LIOs AVANSEE')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
 
             <!-- SECCIÓN 3: TAKAGI -->
             <div class="page page-divider-takagi">
                 <div style="padding: 2rem;">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 3</h2>
+                    <img src="images/logo-takagi.png" alt="Takagi Japan" class="section-brand-logo" onerror="this.style.display='none'">
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 3</h2>
                     <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">TAKAGI</h1>
-                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 1rem;">Excelencia y Calidad en Instrumentos Oftálmicos desde 1955[cite: 81, 90]<br>Microscopios Quirúrgicos de Alta Gama y Lámparas de Hendidura LED[cite: 81, 90]</p>
+                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 0.5rem;">Excelencia y Calidad en Instrumentos Oftálmicos desde 1955<br>Microscopios Quirúrgicos de Alta Gama y Lámparas de Hendidura LED</p>
+                    <span class="origin-badge">MADE IN JAPAN</span>
                 </div>
             </div>
             <!-- Takagi Subsección 3.1 Microscopios -->
@@ -252,46 +350,73 @@
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="this.replaceWith('TAKAGI')">
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
                         <h2 class="product-title">Microscopio Quirúrgico OM-6</h2>
-                        <p class="product-subtitle">Modelo Compacto para Procedimientos Ambulatorios[cite: 84, 85]</p>
+                        <p class="product-subtitle">Modelo Compacto para Procedimientos Ambulatorios</p>
                         <div class="product-img-wrapper"><img src="images/takagi-om6.webp" alt="Takagi OM-6" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-6'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Gran Profundidad de Campo:</strong> Minimiza ajustes constantes durante cirugía[cite: 84, 85].</li>
-                            <li><strong>Chasis Compacto:</strong> Magnificación 3 pasos (4.7x, 7.8x, 12.5x)[cite: 85, 86].</li>
+                            <li><strong>Gran Profundidad de Campo:</strong> Minimiza ajustes constantes durante cirugía.</li>
+                            <li><strong>Chasis Compacto:</strong> Magnificación 3 pasos (4.7x, 7.8x, 12.5x).</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Takagi - Pág. 1</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-6')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Takagi - Pág. 1</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-6')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="this.replaceWith('TAKAGI')">
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
                         <h2 class="product-title">Microscopio Quirúrgico OM-9</h2>
-                        <p class="product-subtitle">Óptica Apocromática y Red Reflex de Alta Definición[cite: 87, 88]</p>
+                        <p class="product-subtitle">Óptica Apocromática y Red Reflex de Alta Definición</p>
                         <div class="product-img-wrapper"><img src="images/takagi-om9.webp" alt="Takagi OM-9" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-9'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Lentes Apocromáticas:</strong> Imagen nítida libre de aberración cromática[cite: 87, 89].</li>
-                            <li><strong>3 Configuraciones (XZ, XE, SM):</strong> Opciones de Zoom o pasos motorizados/manuales[cite: 88, 89].</li>
+                            <li><strong>Lentes Apocromáticas:</strong> Imagen nítida libre de aberración cromática.</li>
+                            <li><strong>3 Configuraciones (XZ, XE, SM):</strong> Opciones de Zoom o pasos motorizados/manuales.</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Takagi - Pág. 2</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-9')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Takagi - Pág. 2</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-9')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="this.replaceWith('TAKAGI')">
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
                         <h2 class="product-title">Microscopio Quirúrgico OM-19</h2>
-                        <p class="product-subtitle">Flagship para Cirugía Oftálmica Avanzada y Vitreorretiniana[cite: 81, 82]</p>
+                        <p class="product-subtitle">Flagship para Cirugía Oftálmica Avanzada y Vitreorretiniana</p>
                         <div class="product-img-wrapper"><img src="images/takagi-om19.webp" alt="Takagi OM-19" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-19'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Iluminación LED Independiente:</strong> Control separado de luz principal y Red Reflex por ojo[cite: 81, 82].</li>
-                            <li><strong>Soporte BIOM / EIBOS:</strong> Integración completa para cirugía posterior de retina[cite: 82, 83].</li>
+                            <li><strong>Iluminación LED Independiente:</strong> Control separado de luz principal y Red Reflex por ojo.</li>
+                            <li><strong>Soporte BIOM / EIBOS:</strong> Integración completa para cirugía posterior de retina.</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Takagi - Pág. 3</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-19')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Takagi - Pág. 3</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-19')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
             <!-- Takagi Subsección 3.2 Lámparas -->
@@ -304,55 +429,84 @@
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="this.replaceWith('TAKAGI')">
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
                         <h2 class="product-title">Lámparas de Hendidura 4ZL & 2ZL</h2>
-                        <p class="product-subtitle">Modelos Galileanos Altamente Funcionales[cite: 90, 92]</p>
+                        <p class="product-subtitle">Modelos Galileanos Altamente Funcionales</p>
                         <div class="product-img-wrapper"><img src="images/takagi-4zl-2zl.webp" alt="Takagi 4ZL / 2ZL" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+4ZL+%2F+2ZL'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Tambor de Magnificación:</strong> 5 aumentos en 4ZL y 3 en 2ZL[cite: 92].</li>
-                            <li><strong>Iluminación LED 3500K:</strong> Tono idéntico entre luz principal y de fondo[cite: 91, 92].</li>
+                            <li><strong>Tambor de Magnificación:</strong> 5 aumentos en 4ZL y 3 en 2ZL.</li>
+                            <li><strong>Iluminación LED 3500K:</strong> Tono idéntico entre luz principal y de fondo.</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Takagi - Pág. 4</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 4ZL / 2ZL')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Takagi - Pág. 4</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 4ZL / 2ZL')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="this.replaceWith('TAKAGI')">
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
                         <h2 class="product-title">Lámpara de Hendidura 30GL</h2>
-                        <p class="product-subtitle">Modelo Esencial Óptica Greenough Convergente[cite: 93, 94]</p>
+                        <p class="product-subtitle">Modelo Esencial Óptica Greenough Convergente</p>
                         <div class="product-img-wrapper"><img src="images/takagi-30gl.webp" alt="Takagi 30GL" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+30GL'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Óptica Greenough:</strong> Imagen esteroscópica nítida y económica[cite: 93, 94].</li>
-                            <li><strong>Sistema Révolver:</strong> Cambio de 2 aumentos fácil de usar[cite: 95].</li>
+                            <li><strong>Óptica Greenough:</strong> Imagen esteroscópica nítida y económica.</li>
+                            <li><strong>Sistema Révolver:</strong> Cambio de 2 aumentos fácil de usar.</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Takagi - Pág. 5</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 30GL')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Takagi - Pág. 5</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 30GL')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="this.replaceWith('TAKAGI')">
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
                         <h2 class="product-title">Lámpara de Hendidura 700GL / NSW</h2>
-                        <p class="product-subtitle">Flagship con Tecnología Stereoscopic Narrow Angle[cite: 96, 97]</p>
+                        <p class="product-subtitle">Flagship con Tecnología Stereoscopic Narrow Angle</p>
                         <div class="product-img-wrapper"><img src="images/takagi-700gl.webp" alt="Takagi 700GL NSW" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+700GL+NSW'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Mecanismo NSW (4.1°):</strong> Reducción del ángulo convergente para evaluación profunda de retina[cite: 97, 98].</li>
-                            <li><strong>Distancia Inter-óptica 22mm:</strong> Efecto esteroscópico natural y detallado[cite: 97].</li>
+                            <li><strong>Mecanismo NSW (4.1°):</strong> Reducción del ángulo convergente para evaluación profunda de retina.</li>
+                            <li><strong>Distancia Inter-óptica 22mm:</strong> Efecto esteroscópico natural y detallado.</li>
                         </ul>
                     </div>
-                    <div class="page-footer"><span class="page-number">Takagi - Pág. 6</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 700GL / NSW')">Solicitar Información / Cotización</button></div>
+                    <div class="page-footer">
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">Takagi - Pág. 6</span>
+                        </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 700GL / NSW')">Solicitar Información / Cotización</button>
+                    </div>
                 </div>
             </div>
 
             <!-- SECCIÓN 4: BIGVISION -->
             <div class="page page-divider-bigvision">
                 <div style="padding: 2rem;">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 4</h2>
+                    <img src="images/logo-bigvision.png" alt="BigVision" class="section-brand-logo" onerror="this.style.display='none'">
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 4</h2>
                     <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">BIGVISION</h1>
-                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 1rem;">Sistemas Digitales de Diagnóstico Oftálmico con Inteligencia Artificial[cite: 100, 106]<br>Tomografía de Coherencia Óptica (OCT) y Biometría Óptica Avanzada[cite: 100, 106]</p>
+                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 0.5rem;">Sistemas Digitales de Diagnóstico Oftálmico con Inteligencia Artificial<br>Tomografía de Coherencia Óptica (OCT) y Biometría Óptica Avanzada</p>
+                    <span class="origin-badge">MADE IN CHINA</span>
                 </div>
             </div>
 
@@ -361,35 +515,36 @@
                 <div class="page-content">
                     <div>
                         <div class="brand-header">
-                            <span class="brand-title-text">BIGVISION • China</span>
+                            <img src="images/logo-bigvision.png" alt="BigVision" class="brand-logo-product" onerror="this.replaceWith('BIGVISION')">
                             <span class="badge-status">REGISTRO INVIMA APROBADO</span>
                         </div>
                         <h2 class="product-title">Tomógrafo de Coherencia Óptica BV1000S</h2>
-                        <p class="product-subtitle">Sistema OCT Automatizado con Inteligencia Artificial Integrada[cite: 106]</p>
+                        <p class="product-subtitle">Sistema OCT Automatizado con Inteligencia Artificial Integrada</p>
                         
                         <div class="product-img-wrapper">
                             <img src="images/bigvision-oct.webp" alt="BigVision OCT BV1000S" onerror="this.src='https://via.placeholder.com/350x180?text=BigVision+OCT+BV1000S'">
                         </div>
 
                         <ul class="product-highlights">
-                            <li><strong>Operación 100% Automática:</strong> Enfoque y localización pupilar guiados por voz (~2 min por paciente)[cite: 106].</li>
-                            <li><strong>Alta Velocidad de Escaneo:</strong> Tecnologías de aceleración de 80.000 A-scans/segundo[cite: 107].</li>
-                            <li><strong>Campo Amplio (12mm x 9mm):</strong> Cobertura simultánea de la zona macular y disco óptico[cite: 106, 108].</li>
-                            <li><strong>Análisis IA de 16 Patologías:</strong> Identificación, segmentación y marcado automático de lesiones retinales[cite: 106, 110].</li>
+                            <li><strong>Operación 100% Automática:</strong> Enfoque y localización pupilar guiados por voz (~2 min por paciente).</li>
+                            <li><strong>Alta Velocidad de Escaneo:</strong> Tecnologías de aceleración de 80.000 A-scans/segundo.</li>
+                            <li><strong>Campo Amplio (12mm x 9mm):</strong> Cobertura simultánea de zona macular y disco óptico.</li>
+                            <li><strong>Análisis IA de 16 Patologías:</strong> Identificación, segmentación y marcado automático de lesiones retinales.</li>
                         </ul>
 
                         <div class="badge-variants">
-                            <span class="badge-v">80.000 A-scans/s</span>[cite: 107]
-                            <span class="badge-v">Escaneo 12x9 mm</span>[cite: 106, 108]
-                            <span class="badge-v">Diagnóstico IA</span>[cite: 106]
+                            <span class="badge-v">80.000 A-scans/s</span>
+                            <span class="badge-v">Escaneo 12x9 mm</span>
+                            <span class="badge-v">Diagnóstico IA</span>
                         </div>
                     </div>
 
                     <div class="page-footer">
-                        <span class="page-number">BigVision - Pág. 1</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'BigVision', 'OCT BV1000S')">Solicitar Información / Cotización</button>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">BigVision - Pág. 1</span>
                         </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'BigVision', 'OCT BV1000S')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
@@ -399,35 +554,36 @@
                 <div class="page-content">
                     <div>
                         <div class="brand-header">
-                            <span class="brand-title-text">BIGVISION • China</span>
+                            <img src="images/logo-bigvision.png" alt="BigVision" class="brand-logo-product" onerror="this.replaceWith('BIGVISION')">
                             <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
                         </div>
                         <h2 class="product-title">Biómetro Óptico Oftálmico BVB2000</h2>
-                        <p class="product-subtitle">Equipo 2-en-1: Biometría Óptica Precisa + Sistema OCT Incorporado[cite: 100]</p>
+                        <p class="product-subtitle">Equipo 2-en-1: Biometría Óptica Precisa + Sistema OCT Incorporado</p>
                         
                         <div class="product-img-wrapper">
                             <img src="images/bigvision-biometro.webp" alt="BigVision Biómetro BVB2000" onerror="this.src='https://via.placeholder.com/350x180?text=BigVision+Biómetro+BVB2000'">
                         </div>
 
                         <ul class="product-highlights">
-                            <li><strong>12 Parámetros en 1 Clic:</strong> Medición automática en &lt;60s de AL, CCT, ACD, LT, K1/K2, WTW, Espesor Coroidal y Retinal[cite: 100].</li>
-                            <li><strong>Validación Visual por OCT:</strong> Muestra imágenes dinámicas en tiempo real de córnea y retina para máxima precisión[cite: 102].</li>
-                            <li><strong>Monitoreo de Miopía en Niños:</strong> Predicción del desarrollo axial a los 18 años y simulación de agudeza visual[cite: 103].</li>
-                            <li><strong>Ajuste Tridimensional Inteligente:</strong> Plataforma motorizada con seguimiento automático de pupila[cite: 100].</li>
+                            <li><strong>12 Parámetros en 1 Clic:</strong> Medición automática en &lt;60s de AL, CCT, ACD, LT, K1/K2, WTW, Espesor Coroidal y Retinal.</li>
+                            <li><strong>Validación Visual por OCT:</strong> Muestra imágenes dinámicas en tiempo real de córnea y retina para máxima precisión.</li>
+                            <li><strong>Monitoreo de Miopía en Niños:</strong> Predicción del desarrollo axial a los 18 años y simulación de agudeza visual.</li>
+                            <li><strong>Ajuste Tridimensional Inteligente:</strong> Plataforma motorizada con seguimiento automático de pupila.</li>
                         </ul>
 
                         <div class="badge-variants">
-                            <span class="badge-v">Biometría + OCT 2-en-1</span>[cite: 100]
-                            <span class="badge-v">12 Parámetros &lt;60s</span>[cite: 100]
-                            <span class="badge-v">Predicción Miopía</span>[cite: 103]
+                            <span class="badge-v">Biometría + OCT 2-en-1</span>
+                            <span class="badge-v">12 Parámetros &lt;60s</span>
+                            <span class="badge-v">Predicción Miopía</span>
                         </div>
                     </div>
 
                     <div class="page-footer">
-                        <span class="page-number">BigVision - Pág. 2</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'BigVision', 'Biómetro BVB2000')">Solicitar Información / Cotización</button>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="this.style.display='none'">
+                            <span class="page-number">BigVision - Pág. 2</span>
                         </div>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'BigVision', 'Biómetro BVB2000')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
