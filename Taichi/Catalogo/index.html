@@ -14,13 +14,13 @@
             --highlight: #00a896;
             --bg-magazine: #1e293b;
             --white: #ffffff;
-            --kowa-green: #00875a;
+            --takagi-blue: #005691;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Roboto', sans-serif; background-color: var(--bg-magazine); color: #333; overflow-x: hidden; }
 
-        /* Controls & Top Header */
+        /* Header Superior y Controles */
         header { background: rgba(27, 54, 93, 0.95); color: var(--white); padding: 0.8rem 1.5rem; position: fixed; top: 0; width: 100%; z-index: 100; backdrop-filter: blur(5px); display: flex; justify-content: space-between; align-items: center; }
         .logo { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--white); text-decoration: none; }
         .logo span { color: var(--highlight); }
@@ -29,41 +29,44 @@
         .btn-nav { background: var(--accent); color: var(--white); border: none; padding: 0.5rem 0.9rem; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: 0.3s; }
         .btn-nav:hover { background: var(--highlight); }
 
-        /* Container & Flipbook */
+        /* Flipbook Container */
         .magazine-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding-top: 60px; padding-bottom: 20px; }
         .flip-book { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        /* Page Layouts */
+        /* Estructura de Páginas */
         .page { background-color: var(--white); width: 100%; height: 100%; border: 1px solid #ddd; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
-        .page-content { padding: 2rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+        .page-content { padding: 1.8rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
         
-        /* Cover & Divider Pages */
+        /* Portadas y Divisores de Sección */
         .page-cover { background: linear-gradient(135deg, var(--primary) 0%, #0d1b2a 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
-        .page-divider { background: linear-gradient(135deg, #1e3a2b 0%, #0d1b2a 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-neitz { background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
+        .page-divider-kowa { background: linear-gradient(135deg, #1e3a2b 0%, #0d1b2a 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
+        .page-divider-takagi { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
+        .page-subdivider { background: linear-gradient(135deg, #1f4068 0%, #162447 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
+
         .cover-title { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 700; margin-top: 1rem; }
         .cover-subtitle { font-size: 1.1rem; color: var(--highlight); margin-bottom: 2rem; letter-spacing: 2px; }
 
-        /* Product Page Inner */
-        .brand-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 0.6rem; margin-bottom: 0.8rem; }
-        .brand-title-text { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary); font-size: 1.2rem; }
-        .badge-status { background: #e8f5e9; color: #2e7d32; font-size: 0.72rem; padding: 0.25rem 0.5rem; border-radius: 12px; font-weight: 600; }
-        .badge-status-pending { background: #fff3e0; color: #e65100; font-size: 0.72rem; padding: 0.25rem 0.5rem; border-radius: 12px; font-weight: 600; }
+        /* Encabezados y Contenido de Producto */
+        .brand-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 0.6rem; }
+        .brand-title-text { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary); font-size: 1.1rem; }
+        .badge-status { background: #e8f5e9; color: #2e7d32; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 12px; font-weight: 600; }
+        .badge-status-pending { background: #fff3e0; color: #e65100; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 12px; font-weight: 600; }
 
-        .product-img-wrapper { text-align: center; margin: 0.8rem 0; height: 190px; display: flex; align-items: center; justify-content: center; }
+        .product-img-wrapper { text-align: center; margin: 0.6rem 0; height: 180px; display: flex; align-items: center; justify-content: center; }
         .product-img-wrapper img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-        .product-title { font-family: 'Montserrat', sans-serif; color: var(--primary); font-size: 1.25rem; margin-bottom: 0.3rem; }
-        .product-subtitle { font-size: 0.82rem; color: #666; margin-bottom: 0.6rem; font-weight: 500; }
+        .product-title { font-family: 'Montserrat', sans-serif; color: var(--primary); font-size: 1.2rem; margin-bottom: 0.25rem; }
+        .product-subtitle { font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; font-weight: 500; }
 
-        .product-highlights { list-style: none; margin: 0.6rem 0; }
-        .product-highlights li { font-size: 0.82rem; margin-bottom: 0.35rem; padding-left: 1.1rem; position: relative; line-height: 1.35; }
+        .product-highlights { list-style: none; margin: 0.5rem 0; }
+        .product-highlights li { font-size: 0.8rem; margin-bottom: 0.3rem; padding-left: 1.1rem; position: relative; line-height: 1.3; }
         .product-highlights li::before { content: "✓"; position: absolute; left: 0; color: var(--highlight); font-weight: bold; }
 
-        .badge-variants { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.5rem; }
-        .badge-v { background: #f0f4f8; color: var(--accent); border: 1px solid #cbd5e1; font-size: 0.7rem; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 600; }
+        .badge-variants { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.4rem; }
+        .badge-v { background: #f0f4f8; color: var(--accent); border: 1px solid #cbd5e1; font-size: 0.68rem; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 600; }
 
-        .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 0.6rem; }
+        .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 0.5rem; }
         .page-number { font-size: 0.75rem; color: #888; }
 
         .btn-action-group { display: flex; gap: 0.4rem; }
@@ -71,7 +74,7 @@
         .btn-info { background: var(--accent); color: var(--white); }
         .btn-info:hover { background: var(--primary); }
 
-        /* Modal Styles */
+        /* Estilos de Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
         .modal-content { background: var(--white); padding: 1.8rem; border-radius: 8px; max-width: 480px; width: 92%; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
@@ -106,16 +109,15 @@
                 </div>
             </div>
 
-            <!-- SECCIÓN 1: DIVISOR NEITZ -->
+            <!-- SECCIÓN 1: NEITZ (Páginas de Neitz mantenidas) -->
             <div class="page page-divider-neitz">
                 <div style="padding: 2rem;">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; color: var(--highlight);">SECCIÓN 1</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">NEITZ</h1>
-                    <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 1rem;">Óptica Japonesa de Alta Precisión desde 1913[cite: 59]<br>Oftalmoscopios Binoculares, Directos y Retinoscopios</p>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 1</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.4rem; margin: 0.5rem 0; letter-spacing: 2px;">NEITZ</h1>
+                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 1rem;">Óptica Japonesa de Alta Precisión desde 1913[cite: 59]<br>Oftalmoscopios Binoculares, Directos y Retinoscopios</p>
                 </div>
             </div>
-
-            <!-- NEITZ - PÁGINA 1 -->
+            <!-- Neitz Pág 1 -->
             <div class="page">
                 <div class="page-content">
                     <div>
@@ -126,29 +128,23 @@
                         <h2 class="product-title">Oftalmoscopios Indirectos Binoculares</h2>
                         <p class="product-subtitle">Línea IO-α LED & IO-Vega: Claridad Óptica y Ergonomía Superior[cite: 58, 68]</p>
                         <div class="product-img-wrapper">
-                            <img src="images/neitz-io-vega.webp" alt="Neitz IO-Vega y IO-a LED" onerror="this.src='https://via.placeholder.com/350x190?text=Neitz+IO-Vega+%2F+IO-a+LED'">
+                            <img src="images/neitz-io-vega.webp" alt="Neitz IO-Vega" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+IO-Vega'">
                         </div>
                         <ul class="product-highlights">
                             <li><strong>IO-Vega:</strong> Ultra liviano (470g), sistema de carga inalámbrica 4 vías[cite: 61, 64] e iluminación ultra suave de baja intensidad (&lt;10 lx a 1.700 lx)[cite: 60, 61].</li>
                             <li><strong>IO-α LED CAMERA:</strong> Sensor CMOS Full HD (1920x1080) integrado para grabación médica y docencia en vivo[cite: 65, 66].</li>
                             <li><strong>IO-α LED:</strong> Iluminación LED color cálido tipo halógeno (3200K, Ra 90+)[cite: 66, 68] con hasta 10 hrs continuas[cite: 68].</li>
                         </ul>
-                        <div class="badge-variants">
-                            <span class="badge-v">IO-Vega</span>
-                            <span class="badge-v">IO-α LED</span>
-                            <span class="badge-v">IO-α LED CAMERA</span>
-                        </div>
                     </div>
                     <div class="page-footer">
                         <span class="page-number">Neitz - Pág. 1</span>
                         <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Indirectos Binoculares (IO-Vega / IO-a LED)')">Solicitar Información / Cotización</button>
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Indirectos Binoculares')">Solicitar Información / Cotización</button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- NEITZ - PÁGINA 2 -->
+            <!-- Neitz Pág 2 -->
             <div class="page">
                 <div class="page-content">
                     <div>
@@ -159,19 +155,13 @@
                         <h2 class="product-title">Oftalmoscopios Directos Serie BXα</h2>
                         <p class="product-subtitle">Iluminación LED de Alta Reproducción Cromática (Ra &gt; 90)[cite: 70, 72]</p>
                         <div class="product-img-wrapper">
-                            <img src="images/neitz-bxa.webp" alt="Neitz Oftalmoscopios Directos BXa" onerror="this.src='https://via.placeholder.com/350x190?text=Neitz+Oftalmoscopios+BXa'">
+                            <img src="images/neitz-bxa.webp" alt="Neitz BXa" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+BXa'">
                         </div>
                         <ul class="product-highlights">
                             <li><strong>Óptica Avanzada:</strong> Rango de corrección dióptrica continuo de -36D a +35D en pasos de 1D[cite: 69, 71].</li>
                             <li><strong>Control Reflexivo:</strong> Filtro polarizado rotatorio para eliminar reflejos corneales molestos[cite: 70, 72].</li>
                             <li><strong>Modo Boost Integrado:</strong> Intensidad regulable progresiva con opción de super-brillo y Filtro Azul Cobalto[cite: 70, 72].</li>
                         </ul>
-                        <div class="badge-variants">
-                            <span class="badge-v">BXa13LED (Batería C)</span>[cite: 69]
-                            <span class="badge-v">BXa13ALED (Batería AA)</span>[cite: 69]
-                            <span class="badge-v">BXαRCLED (Base Carga)</span>[cite: 71]
-                            <span class="badge-v">BXαRCUSBLED (Carga USB-C)</span>[cite: 71]
-                        </div>
                     </div>
                     <div class="page-footer">
                         <span class="page-number">Neitz - Pág. 2</span>
@@ -181,8 +171,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- NEITZ - PÁGINA 3 -->
+            <!-- Neitz Pág 3 -->
             <div class="page">
                 <div class="page-content">
                     <div>
@@ -193,19 +182,13 @@
                         <h2 class="product-title">Retinoscopios Serie RX3 & RXRC</h2>
                         <p class="product-subtitle">Sistemas LED de Franja (Streak) y Punto (Spot)[cite: 73, 75]</p>
                         <div class="product-img-wrapper">
-                            <img src="images/neitz-rx.webp" alt="Neitz Retinoscopios RX3 y RXRC" onerror="this.src='https://via.placeholder.com/350x190?text=Neitz+Retinoscopios+RX'">
+                            <img src="images/neitz-rx.webp" alt="Neitz RX" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+RX'">
                         </div>
                         <ul class="product-highlights">
                             <li><strong>Haza de Luz Definida:</strong> Rotación continua de 360°[cite: 73, 75] con control independiente del ancho de franja (Streak)[cite: 74, 76].</li>
                             <li><strong>Mayor Brillo:</strong> Tecnología LED 3 a 5 veces más brillante en Streak y 5 a 8 veces en Spot que halógenos[cite: 74, 76].</li>
                             <li><strong>Filtro Antirreflejo:</strong> Minimiza la fatiga ocular durante jornadas extensas de refracción[cite: 74, 76].</li>
                         </ul>
-                        <div class="badge-variants">
-                            <span class="badge-v">RX3LED / RX3ALED</span>[cite: 73]
-                            <span class="badge-v">RX3SPLED / RX3ASPLED</span>[cite: 73]
-                            <span class="badge-v">RXRCLED / RXRCUSBLED</span>[cite: 75]
-                            <span class="badge-v">RXRCSPLED / RXRCUSBSPLED</span>[cite: 75]
-                        </div>
                     </div>
                     <div class="page-footer">
                         <span class="page-number">Neitz - Pág. 3</span>
@@ -216,178 +199,346 @@
                 </div>
             </div>
 
-            <!-- SECCIÓN 2: DIVISOR KOWA -->
-            <div class="page page-divider">
+            <!-- SECCIÓN 2: KOWA (Páginas Kowa mantenidas) -->
+            <div class="page page-divider-kowa">
                 <div style="padding: 2rem;">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; color: var(--highlight);">SECCIÓN 2</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">KOWA</h1>
-                    <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 1rem;">Tecnología Japonesa de Diagnóstico e Implantes Oculares<br>Lámpara SL-19, Tonómetro HA-2, Perímetro AP-7000 y LIOs Avansee[cite: 77, 79]</p>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 2</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.4rem; margin: 0.5rem 0; letter-spacing: 2px;">KOWA</h1>
+                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 1rem;">Tecnología Japonesa de Diagnóstico e Implantes Oculares<br>Lámpara SL-19, Tonómetro HA-2, Perímetro AP-7000 y LIOs Avansee[cite: 77, 79]</p>
                 </div>
             </div>
-
-            <!-- KOWA - PÁGINA 1: SL-19 -->
+            <!-- Kowa Pág 1 a 4 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">KOWA • Japón</span>
-                            <span class="badge-status">REGISTRO INVIMA VIGENTE</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
                         <h2 class="product-title">Lámpara de Hendidura Portátil SL-19</h2>
-                        <p class="product-subtitle">La Lámpara de Hendidura Portátil más Liviana y Avanzada del Mercado[cite: 79, 80]</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="images/kowa-sl19.webp" alt="Kowa SL-19" onerror="this.src='https://via.placeholder.com/350x190?text=Kowa+SL-19'">
-                        </div>
-
+                        <p class="product-subtitle">La Lámpara Portátil más Liviana y Avanzada del Mercado[cite: 79, 80]</p>
+                        <div class="product-img-wrapper"><img src="images/kowa-sl19.webp" alt="Kowa SL-19" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+SL-19'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Ultra Ligera:</strong> Fabricada con resina reforzada con fibra de vidrio (solo 620g sin baterías)[cite: 80].</li>
-                            <li><strong>Iluminación Dual:</strong> Iluminación de fondo continua simultánea con hendidura LED[cite: 80].</li>
-                            <li><strong>Luz Azul Integrada:</strong> Botón de acceso directo en empuñadura para examen de fluoresceína[cite: 80].</li>
-                            <li><strong>Larga Autonomía:</strong> Hasta 360 minutos de iluminación continua a máxima intensidad[cite: 80].</li>
+                            <li><strong>Ultra Ligera:</strong> Chasis de resina reforzada con fibra de vidrio (620g)[cite: 80].</li>
+                            <li><strong>Iluminación Dual:</strong> Iluminación de fondo simultánea con hendidura LED[cite: 80].</li>
+                            <li><strong>Luz Azul Integrada:</strong> Acceso rápido en empuñadura para prueba de fluoresceína[cite: 80].</li>
                         </ul>
-
-                        <div class="badge-variants">
-                            <span class="badge-v">Aumentos 10X / 16X</span>[cite: 80]
-                            <span class="badge-v">Hendidura 1.5 a 12mm</span>[cite: 80]
-                            <span class="badge-v">5 Colores Disponibles</span>[cite: 79]
-                        </div>
                     </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Kowa - Pág. 1</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Lámpara de Hendidura Portátil SL-19')">Solicitar Información / Cotización</button>
-                        </div>
-                    </div>
+                    <div class="page-footer"><span class="page-number">Kowa - Pág. 1</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Lámpara SL-19')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
-
-            <!-- KOWA - PÁGINA 2: HA-2 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">KOWA • Japón</span>
-                            <span class="badge-status">REGISTRO INVIMA VIGENTE</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
                         <h2 class="product-title">Tonómetro de Aplanación Portátil HA-2</h2>
                         <p class="product-subtitle">Precisión Goldmann Móvil en Cualquier Posición del Paciente[cite: 77, 78]</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="images/kowa-ha2.webp" alt="Kowa HA-2" onerror="this.src='https://via.placeholder.com/350x190?text=Kowa+HA-2'">
-                        </div>
-
+                        <div class="product-img-wrapper"><img src="images/kowa-ha2.webp" alt="Kowa HA-2" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+HA-2'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Mecanismo de Resorte Único:</strong> Garantiza lecturas exactas de PIO en pacientes sentados o acostados[cite: 78].</li>
-                            <li><strong>Lectura Directa:</strong> Dial de precisión directo (0 a 60 mmHg) sin necesidad de tablas de conversión[cite: 78].</li>
-                            <li><strong>Iluminación Integrada:</strong> Permite realizar mediciones precisas en cualquier nivel de luz en consultorio[cite: 78].</li>
-                            <li><strong>Formato Compacto:</strong> Peso liviano (240g) operado cómodamente con una sola mano[cite: 78].</li>
+                            <li><strong>Mecanismo de Resorte Único:</strong> Lecturas exactas en posición sentado o supino[cite: 78].</li>
+                            <li><strong>Lectura Directa:</strong> Dial continuo (0-60 mmHg) sin tablas de conversión[cite: 78].</li>
+                            <li><strong>Diseño Liviano:</strong> Operación ergonómica de 240g a una sola mano[cite: 78].</li>
                         </ul>
-
-                        <div class="badge-variants">
-                            <span class="badge-v">Escala 0-60 mmHg</span>[cite: 78]
-                            <span class="badge-v">Ocular 6X</span>[cite: 78]
-                            <span class="badge-v">Estuche Rígido Incluido</span>[cite: 78]
-                        </div>
                     </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Kowa - Pág. 2</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Tonómetro de Aplanación Portátil HA-2')">Solicitar Información / Cotización</button>
-                        </div>
-                    </div>
+                    <div class="page-footer"><span class="page-number">Kowa - Pág. 2</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Tonómetro HA-2')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
-
-            <!-- KOWA - PÁGINA 3: AP-7000 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">KOWA • Japón</span>
-                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
                         <h2 class="product-title">Campímetro Automático AP-7000</h2>
-                        <p class="product-subtitle">Perimetría Estática Estándar y Evaluación de Campo Visual Digital</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="images/kowa-ap7000.webp" alt="Kowa AP-7000" onerror="this.src='https://via.placeholder.com/350x190?text=Kowa+Camp%C3%ADmetro+AP-7000'">
-                        </div>
-
+                        <p class="product-subtitle">Perimetría Estática Estándar y Evaluación de Campo Visual</p>
+                        <div class="product-img-wrapper"><img src="images/kowa-ap7000.webp" alt="Kowa AP-7000" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+AP-7000'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Algoritmos Acelerados:</strong> Pruebas de campo visual rápidas orientadas al seguimiento de Glaucoma.</li>
-                            <li><strong>Pantalla Táctil Ergonómica:</strong> Interfaz intuitiva para el operador con reportes estándar globales.</li>
-                            <li><strong>Seguimiento Fijo y Dinámico:</strong> Control automático de fijación ocular para máxima confiabilidad clínica.</li>
+                            <li><strong>Algoritmos Acelerados:</strong> Exámenes rápidos para detección y seguimiento de glaucoma.</li>
+                            <li><strong>Control de Fijación Automático:</strong> Registro en tiempo real para máxima confiabilidad.</li>
                         </ul>
-
-                        <div class="badge-variants">
-                            <span class="badge-v">Perimetría Estática</span>
-                            <span class="badge-v">Análisis Glaucoma</span>
-                            <span class="badge-v">Reportes Digitales</span>
-                        </div>
                     </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Kowa - Pág. 3</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Campímetro Automático AP-7000')">Solicitar Información / Cotización</button>
-                        </div>
+                    <div class="page-footer"><span class="page-number">Kowa - Pág. 3</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Campímetro AP-7000')">Solicitar Información / Cotización</button></div>
+                </div>
+            </div>
+            <div class="page">
+                <div class="page-content">
+                    <div>
+                        <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
+                        <h2 class="product-title">Lentes Intraoculares AVANSEE</h2>
+                        <p class="product-subtitle">Sistema Precurado en Acrílico Hidrofóbico de Alta Claridad</p>
+                        <div class="product-img-wrapper"><img src="images/kowa-avansee.webp" alt="Kowa AVANSEE" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+AVANSEE'"></div>
+                        <ul class="product-highlights">
+                            <li><strong>Sistema Preloaded:</strong> Inserción aséptica a través de microincisión.</li>
+                            <li><strong>Material Acrílico Hidrofóbico:</strong> Claridad óptica superior libre de opacidades.</li>
+                        </ul>
                     </div>
+                    <div class="page-footer"><span class="page-number">Kowa - Pág. 4</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'LIOs AVANSEE')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
 
-            <!-- KOWA - PÁGINA 4: AVANSEE LIOs -->
+            <!-- SECCIÓN 3: TAKAGI (DIVISOR GENERAL) -->
+            <div class="page page-divider-takagi">
+                <div style="padding: 2rem;">
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 3</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">TAKAGI</h1>
+                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 1rem;">Excelencia y Calidad en Instrumentos Oftálmicos Japoneses desde 1955[cite: 81, 84, 90, 93, 96]<br>Microscopios Quirúrgicos de Alta Gama y Lámparas de Hendidura LED[cite: 81, 83, 90, 96]</p>
+                </div>
+            </div>
+
+            <!-- TAKAGI - SUBSECCIÓN 1: PORTADA MICROSCOPIOS QUIRÚRGICOS -->
+            <div class="page page-subdivider">
+                <div style="padding: 2rem;">
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight); letter-spacing: 1px;">SUBSECCIÓN 3.1</h3>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; margin: 0.5rem 0;">MICROSCOPIOS QUIRÚRGICOS</h2>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.8rem;">Precisión Óptica, Ergonomía Quirúrgica e Iluminación LED Red Reflex Avanzada[cite: 81, 82, 85, 87, 88]</p>
+                </div>
+            </div>
+
+            <!-- TAKAGI - MICROSCOPIO OM-6 -->
             <div class="page">
                 <div class="page-content">
                     <div>
                         <div class="brand-header">
-                            <span class="brand-title-text">KOWA • Japón</span>
+                            <span class="brand-title-text">TAKAGI • Japón</span>
                             <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
                         </div>
-                        <h2 class="product-title">Familia de Lentes Intraoculares AVANSEE</h2>
-                        <p class="product-subtitle">Lentes Precurados e Inyectables Acrílicos Hidrofóbicos de Alta Claridad</p>
+                        <h2 class="product-title">Microscopio Quirúrgico OM-6</h2>
+                        <p class="product-subtitle">Modelo Compacto Ideal para Procedimientos Ambulatorios y Menores[cite: 84, 85]</p>
                         
                         <div class="product-img-wrapper">
-                            <img src="images/kowa-avansee.webp" alt="Kowa AVANSEE IOL" onerror="this.src='https://via.placeholder.com/350x190?text=Kowa+LIOs+AVANSEE'">
+                            <img src="images/takagi-om6.webp" alt="Takagi OM-6" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-6'">
                         </div>
 
                         <ul class="product-highlights">
-                            <li><strong>Sistema Precurado (Preloaded):</strong> Inserción aséptica y rápida a través de microincisión.</li>
-                            <li><strong>Material Acrílico Hidrofóbico:</strong> Libre de opacidades y biocompatibilidad ocular comprobada.</li>
-                            <li><strong>Gama Completa:</strong> Soluciones Monofocales, Téricas y de Presbicia para cirugía de catarata.</li>
+                            <li><strong>Óptica de Gran Profundidad:</strong> Profundidad de foco optimizada que minimiza ajustes constantes durante cirugías[cite: 84, 85].</li>
+                            <li><strong>Iluminación LED de Alta Luminosidad:</strong> Vida útil ~40,000 horas con reproducción de color natural[cite: 85].</li>
+                            <li><strong>Diseño Ultra Compacto:</strong> Magnificación manual de 3 pasos (4.7x, 7.8x, 12.5x) y tubos binoculares a 45°[cite: 85, 86].</li>
+                            <li><strong>Versatilidad de Base:</strong> Opción de base plana (001-19) para instalar pegado a la pared o bajo la camilla[cite: 85, 86].</li>
                         </ul>
 
                         <div class="badge-variants">
-                            <span class="badge-v">AVANSEE Preloaded</span>
-                            <span class="badge-v">Monofocal / Toric</span>
-                            <span class="badge-v">Acrílico Hidrofóbico</span>
+                            <span class="badge-v">Magnificación 3 Pasos</span>[cite: 86]
+                            <span class="badge-v">Pedal IPX6</span>[cite: 85, 86]
+                            <span class="badge-v">Cirugía Ambulatoria</span>[cite: 84, 85]
                         </div>
                     </div>
 
                     <div class="page-footer">
-                        <span class="page-number">Kowa - Pág. 4</span>
+                        <span class="page-number">Takagi - Pág. 1</span>
                         <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Familia de Lentes Intraoculares AVANSEE')">Solicitar Información / Cotización</button>
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio Quirúrgico OM-6')">Solicitar Información / Cotización</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- PRÓXIMA SECCIÓN PREVIEW TAKAGI -->
-            <div class="page page-divider">
+            <!-- TAKAGI - MICROSCOPIO OM-9 -->
+            <div class="page">
+                <div class="page-content">
+                    <div>
+                        <div class="brand-header">
+                            <span class="brand-title-text">TAKAGI • Japón</span>
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
+                        <h2 class="product-title">Microscopio Quirúrgico OM-9</h2>
+                        <p class="product-subtitle">Óptica Apocromática y Red Reflex de Alta Definición[cite: 87, 88]</p>
+                        
+                        <div class="product-img-wrapper">
+                            <img src="images/takagi-om9.webp" alt="Takagi OM-9" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-9'">
+                        </div>
+
+                        <ul class="product-highlights">
+                            <li><strong>Lentes Apocromáticas:</strong> Sistema óptico apocromático que elimina la aberración cromática en la estructura ocular[cite: 87, 89].</li>
+                            <li><strong>Iluminación Red Reflex Doble Espejo:</strong> Reflexión del fondo ocular uniforme y brillante para facoemulsificación (PEA) y CCC[cite: 87, 88].</li>
+                            <li><strong>3 Configuraciones (XZ, XE, SM):</strong> Zoom motorizado 1:5 (XZ), magnificación motorizada 5 pasos (XE) o manual (SM)[cite: 88, 89].</li>
+                            <li><strong>Ergonomía Superior:</strong> Binocular inclinable 0° a 90° en versión XZ para máximo confort postural[cite: 88, 89].</li>
+                        </ul>
+
+                        <div class="badge-variants">
+                            <span class="badge-v">Configuración XZ (Zoom)</span>[cite: 88, 89]
+                            <span class="badge-v">Configuración XE (Motorizado)</span>[cite: 88, 89]
+                            <span class="badge-v">Configuración SM (Manual)</span>[cite: 88, 89]
+                        </div>
+                    </div>
+
+                    <div class="page-footer">
+                        <span class="page-number">Takagi - Pág. 2</span>
+                        <div class="btn-action-group">
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio Quirúrgico OM-9')">Solicitar Información / Cotización</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAKAGI - MICROSCOPIO OM-19 -->
+            <div class="page">
+                <div class="page-content">
+                    <div>
+                        <div class="brand-header">
+                            <span class="brand-title-text">TAKAGI • Japón</span>
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
+                        <h2 class="product-title">Microscopio Quirúrgico OM-19</h2>
+                        <p class="product-subtitle">Flagship para Cirugía Oftálmica Avanzada y Vitreorretiniana[cite: 81, 82]</p>
+                        
+                        <div class="product-img-wrapper">
+                            <img src="images/takagi-om19.webp" alt="Takagi OM-19" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-19'">
+                        </div>
+
+                        <ul class="product-highlights">
+                            <li><strong>Fuentes LED Independientes:</strong> Control independiente de iluminación principal y Red Reflex para ojo derecho e izquierdo[cite: 81, 82].</li>
+                            <li><strong>Panel Digital Integrado:</strong> Control digital e indicador de intensidad de luz, zoom motorizado (1:6) y velocidad X-Y[cite: 82, 83].</li>
+                            <li><strong>Compatibilidad Quirúrgica Avanzada:</strong> Adaptadores integrables para sistemas de vitrectomía BIOM y EIBOS[cite: 82, 83].</li>
+                            <li><strong>Pedal Personalizable IPX6:</strong> Distribución ergonómica de pedales para enfoque, zoom e intensidad de luz[cite: 82].</li>
+                        </ul>
+
+                        <div class="badge-variants">
+                            <span class="badge-v">Zoom Motorizado 1:6</span>[cite: 83]
+                            <span class="badge-v">Soporte BIOM / EIBOS</span>[cite: 83]
+                            <span class="badge-v">Red Reflex Independiente</span>[cite: 81, 82]
+                        </div>
+                    </div>
+
+                    <div class="page-footer">
+                        <span class="page-number">Takagi - Pág. 3</span>
+                        <div class="btn-action-group">
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio Quirúrgico OM-19')">Solicitar Información / Cotización</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAKAGI - SUBSECCIÓN 2: PORTADA LÁMPARAS DE HENDIDURA -->
+            <div class="page page-subdivider">
                 <div style="padding: 2rem;">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; color: var(--highlight);">SECCIÓN 3</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">TAKAGI</h1>
-                    <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 1rem;">Microscopios Quirúrgicos y Lámparas de Hendidura<br><em>(Próxima sección a actualizar)</em></p>
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight); letter-spacing: 1px;">SUBSECCIÓN 3.2</h3>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; margin: 0.5rem 0;">LÁMPARAS DE HENDIDURA</h2>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.8rem;">Óptica de Alta Definición y Sistemas de Iluminación LED Diagnóstica[cite: 90, 91, 93, 94, 96, 97]</p>
+                </div>
+            </div>
+
+            <!-- TAKAGI - LÁMPARAS 4ZL y 2ZL -->
+            <div class="page">
+                <div class="page-content">
+                    <div>
+                        <div class="brand-header">
+                            <span class="brand-title-text">TAKAGI • Japón</span>
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
+                        <h2 class="product-title">Lámparas de Hendidura 4ZL & 2ZL</h2>
+                        <p class="product-subtitle">Modelos de Tipo Galileano Altamente Funcionales y Eficientes[cite: 90, 92]</p>
+                        
+                        <div class="product-img-wrapper">
+                            <img src="images/takagi-4zl-2zl.webp" alt="Takagi 4ZL y 2ZL" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+4ZL+%2F+2ZL'">
+                        </div>
+
+                        <ul class="product-highlights">
+                            <li><strong>Estereomicroscopio Galileano:</strong> Tambor giratorio de 5 magnificaciones en 4ZL (6.3x a 40x) y 3 en 2ZL (10x a 25x)[cite: 92].</li>
+                            <li><strong>Operación a Una Mano:</strong> Reóstato de gran diámetro ubicado funcionalmente junto al joystick principal[cite: 91].</li>
+                            <li><strong>Iluminación LED 3500K:</strong> Color cromático idéntico entre luz de hendidura e iluminación de fondo (BG)[cite: 91, 92].</li>
+                            <li><strong>Filtro Amarillo Opcional:</strong> Excelente contraste para pruebas de fluoresceína y adaptación de lentes de contacto[cite: 91, 92].</li>
+                        </ul>
+
+                        <div class="badge-variants">
+                            <span class="badge-v">4ZL (5 Magnificaciones)</span>[cite: 92]
+                            <span class="badge-v">2ZL / 2ZL BG (3 Mag)</span>[cite: 90, 92]
+                            <span class="badge-v">Iluminación LED 3500K</span>[cite: 92]
+                        </div>
+                    </div>
+
+                    <div class="page-footer">
+                        <span class="page-number">Takagi - Pág. 4</span>
+                        <div class="btn-action-group">
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara de Hendidura 4ZL / 2ZL')">Solicitar Información / Cotización</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAKAGI - LÁMPARA 30GL -->
+            <div class="page">
+                <div class="page-content">
+                    <div>
+                        <div class="brand-header">
+                            <span class="brand-title-text">TAKAGI • Japón</span>
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
+                        <h2 class="product-title">Lámpara de Hendidura 30GL</h2>
+                        <p class="product-subtitle">Modelo Esencial Óptica Greenough con Visión Clara de Retina[cite: 93, 94]</p>
+                        
+                        <div class="product-img-wrapper">
+                            <img src="images/takagi-30gl.webp" alt="Takagi 30GL" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+30GL'">
+                        </div>
+
+                        <ul class="product-highlights">
+                            <li><strong>Óptica Greenough Convergente:</strong> Proporciona una imagen estereoscópica brillante y fácil de fusionar[cite: 93, 94].</li>
+                            <li><strong>Cambio de Magnificación Révolver:</strong> Sistema simplificado de 2 magnificaciones (10x / 16x o 16x / 25x)[cite: 95].</li>
+                            <li><strong>Control Intuitivo y Económico:</strong> Equilibrio óptimo entre funcionalidad clínica esencial y costo-efectividad[cite: 93, 94].</li>
+                            <li><strong>Iluminación LED de Larga Vida:</strong> Generación de calor reducida para mayor confort y seguridad del paciente[cite: 94].</li>
+                        </ul>
+
+                        <div class="badge-variants">
+                            <span class="badge-v">Óptica Greenough</span>[cite: 93, 94]
+                            <span class="badge-v">2 Magnificaciones</span>[cite: 95]
+                            <span class="badge-v">LED 3500K</span>[cite: 95]
+                        </div>
+                    </div>
+
+                    <div class="page-footer">
+                        <span class="page-number">Takagi - Pág. 5</span>
+                        <div class="btn-action-group">
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara de Hendidura 30GL')">Solicitar Información / Cotización</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAKAGI - LÁMPARA 700GL & 700GL NSW -->
+            <div class="page">
+                <div class="page-content">
+                    <div>
+                        <div class="brand-header">
+                            <span class="brand-title-text">TAKAGI • Japón</span>
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
+                        <h2 class="product-title">Lámpara de Hendidura 700GL / NSW</h2>
+                        <p class="product-subtitle">Modelo Insignia con Tecnología Stereoscopic Narrow Angle (NSW)[cite: 96, 97]</p>
+                        
+                        <div class="product-img-wrapper">
+                            <img src="images/takagi-700gl.webp" alt="Takagi 700GL NSW" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+700GL+NSW'">
+                        </div>
+
+                        <ul class="product-highlights">
+                            <li><strong>Función Innovadora NSW (Narrow Angle):</strong> Ángulo estereoscópico reducido de 10° a 4.1° al presionar un botón[cite: 97, 98].</li>
+                            <li><strong>Observación de Fondo Superior:</strong> Al ampliar el área de visión binocular estereoscópica, facilita el examen detallado de retina y polo posterior[cite: 96, 97].</li>
+                            <li><strong>Distancia Inter-óptica de 22mm:</strong> Proporciona un efecto estereoscópico natural y nítido desde el segmento anterior al fondo ocular[cite: 97].</li>
+                            <li><strong>Tambor de 5 Posiciones:</strong> Rango completo de aumentos (6.3x a 40x / 6x a 37x en NSW)[cite: 98].</li>
+                        </ul>
+
+                        <div class="badge-variants">
+                            <span class="badge-v">Tecnología NSW (4.1°)</span>[cite: 97, 98]
+                            <span class="badge-v">Flagship Takagi</span>[cite: 96, 97]
+                            <span class="badge-v">Tambor 5 Posiciones</span>[cite: 98]
+                        </div>
+                    </div>
+
+                    <div class="page-footer">
+                        <span class="page-number">Takagi - Pág. 6</span>
+                        <div class="btn-action-group">
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara de Hendidura 700GL / 700GL NSW')">Solicitar Información / Cotización</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRÓXIMA SECCIÓN PREVIEW BIGVISION -->
+            <div class="page page-divider-neitz">
+                <div style="padding: 2rem;">
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 4</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.4rem; margin: 0.5rem 0; letter-spacing: 2px;">BIGVISION</h1>
+                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 1rem;">Sistemas Digitales de Tomografía de Coherencia Óptica (OCT)<br><em>(Próxima sección a actualizar)</em></p>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- MODAL DE SOLICITUD / COTIZACIÓN UNIFICADO -->
+    <!-- MODAL UNIFICADO -->
     <div class="modal" id="modalForm">
         <div class="modal-content">
             <span class="close-modal" onclick="closeForm()">&times;</span>
