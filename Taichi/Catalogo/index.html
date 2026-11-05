@@ -14,7 +14,7 @@
             --highlight: #00a896;
             --bg-magazine: #1e293b;
             --white: #ffffff;
-            --takagi-blue: #005691;
+            --bigvision-purple: #4a2574;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,6 +42,7 @@
         .page-divider-neitz { background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-kowa { background: linear-gradient(135deg, #1e3a2b 0%, #0d1b2a 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-takagi { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
+        .page-divider-bigvision { background: linear-gradient(135deg, #2a0845 0%, #6441a5 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-subdivider { background: linear-gradient(135deg, #1f4068 0%, #162447 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
 
         .cover-title { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 700; margin-top: 1rem; }
@@ -109,7 +110,7 @@
                 </div>
             </div>
 
-            <!-- SECCIÓN 1: NEITZ (Páginas de Neitz mantenidas) -->
+            <!-- SECCIÓN 1: NEITZ -->
             <div class="page page-divider-neitz">
                 <div style="padding: 2rem;">
                     <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 1</h2>
@@ -117,89 +118,55 @@
                     <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 1rem;">Óptica Japonesa de Alta Precisión desde 1913[cite: 59]<br>Oftalmoscopios Binoculares, Directos y Retinoscopios</p>
                 </div>
             </div>
-            <!-- Neitz Pág 1 -->
+            <!-- Neitz Págs 1-3 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">NEITZ • Japón</span>
-                            <span class="badge-status">REGISTRO INVIMA</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">NEITZ • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
                         <h2 class="product-title">Oftalmoscopios Indirectos Binoculares</h2>
-                        <p class="product-subtitle">Línea IO-α LED & IO-Vega: Claridad Óptica y Ergonomía Superior[cite: 58, 68]</p>
-                        <div class="product-img-wrapper">
-                            <img src="images/neitz-io-vega.webp" alt="Neitz IO-Vega" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+IO-Vega'">
-                        </div>
+                        <p class="product-subtitle">Línea IO-α LED & IO-Vega: Claridad Óptica y Ergonomía[cite: 58, 68]</p>
+                        <div class="product-img-wrapper"><img src="images/neitz-io-vega.webp" alt="Neitz IO-Vega" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+IO-Vega'"></div>
                         <ul class="product-highlights">
-                            <li><strong>IO-Vega:</strong> Ultra liviano (470g), sistema de carga inalámbrica 4 vías[cite: 61, 64] e iluminación ultra suave de baja intensidad (&lt;10 lx a 1.700 lx)[cite: 60, 61].</li>
-                            <li><strong>IO-α LED CAMERA:</strong> Sensor CMOS Full HD (1920x1080) integrado para grabación médica y docencia en vivo[cite: 65, 66].</li>
-                            <li><strong>IO-α LED:</strong> Iluminación LED color cálido tipo halógeno (3200K, Ra 90+)[cite: 66, 68] con hasta 10 hrs continuas[cite: 68].</li>
+                            <li><strong>IO-Vega:</strong> Ultra liviano (470g), carga inalámbrica 4 vías[cite: 61, 64].</li>
+                            <li><strong>IO-α LED CAMERA:</strong> CMOS Full HD integrado para docencia[cite: 65, 66].</li>
+                            <li><strong>IO-α LED:</strong> Iluminación cálida 3200K (Ra 90+)[cite: 66, 68].</li>
                         </ul>
                     </div>
-                    <div class="page-footer">
-                        <span class="page-number">Neitz - Pág. 1</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Indirectos Binoculares')">Solicitar Información / Cotización</button>
-                        </div>
-                    </div>
+                    <div class="page-footer"><span class="page-number">Neitz - Pág. 1</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Indirectos')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
-            <!-- Neitz Pág 2 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">NEITZ • Japón</span>
-                            <span class="badge-status">REGISTRO INVIMA</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">NEITZ • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
                         <h2 class="product-title">Oftalmoscopios Directos Serie BXα</h2>
-                        <p class="product-subtitle">Iluminación LED de Alta Reproducción Cromática (Ra &gt; 90)[cite: 70, 72]</p>
-                        <div class="product-img-wrapper">
-                            <img src="images/neitz-bxa.webp" alt="Neitz BXa" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+BXa'">
-                        </div>
+                        <p class="product-subtitle">Iluminación LED de Alta Reproducción Cromática[cite: 70, 72]</p>
+                        <div class="product-img-wrapper"><img src="images/neitz-bxa.webp" alt="Neitz BXa" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+BXa'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Óptica Avanzada:</strong> Rango de corrección dióptrica continuo de -36D a +35D en pasos de 1D[cite: 69, 71].</li>
-                            <li><strong>Control Reflexivo:</strong> Filtro polarizado rotatorio para eliminar reflejos corneales molestos[cite: 70, 72].</li>
-                            <li><strong>Modo Boost Integrado:</strong> Intensidad regulable progresiva con opción de super-brillo y Filtro Azul Cobalto[cite: 70, 72].</li>
+                            <li><strong>Óptica Avanzada:</strong> Corrección de -36D a +35D en pasos de 1D[cite: 69, 71].</li>
+                            <li><strong>Filtro Polarizado:</strong> Elimina reflejos corneales[cite: 70, 72].</li>
                         </ul>
                     </div>
-                    <div class="page-footer">
-                        <span class="page-number">Neitz - Pág. 2</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Directos Serie BXa')">Solicitar Información / Cotización</button>
-                        </div>
-                    </div>
+                    <div class="page-footer"><span class="page-number">Neitz - Pág. 2</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Directos BXa')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
-            <!-- Neitz Pág 3 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">NEITZ • Japón</span>
-                            <span class="badge-status">REGISTRO INVIMA</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">NEITZ • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
                         <h2 class="product-title">Retinoscopios Serie RX3 & RXRC</h2>
                         <p class="product-subtitle">Sistemas LED de Franja (Streak) y Punto (Spot)[cite: 73, 75]</p>
-                        <div class="product-img-wrapper">
-                            <img src="images/neitz-rx.webp" alt="Neitz RX" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+RX'">
-                        </div>
+                        <div class="product-img-wrapper"><img src="images/neitz-rx.webp" alt="Neitz RX" onerror="this.src='https://via.placeholder.com/350x180?text=Neitz+RX'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Haza de Luz Definida:</strong> Rotación continua de 360°[cite: 73, 75] con control independiente del ancho de franja (Streak)[cite: 74, 76].</li>
-                            <li><strong>Mayor Brillo:</strong> Tecnología LED 3 a 5 veces más brillante en Streak y 5 a 8 veces en Spot que halógenos[cite: 74, 76].</li>
-                            <li><strong>Filtro Antirreflejo:</strong> Minimiza la fatiga ocular durante jornadas extensas de refracción[cite: 74, 76].</li>
+                            <li><strong>Haza Definida:</strong> Rotación continua de 360°[cite: 73, 75].</li>
+                            <li><strong>Tecnología LED:</strong> Brillo superior frente a lámparas halógenas[cite: 74, 76].</li>
                         </ul>
                     </div>
-                    <div class="page-footer">
-                        <span class="page-number">Neitz - Pág. 3</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Retinoscopios Serie RX3 / RXRC')">Solicitar Información / Cotización</button>
-                        </div>
-                    </div>
+                    <div class="page-footer"><span class="page-number">Neitz - Pág. 3</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Retinoscopios Serie RX3 / RXRC')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
 
-            <!-- SECCIÓN 2: KOWA (Páginas Kowa mantenidas) -->
+            <!-- SECCIÓN 2: KOWA -->
             <div class="page page-divider-kowa">
                 <div style="padding: 2rem;">
                     <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 2</h2>
@@ -207,18 +174,17 @@
                     <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 1rem;">Tecnología Japonesa de Diagnóstico e Implantes Oculares<br>Lámpara SL-19, Tonómetro HA-2, Perímetro AP-7000 y LIOs Avansee[cite: 77, 79]</p>
                 </div>
             </div>
-            <!-- Kowa Pág 1 a 4 -->
+            <!-- Kowa Págs 1-4 -->
             <div class="page">
                 <div class="page-content">
                     <div>
                         <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
                         <h2 class="product-title">Lámpara de Hendidura Portátil SL-19</h2>
-                        <p class="product-subtitle">La Lámpara Portátil más Liviana y Avanzada del Mercado[cite: 79, 80]</p>
+                        <p class="product-subtitle">La Lámpara Portátil más Liviana del Mercado[cite: 79, 80]</p>
                         <div class="product-img-wrapper"><img src="images/kowa-sl19.webp" alt="Kowa SL-19" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+SL-19'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Ultra Ligera:</strong> Chasis de resina reforzada con fibra de vidrio (620g)[cite: 80].</li>
-                            <li><strong>Iluminación Dual:</strong> Iluminación de fondo simultánea con hendidura LED[cite: 80].</li>
-                            <li><strong>Luz Azul Integrada:</strong> Acceso rápido en empuñadura para prueba de fluoresceína[cite: 80].</li>
+                            <li><strong>Ultra Ligera:</strong> Chasis reforzado de 620g[cite: 80].</li>
+                            <li><strong>Iluminación Dual:</strong> Hendidura e iluminación de fondo simultáneas[cite: 80].</li>
                         </ul>
                     </div>
                     <div class="page-footer"><span class="page-number">Kowa - Pág. 1</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Lámpara SL-19')">Solicitar Información / Cotización</button></div>
@@ -229,12 +195,11 @@
                     <div>
                         <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status">REGISTRO INVIMA</span></div>
                         <h2 class="product-title">Tonómetro de Aplanación Portátil HA-2</h2>
-                        <p class="product-subtitle">Precisión Goldmann Móvil en Cualquier Posición del Paciente[cite: 77, 78]</p>
+                        <p class="product-subtitle">Precisión Goldmann Móvil en Cualquier Posición[cite: 77, 78]</p>
                         <div class="product-img-wrapper"><img src="images/kowa-ha2.webp" alt="Kowa HA-2" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+HA-2'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Mecanismo de Resorte Único:</strong> Lecturas exactas en posición sentado o supino[cite: 78].</li>
-                            <li><strong>Lectura Directa:</strong> Dial continuo (0-60 mmHg) sin tablas de conversión[cite: 78].</li>
-                            <li><strong>Diseño Liviano:</strong> Operación ergonómica de 240g a una sola mano[cite: 78].</li>
+                            <li><strong>Mecanismo Único de Resorte:</strong> Lectura precisa en cualquier postura[cite: 78].</li>
+                            <li><strong>Lectura Directa:</strong> Dial continuo (0-60 mmHg)[cite: 78].</li>
                         </ul>
                     </div>
                     <div class="page-footer"><span class="page-number">Kowa - Pág. 2</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Tonómetro HA-2')">Solicitar Información / Cotización</button></div>
@@ -245,11 +210,10 @@
                     <div>
                         <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
                         <h2 class="product-title">Campímetro Automático AP-7000</h2>
-                        <p class="product-subtitle">Perimetría Estática Estándar y Evaluación de Campo Visual</p>
+                        <p class="product-subtitle">Perimetría Estática Estándar y Evaluación Digital</p>
                         <div class="product-img-wrapper"><img src="images/kowa-ap7000.webp" alt="Kowa AP-7000" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+AP-7000'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Algoritmos Acelerados:</strong> Exámenes rápidos para detección y seguimiento de glaucoma.</li>
-                            <li><strong>Control de Fijación Automático:</strong> Registro en tiempo real para máxima confiabilidad.</li>
+                            <li><strong>Pruebas Rápida de Glaucoma:</strong> Algoritmos optimizados para campo visual.</li>
                         </ul>
                     </div>
                     <div class="page-footer"><span class="page-number">Kowa - Pág. 3</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Campímetro AP-7000')">Solicitar Información / Cotización</button></div>
@@ -260,285 +224,218 @@
                     <div>
                         <div class="brand-header"><span class="brand-title-text">KOWA • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
                         <h2 class="product-title">Lentes Intraoculares AVANSEE</h2>
-                        <p class="product-subtitle">Sistema Precurado en Acrílico Hidrofóbico de Alta Claridad</p>
+                        <p class="product-subtitle">Sistema Preloaded en Acrílico Hidrofóbico</p>
                         <div class="product-img-wrapper"><img src="images/kowa-avansee.webp" alt="Kowa AVANSEE" onerror="this.src='https://via.placeholder.com/350x180?text=Kowa+AVANSEE'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Sistema Preloaded:</strong> Inserción aséptica a través de microincisión.</li>
-                            <li><strong>Material Acrílico Hidrofóbico:</strong> Claridad óptica superior libre de opacidades.</li>
+                            <li><strong>Inserción Aséptica:</strong> Sistema inyectable precurado de microincisión.</li>
                         </ul>
                     </div>
                     <div class="page-footer"><span class="page-number">Kowa - Pág. 4</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'LIOs AVANSEE')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
 
-            <!-- SECCIÓN 3: TAKAGI (DIVISOR GENERAL) -->
+            <!-- SECCIÓN 3: TAKAGI -->
             <div class="page page-divider-takagi">
                 <div style="padding: 2rem;">
                     <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 3</h2>
                     <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">TAKAGI</h1>
-                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 1rem;">Excelencia y Calidad en Instrumentos Oftálmicos Japoneses desde 1955[cite: 81, 84, 90, 93, 96]<br>Microscopios Quirúrgicos de Alta Gama y Lámparas de Hendidura LED[cite: 81, 83, 90, 96]</p>
+                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 1rem;">Excelencia y Calidad en Instrumentos Oftálmicos desde 1955[cite: 81, 90]<br>Microscopios Quirúrgicos de Alta Gama y Lámparas de Hendidura LED[cite: 81, 90]</p>
                 </div>
             </div>
-
-            <!-- TAKAGI - SUBSECCIÓN 1: PORTADA MICROSCOPIOS QUIRÚRGICOS -->
+            <!-- Takagi Subsección 3.1 Microscopios -->
             <div class="page page-subdivider">
                 <div style="padding: 2rem;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight); letter-spacing: 1px;">SUBSECCIÓN 3.1</h3>
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight);">SUBSECCIÓN 3.1</h3>
                     <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; margin: 0.5rem 0;">MICROSCOPIOS QUIRÚRGICOS</h2>
-                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.8rem;">Precisión Óptica, Ergonomía Quirúrgica e Iluminación LED Red Reflex Avanzada[cite: 81, 82, 85, 87, 88]</p>
                 </div>
             </div>
-
-            <!-- TAKAGI - MICROSCOPIO OM-6 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">TAKAGI • Japón</span>
-                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
                         <h2 class="product-title">Microscopio Quirúrgico OM-6</h2>
-                        <p class="product-subtitle">Modelo Compacto Ideal para Procedimientos Ambulatorios y Menores[cite: 84, 85]</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="images/takagi-om6.webp" alt="Takagi OM-6" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-6'">
-                        </div>
-
+                        <p class="product-subtitle">Modelo Compacto para Procedimientos Ambulatorios[cite: 84, 85]</p>
+                        <div class="product-img-wrapper"><img src="images/takagi-om6.webp" alt="Takagi OM-6" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-6'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Óptica de Gran Profundidad:</strong> Profundidad de foco optimizada que minimiza ajustes constantes durante cirugías[cite: 84, 85].</li>
-                            <li><strong>Iluminación LED de Alta Luminosidad:</strong> Vida útil ~40,000 horas con reproducción de color natural[cite: 85].</li>
-                            <li><strong>Diseño Ultra Compacto:</strong> Magnificación manual de 3 pasos (4.7x, 7.8x, 12.5x) y tubos binoculares a 45°[cite: 85, 86].</li>
-                            <li><strong>Versatilidad de Base:</strong> Opción de base plana (001-19) para instalar pegado a la pared o bajo la camilla[cite: 85, 86].</li>
+                            <li><strong>Gran Profundidad de Campo:</strong> Minimiza ajustes constantes durante cirugía[cite: 84, 85].</li>
+                            <li><strong>Chasis Compacto:</strong> Magnificación 3 pasos (4.7x, 7.8x, 12.5x)[cite: 85, 86].</li>
                         </ul>
-
-                        <div class="badge-variants">
-                            <span class="badge-v">Magnificación 3 Pasos</span>[cite: 86]
-                            <span class="badge-v">Pedal IPX6</span>[cite: 85, 86]
-                            <span class="badge-v">Cirugía Ambulatoria</span>[cite: 84, 85]
-                        </div>
                     </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Takagi - Pág. 1</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio Quirúrgico OM-6')">Solicitar Información / Cotización</button>
-                        </div>
-                    </div>
+                    <div class="page-footer"><span class="page-number">Takagi - Pág. 1</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-6')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
-
-            <!-- TAKAGI - MICROSCOPIO OM-9 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">TAKAGI • Japón</span>
-                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
                         <h2 class="product-title">Microscopio Quirúrgico OM-9</h2>
                         <p class="product-subtitle">Óptica Apocromática y Red Reflex de Alta Definición[cite: 87, 88]</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="images/takagi-om9.webp" alt="Takagi OM-9" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-9'">
-                        </div>
-
+                        <div class="product-img-wrapper"><img src="images/takagi-om9.webp" alt="Takagi OM-9" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-9'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Lentes Apocromáticas:</strong> Sistema óptico apocromático que elimina la aberración cromática en la estructura ocular[cite: 87, 89].</li>
-                            <li><strong>Iluminación Red Reflex Doble Espejo:</strong> Reflexión del fondo ocular uniforme y brillante para facoemulsificación (PEA) y CCC[cite: 87, 88].</li>
-                            <li><strong>3 Configuraciones (XZ, XE, SM):</strong> Zoom motorizado 1:5 (XZ), magnificación motorizada 5 pasos (XE) o manual (SM)[cite: 88, 89].</li>
-                            <li><strong>Ergonomía Superior:</strong> Binocular inclinable 0° a 90° en versión XZ para máximo confort postural[cite: 88, 89].</li>
+                            <li><strong>Lentes Apocromáticas:</strong> Imagen nítida libre de aberración cromática[cite: 87, 89].</li>
+                            <li><strong>3 Configuraciones (XZ, XE, SM):</strong> Opciones de Zoom o pasos motorizados/manuales[cite: 88, 89].</li>
                         </ul>
-
-                        <div class="badge-variants">
-                            <span class="badge-v">Configuración XZ (Zoom)</span>[cite: 88, 89]
-                            <span class="badge-v">Configuración XE (Motorizado)</span>[cite: 88, 89]
-                            <span class="badge-v">Configuración SM (Manual)</span>[cite: 88, 89]
-                        </div>
                     </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Takagi - Pág. 2</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio Quirúrgico OM-9')">Solicitar Información / Cotización</button>
-                        </div>
-                    </div>
+                    <div class="page-footer"><span class="page-number">Takagi - Pág. 2</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-9')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
-
-            <!-- TAKAGI - MICROSCOPIO OM-19 -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">TAKAGI • Japón</span>
-                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
                         <h2 class="product-title">Microscopio Quirúrgico OM-19</h2>
                         <p class="product-subtitle">Flagship para Cirugía Oftálmica Avanzada y Vitreorretiniana[cite: 81, 82]</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="images/takagi-om19.webp" alt="Takagi OM-19" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-19'">
-                        </div>
-
+                        <div class="product-img-wrapper"><img src="images/takagi-om19.webp" alt="Takagi OM-19" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+OM-19'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Fuentes LED Independientes:</strong> Control independiente de iluminación principal y Red Reflex para ojo derecho e izquierdo[cite: 81, 82].</li>
-                            <li><strong>Panel Digital Integrado:</strong> Control digital e indicador de intensidad de luz, zoom motorizado (1:6) y velocidad X-Y[cite: 82, 83].</li>
-                            <li><strong>Compatibilidad Quirúrgica Avanzada:</strong> Adaptadores integrables para sistemas de vitrectomía BIOM y EIBOS[cite: 82, 83].</li>
-                            <li><strong>Pedal Personalizable IPX6:</strong> Distribución ergonómica de pedales para enfoque, zoom e intensidad de luz[cite: 82].</li>
+                            <li><strong>Iluminación LED Independiente:</strong> Control separado de luz principal y Red Reflex por ojo[cite: 81, 82].</li>
+                            <li><strong>Soporte BIOM / EIBOS:</strong> Integración completa para cirugía posterior de retina[cite: 82, 83].</li>
                         </ul>
-
-                        <div class="badge-variants">
-                            <span class="badge-v">Zoom Motorizado 1:6</span>[cite: 83]
-                            <span class="badge-v">Soporte BIOM / EIBOS</span>[cite: 83]
-                            <span class="badge-v">Red Reflex Independiente</span>[cite: 81, 82]
-                        </div>
                     </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Takagi - Pág. 3</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio Quirúrgico OM-19')">Solicitar Información / Cotización</button>
-                        </div>
-                    </div>
+                    <div class="page-footer"><span class="page-number">Takagi - Pág. 3</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-19')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
-
-            <!-- TAKAGI - SUBSECCIÓN 2: PORTADA LÁMPARAS DE HENDIDURA -->
+            <!-- Takagi Subsección 3.2 Lámparas -->
             <div class="page page-subdivider">
                 <div style="padding: 2rem;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight); letter-spacing: 1px;">SUBSECCIÓN 3.2</h3>
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight);">SUBSECCIÓN 3.2</h3>
                     <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; margin: 0.5rem 0;">LÁMPARAS DE HENDIDURA</h2>
-                    <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.8rem;">Óptica de Alta Definición y Sistemas de Iluminación LED Diagnóstica[cite: 90, 91, 93, 94, 96, 97]</p>
                 </div>
             </div>
-
-            <!-- TAKAGI - LÁMPARAS 4ZL y 2ZL -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">TAKAGI • Japón</span>
-                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
                         <h2 class="product-title">Lámparas de Hendidura 4ZL & 2ZL</h2>
-                        <p class="product-subtitle">Modelos de Tipo Galileano Altamente Funcionales y Eficientes[cite: 90, 92]</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="images/takagi-4zl-2zl.webp" alt="Takagi 4ZL y 2ZL" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+4ZL+%2F+2ZL'">
-                        </div>
-
+                        <p class="product-subtitle">Modelos Galileanos Altamente Funcionales[cite: 90, 92]</p>
+                        <div class="product-img-wrapper"><img src="images/takagi-4zl-2zl.webp" alt="Takagi 4ZL / 2ZL" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+4ZL+%2F+2ZL'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Estereomicroscopio Galileano:</strong> Tambor giratorio de 5 magnificaciones en 4ZL (6.3x a 40x) y 3 en 2ZL (10x a 25x)[cite: 92].</li>
-                            <li><strong>Operación a Una Mano:</strong> Reóstato de gran diámetro ubicado funcionalmente junto al joystick principal[cite: 91].</li>
-                            <li><strong>Iluminación LED 3500K:</strong> Color cromático idéntico entre luz de hendidura e iluminación de fondo (BG)[cite: 91, 92].</li>
-                            <li><strong>Filtro Amarillo Opcional:</strong> Excelente contraste para pruebas de fluoresceína y adaptación de lentes de contacto[cite: 91, 92].</li>
+                            <li><strong>Tambor de Magnificación:</strong> 5 aumentos en 4ZL y 3 en 2ZL[cite: 92].</li>
+                            <li><strong>Iluminación LED 3500K:</strong> Tono idéntico entre luz principal y de fondo[cite: 91, 92].</li>
                         </ul>
-
-                        <div class="badge-variants">
-                            <span class="badge-v">4ZL (5 Magnificaciones)</span>[cite: 92]
-                            <span class="badge-v">2ZL / 2ZL BG (3 Mag)</span>[cite: 90, 92]
-                            <span class="badge-v">Iluminación LED 3500K</span>[cite: 92]
-                        </div>
                     </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Takagi - Pág. 4</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara de Hendidura 4ZL / 2ZL')">Solicitar Información / Cotización</button>
-                        </div>
-                    </div>
+                    <div class="page-footer"><span class="page-number">Takagi - Pág. 4</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 4ZL / 2ZL')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
-
-            <!-- TAKAGI - LÁMPARA 30GL -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">TAKAGI • Japón</span>
-                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
                         <h2 class="product-title">Lámpara de Hendidura 30GL</h2>
-                        <p class="product-subtitle">Modelo Esencial Óptica Greenough con Visión Clara de Retina[cite: 93, 94]</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="images/takagi-30gl.webp" alt="Takagi 30GL" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+30GL'">
-                        </div>
-
+                        <p class="product-subtitle">Modelo Esencial Óptica Greenough Convergente[cite: 93, 94]</p>
+                        <div class="product-img-wrapper"><img src="images/takagi-30gl.webp" alt="Takagi 30GL" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+30GL'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Óptica Greenough Convergente:</strong> Proporciona una imagen estereoscópica brillante y fácil de fusionar[cite: 93, 94].</li>
-                            <li><strong>Cambio de Magnificación Révolver:</strong> Sistema simplificado de 2 magnificaciones (10x / 16x o 16x / 25x)[cite: 95].</li>
-                            <li><strong>Control Intuitivo y Económico:</strong> Equilibrio óptimo entre funcionalidad clínica esencial y costo-efectividad[cite: 93, 94].</li>
-                            <li><strong>Iluminación LED de Larga Vida:</strong> Generación de calor reducida para mayor confort y seguridad del paciente[cite: 94].</li>
+                            <li><strong>Óptica Greenough:</strong> Imagen esteroscópica nítida y económica[cite: 93, 94].</li>
+                            <li><strong>Sistema Révolver:</strong> Cambio de 2 aumentos fácil de usar[cite: 95].</li>
                         </ul>
-
-                        <div class="badge-variants">
-                            <span class="badge-v">Óptica Greenough</span>[cite: 93, 94]
-                            <span class="badge-v">2 Magnificaciones</span>[cite: 95]
-                            <span class="badge-v">LED 3500K</span>[cite: 95]
-                        </div>
                     </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Takagi - Pág. 5</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara de Hendidura 30GL')">Solicitar Información / Cotización</button>
-                        </div>
-                    </div>
+                    <div class="page-footer"><span class="page-number">Takagi - Pág. 5</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 30GL')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
-
-            <!-- TAKAGI - LÁMPARA 700GL & 700GL NSW -->
             <div class="page">
                 <div class="page-content">
                     <div>
-                        <div class="brand-header">
-                            <span class="brand-title-text">TAKAGI • Japón</span>
-                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
-                        </div>
+                        <div class="brand-header"><span class="brand-title-text">TAKAGI • Japón</span><span class="badge-status-pending">TRÁMITE REGULATORIO</span></div>
                         <h2 class="product-title">Lámpara de Hendidura 700GL / NSW</h2>
-                        <p class="product-subtitle">Modelo Insignia con Tecnología Stereoscopic Narrow Angle (NSW)[cite: 96, 97]</p>
-                        
-                        <div class="product-img-wrapper">
-                            <img src="images/takagi-700gl.webp" alt="Takagi 700GL NSW" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+700GL+NSW'">
-                        </div>
-
+                        <p class="product-subtitle">Flagship con Tecnología Stereoscopic Narrow Angle[cite: 96, 97]</p>
+                        <div class="product-img-wrapper"><img src="images/takagi-700gl.webp" alt="Takagi 700GL NSW" onerror="this.src='https://via.placeholder.com/350x180?text=Takagi+700GL+NSW'"></div>
                         <ul class="product-highlights">
-                            <li><strong>Función Innovadora NSW (Narrow Angle):</strong> Ángulo estereoscópico reducido de 10° a 4.1° al presionar un botón[cite: 97, 98].</li>
-                            <li><strong>Observación de Fondo Superior:</strong> Al ampliar el área de visión binocular estereoscópica, facilita el examen detallado de retina y polo posterior[cite: 96, 97].</li>
-                            <li><strong>Distancia Inter-óptica de 22mm:</strong> Proporciona un efecto estereoscópico natural y nítido desde el segmento anterior al fondo ocular[cite: 97].</li>
-                            <li><strong>Tambor de 5 Posiciones:</strong> Rango completo de aumentos (6.3x a 40x / 6x a 37x en NSW)[cite: 98].</li>
+                            <li><strong>Mecanismo NSW (4.1°):</strong> Reducción del ángulo convergente para evaluación profunda de retina[cite: 97, 98].</li>
+                            <li><strong>Distancia Inter-óptica 22mm:</strong> Efecto esteroscópico natural y detallado[cite: 97].</li>
                         </ul>
-
-                        <div class="badge-variants">
-                            <span class="badge-v">Tecnología NSW (4.1°)</span>[cite: 97, 98]
-                            <span class="badge-v">Flagship Takagi</span>[cite: 96, 97]
-                            <span class="badge-v">Tambor 5 Posiciones</span>[cite: 98]
-                        </div>
                     </div>
-
-                    <div class="page-footer">
-                        <span class="page-number">Takagi - Pág. 6</span>
-                        <div class="btn-action-group">
-                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara de Hendidura 700GL / 700GL NSW')">Solicitar Información / Cotización</button>
-                        </div>
-                    </div>
+                    <div class="page-footer"><span class="page-number">Takagi - Pág. 6</span><button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 700GL / NSW')">Solicitar Información / Cotización</button></div>
                 </div>
             </div>
 
-            <!-- PRÓXIMA SECCIÓN PREVIEW BIGVISION -->
-            <div class="page page-divider-neitz">
+            <!-- SECCIÓN 4: BIGVISION -->
+            <div class="page page-divider-bigvision">
                 <div style="padding: 2rem;">
                     <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; color: var(--highlight);">SECCIÓN 4</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.4rem; margin: 0.5rem 0; letter-spacing: 2px;">BIGVISION</h1>
-                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 1rem;">Sistemas Digitales de Tomografía de Coherencia Óptica (OCT)<br><em>(Próxima sección a actualizar)</em></p>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">BIGVISION</h1>
+                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 1rem;">Sistemas Digitales de Diagnóstico Oftálmico con Inteligencia Artificial[cite: 100, 106]<br>Tomografía de Coherencia Óptica (OCT) y Biometría Óptica Avanzada[cite: 100, 106]</p>
+                </div>
+            </div>
+
+            <!-- BIGVISION - PÁGINA 1: OCT BV1000S -->
+            <div class="page">
+                <div class="page-content">
+                    <div>
+                        <div class="brand-header">
+                            <span class="brand-title-text">BIGVISION • China</span>
+                            <span class="badge-status">REGISTRO INVIMA APROBADO</span>
+                        </div>
+                        <h2 class="product-title">Tomógrafo de Coherencia Óptica BV1000S</h2>
+                        <p class="product-subtitle">Sistema OCT Automatizado con Inteligencia Artificial Integrada[cite: 106]</p>
+                        
+                        <div class="product-img-wrapper">
+                            <img src="images/bigvision-oct.webp" alt="BigVision OCT BV1000S" onerror="this.src='https://via.placeholder.com/350x180?text=BigVision+OCT+BV1000S'">
+                        </div>
+
+                        <ul class="product-highlights">
+                            <li><strong>Operación 100% Automática:</strong> Enfoque y localización pupilar guiados por voz (~2 min por paciente)[cite: 106].</li>
+                            <li><strong>Alta Velocidad de Escaneo:</strong> Tecnologías de aceleración de 80.000 A-scans/segundo[cite: 107].</li>
+                            <li><strong>Campo Amplio (12mm x 9mm):</strong> Cobertura simultánea de la zona macular y disco óptico[cite: 106, 108].</li>
+                            <li><strong>Análisis IA de 16 Patologías:</strong> Identificación, segmentación y marcado automático de lesiones retinales[cite: 106, 110].</li>
+                        </ul>
+
+                        <div class="badge-variants">
+                            <span class="badge-v">80.000 A-scans/s</span>[cite: 107]
+                            <span class="badge-v">Escaneo 12x9 mm</span>[cite: 106, 108]
+                            <span class="badge-v">Diagnóstico IA</span>[cite: 106]
+                        </div>
+                    </div>
+
+                    <div class="page-footer">
+                        <span class="page-number">BigVision - Pág. 1</span>
+                        <div class="btn-action-group">
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'BigVision', 'OCT BV1000S')">Solicitar Información / Cotización</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BIGVISION - PÁGINA 2: BIÓMETRO BVB2000 -->
+            <div class="page">
+                <div class="page-content">
+                    <div>
+                        <div class="brand-header">
+                            <span class="brand-title-text">BIGVISION • China</span>
+                            <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
+                        </div>
+                        <h2 class="product-title">Biómetro Óptico Oftálmico BVB2000</h2>
+                        <p class="product-subtitle">Equipo 2-en-1: Biometría Óptica Precisa + Sistema OCT Incorporado[cite: 100]</p>
+                        
+                        <div class="product-img-wrapper">
+                            <img src="images/bigvision-biometro.webp" alt="BigVision Biómetro BVB2000" onerror="this.src='https://via.placeholder.com/350x180?text=BigVision+Biómetro+BVB2000'">
+                        </div>
+
+                        <ul class="product-highlights">
+                            <li><strong>12 Parámetros en 1 Clic:</strong> Medición automática en &lt;60s de AL, CCT, ACD, LT, K1/K2, WTW, Espesor Coroidal y Retinal[cite: 100].</li>
+                            <li><strong>Validación Visual por OCT:</strong> Muestra imágenes dinámicas en tiempo real de córnea y retina para máxima precisión[cite: 102].</li>
+                            <li><strong>Monitoreo de Miopía en Niños:</strong> Predicción del desarrollo axial a los 18 años y simulación de agudeza visual[cite: 103].</li>
+                            <li><strong>Ajuste Tridimensional Inteligente:</strong> Plataforma motorizada con seguimiento automático de pupila[cite: 100].</li>
+                        </ul>
+
+                        <div class="badge-variants">
+                            <span class="badge-v">Biometría + OCT 2-en-1</span>[cite: 100]
+                            <span class="badge-v">12 Parámetros &lt;60s</span>[cite: 100]
+                            <span class="badge-v">Predicción Miopía</span>[cite: 103]
+                        </div>
+                    </div>
+
+                    <div class="page-footer">
+                        <span class="page-number">BigVision - Pág. 2</span>
+                        <div class="btn-action-group">
+                            <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'BigVision', 'Biómetro BVB2000')">Solicitar Información / Cotización</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- MODAL UNIFICADO -->
+    <!-- MODAL UNIFICADO DE CONTACTO -->
     <div class="modal" id="modalForm">
         <div class="modal-content">
             <span class="close-modal" onclick="closeForm()">&times;</span>
