@@ -3,1204 +3,616 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revista Digital Taichi Colombia - Portafolio Oftalmología 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>Revista Digital Taichi Colombia - Portafolio Oftalmología</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Librería Flipbook 3D (StPageFlip) -->
     <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
     <style>
         :root {
             --primary: #1b365d;
-            --primary-dark: #0d1b2a;
             --accent: #2a638a;
             --highlight: #00a896;
-            --highlight-light: #e6f7f5;
-            --bg-magazine: #0f172a;
-            --card-bg: #ffffff;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
+            --bg-magazine: #1e293b;
             --white: #ffffff;
-            --invima-green: #2e7d32;
-            --invima-bg: #e8f5e9;
-            --pending-orange: #d97706;
-            --pending-bg: #fffbe6;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: 'Roboto', sans-serif; 
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); 
-            color: var(--text-dark); 
-            min-height: 100vh;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-        }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-magazine); color: #333; overflow-x: hidden; }
 
-        /* HEADER Fijo */
-        header { 
-            background: rgba(27, 54, 93, 0.95); 
-            color: var(--white); 
-            padding: 0.75rem 2rem; 
-            position: fixed; 
-            top: 0; 
-            width: 100%; 
-            z-index: 1000; 
-            backdrop-filter: blur(10px); 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-        }
+        /* Header Superior y Controles */
+        header { background: rgba(27, 54, 93, 0.95); color: var(--white); padding: 0.8rem 1.5rem; position: fixed; top: 0; width: 100%; z-index: 100; backdrop-filter: blur(5px); display: flex; justify-content: space-between; align-items: center; }
+        .logo-header { height: 32px; object-fit: contain; }
+        .logo-text { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .logo-text span { color: var(--highlight); }
 
-        .logo-text { 
-            font-family: 'Montserrat', sans-serif; 
-            font-weight: 800; 
-            font-size: 1.25rem; 
-            color: var(--white); 
-            text-decoration: none; 
-            display: flex; 
-            align-items: center; 
-            gap: 0.75rem; 
-            letter-spacing: 0.5px;
-        }
+        .nav-controls { display: flex; gap: 0.8rem; align-items: center; }
+        .btn-nav { background: var(--accent); color: var(--white); border: none; padding: 0.5rem 0.9rem; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: 0.3s; }
+        .btn-nav:hover { background: var(--highlight); }
 
-        .logo-badge {
-            background: linear-gradient(135deg, var(--highlight) 0%, #00796b 100%);
-            color: var(--white);
-            font-size: 0.7rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-weight: 700;
-        }
+        /* Flipbook Container */
+        .magazine-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding-top: 60px; padding-bottom: 20px; }
+        .flip-book { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        .nav-controls { 
-            display: flex; 
-            gap: 1rem; 
-            align-items: center; 
-        }
-
-        .btn-nav { 
-            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%); 
-            color: var(--white); 
-            border: 1px solid rgba(255,255,255,0.2); 
-            padding: 0.5rem 1.1rem; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600; 
-            font-size: 0.85rem; 
-            transition: all 0.3s ease; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .btn-nav:hover { 
-            background: var(--highlight); 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,168,150,0.4);
-        }
-
-        .page-counter-indicator {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.9);
-            background: rgba(255,255,255,0.1);
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        /* FLIPBOOK CONTAINER */
-        .magazine-wrapper { 
-            flex: 1;
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            padding-top: 80px; 
-            padding-bottom: 30px; 
-            perspective: 2000px;
-        }
-
-        .flip-book { 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6); 
-            border-radius: 4px;
-        }
-
-        /* ESTRUCTURA GENERAL DE PÁGINAS */
-        .page { 
-            background-color: var(--white); 
-            width: 100%; 
-            height: 100%; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-            position: relative;
-        }
-
-        .page-inner { 
-            padding: 1.8rem; 
-            height: 100%; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-        }
-
-        /* ESTILOS DE PORTADA GENERAL */
-        .page-cover { 
-            background: linear-gradient(145deg, var(--primary-dark) 0%, var(--primary) 60%, #1e3a8a 100%); 
-            color: var(--white); 
-            padding: 2.5rem 2rem; 
-            text-align: center;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .cover-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .taichi-hero-logo {
-            width: 90px;
-            height: 90px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid rgba(0,168,150,0.5);
-            margin-bottom: 0.5rem;
-            box-shadow: 0 0 30px rgba(0,168,150,0.3);
-        }
-
-        .cover-title { 
-            font-family: 'Montserrat', sans-serif; 
-            font-size: 2.2rem; 
-            font-weight: 800; 
-            letter-spacing: -0.5px;
-            line-height: 1.15;
-            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .cover-subtitle { 
-            font-size: 0.95rem; 
-            color: var(--highlight); 
-            margin-top: 0.5rem;
-            letter-spacing: 3px; 
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .manufacturers-grid-box { 
-            background: rgba(255, 255, 255, 0.06); 
-            padding: 1.25rem 1rem; 
-            border-radius: 12px; 
-            width: 100%; 
-            backdrop-filter: blur(8px); 
-            border: 1px solid rgba(255,255,255,0.15); 
-        }
-
-        .manufacturers-title { 
-            font-size: 0.72rem; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            color: var(--highlight); 
-            font-weight: 700; 
-            margin-bottom: 0.9rem;
-        }
-
-        .logos-container { 
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.8rem;
-        }
-
-        .brand-card-item {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 8px;
-            padding: 0.6rem 0.4rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.25rem;
-            transition: all 0.3s ease;
-        }
-
-        .brand-card-item span.b-name {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
-            color: #ffffff;
-        }
-
-        .brand-card-item span.b-origin {
-            font-size: 0.62rem;
-            color: #94a3b8;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        /* PORTADAS DE SECCIÓN */
-        .page-divider {
-            color: var(--white);
-            padding: 2.5rem 2rem;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        .divider-neitz { background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1e3a8a 100%); }
-        .divider-kowa { background: linear-gradient(135deg, #064e3b 0%, #022c22 60%, #0f172a 100%); }
-        .divider-takagi { background: linear-gradient(135deg, #311b92 0%, #1a237e 60%, #0d47a1 100%); }
-        .divider-bigvision { background: linear-gradient(135deg, #4c1d95 0%, #2e1065 60%, #0f172a 100%); }
-        .divider-sub { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); }
-
-        .section-num {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 800;
-            color: var(--highlight);
-            letter-spacing: 3px;
-            margin-bottom: 0.5rem;
-        }
-
-        .section-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2.6rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
-        }
-
-        .origin-badge {
-            background: rgba(255, 255, 255, 0.15);
-            color: var(--white);
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.35rem 1rem;
-            border-radius: 20px;
-            letter-spacing: 1.5px;
-            margin-top: 1.2rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            text-transform: uppercase;
-        }
-
-        /* ENCABEZADOS Y CONTENIDO DE PRODUCTO */
-        .brand-header-strip { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 2px solid #e2e8f0; 
-            padding-bottom: 0.5rem; 
-            margin-bottom: 0.8rem; 
-        }
-
-        .brand-logo-badge {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            font-size: 1.1rem;
-            color: var(--primary);
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .badge-status { 
-            background: var(--invima-bg); 
-            color: var(--invima-green); 
-            font-size: 0.68rem; 
-            padding: 0.25rem 0.6rem; 
-            border-radius: 12px; 
-            font-weight: 700;
-            letter-spacing: 0.3px;
-            border: 1px solid rgba(46, 125, 50, 0.2);
-        }
-
-        .badge-status-pending { 
-            background: var(--pending-bg); 
-            color: var(--pending-orange); 
-            font-size: 0.68rem; 
-            padding: 0.25rem 0.6rem; 
-            border-radius: 12px; 
-            font-weight: 700;
-            letter-spacing: 0.3px;
-            border: 1px solid rgba(217, 119, 6, 0.2);
-        }
-
-        .product-title { 
-            font-family: 'Montserrat', sans-serif; 
-            color: var(--primary); 
-            font-size: 1.15rem; 
-            font-weight: 700;
-            line-height: 1.25;
-            margin-bottom: 0.2rem; 
-        }
-
-        .product-subtitle { 
-            font-size: 0.8rem; 
-            color: var(--text-muted); 
-            margin-bottom: 0.6rem; 
-            font-weight: 500; 
-        }
-
-        .product-img-box { 
-            text-align: center; 
-            margin: 0.5rem 0; 
-            height: 175px; 
-            background: #f8fafc;
-            border-radius: 8px;
-            border: 1px solid #f1f5f9;
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 0.5rem;
-        }
-
-        .product-img-box svg { 
-            max-height: 100%; 
-            max-width: 100%; 
-        }
-
-        .product-highlights { 
-            list-style: none; 
-            margin: 0.6rem 0; 
-        }
-
-        .product-highlights li { 
-            font-size: 0.78rem; 
-            color: #334155;
-            margin-bottom: 0.4rem; 
-            padding-left: 1.2rem; 
-            position: relative; 
-            line-height: 1.35; 
-        }
-
-        .product-highlights li::before { 
-            content: "✓"; 
-            position: absolute; 
-            left: 0; 
-            color: var(--highlight); 
-            font-weight: 800; 
-        }
-
-        .badge-variants { 
-            display: flex; 
-            gap: 0.35rem; 
-            flex-wrap: wrap; 
-            margin-top: 0.5rem; 
-        }
-
-        .badge-v { 
-            background: var(--highlight-light); 
-            color: #00695c; 
-            border: 1px solid rgba(0, 168, 150, 0.25); 
-            font-size: 0.65rem; 
-            padding: 0.2rem 0.5rem; 
-            border-radius: 4px; 
-            font-weight: 600; 
-        }
-
-        /* PIE DE PÁGINA */
-        .page-footer { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-top: 1px solid #e2e8f0; 
-            padding-top: 0.6rem; 
-            margin-top: 0.5rem;
-        }
-
-        .footer-brand { 
-            display: flex; 
-            align-items: center; 
-            gap: 0.4rem; 
-        }
-
-        .taichi-mini-badge {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        .taichi-mini-badge span { color: var(--highlight); }
-
-        .page-number { 
-            font-size: 0.72rem; 
-            color: var(--text-muted); 
-            font-weight: 600;
-        }
-
-        .btn-info { 
-            padding: 0.45rem 0.85rem; 
-            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%); 
-            color: var(--white); 
-            border: none;
-            border-radius: 4px; 
-            font-weight: 700; 
-            font-size: 0.72rem; 
-            cursor: pointer; 
-            transition: all 0.2s ease; 
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .btn-info:hover { 
-            background: var(--highlight); 
-            box-shadow: 0 2px 8px rgba(0,168,150,0.3);
-        }
-
-        /* MODAL DE CONTACTO */
-        .modal-overlay { 
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(15, 23, 42, 0.8); 
-            z-index: 2000; 
-            justify-content: center; 
-            align-items: center; 
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-overlay.active { display: flex; }
-
-        .modal-card { 
-            background: var(--white); 
-            padding: 2rem; 
-            border-radius: 12px; 
-            max-width: 480px; 
-            width: 90%; 
-            position: relative; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); 
-            animation: modalIn 0.3s ease;
-        }
-
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .close-modal { 
-            position: absolute; 
-            top: 1rem; 
-            right: 1.2rem; 
-            font-size: 1.5rem; 
-            cursor: pointer; 
-            color: var(--text-muted); 
-            transition: color 0.2s;
-        }
-
-        .close-modal:hover { color: var(--primary); }
-
-        .form-group { margin-bottom: 0.85rem; }
-        .form-group label { display: block; font-size: 0.78rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--primary); }
-        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; outline: none; }
-        .form-group input:focus, .form-group select:focus { border-color: var(--highlight); box-shadow: 0 0 0 3px rgba(0,168,150,0.15); }
+        /* Estructura de Páginas */
+        .page { background-color: var(--white); width: 100%; height: 100%; border: 1px solid #ddd; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+        .page-content { padding: 1.8rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
         
-        .btn-submit { 
-            width: 100%; 
-            padding: 0.8rem; 
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); 
-            color: var(--white); 
-            font-weight: 700; 
-            font-family: 'Montserrat', sans-serif;
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            margin-top: 0.5rem; 
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
+        /* Portadas y Divisores de Sección */
+        .page-cover { background: linear-gradient(135deg, var(--primary) 0%, #0d1b2a 100%); color: var(--white); text-align: center; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 3rem 2rem; }
+        .page-divider-neitz { background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
+        .page-divider-kowa { background: linear-gradient(135deg, #1e3a2b 0%, #0d1b2a 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
+        .page-divider-takagi { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
+        .page-divider-bigvision { background: linear-gradient(135deg, #2a0845 0%, #6441a5 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
+        .page-subdivider { background: linear-gradient(135deg, #1f4068 0%, #162447 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
 
-        .btn-submit:hover { background: var(--highlight); }
+        .cover-title { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 700; margin-top: 0.5rem; }
+        .cover-subtitle { font-size: 1.1rem; color: var(--highlight); margin-bottom: 1rem; letter-spacing: 2px; }
 
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
-            header { padding: 0.6rem 1rem; }
-            .logo-text { font-size: 1rem; }
-            .nav-controls span { display: none; }
-            .magazine-wrapper { padding-top: 65px; }
-        }
+        /* Cuadrícula de Logos en Portada */
+        .manufacturers-grid { background: rgba(255, 255, 255, 0.08); padding: 1.2rem; border-radius: 8px; width: 100%; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.15); margin-top: 1rem; }
+        .manufacturers-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 0.8rem; color: var(--highlight); font-weight: 700; }
+        .logos-container { display: flex; justify-content: space-around; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+        .brand-logo-item { max-height: 38px; max-width: 85px; filter: brightness(0) invert(1); opacity: 0.9; object-fit: contain; }
+
+        /* Fallbacks visuales para logos */
+        .text-logo-fallback { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ffffff; letter-spacing: 1px; font-size: 0.9rem; }
+
+        /* Elementos de Encabezado de Sección con Logos */
+        .section-brand-logo { max-height: 55px; max-width: 180px; object-fit: contain; filter: brightness(0) invert(1); margin-bottom: 1rem; }
+        .origin-badge { display: inline-block; background: rgba(255,255,255,0.15); color: #fff; font-size: 0.8rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 1px; margin-top: 0.8rem; border: 1px solid rgba(255,255,255,0.25); }
+
+        /* Encabezados y Contenido de Producto */
+        .brand-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 0.6rem; }
+        .brand-logo-product { max-height: 28px; max-width: 110px; object-fit: contain; }
+        .badge-status { background: #e8f5e9; color: #2e7d32; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 12px; font-weight: 600; }
+        .badge-status-pending { background: #fff3e0; color: #e65100; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 12px; font-weight: 600; }
+
+        .product-img-wrapper { text-align: center; margin: 0.6rem 0; height: 180px; display: flex; align-items: center; justify-content: center; }
+        .product-img-wrapper img { max-height: 100%; max-width: 100%; object-fit: contain; }
+
+        .product-title { font-family: 'Montserrat', sans-serif; color: var(--primary); font-size: 1.2rem; margin-bottom: 0.25rem; }
+        .product-subtitle { font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; font-weight: 500; }
+
+        .product-highlights { list-style: none; margin: 0.5rem 0; }
+        .product-highlights li { font-size: 0.8rem; margin-bottom: 0.3rem; padding-left: 1.1rem; position: relative; line-height: 1.3; }
+        .product-highlights li::before { content: "✓"; position: absolute; left: 0; color: var(--highlight); font-weight: bold; }
+
+        .badge-variants { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.4rem; }
+        .badge-v { background: #f0f4f8; color: var(--accent); border: 1px solid #cbd5e1; font-size: 0.68rem; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 600; }
+
+        /* Pie de Página de Producto */
+        .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 0.5rem; }
+        .footer-left { display: flex; align-items: center; gap: 0.6rem; }
+        .taichi-mini-logo { height: 18px; object-fit: contain; opacity: 0.85; }
+        .page-number { font-size: 0.75rem; color: #888; }
+
+        .btn-action-group { display: flex; gap: 0.4rem; }
+        .btn-page { padding: 0.45rem 0.75rem; border: none; border-radius: 4px; font-weight: 600; font-size: 0.78rem; cursor: pointer; transition: 0.2s; }
+        .btn-info { background: var(--accent); color: var(--white); }
+        .btn-info:hover { background: var(--primary); }
+
+        /* Estilos de Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--white); padding: 1.8rem; border-radius: 8px; max-width: 480px; width: 92%; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .close-modal { position: absolute; top: 0.8rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: #666; }
+        .form-group { margin-bottom: 0.8rem; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.2rem; }
+        .form-group input, .form-group select { width: 100%; padding: 0.55rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.85rem; }
+        .btn-submit { width: 100%; padding: 0.75rem; background: var(--primary); color: var(--white); font-weight: 700; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; }
+        .btn-submit:hover { background: var(--accent); }
     </style>
 </head>
 <body>
 
-    <!-- HEADER SUPERIOR -->
     <header>
         <a href="#" class="logo-text">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20 5 5 0 0 1 0-10 5 5 0 0 0 0-10"/></svg>
-            TAICHI <span style="color:var(--highlight)">COLOMBIA</span>
-            <span class="logo-badge">2026</span>
+            <img src="images/logo-taichi.png" alt="Taichi Colombia" class="logo-header" onerror="handleImageError(this, 'TAICHI')">
+            <span id="taichiHeaderBrand">TAICHI <span>COLOMBIA</span></span>
         </a>
         <div class="nav-controls">
-            <button class="btn-nav" onclick="pageFlip.flipPrev()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                Anterior
-            </button>
-            <span class="page-counter-indicator" id="pageNumberDisplay">Portada</span>
-            <button class="btn-nav" onclick="pageFlip.flipNext()">
-                Siguiente
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
+            <button class="btn-nav" onclick="pageFlip.flipPrev()">◄ Anterior</button>
+            <span style="font-size:0.85rem;">Desliza para navegar</span>
+            <button class="btn-nav" onclick="pageFlip.flipNext()">Siguiente ►</button>
         </div>
     </header>
 
-    <!-- REVISTA FLIPBOOK CONTAINER -->
-    <div class="magazine-wrapper">
+    <div class="magazine-container">
         <div id="magazine" class="flip-book">
             
-            <!-- PORTADA PRINCIPAL -->
+            <!-- PORTADA GENERAL -->
             <div class="page page-cover">
-                <div class="cover-header">
-                    <div class="taichi-hero-logo">
-                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#00a896" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20 5 5 0 0 1 0-10 5 5 0 0 0 0-10"/></svg>
-                    </div>
+                <div>
+                    <img src="images/logo-taichi.png" alt="Taichi Holdings Colombia" style="max-height: 70px; margin-bottom: 1rem; object-fit: contain;" onerror="handleImageError(this, 'TAICHI HOLDINGS')">
                     <h1 class="cover-title">CATÁLOGO OFTALMOLOGÍA</h1>
                     <p class="cover-subtitle">PORTAFOLIO DE ALTA PRECISIÓN</p>
-                    <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 0.2rem;">Taichi Holdings Colombia • Edición 2026</p>
+                    <p style="font-size: 0.85rem; opacity: 0.85;">Taichi Holdings Colombia<br>Edición Interactiva 2026</p>
                 </div>
 
-                <div class="manufacturers-grid-box">
-                    <p class="manufacturers-title">MARCAS OFICIALES REPRESENTADAS</p>
+                <div class="manufacturers-grid">
+                    <p class="manufacturers-title">MARCAS OFICIALES DISTRIBUIDAS</p>
                     <div class="logos-container">
-                        <div class="brand-card-item">
-                            <span class="b-name">NEITZ</span>
-                            <span class="b-origin">Japón 1913</span>
-                        </div>
-                        <div class="brand-card-item">
-                            <span class="b-name">KOWA</span>
-                            <span class="b-origin">Japón</span>
-                        </div>
-                        <div class="brand-card-item">
-                            <span class="b-name">TAKAGI</span>
-                            <span class="b-origin">Japón 1955</span>
-                        </div>
-                        <div class="brand-card-item">
-                            <span class="b-name">BIGVISION</span>
-                            <span class="b-origin">China (IA)</span>
-                        </div>
+                        <img src="images/logo-neitz.png" alt="Neitz" class="brand-logo-item" title="Neitz" onerror="handleLogoFallback(this, 'NEITZ')">
+                        <img src="images/logo-kowa.png" alt="Kowa" class="brand-logo-item" title="Kowa" onerror="handleLogoFallback(this, 'KOWA')">
+                        <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-item" title="Takagi" onerror="handleLogoFallback(this, 'TAKAGI')">
+                        <img src="images/logo-bigvision.png" alt="BigVision" class="brand-logo-item" title="BigVision" onerror="handleLogoFallback(this, 'BIGVISION')">
                     </div>
                 </div>
             </div>
 
-            <!-- SECCIÓN 1: NEITZ (PORTADA) -->
-            <div class="page page-divider divider-neitz">
-                <div class="section-num">SECCIÓN 1</div>
-                <h1 class="section-title">NEITZ</h1>
-                <p style="font-size: 0.9rem; opacity: 0.9; max-width: 280px; margin: 0 auto; line-height: 1.4;">
-                    Óptica Japonesa de Alta Precisión desde 1913.<br>Sistemas de Diagnóstico Retinal.
-                </p>
-                <span class="origin-badge">MADE IN JAPAN</span>
+            <!-- SECCIÓN 1: NEITZ -->
+            <div class="page page-divider-neitz">
+                <div style="padding: 2rem;">
+                    <img src="images/logo-neitz.png" alt="Neitz Japan" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'NEITZ JAPAN')">
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 1</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.4rem; margin: 0.5rem 0; letter-spacing: 2px;">NEITZ</h1>
+                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.5rem;">Óptica Japonesa de Alta Precisión desde 1913<br>Oftalmoscopios Binoculares, Directos y Retinoscopios</p>
+                    <span class="origin-badge">MADE IN JAPAN</span>
+                </div>
             </div>
-
-            <!-- NEITZ PÁG 1: IO-α & IO-VEGA -->
+            <!-- Neitz Pág 1 -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">NEITZ</span>
-                            <span class="badge-status">REGISTRO INVIMA APROBADO</span>
+                        <div class="brand-header">
+                            <img src="images/logo-neitz.png" alt="Neitz" class="brand-logo-product" onerror="handleImageError(this, 'NEITZ • JAPAN')">
+                            <span class="badge-status">REGISTRO INVIMA</span>
                         </div>
                         <h2 class="product-title">Oftalmoscopios Indirectos Binoculares</h2>
-                        <p class="product-subtitle">Línea Premium IO-α LED & IO-Vega Inalámbrico</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 200 120" width="180" height="110">
-                                <path d="M40 60 Q 60 20 100 20 Q 140 20 160 60 Q 140 100 100 100 Q 60 100 40 60 Z" fill="none" stroke="#1b365d" stroke-width="3"/>
-                                <circle cx="100" cy="60" r="25" fill="#2a638a" opacity="0.3"/>
-                                <circle cx="100" cy="60" r="12" fill="#00a896"/>
-                                <rect x="85" y="10" width="30" height="12" rx="3" fill="#1b365d"/>
-                                <path d="M 70 60 L 30 40 M 130 60 L 170 40" stroke="#00a896" stroke-width="2" stroke-dasharray="3,3"/>
-                            </svg>
+                        <p class="product-subtitle">Línea IO-α LED & IO-Vega: Claridad Óptica y Ergonomía</p>
+                        <div class="product-img-wrapper">
+                            <img src="images/neitz-io-vega.webp" alt="Neitz IO-Vega" onerror="handleProductSvgFallback(this, 'Neitz IO-Vega', '#2c3e50')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>IO-Vega:</strong> Ultra liviano (solo 470g) con sistema de carga inalámbrica de 4 vías.</li>
-                            <li><strong>IO-α LED CAMERA:</strong> Cámara CMOS Full HD integrada para docencia y registros.</li>
-                            <li><strong>Luz Cálida LED:</strong> Temperatura de color 3200K (Ra 90+) para tonos retinales reales.</li>
+                            <li><strong>IO-Vega:</strong> Ultra liviano (470g), carga inalámbrica 4 vías.</li>
+                            <li><strong>IO-α LED CAMERA:</strong> CMOS Full HD integrado para docencia.</li>
+                            <li><strong>IO-α LED:</strong> Iluminación cálida 3200K (Ra 90+).</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Neitz • Pág 1</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Neitz - Pág. 1</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Neitz', 'Oftalmoscopios Indirectos Binoculares')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Indirectos Binoculares')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
-
-            <!-- NEITZ PÁG 2: OFTALMOSCOPIOS DIRECTOS BXα -->
+            <!-- Neitz Pág 2 -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">NEITZ</span>
-                            <span class="badge-status">REGISTRO INVIMA APROBADO</span>
+                        <div class="brand-header">
+                            <img src="images/logo-neitz.png" alt="Neitz" class="brand-logo-product" onerror="handleImageError(this, 'NEITZ • JAPAN')">
+                            <span class="badge-status">REGISTRO INVIMA</span>
                         </div>
                         <h2 class="product-title">Oftalmoscopios Directos Serie BXα</h2>
                         <p class="product-subtitle">Iluminación LED de Alta Reproducción Cromática</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 120 150" width="120" height="120">
-                                <rect x="45" y="40" width="30" height="90" rx="6" fill="#1b365d"/>
-                                <rect x="40" y="15" width="40" height="30" rx="4" fill="#2a638a"/>
-                                <circle cx="60" cy="30" r="8" fill="#00a896"/>
-                                <rect x="52" y="70" width="16" height="25" rx="2" fill="#0f172a"/>
-                            </svg>
+                        <div class="product-img-wrapper">
+                            <img src="images/neitz-bxa.webp" alt="Neitz BXa" onerror="handleProductSvgFallback(this, 'Neitz BXα', '#2c3e50')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Óptica Avanzada:</strong> Corrección amplia de -36D a +35D en pasos de 1D.</li>
-                            <li><strong>Filtro Polarizado:</strong> Elimina eficazmente reflejos corneales molestos.</li>
-                            <li><strong>Ergonomía Superior:</strong> Selector de aperturas suave y dial accesible.</li>
+                            <li><strong>Óptica Avanzada:</strong> Corrección de -36D a +35D en pasos de 1D.</li>
+                            <li><strong>Filtro Polarizado:</strong> Elimina reflejos corneales.</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Neitz • Pág 2</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Neitz - Pág. 2</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Neitz', 'Oftalmoscopios Directos BXα')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Oftalmoscopios Directos Serie BXa')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
-
-            <!-- NEITZ PÁG 3: RETINOSCOPIOS RX3 & RXRC -->
+            <!-- Neitz Pág 3 -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">NEITZ</span>
-                            <span class="badge-status">REGISTRO INVIMA APROBADO</span>
+                        <div class="brand-header">
+                            <img src="images/logo-neitz.png" alt="Neitz" class="brand-logo-product" onerror="handleImageError(this, 'NEITZ • JAPAN')">
+                            <span class="badge-status">REGISTRO INVIMA</span>
                         </div>
                         <h2 class="product-title">Retinoscopios Serie RX3 & RXRC</h2>
                         <p class="product-subtitle">Sistemas LED de Franja (Streak) y Punto (Spot)</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 120 150" width="120" height="120">
-                                <rect x="48" y="45" width="24" height="85" rx="4" fill="#334155"/>
-                                <path d="M 35 20 L 85 20 L 75 45 L 45 45 Z" fill="#1b365d"/>
-                                <line x1="60" y1="10" x2="60" y2="20" stroke="#00a896" stroke-width="4"/>
-                            </svg>
+                        <div class="product-img-wrapper">
+                            <img src="images/neitz-rx.webp" alt="Neitz RX" onerror="handleProductSvgFallback(this, 'Neitz RX3 / RXRC', '#2c3e50')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Haz Definido:</strong> Rotación continua del eje de franja de 360°.</li>
-                            <li><strong>Tecnología LED:</strong> Brillo constante y superior sin calentamiento.</li>
-                            <li><strong>Filtro Verde Integrado:</strong> Para una réplica cómoda de la refracción.</li>
+                            <li><strong>Haza Definida:</strong> Rotación continua de 360°.</li>
+                            <li><strong>Tecnología LED:</strong> Brillo superior frente a lámparas halógenas.</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Neitz • Pág 3</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Neitz - Pág. 3</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Neitz', 'Retinoscopios RX3/RXRC')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Neitz', 'Retinoscopios Serie RX3 / RXRC')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
 
-            <!-- SECCIÓN 2: KOWA (PORTADA) -->
-            <div class="page page-divider divider-kowa">
-                <div class="section-num">SECCIÓN 2</div>
-                <h1 class="section-title">KOWA</h1>
-                <p style="font-size: 0.9rem; opacity: 0.9; max-width: 280px; margin: 0 auto; line-height: 1.4;">
-                    Tecnología Japonesa de Diagnóstico Oftálmico e Implantes Oculares Avanzados.
-                </p>
-                <span class="origin-badge">MADE IN JAPAN</span>
+            <!-- SECCIÓN 2: KOWA -->
+            <div class="page page-divider-kowa">
+                <div style="padding: 2rem;">
+                    <img src="images/logo-kowa.png" alt="Kowa Japan" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'KOWA JAPAN')">
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 2</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.4rem; margin: 0.5rem 0; letter-spacing: 2px;">KOWA</h1>
+                    <p style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.5rem;">Tecnología Japonesa de Diagnóstico e Implantes Oculares<br>Lámpara SL-19, Tonómetro HA-2, Perímetro AP-7000 y LIOs Avansee</p>
+                    <span class="origin-badge">MADE IN JAPAN</span>
+                </div>
             </div>
-
-            <!-- KOWA PÁG 1: SL-19 -->
+            <!-- Kowa Págs 1-4 -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">KOWA</span>
-                            <span class="badge-status">REGISTRO INVIMA APROBADO</span>
+                        <div class="brand-header">
+                            <img src="images/logo-kowa.png" alt="Kowa" class="brand-logo-product" onerror="handleImageError(this, 'KOWA • JAPAN')">
+                            <span class="badge-status">REGISTRO INVIMA</span>
                         </div>
                         <h2 class="product-title">Lámpara de Hendidura Portátil SL-19</h2>
-                        <p class="product-subtitle">La más Liviana del Mercado (620g)</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 160 120" width="150" height="110">
-                                <rect x="30" y="75" width="100" height="18" rx="4" fill="#1b365d"/>
-                                <path d="M 60 75 L 80 25 L 100 75 Z" fill="#2a638a" opacity="0.6"/>
-                                <circle cx="80" cy="25" r="10" fill="#00a896"/>
-                                <line x1="80" y1="35" x2="80" y2="75" stroke="#00a896" stroke-width="2"/>
-                            </svg>
+                        <p class="product-subtitle">La Lámpara Portátil más Liviana del Mercado</p>
+                        <div class="product-img-wrapper">
+                            <img src="images/kowa-sl19.webp" alt="Kowa SL-19" onerror="handleProductSvgFallback(this, 'Kowa SL-19', '#1e3a2b')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Ultra Ligera:</strong> Chasis ergonómico optimizado para consulta móvil.</li>
+                            <li><strong>Ultra Ligera:</strong> Chasis reforzado de 620g.</li>
                             <li><strong>Iluminación Dual:</strong> Hendidura e iluminación de fondo simultáneas.</li>
-                            <li><strong>Aumentos Opciónales:</strong> Magnificaciones 10x y 16x de alta resolución.</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Kowa • Pág 1</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Kowa - Pág. 1</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Kowa', 'Lámpara Hendidura SL-19')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Lámpara SL-19')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
-
-            <!-- KOWA PÁG 2: HA-2 -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">KOWA</span>
-                            <span class="badge-status">REGISTRO INVIMA APROBADO</span>
+                        <div class="brand-header">
+                            <img src="images/logo-kowa.png" alt="Kowa" class="brand-logo-product" onerror="handleImageError(this, 'KOWA • JAPAN')">
+                            <span class="badge-status">REGISTRO INVIMA</span>
                         </div>
-                        <h2 class="product-title">Tonómetro de Aplanación HA-2</h2>
+                        <h2 class="product-title">Tonómetro de Aplanación Portátil HA-2</h2>
                         <p class="product-subtitle">Precisión Goldmann Móvil en Cualquier Posición</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 140 120" width="130" height="110">
-                                <rect x="50" y="30" width="40" height="70" rx="8" fill="#1e293b"/>
-                                <circle cx="70" cy="55" r="14" fill="#ffffff" stroke="#2a638a" stroke-width="3"/>
-                                <path d="M 70 20 L 70 30" stroke="#00a896" stroke-width="4"/>
-                            </svg>
+                        <div class="product-img-wrapper">
+                            <img src="images/kowa-ha2.webp" alt="Kowa HA-2" onerror="handleProductSvgFallback(this, 'Kowa HA-2', '#1e3a2b')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Resorte Compensado:</strong> Permite lecturas en pacientes sentados o acostados.</li>
-                            <li><strong>Lectura Directa:</strong> Dial micrométrico continuo de 0 a 60 mmHg.</li>
-                            <li><strong>Luz Azul Incorporada:</strong> Iluminación integrada para medición con fluoresceína.</li>
+                            <li><strong>Mecanismo Único de Resorte:</strong> Lectura precisa en cualquier postura.</li>
+                            <li><strong>Lectura Directa:</strong> Dial continuo (0-60 mmHg).</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Kowa • Pág 2</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Kowa - Pág. 2</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Kowa', 'Tonómetro HA-2')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Tonómetro HA-2')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
-
-            <!-- KOWA PÁG 3: AP-7000 -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">KOWA</span>
+                        <div class="brand-header">
+                            <img src="images/logo-kowa.png" alt="Kowa" class="brand-logo-product" onerror="handleImageError(this, 'KOWA • JAPAN')">
                             <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
                         </div>
                         <h2 class="product-title">Campímetro Automático AP-7000</h2>
-                        <p class="product-subtitle">Perimetría Estática y Análisis Cuantitativo de Glaucoma</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 160 120" width="150" height="110">
-                                <path d="M 30 95 C 30 40, 130 40, 130 95 Z" fill="#e2e8f0" stroke="#1b365d" stroke-width="3"/>
-                                <circle cx="80" cy="65" r="4" fill="#d97706"/>
-                                <circle cx="65" cy="55" r="2" fill="#00a896"/>
-                                <circle cx="95" cy="70" r="2" fill="#00a896"/>
-                            </svg>
+                        <p class="product-subtitle">Perimetría Estática Estándar y Evaluación Digital</p>
+                        <div class="product-img-wrapper">
+                            <img src="images/kowa-ap7000.webp" alt="Kowa AP-7000" onerror="handleProductSvgFallback(this, 'Kowa AP-7000', '#1e3a2b')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Algoritmos Rápido de Glaucoma:</strong> Evaluaciones precisas en tiempo reducido.</li>
-                            <li><strong>Seguimiento Foveal Dinámico:</strong> Monitoreo activo de la fijación del paciente.</li>
+                            <li><strong>Pruebas Rápida de Glaucoma:</strong> Algoritmos optimizados para campo visual.</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Kowa • Pág 3</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Kowa - Pág. 3</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Kowa', 'Campímetro AP-7000')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'Campímetro AP-7000')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
-
-            <!-- KOWA PÁG 4: AVANSEE -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">KOWA</span>
+                        <div class="brand-header">
+                            <img src="images/logo-kowa.png" alt="Kowa" class="brand-logo-product" onerror="handleImageError(this, 'KOWA • JAPAN')">
                             <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
                         </div>
                         <h2 class="product-title">Lentes Intraoculares AVANSEE</h2>
-                        <p class="product-subtitle">Sistema Precargado en Acrílico Hidrofóbico</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 140 120" width="130" height="110">
-                                <circle cx="70" cy="60" r="24" fill="none" stroke="#00a896" stroke-width="3"/>
-                                <path d="M 46 60 Q 30 40 20 60 Q 30 80 46 60" fill="none" stroke="#2a638a" stroke-width="2"/>
-                                <path d="M 94 60 Q 110 40 120 60 Q 110 80 94 60" fill="none" stroke="#2a638a" stroke-width="2"/>
-                            </svg>
+                        <p class="product-subtitle">Sistema Preloaded en Acrílico Hidrofóbico</p>
+                        <div class="product-img-wrapper">
+                            <img src="images/kowa-avansee.webp" alt="Kowa AVANSEE" onerror="handleProductSvgFallback(this, 'LIOs AVANSEE', '#1e3a2b')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Inserción Aséptica:</strong> Inyector precargado listo para microincisión.</li>
-                            <li><strong>Material Hidrofóbico:</strong> Claridad óptica libre de opacificaciones secundarias.</li>
+                            <li><strong>Inserción Aséptica:</strong> Sistema inyectable precurado de microincisión.</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Kowa • Pág 4</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Kowa - Pág. 4</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Kowa', 'Lentes LIO AVANSEE')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Kowa', 'LIOs AVANSEE')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
 
-            <!-- SECCIÓN 3: TAKAGI (PORTADA) -->
-            <div class="page page-divider divider-takagi">
-                <div class="section-num">SECCIÓN 3</div>
-                <h1 class="section-title">TAKAGI</h1>
-                <p style="font-size: 0.9rem; opacity: 0.9; max-width: 280px; margin: 0 auto; line-height: 1.4;">
-                    Excelencia en Instrumentos Quirúrgicos y Diagnóstico desde 1955.
-                </p>
-                <span class="origin-badge">MADE IN JAPAN</span>
+            <!-- SECCIÓN 3: TAKAGI -->
+            <div class="page page-divider-takagi">
+                <div style="padding: 2rem;">
+                    <img src="images/logo-takagi.png" alt="Takagi Japan" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'TAKAGI JAPAN')">
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 3</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">TAKAGI</h1>
+                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 0.5rem;">Excelencia y Calidad en Instrumentos Oftálmicos desde 1955<br>Microscopios Quirúrgicos de Alta Gama y Lámparas de Hendidura LED</p>
+                    <span class="origin-badge">MADE IN JAPAN</span>
+                </div>
             </div>
-
-            <!-- TAKAGI SUBSECCIÓN 3.1: MICROSCOPIOS -->
-            <div class="page page-divider divider-sub">
-                <div class="section-num" style="color:var(--highlight)">SUBSECCIÓN 3.1</div>
-                <h2 style="font-family:'Montserrat'; font-size:1.8rem; font-weight:800; color:#fff;">MICROSCOPIOS QUIRÚRGICOS</h2>
-                <p style="font-size:0.85rem; color:#cbd5e1; margin-top:0.8rem; max-width:240px;">Modelos OM-6, OM-9 y OM-19 para Microcirugía Oftálmica</p>
+            <!-- Takagi Subsección 3.1 Microscopios -->
+            <div class="page page-subdivider">
+                <div style="padding: 2rem;">
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight);">SUBSECCIÓN 3.1</h3>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; margin: 0.5rem 0;">MICROSCOPIOS QUIRÚRGICOS</h2>
+                </div>
             </div>
-
-            <!-- TAKAGI PÁG 1: OM-6 -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">TAKAGI</span>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="handleImageError(this, 'TAKAGI • JAPAN')">
                             <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
                         </div>
                         <h2 class="product-title">Microscopio Quirúrgico OM-6</h2>
-                        <p class="product-subtitle">Diseño Compacto para Procedimientos Ambulatorios</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 160 120" width="150" height="110">
-                                <rect x="70" y="20" width="20" height="70" fill="#334155"/>
-                                <rect x="50" y="40" width="60" height="30" rx="4" fill="#1b365d"/>
-                                <circle cx="65" cy="55" r="8" fill="#00a896"/>
-                                <circle cx="95" cy="55" r="8" fill="#00a896"/>
-                            </svg>
+                        <p class="product-subtitle">Modelo Compacto para Procedimientos Ambulatorios</p>
+                        <div class="product-img-wrapper">
+                            <img src="images/takagi-om6.webp" alt="Takagi OM-6" onerror="handleProductSvgFallback(this, 'Takagi OM-6', '#203a43')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Gran Profundidad de Campo:</strong> Enfoque óptimo sin ajustes constantes.</li>
-                            <li><strong>Magnificación 3 Pasos:</strong> Sistema óptico manual (4.7x, 7.8x, 12.5x).</li>
+                            <li><strong>Gran Profundidad de Campo:</strong> Minimiza ajustes constantes durante cirugía.</li>
+                            <li><strong>Chasis Compacto:</strong> Magnificación 3 pasos (4.7x, 7.8x, 12.5x).</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Takagi • Pág 1</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Takagi - Pág. 1</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Takagi', 'Microscopio OM-6')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-6')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
-
-            <!-- TAKAGI PÁG 2: OM-9 -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">TAKAGI</span>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="handleImageError(this, 'TAKAGI • JAPAN')">
                             <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
                         </div>
                         <h2 class="product-title">Microscopio Quirúrgico OM-9</h2>
                         <p class="product-subtitle">Óptica Apocromática y Red Reflex de Alta Definición</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 160 120" width="150" height="110">
-                                <rect x="75" y="15" width="10" height="85" fill="#1e293b"/>
-                                <path d="M 40 40 L 120 40 L 110 70 L 50 70 Z" fill="#2a638a"/>
-                                <circle cx="65" cy="55" r="10" fill="#00a896"/>
-                                <circle cx="95" cy="55" r="10" fill="#00a896"/>
-                            </svg>
+                        <div class="product-img-wrapper">
+                            <img src="images/takagi-om9.webp" alt="Takagi OM-9" onerror="handleProductSvgFallback(this, 'Takagi OM-9', '#203a43')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Lentes Apocromáticos:</strong> Imágenes esteroscópicas libres de aberración cromática.</li>
-                            <li><strong>Configuraciones Zoom/Motorizadas:</strong> Variantes XZ, XE y SM a elección.</li>
+                            <li><strong>Lentes Apocromáticas:</strong> Imagen nítida libre de aberración cromática.</li>
+                            <li><strong>3 Configuraciones (XZ, XE, SM):</strong> Opciones de Zoom o pasos motorizados/manuales.</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Takagi • Pág 2</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Takagi - Pág. 2</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Takagi', 'Microscopio OM-9')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-9')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
-
-            <!-- TAKAGI PÁG 3: OM-19 -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">TAKAGI</span>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="handleImageError(this, 'TAKAGI • JAPAN')">
                             <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
                         </div>
                         <h2 class="product-title">Microscopio Quirúrgico OM-19</h2>
-                        <p class="product-subtitle">Flagship para Cirugía Posterior Vitreorretiniana</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 160 120" width="150" height="110">
-                                <rect x="70" y="10" width="20" height="95" fill="#0f172a"/>
-                                <rect x="35" y="35" width="90" height="40" rx="6" fill="#1b365d"/>
-                                <circle cx="60" cy="55" r="12" fill="#00a896"/>
-                                <circle cx="100" cy="55" r="12" fill="#00a896"/>
-                            </svg>
+                        <p class="product-subtitle">Flagship para Cirugía Oftálmica Avanzada y Vitreorretiniana</p>
+                        <div class="product-img-wrapper">
+                            <img src="images/takagi-om19.webp" alt="Takagi OM-19" onerror="handleProductSvgFallback(this, 'Takagi OM-19', '#203a43')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Iluminación LED Independiente:</strong> Control separado de luz principal y Red Reflex.</li>
-                            <li><strong>Integración BIOM / EIBOS:</strong> Sistema totalmente adaptado para cirugía de retina.</li>
+                            <li><strong>Iluminación LED Independiente:</strong> Control separado de luz principal y Red Reflex por ojo.</li>
+                            <li><strong>Soporte BIOM / EIBOS:</strong> Integración completa para cirugía posterior de retina.</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Takagi • Pág 3</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Takagi - Pág. 3</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Takagi', 'Microscopio OM-19')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Microscopio OM-19')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
-
-            <!-- TAKAGI SUBSECCIÓN 3.2: LÁMPARAS DE HENDIDURA -->
-            <div class="page page-divider divider-sub">
-                <div class="section-num" style="color:var(--highlight)">SUBSECCIÓN 3.2</div>
-                <h2 style="font-family:'Montserrat'; font-size:1.8rem; font-weight:800; color:#fff;">LÁMPARAS DE HENDIDURA</h2>
-                <p style="font-size:0.85rem; color:#cbd5e1; margin-top:0.8rem; max-width:240px;">Series 4ZL/2ZL, 30GL y 700GL/NSW</p>
+            <!-- Takagi Subsección 3.2 Lámparas -->
+            <div class="page page-subdivider">
+                <div style="padding: 2rem;">
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight);">SUBSECCIÓN 3.2</h3>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; margin: 0.5rem 0;">LÁMPARAS DE HENDIDURA</h2>
+                </div>
             </div>
-
-            <!-- TAKAGI PÁG 4: 4ZL / 2ZL -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">TAKAGI</span>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="handleImageError(this, 'TAKAGI • JAPAN')">
                             <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
                         </div>
                         <h2 class="product-title">Lámparas de Hendidura 4ZL & 2ZL</h2>
-                        <p class="product-subtitle">Modelos Galileanos con Iluminación LED 3500K</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 140 120" width="130" height="110">
-                                <rect x="30" y="80" width="80" height="15" fill="#1b365d"/>
-                                <rect x="65" y="20" width="10" height="60" fill="#334155"/>
-                                <circle cx="70" cy="35" r="14" fill="#00a896" opacity="0.7"/>
-                            </svg>
+                        <p class="product-subtitle">Modelos Galileanos Altamente Funcionales</p>
+                        <div class="product-img-wrapper">
+                            <img src="images/takagi-4zl-2zl.webp" alt="Takagi 4ZL / 2ZL" onerror="handleProductSvgFallback(this, 'Takagi 4ZL / 2ZL', '#203a43')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Tambor de Magnificación:</strong> 5 aumentos en 4ZL y 3 aumentos en 2ZL.</li>
-                            <li><strong>Tono de Luz Uniforme:</strong> Iluminación idéntica en campo principal y de fondo.</li>
+                            <li><strong>Tambor de Magnificación:</strong> 5 aumentos en 4ZL y 3 en 2ZL.</li>
+                            <li><strong>Iluminación LED 3500K:</strong> Tono idéntico entre luz principal y de fondo.</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Takagi • Pág 4</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Takagi - Pág. 4</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Takagi', 'Lámparas 4ZL/2ZL')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 4ZL / 2ZL')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
-
-            <!-- TAKAGI PÁG 5: 30GL -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">TAKAGI</span>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="handleImageError(this, 'TAKAGI • JAPAN')">
                             <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
                         </div>
                         <h2 class="product-title">Lámpara de Hendidura 30GL</h2>
-                        <p class="product-subtitle">Sistema Esencial con Óptica Greenough Convergente</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 140 120" width="130" height="110">
-                                <rect x="30" y="85" width="80" height="12" fill="#1e293b"/>
-                                <path d="M 50 85 L 70 30 L 90 85 Z" fill="#2a638a" opacity="0.4"/>
-                            </svg>
+                        <p class="product-subtitle">Modelo Esencial Óptica Greenough Convergente</p>
+                        <div class="product-img-wrapper">
+                            <img src="images/takagi-30gl.webp" alt="Takagi 30GL" onerror="handleProductSvgFallback(this, 'Takagi 30GL', '#203a43')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Óptica Greenough:</strong> Imagen esteroscópica nítida de excelente relación costo-beneficio.</li>
-                            <li><strong>Cambio Révolver:</strong> Cambio ágil de 2 aumentos para examen general.</li>
+                            <li><strong>Óptica Greenough:</strong> Imagen esteroscópica nítida y económica.</li>
+                            <li><strong>Sistema Révolver:</strong> Cambio de 2 aumentos fácil de usar.</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Takagi • Pág 5</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Takagi - Pág. 5</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Takagi', 'Lámpara 30GL')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 30GL')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
-
-            <!-- TAKAGI PÁG 6: 700GL / NSW -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">TAKAGI</span>
+                        <div class="brand-header">
+                            <img src="images/logo-takagi.png" alt="Takagi" class="brand-logo-product" onerror="handleImageError(this, 'TAKAGI • JAPAN')">
                             <span class="badge-status-pending">TRÁMITE REGULATORIO</span>
                         </div>
                         <h2 class="product-title">Lámpara de Hendidura 700GL / NSW</h2>
-                        <p class="product-subtitle">Tecnología Stereoscopic Narrow Angle (4.1°)</p>
-                        
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 140 120" width="130" height="110">
-                                <rect x="25" y="85" width="90" height="15" fill="#0f172a"/>
-                                <path d="M 60 85 L 70 25 L 80 85 Z" fill="#00a896"/>
-                            </svg>
+                        <p class="product-subtitle">Flagship con Tecnología Stereoscopic Narrow Angle</p>
+                        <div class="product-img-wrapper">
+                            <img src="images/takagi-700gl.webp" alt="Takagi 700GL NSW" onerror="handleProductSvgFallback(this, 'Takagi 700GL NSW', '#203a43')">
                         </div>
-
                         <ul class="product-highlights">
-                            <li><strong>Mecanismo NSW:</strong> Reduce el ángulo convergente para fondo de ojo profundo.</li>
-                            <li><strong>Distancia Inter-óptica 22mm:</strong> Vista esteroscópica natural sin fatiga visual.</li>
+                            <li><strong>Mecanismo NSW (4.1°):</strong> Reducción del ángulo convergente para evaluación profunda de retina.</li>
+                            <li><strong>Distancia Inter-óptica 22mm:</strong> Efecto esteroscópico natural y detallado.</li>
                         </ul>
                     </div>
-
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">Takagi • Pág 6</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">Takagi - Pág. 6</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('Takagi', 'Lámpara 700GL/NSW')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'Takagi', 'Lámpara 700GL / NSW')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
 
-            <!-- SECCIÓN 4: BIGVISION (PORTADA) -->
-            <div class="page page-divider divider-bigvision">
-                <div class="section-num">SECCIÓN 4</div>
-                <h1 class="section-title">BIGVISION</h1>
-                <p style="font-size: 0.9rem; opacity: 0.9; max-width: 280px; margin: 0 auto; line-height: 1.4;">
-                    Diagnóstico Oftálmico Digital Guiado por Inteligencia Artificial de Última Generación.
-                </p>
-                <span class="origin-badge">MADE IN CHINA</span>
+            <!-- SECCIÓN 4: BIGVISION -->
+            <div class="page page-divider-bigvision">
+                <div style="padding: 2rem;">
+                    <img src="images/logo-bigvision.png" alt="BigVision" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'BIGVISION CHINA')">
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.6rem; color: var(--highlight);">SECCIÓN 4</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin: 0.5rem 0; letter-spacing: 2px;">BIGVISION</h1>
+                    <p style="font-size: 0.9rem; opacity: 0.95; margin-top: 0.5rem;">Sistemas Digitales de Diagnóstico Oftálmico con Inteligencia Artificial<br>Tomografía de Coherencia Óptica (OCT) y Biometría Óptica Avanzada</p>
+                    <span class="origin-badge">MADE IN CHINA</span>
+                </div>
             </div>
 
-            <!-- BIGVISION PÁG 1: OCT BV1000S -->
+            <!-- BIGVISION - PÁGINA 1: OCT BV1000S -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">BIGVISION</span>
+                        <div class="brand-header">
+                            <img src="images/logo-bigvision.png" alt="BigVision" class="brand-logo-product" onerror="handleImageError(this, 'BIGVISION')">
                             <span class="badge-status">REGISTRO INVIMA APROBADO</span>
                         </div>
                         <h2 class="product-title">Tomógrafo de Coherencia Óptica BV1000S</h2>
-                        <p class="product-subtitle">Sistema OCT 100% Automatizado con Diagnóstico por IA</p>
+                        <p class="product-subtitle">Sistema OCT Automatizado con Inteligencia Artificial Integrada</p>
                         
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 180 120" width="160" height="110">
-                                <rect x="30" y="65" width="120" height="25" rx="4" fill="#1b365d"/>
-                                <rect x="50" y="25" width="80" height="40" rx="6" fill="#2a638a"/>
-                                <circle cx="90" cy="45" r="14" fill="#00a896"/>
-                                <path d="M 40 100 Q 90 85 140 100" stroke="#00a896" stroke-width="3" fill="none"/>
-                            </svg>
+                        <div class="product-img-wrapper">
+                            <img src="images/bigvision-oct.webp" alt="BigVision OCT BV1000S" onerror="handleProductSvgFallback(this, 'OCT BigVision BV1000S', '#4a2574')">
                         </div>
 
                         <ul class="product-highlights">
-                            <li><strong>Operación 100% Automática:</strong> Enfoque y pupila guiados por voz (~2 min bilat).</li>
-                            <li><strong>Alta Velocidad de Escaneo:</strong> Aceleración de 80.000 A-scans por segundo.</li>
-                            <li><strong>Escaneo Campo Amplio (12x9mm):</strong> Macula y disco óptico simultáneos.</li>
-                            <li><strong>Análisis IA de 16 Patologías:</strong> Marcado y cuantificación de lesiones retinales.</li>
+                            <li><strong>Operación 100% Automática:</strong> Enfoque y localización pupilar guiados por voz (~2 min por paciente).</li>
+                            <li><strong>Alta Velocidad de Escaneo:</strong> Tecnologías de aceleración de 80.000 A-scans/segundo.</li>
+                            <li><strong>Campo Amplio (12mm x 9mm):</strong> Cobertura simultánea de zona macular y disco óptico.</li>
+                            <li><strong>Análisis IA de 16 Patologías:</strong> Identificación, segmentación y marcado automático de lesiones retinales.</li>
                         </ul>
 
                         <div class="badge-variants">
                             <span class="badge-v">80.000 A-scans/s</span>
-                            <span class="badge-v">Campo Amplio 12x9 mm</span>
-                            <span class="badge-v">Algoritmo IA 16 Lesiones</span>
+                            <span class="badge-v">Escaneo 12x9 mm</span>
+                            <span class="badge-v">Diagnóstico IA</span>
                         </div>
                     </div>
 
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">BigVision • Pág 1</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">BigVision - Pág. 1</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('BigVision', 'OCT BV1000S')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'BigVision', 'OCT BV1000S')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
 
-            <!-- BIGVISION PÁG 2: BIÓMETRO BVB2000 -->
+            <!-- BIGVISION - PÁGINA 2: BIÓMETRO BVB2000 -->
             <div class="page">
-                <div class="page-inner">
+                <div class="page-content">
                     <div>
-                        <div class="brand-header-strip">
-                            <span class="brand-logo-badge">BIGVISION</span>
+                        <div class="brand-header">
+                            <img src="images/logo-bigvision.png" alt="BigVision" class="brand-logo-product" onerror="handleImageError(this, 'BIGVISION')">
                             <span class="badge-status">REGISTRO INVIMA APROBADO</span>
                         </div>
                         <h2 class="product-title">Biómetro Óptico Oftálmico BVB2000</h2>
-                        <p class="product-subtitle">Equipo 2-en-1: Biometría Óptica + OCT Incorporado</p>
+                        <p class="product-subtitle">Equipo 2-en-1: Biometría Óptica Precisa + Sistema OCT Incorporado</p>
                         
-                        <div class="product-img-box">
-                            <svg viewBox="0 0 180 120" width="160" height="110">
-                                <rect x="35" y="70" width="110" height="20" rx="4" fill="#0f172a"/>
-                                <rect x="55" y="30" width="70" height="40" rx="6" fill="#1b365d"/>
-                                <circle cx="90" cy="50" r="12" fill="#00a896"/>
-                                <line x1="20" y1="90" x2="160" y2="90" stroke="#00a896" stroke-width="2"/>
-                            </svg>
+                        <div class="product-img-wrapper">
+                            <img src="images/bigvision-biometro.webp" alt="BigVision Biómetro BVB2000" onerror="handleProductSvgFallback(this, 'Biómetro BVB2000', '#4a2574')">
                         </div>
 
                         <ul class="product-highlights">
-                            <li><strong>12 Parámetros en 1 Clic:</strong> Medición en &lt;60s (AL, CCT, ACD, LT, K1/K2, WTW, etc).</li>
-                            <li><strong>Validación Visual por OCT:</strong> Imagen en tiempo real de córnea y retina.</li>
-                            <li><strong>Predicción de Miopía Infantil:</strong> Proyección de eje axial a los 18 años.</li>
-                            <li><strong>Plataforma 3D Motorizada:</strong> Ajuste automático de mentonera y ojo Izq/Der.</li>
+                            <li><strong>12 Parámetros en 1 Clic:</strong> Medición automática en &lt;60s de AL, CCT, ACD, LT, K1/K2, WTW, Espesor Coroidal y Retinal.</li>
+                            <li><strong>Validación Visual por OCT:</strong> Muestra imágenes dinámicas en tiempo real de córnea y retina para máxima precisión.</li>
+                            <li><strong>Monitoreo de Miopía en Niños:</strong> Predicción del desarrollo axial a los 18 años y simulación de agudeza visual.</li>
+                            <li><strong>Ajuste Tridimensional Inteligente:</strong> Plataforma motorizada con seguimiento automático de pupila.</li>
                         </ul>
 
                         <div class="badge-variants">
                             <span class="badge-v">Biometría + OCT 2-en-1</span>
-                            <span class="badge-v">12 Parámetros en &lt;60s</span>
-                            <span class="badge-v">Control de Miopía</span>
+                            <span class="badge-v">12 Parámetros &lt;60s</span>
+                            <span class="badge-v">Predicción Miopía</span>
                         </div>
                     </div>
 
                     <div class="page-footer">
-                        <div class="footer-brand">
-                            <div class="taichi-mini-badge">TAICHI <span>COL</span></div>
-                            <span class="page-number">BigVision • Pág 2</span>
+                        <div class="footer-left">
+                            <img src="images/logo-taichi.png" alt="Taichi" class="taichi-mini-logo" onerror="handleImageError(this, 'TAICHI')">
+                            <span class="page-number">BigVision - Pág. 2</span>
                         </div>
-                        <button class="btn-info" onclick="openForm('BigVision', 'Biómetro BVB2000')">Solicitar Cotización</button>
+                        <button class="btn-page btn-info" onclick="openForm('Información / Cotización', 'BigVision', 'Biómetro BVB2000')">Solicitar Información / Cotización</button>
                     </div>
                 </div>
             </div>
@@ -1208,108 +620,166 @@
         </div>
     </div>
 
-    <!-- MODAL DE FORMULARIO -->
-    <div class="modal-overlay" id="contactModal">
-        <div class="modal-card">
+    <!-- MODAL UNIFICADO DE CONTACTO -->
+    <div class="modal" id="modalForm">
+        <div class="modal-content">
             <span class="close-modal" onclick="closeForm()">&times;</span>
-            <h3 id="modalTitle" style="font-family:'Montserrat'; font-size:1.2rem; color:var(--primary); font-weight:800;">Solicitud de Cotización</h3>
-            <p id="modalSubtitle" style="font-size:0.85rem; color:var(--highlight); font-weight:700; margin-bottom:1rem;"></p>
-
-            <form id="quoteForm">
-                <input type="hidden" id="formMarca">
-                <input type="hidden" id="formProducto">
+            <h2 id="modalTitle" style="color: var(--primary); font-family: 'Montserrat', sans-serif; font-size: 1.3rem;">Solicitud de Información y Cotización</h2>
+            <p id="modalSubtitle" style="font-size:0.85rem; color:var(--accent); font-weight: 600; margin-bottom: 0.8rem;"></p>
+            
+            <form id="prospectForm">
+                <input type="hidden" id="tipoSolicitud">
+                <input type="hidden" id="marca">
+                <input type="hidden" id="producto">
 
                 <div class="form-group">
-                    <label>Tipo de Solicitud *</label>
-                    <select id="solicitudTipo" required>
-                        <option value="Cotización Comercial">Cotización Comercial</option>
-                        <option value="Demostración de Equipo">Solicitar Demostración en Clínica</option>
-                        <option value="Información Técnica">Ficha Técnica Completa</option>
+                    <label>¿Qué deseas recibir? *</label>
+                    <select id="opcionRequerida" required>
+                        <option value="Información Técnica y Cotización">Información Técnica y Cotización Comercial</option>
+                        <option value="Solo Cotización Comercial">Solo Cotización Comercial</option>
+                        <option value="Solicitar Demostración">Solicitar Demostración en Consultorio / Clínica</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Nombre Completo / Clínica *</label>
-                    <input type="text" id="clienteNombre" placeholder="Ej. Dr. Carlos Mendoza / Clínica Central" required>
+                    <input type="text" id="nombre" required placeholder="Ej. Dr. Juan Pérez / Clínica De la Visión">
                 </div>
                 <div class="form-group">
                     <label>Correo Electrónico *</label>
-                    <input type="email" id="clienteEmail" placeholder="doctor@clinica.com" required>
+                    <input type="email" id="correo" required placeholder="ejemplo@correo.com">
                 </div>
                 <div class="form-group">
                     <label>Teléfono / WhatsApp *</label>
-                    <input type="tel" id="clienteTel" placeholder="+57 300 123 4567" required>
+                    <input type="tel" id="telefono" required placeholder="+57 300 000 0000">
                 </div>
                 <div class="form-group">
                     <label>Ciudad *</label>
-                    <input type="text" id="clienteCiudad" placeholder="Ej. Bogotá, Medellín, Cali..." required>
+                    <input type="text" id="ciudad" required placeholder="Ej. Bogotá, Armenia, Medellín...">
                 </div>
-
-                <button type="submit" class="btn-submit" id="submitBtn">Enviar Solicitud a Taichi Colombia</button>
+                <div class="form-group">
+                    <label>Canal Preferido de Contacto *</label>
+                    <select id="prefContacto">
+                        <option value="WhatsApp">WhatsApp</option>
+                        <option value="Correo Electrónico">Correo Electrónico</option>
+                        <option value="Llamada Telefónica">Llamada Telefónica</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit" id="submitBtn">Enviar Solicitud</button>
             </form>
         </div>
     </div>
 
     <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+
         let pageFlip;
 
+        /* Funciones Handlers de Fallback SVG / Texto */
+        function handleImageError(imgElem, fallbackText) {
+            const textSpan = document.createElement('span');
+            textSpan.className = 'text-logo-fallback';
+            textSpan.innerText = fallbackText;
+            if (imgElem.parentNode) {
+                imgElem.parentNode.replaceChild(textSpan, imgElem);
+            }
+        }
+
+        function handleLogoFallback(imgElem, brandName) {
+            const span = document.createElement('span');
+            span.style.cssText = 'color:#fff; font-weight:bold; font-size:0.85rem; letter-spacing:1px;';
+            span.innerText = brandName;
+            if (imgElem.parentNode) {
+                imgElem.parentNode.replaceChild(span, imgElem);
+            }
+        }
+
+        function handleLogoSectionFallback(imgElem, brandName) {
+            const div = document.createElement('div');
+            div.style.cssText = 'font-family: Montserrat; font-size:1.8rem; font-weight:bold; color:#00a896; margin-bottom:1rem; letter-spacing:2px;';
+            div.innerText = brandName;
+            if (imgElem.parentNode) {
+                imgElem.parentNode.replaceChild(div, imgElem);
+            }
+        }
+
+        function handleProductSvgFallback(imgElem, productName, themeColor) {
+            const svgData = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="300" height="160" viewBox="0 0 300 160">
+                    <rect width="100%" height="100%" fill="${themeColor}" rx="8"/>
+                    <circle cx="150" cy="70" r="32" fill="none" stroke="#00a896" stroke-width="4" opacity="0.8"/>
+                    <circle cx="150" cy="70" r="14" fill="#00a896" opacity="0.9"/>
+                    <text x="150" y="130" fill="#ffffff" font-family="Roboto, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">${productName}</text>
+                </svg>
+            `;
+            const svgContainer = document.createElement('div');
+            svgContainer.innerHTML = svgData;
+            if (imgElem.parentNode) {
+                imgElem.parentNode.replaceChild(svgContainer.firstElementChild, imgElem);
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
-            // Inicialización de la librería StPageFlip
-            const magazineEl = document.getElementById('magazine');
-            
-            pageFlip = new St.PageFlip(magazineEl, {
-                width: 440,
+            pageFlip = new St.PageFlip(document.getElementById('magazine'), {
+                width: 450,
                 height: 600,
                 size: "fixed",
-                minWidth: 320,
-                maxWidth: 900,
-                minHeight: 450,
-                maxHeight: 1200,
-                maxShadowOpacity: 0.6,
+                minWidth: 315,
+                maxWidth: 1000,
+                minHeight: 420,
+                maxHeight: 1350,
+                maxShadowOpacity: 0.5,
                 showCover: true,
                 mobileScrollSupport: false
             });
 
             pageFlip.loadFromHTML(document.querySelectorAll('.page'));
-
-            // Actualización dinámica del contador de páginas en el Header
-            pageFlip.on('flip', (e) => {
-                const pageNum = e.data;
-                const totalPages = pageFlip.getPageCount();
-                const display = document.getElementById('pageNumberDisplay');
-                
-                if (pageNum === 0) {
-                    display.innerText = "Portada";
-                } else {
-                    display.innerText = `Pág. ${pageNum} / ${totalPages - 1}`;
-                }
-            });
         });
 
-        function openForm(marca, producto) {
-            document.getElementById('formMarca').value = marca;
-            document.getElementById('formProducto').value = producto;
-            document.getElementById('modalTitle').innerText = `Solicitar ${producto}`;
-            document.getElementById('modalSubtitle').innerText = `Marca: ${marca} (Distribuidor Autorizado Taichi Colombia)`;
-            document.getElementById('contactModal').classList.add('active');
+        function openForm(tipo, marca, producto) {
+            document.getElementById('tipoSolicitud').value = tipo;
+            document.getElementById('marca').value = marca;
+            document.getElementById('producto').value = producto;
+            document.getElementById('modalTitle').innerText = `Solicitud / Cotización`;
+            document.getElementById('modalSubtitle').innerText = `${marca} - ${producto}`;
+            document.getElementById('modalForm').classList.add('active');
         }
 
         function closeForm() {
-            document.getElementById('contactModal').classList.remove('active');
+            document.getElementById('modalForm').classList.remove('active');
         }
 
-        document.getElementById('quoteForm').addEventListener('submit', function(e) {
+        document.getElementById('prospectForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerText = "Enviando...";
+            btn.innerText = "Procesando...";
 
-            setTimeout(() => {
-                alert(`¡Gracias por su interés! Su solicitud para ${document.getElementById('formProducto').value} ha sido registrada. Un especialista de Taichi Colombia lo contactará a la brevedad.`);
-                btn.disabled = false;
-                btn.innerText = "Enviar Solicitud a Taichi Colombia";
+            const payload = {
+                tipoSolicitud: document.getElementById('opcionRequerida').value,
+                marca: document.getElementById('marca').value,
+                producto: document.getElementById('producto').value,
+                nombre: document.getElementById('nombre').value,
+                correo: document.getElementById('correo').value,
+                telefono: document.getElementById('telefono').value,
+                ciudad: document.getElementById('ciudad').value,
+                prefContacto: document.getElementById('prefContacto').value
+            };
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                alert('¡Solicitud enviada con éxito! Nos pondremos en contacto muy pronto.');
                 closeForm();
-                this.reset();
-            }, 800);
+                document.getElementById('prospectForm').reset();
+            }).catch(err => {
+                alert('Error al enviar la solicitud. Por favor intente nuevamente.');
+            }).finally(() => {
+                btn.disabled = false;
+                btn.innerText = "Enviar Solicitud";
+            });
         });
     </script>
 </body>
