@@ -30,7 +30,7 @@
         .btn-nav:hover { background: var(--highlight); }
         .nav-hint { font-size: 0.75rem; opacity: 0.9; }
 
-        /* Contenedor Ajustado para Encajar Perfectamente en Pantalla */
+        /* Contenedor Principal */
         .magazine-container { 
             display: flex; 
             justify-content: center; 
@@ -40,94 +40,97 @@
             margin-top: 48px; 
             padding: 10px; 
             overflow: hidden; 
+            position: relative;
         }
+        
         .flip-book { 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             margin: 0 auto;
-            max-height: calc(100vh - 68px) !important;
+            display: none; /* Se muestra vía JS tras inicializar para evitar parpadeos */
         }
 
         /* Estructura Interna de Páginas */
-        .page { background-color: var(--white); width: 100%; height: 100%; border: 1px solid #ddd; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
-        .page-content { padding: 1.1rem 1.2rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+        .page { 
+            background-color: var(--white); 
+            width: 100%; 
+            height: 100%; 
+            border: 1px solid #ddd; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            position: absolute; /* Evita el colapso y apilamiento vertical */
+            top: 0;
+            left: 0;
+        }
+        .page-content { padding: 1rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
         
         /* Portadas y Divisores de Sección */
-        .page-cover { background: linear-gradient(135deg, var(--primary) 0%, #0d1b2a 100%); color: var(--white); text-align: center; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 1.8rem 1.2rem; }
+        .page-cover { background: linear-gradient(135deg, var(--primary) 0%, #0d1b2a 100%); color: var(--white); text-align: center; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 1.5rem 1rem; }
         .page-divider-neitz { background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-kowa { background: linear-gradient(135deg, #1e3a2b 0%, #0d1b2a 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-takagi { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-divider-bigvision { background: linear-gradient(135deg, #2a0845 0%, #6441a5 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
         .page-subdivider { background: linear-gradient(135deg, #1f4068 0%, #162447 100%); color: var(--white); text-align: center; justify-content: center; align-items: center; }
 
-        .cover-title { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; font-weight: 700; margin-top: 0.2rem; }
-        .cover-subtitle { font-size: 0.88rem; color: var(--highlight); margin-bottom: 0.6rem; letter-spacing: 1.5px; }
+        .cover-title { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 700; margin-top: 0.2rem; }
+        .cover-subtitle { font-size: 0.85rem; color: var(--highlight); margin-bottom: 0.5rem; letter-spacing: 1.5px; }
 
         /* Cuadrícula de Logos en Portada */
-        .manufacturers-grid { background: rgba(255, 255, 255, 0.08); padding: 0.75rem; border-radius: 8px; width: 100%; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.15); margin-top: 0.4rem; }
-        .manufacturers-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.8; margin-bottom: 0.4rem; color: var(--highlight); font-weight: 700; }
+        .manufacturers-grid { background: rgba(255, 255, 255, 0.08); padding: 0.6rem; border-radius: 8px; width: 100%; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.15); margin-top: 0.4rem; }
+        .manufacturers-title { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.8; margin-bottom: 0.3rem; color: var(--highlight); font-weight: 700; }
         .logos-container { display: flex; justify-content: space-around; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
-        .brand-logo-item { max-height: 26px; max-width: 70px; filter: brightness(0) invert(1); opacity: 0.9; object-fit: contain; }
+        .brand-logo-item { max-height: 24px; max-width: 65px; filter: brightness(0) invert(1); opacity: 0.9; object-fit: contain; }
 
-        /* Fallbacks visuales para logos */
+        /* Fallbacks visuales */
         .text-logo-fallback { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ffffff; letter-spacing: 1px; font-size: 0.8rem; }
-
-        /* Elementos de Encabezado de Sección con Logos */
-        .section-brand-logo { max-height: 42px; max-width: 140px; object-fit: contain; filter: brightness(0) invert(1); margin-bottom: 0.6rem; }
-        .origin-badge { display: inline-block; background: rgba(255,255,255,0.15); color: #fff; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 20px; letter-spacing: 1px; margin-top: 0.5rem; border: 1px solid rgba(255,255,255,0.25); }
+        .section-brand-logo { max-height: 40px; max-width: 130px; object-fit: contain; filter: brightness(0) invert(1); margin-bottom: 0.5rem; }
+        .origin-badge { display: inline-block; background: rgba(255,255,255,0.15); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 20px; letter-spacing: 1px; margin-top: 0.4rem; border: 1px solid rgba(255,255,255,0.25); }
 
         /* Encabezados y Contenido de Producto */
-        .brand-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 0.35rem; margin-bottom: 0.35rem; }
-        .brand-logo-product { max-height: 22px; max-width: 95px; object-fit: contain; }
-        .badge-status { background: #e8f5e9; color: #2e7d32; font-size: 0.62rem; padding: 0.15rem 0.4rem; border-radius: 12px; font-weight: 600; }
-        .badge-status-pending { background: #fff3e0; color: #e65100; font-size: 0.62rem; padding: 0.15rem 0.4rem; border-radius: 12px; font-weight: 600; }
+        .brand-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 0.3rem; margin-bottom: 0.3rem; }
+        .brand-logo-product { max-height: 20px; max-width: 90px; object-fit: contain; }
+        .badge-status { background: #e8f5e9; color: #2e7d32; font-size: 0.6rem; padding: 0.12rem 0.35rem; border-radius: 12px; font-weight: 600; }
+        .badge-status-pending { background: #fff3e0; color: #e65100; font-size: 0.6rem; padding: 0.12rem 0.35rem; border-radius: 12px; font-weight: 600; }
 
-        .product-img-wrapper { text-align: center; margin: 0.3rem 0; height: 135px; display: flex; align-items: center; justify-content: center; }
+        .product-img-wrapper { text-align: center; margin: 0.2rem 0; height: 125px; display: flex; align-items: center; justify-content: center; }
         .product-img-wrapper img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-        .product-title { font-family: 'Montserrat', sans-serif; color: var(--primary); font-size: 0.98rem; margin-bottom: 0.15rem; }
-        .product-subtitle { font-size: 0.72rem; color: #666; margin-bottom: 0.35rem; font-weight: 500; }
+        .product-title { font-family: 'Montserrat', sans-serif; color: var(--primary); font-size: 0.92rem; margin-bottom: 0.1rem; }
+        .product-subtitle { font-size: 0.7rem; color: #666; margin-bottom: 0.3rem; font-weight: 500; }
 
-        .product-highlights { list-style: none; margin: 0.25rem 0; }
-        .product-highlights li { font-size: 0.72rem; margin-bottom: 0.2rem; padding-left: 0.9rem; position: relative; line-height: 1.25; }
+        .product-highlights { list-style: none; margin: 0.2rem 0; }
+        .product-highlights li { font-size: 0.7rem; margin-bottom: 0.18rem; padding-left: 0.85rem; position: relative; line-height: 1.2; }
         .product-highlights li::before { content: "✓"; position: absolute; left: 0; color: var(--highlight); font-weight: bold; }
 
-        .badge-variants { display: flex; gap: 0.2rem; flex-wrap: wrap; margin-top: 0.25rem; }
-        .badge-v { background: #f0f4f8; color: var(--accent); border: 1px solid #cbd5e1; font-size: 0.62rem; padding: 0.1rem 0.3rem; border-radius: 4px; font-weight: 600; }
+        .badge-variants { display: flex; gap: 0.2rem; flex-wrap: wrap; margin-top: 0.2rem; }
+        .badge-v { background: #f0f4f8; color: var(--accent); border: 1px solid #cbd5e1; font-size: 0.6rem; padding: 0.08rem 0.25rem; border-radius: 4px; font-weight: 600; }
 
         /* Pie de Página de Producto */
-        .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 0.35rem; margin-top: 0.2rem; }
+        .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 0.3rem; margin-top: 0.2rem; }
         .footer-left { display: flex; align-items: center; gap: 0.4rem; }
-        .taichi-mini-logo { height: 15px; object-fit: contain; opacity: 0.85; }
-        .page-number { font-size: 0.68rem; color: #888; }
+        .taichi-mini-logo { height: 14px; object-fit: contain; opacity: 0.85; }
+        .page-number { font-size: 0.65rem; color: #888; }
 
-        .btn-action-group { display: flex; gap: 0.3rem; }
-        .btn-page { padding: 0.35rem 0.6rem; border: none; border-radius: 4px; font-weight: 600; font-size: 0.72rem; cursor: pointer; transition: 0.2s; white-space: nowrap; }
+        .btn-page { padding: 0.35rem 0.55rem; border: none; border-radius: 4px; font-weight: 600; font-size: 0.7rem; cursor: pointer; transition: 0.2s; white-space: nowrap; }
         .btn-info { background: var(--accent); color: var(--white); }
         .btn-info:hover { background: var(--primary); }
-
-        /* Ajustes Responsivos Móviles */
-        @media (max-width: 768px) {
-            header { padding: 0.3rem 0.5rem; }
-            .logo-text { font-size: 0.85rem; }
-            .nav-hint { display: none; }
-            .btn-nav { padding: 0.3rem 0.5rem; font-size: 0.72rem; }
-            .page-content { padding: 0.9rem 0.8rem; }
-            .product-img-wrapper { height: 120px; }
-            .product-title { font-size: 0.92rem; }
-            .product-highlights li { font-size: 0.7rem; }
-            .btn-page { padding: 0.3rem 0.5rem; font-size: 0.68rem; }
-        }
 
         /* Estilos de Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { background: var(--white); padding: 1.4rem; border-radius: 8px; max-width: 420px; width: 92%; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
-        .close-modal { position: absolute; top: 0.7rem; right: 0.9rem; font-size: 1.4rem; cursor: pointer; color: #666; }
-        .form-group { margin-bottom: 0.6rem; }
-        .form-group label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.18rem; }
-        .form-group input, .form-group select { width: 100%; padding: 0.45rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.8rem; }
-        .btn-submit { width: 100%; padding: 0.6rem; background: var(--primary); color: var(--white); font-weight: 700; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.35rem; }
+        .modal-content { background: var(--white); padding: 1.2rem; border-radius: 8px; max-width: 400px; width: 92%; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
+        .close-modal { position: absolute; top: 0.6rem; right: 0.8rem; font-size: 1.3rem; cursor: pointer; color: #666; }
+        .form-group { margin-bottom: 0.5rem; }
+        .form-group label { display: block; font-size: 0.72rem; font-weight: 600; margin-bottom: 0.15rem; }
+        .form-group input, .form-group select { width: 100%; padding: 0.4rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.78rem; }
+        .btn-submit { width: 100%; padding: 0.55rem; background: var(--primary); color: var(--white); font-weight: 700; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.3rem; }
         .btn-submit:hover { background: var(--accent); }
+
+        @media (max-width: 768px) {
+            .nav-hint { display: none; }
+            .btn-nav { padding: 0.3rem 0.5rem; font-size: 0.7rem; }
+        }
     </style>
 </head>
 <body>
@@ -150,10 +153,10 @@
             <!-- PORTADA GENERAL -->
             <div class="page page-cover">
                 <div>
-                    <img src="images/logo-taichi.png" alt="Taichi Holdings Colombia" style="max-height: 52px; margin-bottom: 0.6rem; object-fit: contain;" onerror="handleImageError(this, 'TAICHI HOLDINGS')">
+                    <img src="images/logo-taichi.png" alt="Taichi Holdings Colombia" style="max-height: 48px; margin-bottom: 0.5rem; object-fit: contain;" onerror="handleImageError(this, 'TAICHI HOLDINGS')">
                     <h1 class="cover-title">CATÁLOGO OFTALMOLOGÍA</h1>
                     <p class="cover-subtitle">PORTAFOLIO DE ALTA PRECISIÓN</p>
-                    <p style="font-size: 0.78rem; opacity: 0.85;">Taichi Holdings Colombia<br>Edición Interactiva 2026</p>
+                    <p style="font-size: 0.75rem; opacity: 0.85;">Taichi Holdings Colombia<br>Edición Interactiva 2026</p>
                 </div>
 
                 <div class="manufacturers-grid">
@@ -169,11 +172,11 @@
 
             <!-- SECCIÓN 1: NEITZ -->
             <div class="page page-divider-neitz">
-                <div style="padding: 1.2rem;">
+                <div style="padding: 1rem;">
                     <img src="images/logo-neitz.png" alt="Neitz Japan" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'NEITZ JAPAN')">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.3rem; color: var(--highlight);">SECCIÓN 1</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2rem; margin: 0.3rem 0; letter-spacing: 2px;">NEITZ</h1>
-                    <p style="font-size: 0.78rem; opacity: 0.9; margin-top: 0.3rem;">Óptica Japonesa de Alta Precisión desde 1913<br>Oftalmoscopios Binoculares, Directos y Retinoscopios</p>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight);">SECCIÓN 1</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin: 0.3rem 0; letter-spacing: 2px;">NEITZ</h1>
+                    <p style="font-size: 0.75rem; opacity: 0.9; margin-top: 0.3rem;">Óptica Japonesa de Alta Precisión desde 1913<br>Oftalmoscopios Binoculares, Directos y Retinoscopios</p>
                     <span class="origin-badge">MADE IN JAPAN</span>
                 </div>
             </div>
@@ -262,11 +265,11 @@
 
             <!-- SECCIÓN 2: KOWA -->
             <div class="page page-divider-kowa">
-                <div style="padding: 1.2rem;">
+                <div style="padding: 1rem;">
                     <img src="images/logo-kowa.png" alt="Kowa Japan" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'KOWA JAPAN')">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.3rem; color: var(--highlight);">SECCIÓN 2</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.2rem; margin: 0.3rem 0; letter-spacing: 2px;">KOWA</h1>
-                    <p style="font-size: 0.78rem; opacity: 0.9; margin-top: 0.3rem;">Tecnología Japonesa de Diagnóstico e Implantes Oculares<br>Lámpara SL-19, Tonómetro HA-2, Perímetro AP-7000 y LIOs Avansee</p>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight);">SECCIÓN 2</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin: 0.3rem 0; letter-spacing: 2px;">KOWA</h1>
+                    <p style="font-size: 0.75rem; opacity: 0.9; margin-top: 0.3rem;">Tecnología Japonesa de Diagnóstico e Implantes Oculares<br>Lámpara SL-19, Tonómetro HA-2, Perímetro AP-7000 y LIOs Avansee</p>
                     <span class="origin-badge">MADE IN JAPAN</span>
                 </div>
             </div>
@@ -284,7 +287,7 @@
                             <img src="images/kowa-sl19.webp" alt="Kowa SL-19" onerror="handleProductSvgFallback(this, 'Kowa SL-19', '#1e3a2b')">
                         </div>
                         <ul class="product-highlights">
-                            <li><strong>Ultra Ligera:</strong> Chasis reinforced de 620g.</li>
+                            <li><strong>Ultra Ligera:</strong> Chasis reforzado de 620g.</li>
                             <li><strong>Iluminación Dual:</strong> Hendidura e iluminación de fondo simultáneas.</li>
                         </ul>
                     </div>
@@ -378,17 +381,17 @@
             <div class="page page-divider-takagi">
                 <div style="padding: 1.2rem;">
                     <img src="images/logo-takagi.png" alt="Takagi Japan" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'TAKAGI JAPAN')">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.3rem; color: var(--highlight);">SECCIÓN 3</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.2rem; margin: 0.3rem 0; letter-spacing: 2px;">TAKAGI</h1>
-                    <p style="font-size: 0.78rem; opacity: 0.9; margin-top: 0.3rem;">Excelencia y Calidad en Instrumentos Oftálmicos desde 1955<br>Microscopios Quirúrgicos de Alta Gama y Lámparas de Hendidura LED</p>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight);">SECCIÓN 3</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin: 0.3rem 0; letter-spacing: 2px;">TAKAGI</h1>
+                    <p style="font-size: 0.75rem; opacity: 0.9; margin-top: 0.3rem;">Excelencia y Calidad en Instrumentos Oftálmicos desde 1955<br>Microscopios Quirúrgicos de Alta Gama y Lámparas de Hendidura LED</p>
                     <span class="origin-badge">MADE IN JAPAN</span>
                 </div>
             </div>
             <!-- Takagi Subsección 3.1 Microscopios -->
             <div class="page page-subdivider">
                 <div style="padding: 1.2rem;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--highlight);">SUBSECCIÓN 3.1</h3>
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.7rem; margin: 0.3rem 0;">MICROSCOPIOS QUIRÚRGICOS</h2>
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--highlight);">SUBSECCIÓN 3.1</h3>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.5rem; margin: 0.3rem 0;">MICROSCOPIOS QUIRÚRGICOS</h2>
                 </div>
             </div>
             <div class="page">
@@ -472,8 +475,8 @@
             <!-- Takagi Subsección 3.2 Lámparas -->
             <div class="page page-subdivider">
                 <div style="padding: 1.2rem;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--highlight);">SUBSECCIÓN 3.2</h3>
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.7rem; margin: 0.3rem 0;">LÁMPARAS DE HENDIDURA</h2>
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--highlight);">SUBSECCIÓN 3.2</h3>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.5rem; margin: 0.3rem 0;">LÁMPARAS DE HENDIDURA</h2>
                 </div>
             </div>
             <div class="page">
@@ -557,11 +560,11 @@
 
             <!-- SECCIÓN 4: BIGVISION -->
             <div class="page page-divider-bigvision">
-                <div style="padding: 1.2rem;">
+                <div style="padding: 1rem;">
                     <img src="images/logo-bigvision.png" alt="BigVision" class="section-brand-logo" onerror="handleLogoSectionFallback(this, 'BIGVISION CHINA')">
-                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.3rem; color: var(--highlight);">SECCIÓN 4</h2>
-                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.2rem; margin: 0.3rem 0; letter-spacing: 2px;">BIGVISION</h1>
-                    <p style="font-size: 0.78rem; opacity: 0.9; margin-top: 0.3rem;">Sistemas Digitales de Diagnóstico Oftálmico con Inteligencia Artificial<br>Tomografía de Coherencia Óptica (OCT) y Biometría Óptica Avanzada</p>
+                    <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: var(--highlight);">SECCIÓN 4</h2>
+                    <h1 style="font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin: 0.3rem 0; letter-spacing: 2px;">BIGVISION</h1>
+                    <p style="font-size: 0.75rem; opacity: 0.9; margin-top: 0.3rem;">Sistemas Digitales de Diagnóstico Oftálmico con Inteligencia Artificial<br>Tomografía de Coherencia Óptica (OCT) y Biometría Óptica Avanzada</p>
                     <span class="origin-badge">MADE IN CHINA</span>
                 </div>
             </div>
@@ -697,7 +700,6 @@
     </div>
 
     <script>
-        // URL oficial configurada para la hoja de cálculo receptora de Taichi Colombia
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx3jfk5znzRetPJnlEFtCyyXdDse-9j6F6tdb3UrqLA3gRw3AiIzymm-uusATw3uFP_EQ/exec";
 
         let pageFlip;
@@ -746,29 +748,58 @@
             }
         }
 
-        /* Inicialización Responsiva Estabilidad Fija Proporcional */
+        /* Inicialización Estable y Adaptativa */
         function initPageFlip() {
+            const container = document.querySelector('.magazine-container');
+            const availWidth = container.clientWidth - 20;
+            const availHeight = container.clientHeight - 20;
             const isMobile = window.innerWidth <= 768;
-            
-            pageFlip = new St.PageFlip(document.getElementById('magazine'), {
-                width: 380,
-                height: 500,
+
+            let pageW, pageH;
+
+            if (isMobile) {
+                pageW = Math.min(availWidth, 360);
+                pageH = Math.min(availHeight, 520);
+            } else {
+                pageH = Math.min(availHeight, 540);
+                pageW = Math.round(pageH * 0.72); 
+            }
+
+            const bookElem = document.getElementById('magazine');
+
+            pageFlip = new St.PageFlip(bookElem, {
+                width: pageW,
+                height: pageH,
                 size: "fixed",
-                minWidth: 260,
-                maxWidth: 420,
-                minHeight: 360,
-                maxHeight: 560,
+                minWidth: 240,
+                maxWidth: 450,
+                minHeight: 350,
+                maxHeight: 600,
                 maxShadowOpacity: 0.35,
                 showCover: true,
                 mobileScrollSupport: true,
-                usePortrait: isMobile
+                usePortrait: isMobile,
+                startPage: 0
             });
 
             pageFlip.loadFromHTML(document.querySelectorAll('.page'));
-        });
+            bookElem.style.display = 'block'; // Mostrar solo cuando esté renderizado correctamente
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             initPageFlip();
+        });
+
+        // Re-calcular si se rota la pantalla o se cambia el tamaño del navegador
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (pageFlip) {
+                    pageFlip.destroy();
+                    initPageFlip();
+                }
+            }, 300);
         });
 
         function openForm(tipo, marca, producto) {
@@ -784,7 +815,7 @@
             document.getElementById('modalForm').classList.remove('active');
         }
 
-        /* Envío de Prospectos compatible con Google Apps Script */
+        /* Envío de Prospectos */
         document.getElementById('prospectForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
